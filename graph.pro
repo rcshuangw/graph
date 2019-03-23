@@ -1,2 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS += h5base 
+SUBDIRS += h5base \
+           h5iconeditor

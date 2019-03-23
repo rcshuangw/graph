@@ -63,3 +63,13 @@ bool HDrawManager::findTool(DrawShape shape,const QString& catalogName,const QSt
         }
     }
 }
+
+void HDrawManager::onDrawPath(const QList<Path> &pathList)
+{
+    emit drawPath(pathList);
+}
+
+void HDrawManager::onEndDraw()
+{
+    emit endDraw();
+}
