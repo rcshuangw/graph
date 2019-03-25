@@ -11,11 +11,11 @@ class HIconDrawManager : HDrawManager
 {
     Q_OBJECT
 public:
-    HIconState(HIconEditorMgr* pMgr);
-    ~HIconState();
+    HIconDrawManager(HIconEditorMgr* pMgr);
+    ~HIconDrawManager();
 
-    void setDrawShape(DRAWSHAPE drawShape){curDrawShape = drawShape;}
-    DRAWSHAPE getDrawShape(){return curDrawShape;}
+    void setDrawShape(DrawShape drawShape){curDrawShape = drawShape;}
+    DrawShape getDrawShape(){return curDrawShape;}
      void appendObj(HBaseObj* obj);
 
 public:
