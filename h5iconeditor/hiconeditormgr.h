@@ -1,22 +1,22 @@
 ﻿#ifndef HICONMGR_H
 #define HICONMGR_H
 #include "hiconscene.h"
-#include "hiconframe.h"
+#include "hiconeditorframe.h"
 #include "hicondocument.h"
 #include "hiconstate.h"
-#include "hiconop.h"
+#include "hiconeditorop.h"
 #include <QUndoStack>
-class HIconFrame;
+class HIconEditorFrame;
 class HIconDocument;
-class HIconState;
-class HIconOp;
-class HIconMgr
+class HIconDrawManager;
+class HIconEditorOp;
+class HIconEditorMgr
 {
 public:
-    HIconMgr();
+    HIconEditorMgr();
     HIconDocument* getIconDocument();
     HIconTemplate* getIconTemplate();
-    HIconFrame* getIconFrame();
+    HIconEditorFrame* getIconFrame();
     QUndoStack* getIconUndoStack();
     HIconOp* getIconOp();
 
@@ -28,7 +28,7 @@ public:
     bool getShowCenterLine();
 
     void setDrawShape(DRAWSHAPE ds);
-    DRAWSHAPE getDrawShape();
+    DrawShape getDrawShape();
     void setSelectMode(SELECTMODE ds);
     SELECTMODE getSelectMode();
 
@@ -38,15 +38,15 @@ public:
     void Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
     bool Save(bool savefile=false);
 private:
-    DRAWSHAPE m_drawShape;
+    DrawShape m_drawShape;
     SELECTMODE m_selectMode;
     bool m_bShowGrid;
     bool m_bShowCenterLine;
     QString m_strBgClr;
-    HIconFrame* m_pIconFrame;
+    HIconEditorFrame* m_pIconFrame;
     HIconDocument* m_pIconDocument;
-    HIconState* m_pIconState;
-    HIconOp* m_pIconOp;
+    HIconDrawManager* m_pIconState;
+    HIconEditorOp* m_pIconOp;
     QUndoStack* m_pIconUndoStack;
 };
 

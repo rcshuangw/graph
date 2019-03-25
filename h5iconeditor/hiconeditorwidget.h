@@ -2,11 +2,14 @@
 #define HICONWIDGET_H
 
 #include <QWidget>
-
 #include "hiconapi.h"
+/*
+ * 存放QIconEditorFrame和QTabBar
+*/
 class QTabBar;
 class HIconEditorFrame;
 class HIconMgr;
+
 class HIconEditorWidget : public QWidget
 {
     Q_OBJECT

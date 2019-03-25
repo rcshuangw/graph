@@ -5,8 +5,8 @@ TARGET = icon
 
 INCLUDEPATH += \
     ../include \
-    ../include/H5IconGui \
-    ../include/H5IconHelp
+    ../include/h5iconlib \
+    ../include/h5icongui
 
 HEADERS       = \
     hiconmainwindow.h \
@@ -15,20 +15,18 @@ HEADERS       = \
     #hiconsymbol.h \
     #hicontemplate.h \
     hicondocument.h \
-    hiconscene.h \
-    hiconmgr.h \
-    hiconstate.h \
     hiconpreview.h \
     #hiconshowpattern.h \
     hiconcommand.h \
     habout.h \
-    hiconop.h \
     hiconeditorframe.h \
     hiconeditorwidget.h \
     hicondocument.h \
     hiconmainwindow.h \
-    hiconmgr.h \
-    hiconop.h
+    hiconeditormgr.h \
+    hiconeditorop.h \
+    hiconeditorscene.h \
+    hicondrawmanager.h
 
 SOURCES       = main.cpp \
     hiconmainwindow.cpp \
@@ -37,22 +35,20 @@ SOURCES       = main.cpp \
     #hiconsymbol.cpp \
     #hicontemplate.cpp \
     hicondocument.cpp \
-    hiconscene.cpp \
-    hiconmgr.cpp \
-    hiconstate.cpp \
     hiconpreview.cpp \
     #hiconshowpattern.cpp \
     hiconcommand.cpp \
     habout.cpp \
-    hiconop.cpp \
     hiconmainwindowactions.cpp \
     hiconeditorframe.cpp \
     hiconeditorwidget.cpp \
     hicondocument.cpp \
     hiconmainwindow.cpp \
     hiconmainwindowactions.cpp \
-    hiconmgr.cpp \
-    hiconop.cpp
+    hiconeditormgr.cpp \
+    hiconeditorop.cpp \
+    hiconeditorscene.cpp \
+    hicondrawmanager.cpp
 
 RESOURCES     = \
     icon.qrc \

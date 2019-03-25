@@ -23,7 +23,6 @@ protected:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 signals:
-
     void objSelectChanged(HBaseObj* obj,bool isSelected);
     void recalcSelect();
 

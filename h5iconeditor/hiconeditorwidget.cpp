@@ -6,7 +6,7 @@
 #include <QContextMenuEvent>
 #include <QMessageBox>
 #include "hiconeditorframe.h"
-#include "hiconmgr.h"
+#include "hiconeditormgr.h"
 #include "hicontemplate.h"
 #include "hiconsymbol.h"
 #include "hiconshowpattern.h"

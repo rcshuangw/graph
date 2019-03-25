@@ -9,27 +9,35 @@
 
 /*
  * 界面相关类：主要是QGraphicsView的QWidget容器界面类
+ * 单个界面
 */
 
-class HIconMgr;
+class HIconEditorMgr;
 struct Path;
 class HIconEditorFrame : public HFrame
 {
     Q_OBJECT
 public:
     HIconEditorFrame(QWidget * parent = 0, Qt::WindowFlags f = 0 );
-    HIconEditorFrame(HIconMgr* pMgr,QWidget * parent = 0, Qt::WindowFlags f = 0 );
+    HIconEditorFrame(HIconEditorMgr* pMgr,QWidget * parent = 0, Qt::WindowFlags f = 0 );
     ~HIconEditorFrame();
 
 public:
-
-    void setIconMgr(HIconMgr* iconmgr);
-
+    void drawPath(const QList<Path>& pathList);
+    void endDraw();
+    void objCreated(HBaseObj* obj,bool isPaste);
+    void objRemoved(HBaseObj* obj);
     //刷新选中点、选中框
     void refreshSelected(const QRectF& rect);
 
     //鼠标的改变
     void cursorChanged(const QCursor& cursor);
+
+public:
+
+    void setIconMgr(HIconEditorMgr* iconmgr);
+
+
 
     //设置scene的逻辑区域
     void setLogicRect(QRectF& rectF);
@@ -55,6 +63,9 @@ public:
     //获取item
     HIconGraphicsItem* getIconGraphicsItemByObj(HBaseObj* pObj);
 
+public slots:
+    void objSelectChanged(HBaseObj* obj,bool isSelected);
+    void recalcSelect();
 protected:
 
     //事件过滤
@@ -62,7 +73,7 @@ protected:
 
 private:
     QRectF m_sceneRect;
-    HIconMgr* m_pIconMgr;
+    HIconEditorMgr* m_pIconMgr;
 
 };
 

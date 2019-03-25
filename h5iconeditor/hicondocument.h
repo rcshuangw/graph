@@ -4,7 +4,7 @@
 #include <QObject>
 #include "hiconapi.h"
 #include "hicontemplate.h"
-#include "hiconmgr.h"
+#include "hiconeditormgr.h"
 #include "hiconhelper.h"
 class HIconMgr;
 class HIconDocument : public QObject
@@ -20,6 +20,7 @@ public:
     void Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
     void Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
     bool Save(bool savefile = false);
+
     HIconTemplate* getCurrentTemplate();
     HIconTemplate* findIconTemplateByTypeAndUuid(int nTemplateType,const QString& strUuid);
     HIconTemplate* findIconTemplateByTemplateName(const QString& strTemplateName);

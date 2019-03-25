@@ -52,7 +52,7 @@
 
 
 #include "hiconmainwindow.h"
-#include "hiconmgr.h"
+#include "hiconeditormgr.h"
 #include <QTranslator>
 #include <QDir>
 int main(int argc, char *argv[])

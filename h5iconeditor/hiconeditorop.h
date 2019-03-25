@@ -3,11 +3,11 @@
 #include "hiconapi.h"
 #include "hbaseobj.h"
 #include "hgroupobj.h"
-#include "hiconmgr.h"
-class HIconOp
+#include "hiconeditormgr.h"
+class HIconEditorOp
 {
 public:
-    HIconOp(HIconMgr* mgr);
+    HIconEditorOp(HIconMgr* mgr);
 
 public:
 
@@ -115,7 +115,7 @@ public:
     void setupMatrix();
 
 private:
-    HIconMgr* pIconMgr;
+    HIconEditorMgr* pIconMgr;
     Qt::Alignment m_Alignment;
     IconSize m_Equalway;
     IconFlip m_Flipway;

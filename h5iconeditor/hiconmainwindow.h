@@ -12,7 +12,7 @@
 #include "hiconframe.h"
 #include "hiconwidget.h"
 #include "hicondocument.h"
-#include "hiconmgr.h"
+#include "hiconeditormgr.h"
 #include "hiconpreview.h"
 class HIconMainWindow : public QMainWindow
 {

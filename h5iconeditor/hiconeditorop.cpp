@@ -1,4 +1,4 @@
-#include "hiconop.h"
+#include "hiconeditorop.h"
 #include <QScrollBar>
 #include <QGraphicsView>
 #include <QDir>
@@ -6,13 +6,13 @@
 #include "hiconitemgroup.h"
 #include "publicdata.h"
 
-HIconOp::HIconOp(HIconMgr* mgr)
+HIconEditorOp::HIconEditorOp(HIconMgr* mgr)
     :pIconMgr(mgr)
 {
 
 }
 
-void HIconOp::fitWidth()
+void HIconEditorOp::fitWidth()
 {
     if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->view())
         return;
@@ -29,7 +29,7 @@ void HIconOp::fitWidth()
 
 }
 
-void HIconOp::fitHeight()
+void HIconEditorOp::fitHeight()
 {
     if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->view())
         return;
@@ -45,13 +45,13 @@ void HIconOp::fitHeight()
     pIconMgr->getIconFrame()->scaleChangedTo(ratio);
 }
 
-void HIconOp::cut()
+void HIconEditorOp::cut()
 {
     copy();
     del();
 }
 
-void HIconOp::copy()
+void HIconEditorOp::copy()
 {
     if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene())
         return;
@@ -86,7 +86,7 @@ void HIconOp::copy()
     }
 }
 
-void HIconOp::paste()
+void HIconEditorOp::paste()
 {
     if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene())
         return;
@@ -147,7 +147,7 @@ void HIconOp::paste()
     pIconMgr->getIconUndoStack()->push(pasteIconCommand);
 }
 
-void HIconOp::del()
+void HIconEditorOp::del()
 {
     if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene())
         return;
@@ -168,7 +168,7 @@ void HIconOp::del()
 }
 
 
-QString HIconOp::getClipboardFile()
+QString HIconEditorOp::getClipboardFile()
 {
     char szDataPath[128];
     getDataFilePath(DFPATH_DATA,szDataPath);
@@ -181,7 +181,7 @@ QString HIconOp::getClipboardFile()
     return clipboardPath;
 }
 
-void HIconOp::bringToTop()
+void HIconEditorOp::bringToTop()
 {
     if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene())
         return;
@@ -210,7 +210,7 @@ void HIconOp::bringToTop()
 
 }
 
-void HIconOp::bringToBottom()
+void HIconEditorOp::bringToBottom()
 {
     if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene())
         return;
@@ -237,7 +237,7 @@ void HIconOp::bringToBottom()
     }
 }
 
-void HIconOp::groupObj()
+void HIconEditorOp::groupObj()
 {
     if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene() ||!pIconMgr->getIconTemplate() || !pIconMgr->getIconTemplate()->getSymbol())
         return;
@@ -270,7 +270,7 @@ void HIconOp::groupObj()
     pIconMgr->setDrawShape(enumSelection);
 }
 
-void HIconOp::ungroupObj()
+void HIconEditorOp::ungroupObj()
 {
     if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene()||!pIconMgr->getIconTemplate() || !pIconMgr->getIconTemplate()->getSymbol())
         return;
@@ -293,13 +293,13 @@ void HIconOp::ungroupObj()
     pIconMgr->setDrawShape(enumSelection);
 }
 
-void HIconOp::zoomIn()
+void HIconEditorOp::zoomIn()
 {
 
 
 }
 
-void HIconOp::zoomOut()
+void HIconEditorOp::zoomOut()
 {
 
 }

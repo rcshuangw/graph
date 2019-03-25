@@ -1,9 +1,9 @@
-﻿#include "hiconmgr.h"
+﻿#include "hiconeditormgr.h"
 
-HIconMgr::HIconMgr()
+HIconEditorMgr::HIconEditorMgr()
     :m_bShowGrid(true),m_bShowCenterLine(true)
 {
-    m_pIconFrame = new HIconFrame(this);
+    m_pIconFrame = new HIconEditorFrame(this);
     //pIconFrame->setIconMgr(this);
     m_pIconDocument = new HIconDocument(this);
     m_pIconState = new HIconState(this);
@@ -16,87 +16,87 @@ HIconMgr::HIconMgr()
     m_selectMode = enumSelect;
 }
 
-HIconDocument* HIconMgr::getIconDocument()
+HIconDocument* HIconEditorMgr::getIconDocument()
 {
     if(m_pIconDocument)
         return m_pIconDocument;
     return NULL;
 }
 
-HIconTemplate* HIconMgr::getIconTemplate()
+HIconTemplate* HIconEditorMgr::getIconTemplate()
 {
     if(m_pIconDocument)
         return m_pIconDocument->getCurrentTemplate();
     return NULL;
 }
 
-HIconFrame* HIconMgr::getIconFrame()
+HIconFrame* HIconEditorMgr::getIconFrame()
 {
     if(m_pIconFrame)
         return m_pIconFrame;
     return NULL;
 }
 
-QUndoStack* HIconMgr::getIconUndoStack()
+QUndoStack* HIconEditorMgr::getIconUndoStack()
 {
     if(m_pIconUndoStack)
         return m_pIconUndoStack;
     return NULL;
 }
 
-HIconOp* HIconMgr::getIconOp()
+HIconOp* HIconEditorMgr::getIconOp()
 {
     if(m_pIconOp)
         return m_pIconOp;
     return NULL;
 }
 
-void HIconMgr::setBackgroundColor(QString clrName)
+void HIconEditorMgr::setBackgroundColor(QString clrName)
 {
     m_strBgClr = clrName;
 }
 
-QString HIconMgr::getBackgroundColor()
+QString HIconEditorMgr::getBackgroundColor()
 {
     return m_strBgClr;
 }
 
-void HIconMgr::setShowGrid(bool show)
+void HIconEditorMgr::setShowGrid(bool show)
 {
     m_bShowGrid = show;
 }
 
-bool HIconMgr::getShowGrid()
+bool HIconEditorMgr::getShowGrid()
 {
     return m_bShowGrid;
 }
 
-void HIconMgr::setShowCenterLine(bool show)
+void HIconEditorMgr::setShowCenterLine(bool show)
 {
     m_bShowCenterLine = show;
 }
 
-bool HIconMgr::getShowCenterLine()
+bool HIconEditorMgr::getShowCenterLine()
 {
     return m_bShowCenterLine;
 }
 
-void HIconMgr::setDrawShape(DRAWSHAPE ds)
+void HIconEditorMgr::setDrawShape(DRAWSHAPE ds)
 {
     m_drawShape = ds;
 }
 
-DRAWSHAPE HIconMgr::getDrawShape()
+DrawShape HIconEditorMgr::getDrawShape()
 {
     return m_drawShape;
 }
 
-void HIconMgr::setSelectMode(SELECTMODE ds)
+void HIconEditorMgr::setSelectMode(SELECTMODE ds)
 {
     m_selectMode = ds;
 }
 
-SELECTMODE HIconMgr::getSelectMode()
+SELECTMODE HIconEditorMgr::getSelectMode()
 {
     return m_selectMode;
 }
