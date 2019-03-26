@@ -11,15 +11,15 @@
 HIconEditorFrame::HIconEditorFrame(QWidget * parent, Qt::WindowFlags f )
     :HFrame(parent,f)
 {
-    m_pIconMgr = NULL;
+    m_pIconEditorMgr = NULL;
     m_pView->setInteractive(false);
     m_pView->setDragMode(QGraphicsView::NoDrag);
 }
 
 HIconEditorFrame::HIconEditorFrame(HIconMgr* pMgr,QWidget * parent, Qt::WindowFlags f)
-:m_pIconMgr(pMgr),HFrame(parent,f)
+:m_pIconEditorMgr(pMgr),HFrame(parent,f)
 {
-    m_pView->setScene(new HIconScene(m_pIconMgr));
+    m_pView->setScene(new HIconScene(m_pIconEditorMgr));
 }
 
 HIconEditorFrame::~HIconEditorFrame()
@@ -29,7 +29,7 @@ HIconEditorFrame::~HIconEditorFrame()
 
 void HIconEditorFrame::setIconMgr(HIconMgr *iconmgr)
 {
-    m_pIconMgr = iconmgr;
+    m_pIconEditorMgr = iconmgr;
 }
 
 void HIconEditorFrame::setLogicRect(QRectF &rectF)
@@ -111,7 +111,11 @@ void HIconEditorFrame::objRemoved(HBaseObj* obj)
 
 void HIconEditorFrame::objSelectChanged(HBaseObj *obj, bool isSelected)
 {
-
+    if(!m_pIconEditorMgr)
+        return;
+    //选择selectManager
+    //m_pEditMgr->m_pSelectionMgr->SelectChanged(obj,isSelected);
+    //m_pEditMgr->m_pSelectionMgr->RecalcSelect();
 }
 
 void HIconEditorFrame::recalcSelect()

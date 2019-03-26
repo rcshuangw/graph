@@ -23,10 +23,14 @@ public:
     ~HIconEditorFrame();
 
 public:
+
+    //创建Item和绘制相关信息
     void drawPath(const QList<Path>& pathList);
     void endDraw();
     void objCreated(HBaseObj* obj,bool isPaste);
     void objRemoved(HBaseObj* obj);
+
+
     //刷新选中点、选中框
     void refreshSelected(const QRectF& rect);
 
@@ -37,19 +41,8 @@ public:
 
     void setIconMgr(HIconEditorMgr* iconmgr);
 
-
-
     //设置scene的逻辑区域
     void setLogicRect(QRectF& rectF);
-
-    //在pattern获取Item对象
-    HIconGraphicsItem* addItemByIconObj(HBaseObj* pObj);
-
-    //增加scene的显示方案
-    void refreshSceneByPatternId(int nPatternId);
-
-    //删除scene的显示方案
-    void clearSceneByPatternId(int nPatternId);
 
     //获取scene的区域
     QRectF getLogicRect();
@@ -63,6 +56,17 @@ public:
     //获取item
     HIconGraphicsItem* getIconGraphicsItemByObj(HBaseObj* pObj);
 
+//////////////////////////////////////////////以下为pattern的操作//////////////////////////////////////////
+    //在pattern获取Item对象
+    HIconGraphicsItem* addItemByIconObj(HBaseObj* pObj);
+
+    //增加scene的显示方案
+    void refreshSceneByPatternId(int nPatternId);
+
+    //删除scene的显示方案
+    void clearSceneByPatternId(int nPatternId);
+
+
 public slots:
     void objSelectChanged(HBaseObj* obj,bool isSelected);
     void recalcSelect();
@@ -73,7 +77,7 @@ protected:
 
 private:
     QRectF m_sceneRect;
-    HIconEditorMgr* m_pIconMgr;
+    HIconEditorMgr* m_pIconEditorMgr;
 
 };
 
