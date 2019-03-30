@@ -21,13 +21,19 @@ INCLUDEPATH += \
 CONFIG += qt warn_off thread exceptions
 SOURCES += \
       h5graphicsitem.cpp \
-      hbaseobj.cpp
+      hbaseobj.cpp \
+    hshapeobj.cpp \
+    hlineobj.cpp \
+    hrectangle.cpp
 
 HEADERS +=\
     ../../include/hiconapi.h \
     ../../include/h5iconlib/h5iconlibexport.h \
     ../../include/h5iconlib/h5graphicsitem.h \
-    ../../include/h5iconlib/hbaseobj.h
+    ../../include/h5iconlib/hbaseobj.h \
+    ../../include/h5iconlib/hshapeobj.h \
+    ../../include/h5iconlib/hlineobj.h \
+    ../../include/h5iconlib/hrectangle.h
 
 unix{
     UI_DIR = temp/ui
