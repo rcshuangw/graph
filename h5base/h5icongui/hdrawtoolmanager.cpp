@@ -1,4 +1,4 @@
-#include "hdrawmanager.h"
+#include "hdrawtoolmanager.h"
 #include "h5drawtool.h"
 #include "hlinetool.h"
 #include "hpolylinetool.h"

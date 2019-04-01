@@ -5,7 +5,10 @@
 #include "hiconapi.h"
 #include "hbaseobj.h"
 #include "hiconeditormgr.h"
-#include "hdrawmanager.h"
+#include "hdrawtoolmanager.h"
+/*
+ * 图符绘制管理类：主要是针对图符的绘制过程
+*/
 class HIconEditorMgr;
 class HIconDrawManager : HDrawManager
 {

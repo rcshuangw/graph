@@ -1,6 +1,6 @@
 #ifndef HICONSELECTTOOLMANAGER_H
 #define HICONSELECTTOOLMANAGER_H
-#include "hdrawmanager.h"
+#include "hdrawtoolmanager.h"
 class HIconSelectToolManager
 {
 public:
