@@ -22,22 +22,24 @@ CONFIG += qt warn_off thread exceptions
 SOURCES += \
     h5event.cpp \
     h5drawtool.cpp \
-    hdrawmanager.cpp \
     hrecttool.cpp \
     hlinetool.cpp \
     harctool.cpp \
-    hpolylinetool.cpp
+    hpolylinetool.cpp \
+    hdrawtoolmanager.cpp \
+    hselectmanager.cpp
 
 HEADERS +=\
     ../../include/hiconapi.h \
     ../../include/h5icongui/h5iconguiexport.h \
     ../../include/h5icongui/h5event.h \
     ../../include/h5icongui/h5drawtool.h \
-    ../../include/h5icongui/hdrawmanager.h \
     ../../include/h5icongui/hrecttool.h \
     ../../include/h5icongui/hlinetool.h \
     ../../include/h5icongui/harctool.h \
-    ../../include/h5icongui/hpolylinetool.h
+    ../../include/h5icongui/hpolylinetool.h \
+    ../../include/h5icongui/hdrawtoolmanager.h \
+    ../../include/h5icongui/hselectmanager.h
    
 
 unix{

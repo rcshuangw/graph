@@ -8,7 +8,7 @@ class HIconEditorOp
 {
 public:
     HIconEditorOp(HIconMgr* mgr);
-
+    ~HIconEditorOp();
 public:
 
     void fitWidth();

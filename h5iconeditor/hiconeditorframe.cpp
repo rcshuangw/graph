@@ -5,7 +5,7 @@
 #include <QProcessEnvironment>
 #include "hiconeditorscene.h"
 #include "hiconeditormgr.h"
-#include "hicondrawmanager.h"
+#include "hicondrawtoolmanager.h"
 
 
 HIconEditorFrame::HIconEditorFrame(QWidget * parent, Qt::WindowFlags f )

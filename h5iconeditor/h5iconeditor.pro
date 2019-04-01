@@ -26,7 +26,9 @@ HEADERS       = \
     hiconeditormgr.h \
     hiconeditorop.h \
     hiconeditorscene.h \
-    hicondrawmanager.h
+    #hiconselectmanager.h \
+    hicondrawtoolmanager.h \
+    hiconselecttoolmanager.h
 
 SOURCES       = main.cpp \
     hiconmainwindow.cpp \
@@ -48,7 +50,9 @@ SOURCES       = main.cpp \
     hiconeditormgr.cpp \
     hiconeditorop.cpp \
     hiconeditorscene.cpp \
-    hicondrawmanager.cpp
+    #hiconselectmanager.cpp \
+    hicondrawtoolmanager.cpp \
+    hiconselecttoolmanager.cpp
 
 RESOURCES     = \
     icon.qrc \

@@ -1,4 +1,4 @@
-﻿#include "hicondrawmanager.h"
+﻿#include "hicondrawtoolmanager.h"
 #include "hiconobj.h"
 
 HIconState::HIconState(HIconMgr* pMgr):pIconMgr(pMgr)

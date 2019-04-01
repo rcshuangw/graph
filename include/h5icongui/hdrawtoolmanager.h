@@ -12,6 +12,9 @@ struct Path
     bool coordType; //false 逻辑坐标 true 设备坐标
 };
 
+/*
+ * 绘制工具管理类
+*/
 class HDrawTool;
 class HDrawManager : public QObject
 {

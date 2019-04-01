@@ -4,11 +4,12 @@
 #include <QWidget>
 #include "hiconapi.h"
 /*
- * 存放QIconEditorFrame和QTabBar
+ * 绘制图符窗口类：存放QIconEditorFrame和QTabBar
+ * QIconEditorFrame类是真正的窗口绘制类
 */
 class QTabBar;
 class HIconEditorFrame;
-class HIconMgr;
+class HIconEditorMgr;
 
 class HIconEditorWidget : public QWidget
 {
@@ -16,7 +17,7 @@ class HIconEditorWidget : public QWidget
 public:
     HIconEditorWidget();
 
-    void setIconMgr(HIconMgr* iconMgr);
+    void setIconMgr(HIconEditorMgr* iconMgr);
 
     //新建一个icon图元
     void newIconWidget();
@@ -41,7 +42,7 @@ public slots:
     void renameShowPattern();
     void patternChanged(int curPatternId);
 private:
-    HIconMgr* pIconMgr;
+    HIconEditorMgr* pIconMgr;
     QTabBar* pTabBar;
 };
 

@@ -1,5 +1,5 @@
 #include "hrecttool.h"
-#include "hdrawmanager.h"
+#include "hdrawtoolmanager.h"
 HRectTool::HRectTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
     :m_pDrawManager(manager),m_edrawShape(objShape),m_strObjName(name),m_strObjUuid(uuid)
 {
