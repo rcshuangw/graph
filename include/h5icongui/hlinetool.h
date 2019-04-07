@@ -4,18 +4,19 @@
 class H5ICONGUI_EXPORT HLineTool: public HDrawTool
 {
 public:
-    HLineTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid);
+    HLineTool(HToolManager* manager,DrawShape objShape,const QString& name,const QString& uuid);
     virtual ~HLineTool();
 
 public:
     virtual void clear();
     virtual void onEvent(HEvent& event);
-    virtual void onMousePress(QMouseEvent* event,QVariant &data);
-    virtual void onMouseMove(QMouseEvent* event,QVariant &data);
-    virtual void onMouseRelease(QMouseEvent* event,QVariant &data);
+	virtual void onMousePressEvent(QMouseEvent* event, QVariant &data);
+	virtual void onMouseMoveEvent(QMouseEvent* event, QVariant &data);
+	virtual void onMouseReleaseEvent(QMouseEvent* event, QVariant &data);
 
 private:
     QPointF m_ptStPoint;
     QPointF m_ptCurPoint;
+	bool m_bDrawStart;
 };
 #endif // HLINETOOL_H

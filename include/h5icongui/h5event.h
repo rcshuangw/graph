@@ -14,7 +14,7 @@ public:
 public:
     QEvent* event();
     QVariant data();
-private:
+public:
     QEvent* m_event;
     QVariant m_data;
 };

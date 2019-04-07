@@ -1,8 +1,9 @@
 #include "hlinetool.h"
-HLineTool::HLineTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
-    :m_pDrawManager(manager),m_edrawShape(objShape),m_strObjName(name),m_strObjUuid(uuid)
+#include "htoolmanager.h"
+HLineTool::HLineTool(HToolManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
+    :HDrawTool(manager,objShape,name,uuid)
 {
-
+	m_bDrawStart = false;
 }
 
 HLineTool::~HLineTool()
@@ -20,29 +21,78 @@ void HLineTool::onEvent(HEvent& e)
     HDrawTool::onEvent(e);
     if(e.event()->type() == QMouseEvent::MouseButtonPress)
     {
-        onMousePress((QMouseEvent*)e.event(),e.data());
+        onMousePressEvent((QMouseEvent*)e.event(), e.m_data);
     }
     else if(e.event()->type() == QMouseEvent::MouseMove)
     {
-        onMouseMove((QMouseEvent*)e.event(),e.data());
+        onMouseMoveEvent((QMouseEvent*)e.event(), e.m_data);
     }
     else if(e.event()->type() == QMouseEvent::MouseButtonRelease)
     {
-        onMouseRelease((QMouseEvent*)e.event(),e.data());
+        onMouseReleaseEvent((QMouseEvent*)e.event(), e.m_data);
     }
 }
 
-void HLineTool::onMousePress(QMouseEvent* event,QVariant &data)
+void HLineTool::onMousePressEvent(QMouseEvent* event,QVariant &data)
 {
-
+	if (!m_pToolManager)
+		return;
+	if (event->button() != Qt::LeftButton)
+		return;
+	QPointF pt = data.toPointF();
+	//if (!m_bDrawStart)
+	{
+		m_ptStPoint = m_ptCurPoint = pt;
+	//	m_bDrawStart = true;
+	}
 }
 
-void HLineTool::onMouseMove(QMouseEvent* event,QVariant &data)
+void HLineTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
 {
-
+	if (!m_pToolManager)
+		return;
+	if (!(event->button()&Qt::LeftButton))
+		return;
+	QPointF pt = data.toPointF();
+	m_ptCurPoint = pt;
+	
+	QPainterPath painterPath;
+	painterPath.moveTo(m_ptStPoint);
+	painterPath.lineTo(m_ptCurPoint);
+	//设置属性
+	Path path;
+	path.coordType = false;
+	path.painterPath = painterPath;
+	//由绘制管理发送给editor
+	QList<Path> pathList;
+	pathList.append(path);
+	m_pToolManager->onDrawPath(pathList);
 }
 
-void HLineTool::onMouseRelease(QMouseEvent* event,QVariant &data)
+void HLineTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
 {
+	QPointF pt = data.toPointF();
+	m_ptCurPoint = pt;
+	if (event->button() != Qt::LeftButton)
+		return;
 
+	if (qFuzzyCompare(m_ptCurPoint.x(), m_ptStPoint.x()) && qFuzzyCompare(m_ptCurPoint.y(), m_ptStPoint.y()))
+		return;
+
+	HBaseObj* pObj = NULL;
+	if (0 == m_edrawShape)
+	{
+	}
+	else
+	{
+		//创建lineobj对象
+	}
+
+	if (pObj)
+	{
+		QPolygonF points;
+		points << m_ptStPoint << m_ptCurPoint;
+		m_pToolManager->appendObj(pObj);
+	}
+	m_pToolManager->endDraw();
 }

@@ -1,7 +1,7 @@
 #include "hrecttool.h"
-#include "hdrawtoolmanager.h"
-HRectTool::HRectTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
-    :m_pDrawManager(manager),m_edrawShape(objShape),m_strObjName(name),m_strObjUuid(uuid)
+#include "htoolmanager.h"
+HRectTool::HRectTool(HToolManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
+    :HDrawTool(manager, objShape, name, uuid)
 {
 
 }
@@ -13,7 +13,7 @@ HRectTool::~HRectTool()
 
 void HRectTool::clear()
 {
-
+	m_ptStPoint = m_ptCurPoint = QPointF();
 }
 
 void HRectTool::onEvent(HEvent& e)
@@ -21,21 +21,21 @@ void HRectTool::onEvent(HEvent& e)
     HDrawTool::onEvent(e);
     if(e.event()->type() == QMouseEvent::MouseButtonPress)
     {
-        onMousePress((QMouseEvent*)e.event(),e.data());
+        onMousePressEvent((QMouseEvent*)e.event(),e.m_data);
     }
     else if(e.event()->type() == QMouseEvent::MouseMove)
     {
-        onMouseMove((QMouseEvent*)e.event(),e.data());
+        onMouseMoveEvent((QMouseEvent*)e.event(), e.m_data);
     }
     else if(e.event()->type() == QMouseEvent::MouseButtonRelease)
     {
-        onMouseRelease((QMouseEvent*)e.event(),e.data());
+        onMouseReleaseEvent((QMouseEvent*)e.event(), e.m_data);
     }
 }
 
-void HRectTool::onMousePress(QMouseEvent* event,QVariant &data)
+void HRectTool::onMousePressEvent(QMouseEvent* event,QVariant &data)
 {
-    if(!m_pDrawManager)
+    if(!m_pToolManager)
         return;
     if(event->button() != Qt::LeftButton)
         return;
@@ -43,9 +43,9 @@ void HRectTool::onMousePress(QMouseEvent* event,QVariant &data)
     m_ptStPoint = m_ptCurPoint = pt;
 }
 
-void HRectTool::onMouseMove(QMouseEvent* event,QVariant &data)
+void HRectTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
 {
-    if(!m_pDrawManager)
+    if(!m_pToolManager)
         return;
     if(!(event->button()&Qt::LeftButton))
         return;
@@ -87,11 +87,11 @@ void HRectTool::onMouseMove(QMouseEvent* event,QVariant &data)
     path.painterPath = painterPath;
     //由绘制管理发送给editor
     QList<Path> pathList;
-    pathList.append(Path);
-    m_pDrawManager->onDrawPath(pathList);
+    pathList.append(path);
+	m_pToolManager->onDrawPath(pathList);
 }
 
-void HRectTool::onMouseRelease(QMouseEvent* event,QVariant &data)
+void HRectTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
 {
     QPointF pt = data.toPointF();
     m_ptCurPoint = pt;
@@ -142,8 +142,8 @@ void HRectTool::onMouseRelease(QMouseEvent* event,QVariant &data)
 
             //obj设置points
             //设置obj属性
-            m_pDrawManager->appendObj(pObj);
+			m_pToolManager->appendObj(pObj);
         }
-        m_pDrawManager->endDraw();
     }
+	m_pToolManager->endDraw();
 }

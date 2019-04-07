@@ -16,12 +16,12 @@ struct Path
  * 绘制工具管理类
 */
 class HDrawTool;
-class HDrawManager : public QObject
+class HToolManager : public QObject
 {
     Q_OBJECT
 public:
-    HDrawManager();
-    ~HDrawManager();
+	HToolManager();
+    ~HToolManager();
 public:
     virtual void onEvent(HEvent& e);
 

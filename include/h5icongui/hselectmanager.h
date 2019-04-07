@@ -25,6 +25,9 @@ public:
 
 private:
     void calcPoints();
+
+signals:
+	void refreshSelect(const QRect& rect);
 };
 
 #endif // HICONSELECTMANAGER_H

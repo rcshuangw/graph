@@ -102,22 +102,22 @@ SELECTMODE HIconEditorMgr::getSelectMode()
 }
 
 
-void HIconMgr::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
+void HIconEditorMgr::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
 {
     m_pIconDocument->New(strTemplateName,strCatalogName,nCatalogType);
 }
 
-void HIconMgr::Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
+void HIconEditorMgr::Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
 {
     m_pIconDocument->Del(strTemplateName,nTemplateType,strUuid);
 }
 
-bool HIconMgr::Save(bool savefile)
+bool HIconEditorMgr::Save(bool savefile)
 {
     return m_pIconDocument->Save(savefile);
 }
 
-void HIconMgr::Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
+void HIconEditorMgr::Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
 {
     m_pIconDocument->Open(strTemplateName,nTemplateType,strUuid);
 }

@@ -4,15 +4,15 @@
 class H5ICONGUI_EXPORT HPolylineTool: public HDrawTool
 {
 public:
-    HPolylineTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid);
+    HPolylineTool(HToolManager* manager,DrawShape objShape,const QString& name,const QString& uuid);
     virtual ~HPolylineTool();
 
 public:
     virtual void clear();
     virtual void onEvent(HEvent& event);
-    virtual void onMousePress(QMouseEvent* event,QVariant &data);
-    virtual void onMouseMove(QMouseEvent* event,QVariant &data);
-    virtual void onMouseRelease(QMouseEvent* event,QVariant &data);
+	virtual void onMousePressEvent(QMouseEvent* event, QVariant &data);
+	virtual void onMouseMoveEvent(QMouseEvent* event, QVariant &data);
+	virtual void onMouseReleaseEvent(QMouseEvent* event, QVariant &data);
 
 private:
     QPointF m_ptStPoint;
