@@ -12,6 +12,7 @@
 #include "hiconapi.h"
 #include "h5iconlibexport.h"
 #include "h5graphicsitem.h"
+
 class H5ICONLIB_EXPORT HBaseObj: public QObject
 {
 public:
@@ -74,18 +75,6 @@ public:
     virtual void setTextColor(const QColor* c);
     virtual QColor getTextColor();
 
-    //矩形框的x,y轴弯曲度
-    virtual void setRound(bool bcheck);
-    virtual bool getRound();
-
-    //圆角x轴
-    virtual void setXAxis(int xAxis);
-    virtual int getXAxis();
-
-    //圆角y轴
-    virtual void setYAxis(int yAxis);
-    virtual int getYAxis();
-
     //是否可见
     virtual void setVisible(bool,int nFlag = 0);
     virtual bool isVisible();
@@ -100,6 +89,19 @@ public:
 
     void setPattern(quint8 pattern);
     quint8 getPattern();
+
+	///区域位置大小
+	virtual QRectF getBounding(qint8 flag = 0);
+
+	///绘图路径
+	virtual QPainterPath getShape(qint8 flag = 0) = 0;
+
+	///绝对坐标
+	virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
+
+	///相对坐标
+	///flag:bit0是否绝对坐标, bit1是否不旋转, bit2是否不翻转
+	virtual QPolygonF getPointList(qint8 flag = 0) = 0;
 
     ///////////////////////////////////////////////////////操作属性/////////////////////////////
     //设置转换
@@ -128,6 +130,8 @@ public:
     //设置翻转
     virtual void turn(bool bHorizon,bool bVertical);
 
+	virtual void move(qreal dx, qreal dy, bool bscale = false);
+	virtual void moveBy(qreal dx, qreal dy);
 
 
     //obj的当前位置
@@ -146,8 +150,7 @@ public:
 
     bool contains(int nPatternId);
 
-    virtual void move(qreal dx,qreal dy,bool bscale = false);
-    virtual void moveBy(qreal dx,qreal dy);
+   
 
     //设置item对象
     virtual void setIconGraphicsItem(H5GraphicsItem* item);
@@ -188,7 +191,7 @@ public:
     quint8 nPattern;
 
     H5GraphicsItem* pIconGraphicsItem;
-    quint8 drawShape;//图符类型(直线\圆)
+    DrawShape m_eDrawShape;//图符类型(直线\圆)
 
     //对象标识ID
     quint32 nObjectId;

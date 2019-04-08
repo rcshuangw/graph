@@ -48,13 +48,32 @@ public:
     virtual void setFrameSee(bool frameSee);
     virtual bool getFrameSee();
 
+	///改变大小
+	virtual void resize(double w, double h, bool scale = false);
+
+	virtual void expand(double dx1, double dx2, double dy1, double dy2, qint8 flag = 0);
+	//int	GetExpandDirection();
+
+
+	///绝对坐标
+	virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
+
+	///获取点列表
+	virtual QPolygonF getPointList(qint8 flag = 0);
+
+	///获得包裹区域位置大小
+	virtual QRectF bounding(qint8 flag = 0);
+
+	///获得绘图路径
+	virtual QPainterPath shape(qint8 flag = 0);
+
     //透明度
     virtual void setTransparency(quint8 transparency);
     virtual quint8 getTransparency();
 
-    virtual void setImagePath(const QString& path);
-    virtual QString getImagePath();
-    virtual bool isValidImagePath() const;
+    virtual void setBkImagePath(const QString& path);
+    virtual QString getBkImagePath();
+    virtual bool isValidBkImagePath() const;
 
     virtual void setKeepImageRatio(bool bcheck);
     virtual bool getKeepImageRatio();
@@ -62,26 +81,29 @@ public:
     virtual void setImageDirect(quint8 direct);
     virtual quint8 getImageDirect();
 
+	///设置贴片
+
     //////////////////////////////////////////设置属性//////////////////////////////////////
 public:
-    qreal width;
-    qreal height;
+    qreal m_width;
+    qreal m_height;
 
     //填充方面
-    quint8 nFillWay;//填充方式
-    quint8 nFillStyle;//填充风格
-    QString strFillColor; //填充颜色
-    quint8 nFillDirection;//填充方向
-    quint8 nFillPercentage;//填充比例
+	bool m_bFill;
+    quint8 m_nFillWay;//填充方式
+    quint8 m_nFillStyle;//填充风格
+    QString m_strFillColor; //填充颜色
+    quint8 m_nFillDirection;//填充方向
+    quint8 m_nFillPercentage;//填充比例
 
     //边框透明度
-    bool bFrameSee;//边框可见
-    quint8 nTransparency; //透明度
+    bool m_bFrameSee;//边框可见
+    quint8 m_nTransparency; //透明度
 
     //图片
-    QString strImagePath;//图片路径
-    bool bKeepImageRatio; //保持图片比例
-    quint8 nImageDirect; //图片的方向
+    QString m_strImagePath;//图片路径
+    bool m_bKeepImageRatio; //保持图片比例
+    quint8 m_nImageDirect; //图片的方向
 };
 
 #endif // HSIMPLEOBJ_H

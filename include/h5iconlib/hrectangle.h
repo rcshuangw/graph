@@ -1,7 +1,6 @@
 ﻿#ifndef HRECTANGLE_H
 #define HRECTANGLE_H
 #include "hshapeobj.h"
-
 ///////////////////////////////////////////HRectangleObj///////////////////////////////////////////
 class H5ICONLIB_EXPORT HRectangle : public HShapeObj
 {
@@ -23,43 +22,31 @@ public:
     virtual void copyTo(HBaseObj* obj);
     virtual void clone(HBaseObj* obj);
 
-    //与QGraphicsItem相关
-    virtual DRAWSHAPE getShapeType();
-    virtual void moveBy(qreal dx,qreal dy);
-    virtual void resize(double w,double h);
-    virtual void paint(QPainter* painter);
-    virtual void setPainter(QPainter* painter,const QRectF& rect);
-    virtual QRectF boundingRect();
-    virtual bool contains(const QPointF &point) ;
-    virtual QPainterPath shape() ;
-    virtual void resetRectPoint(const QPointF& pt1,const QPointF& pt2);
-    virtual void setObjRect(const QRectF& rect);
-    virtual QRectF getObjRect();
+	///获得包裹区域位置大小
+	virtual QRectF bounding(qint8 flag = 0);
 
+	///获得绘图路径
+	virtual QPainterPath shape(qint8 flag = 0);
 
+	///设置贴片
+	virtual void setBkImagePath(const QString& s);
 
-    //设置相关属性
-    virtual void setTopLeft(const QPointF& point);
-    virtual QPointF getTopLeft();
-    virtual void setRectWidth(double width);
-    virtual double getRectWidth();
-    virtual void setRectHeight(double height);
-    virtual double getRectHeight();
-    virtual QPolygonF getRectLists();
+	//矩形框的x,y轴弯曲度  放到rect里面
+	virtual void setRound(bool bcheck);
+	virtual bool getRound();
 
+	//圆角x轴
+	virtual void setXAxis(int xAxis);
+	virtual quint8 getXAxis();
 
-    //设置其他功能
-    virtual QPainterPath getPath();//只提供矩形，圆，椭圆，文字三种支持图片
-    //设置绘制选择状态
-    virtual void drawSelect(QPainter* painter);//单个选择
-    virtual void drawMulSelect(QPainter* painter,bool benchmark); //多选择
+	//圆角y轴
+	virtual void setYAxis(int yAxis);
+	virtual quint8 getYAxis();
 
-public:
-    QPointF ptOld,ptNew;
 protected:
-    QPointF topLeft;
-    double rectWidth;
-    double rectHeight;
+	bool m_bRound;
+	quint8 m_nXAxis;
+	quint8 m_nYAxis;
 };
 
 
