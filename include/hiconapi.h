@@ -77,10 +77,11 @@
 
 enum DrawShape
 {
-    Selection, //选择模式
+    //Selection, //选择模式
     //enumMulSelection,
 
     //绘制对象
+	No,
     Line,
     Rectangle,
     Ellipse,

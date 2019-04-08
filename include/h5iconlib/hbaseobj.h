@@ -66,7 +66,6 @@ public:
     virtual Qt::PenCapStyle getLineCapStyle();
 
 
-
     //边框色
     virtual void setBorderColor(const QColor* c);
     virtual QColor getBorderColor();
@@ -108,7 +107,7 @@ public:
     virtual bool getTransform(QTransform& transform,quint8 flag);
 
     //设置映射
-    virtual void Maps(QPolygonF& pylist,quint8 flag);
+    virtual void maps(QPolygonF& pylist,quint8 flag);
 
     //是否0值
     virtual bool isZero(double value);
@@ -157,7 +156,7 @@ public:
     virtual H5GraphicsItem* getIconGraphicsItem();
 
     //改变大小
-    virtual void resize(double w,double h);
+    virtual void resize(double w,double h,bool);
     virtual void resetRectPoint(const QPointF& pt1,const QPointF& pt2);
     //void setSubObjRect(qreal dx,qreal dy);
 
@@ -171,30 +170,31 @@ public:
 public:
 
     //基本信息
-    QString strObjName; //对象名称
-    double originX;//原点位置（x,y)
-    double originY;
+    QString m_strObjName; //对象名称
+	DrawShape m_eDrawShape;
+    double m_dOriginX;//原点位置（x,y)
+    double m_dOriginY;
 
-    float fRotateAngle;//旋转角度
-    QString strLineColor;//线条颜色
-    quint8 nLineWidth;//线宽
-    quint8 nLineStyle;//线型
-    quint8 nLineJoinStyle;//线连接处形状
-    quint8 nLineCapStyle;//线端形状
+    float m_fRotateAngle;//旋转角度
+    QString m_strLineColor;//线条颜色
+    quint8 m_nLineWidth;//线宽
+    quint8 m_nLineStyle;//线型
+    quint8 m_nLineJoinStyle;//线连接处形状
+    quint8 m_nLineCapStyle;//线端形状
 
-    bool bHorizonTurn;//水平翻转
-    bool bVerticalTurn;//垂直翻转
-    bool bVisible;//是否显示
-    bool bDeleted;//是否删除
+    bool m_bHorizonTurn;//水平翻转
+    bool m_bVerticalTurn;//垂直翻转
+    bool m_bVisible;//是否显示
+    bool m_bDeleted;//是否删除
+	bool m_bModify;
 
-    qint64 nStackOrder;
-    quint8 nPattern;
+    qint64 m_nStackOrder;
+    quint8 m_nPattern;
 
-    H5GraphicsItem* pIconGraphicsItem;
-    DrawShape m_eDrawShape;//图符类型(直线\圆)
+    H5GraphicsItem* m_pIconGraphicsItem;
 
     //对象标识ID
-    quint32 nObjectId;
+    quint32 m_nObjectId;
 
 private:
 
