@@ -35,7 +35,7 @@ void HBaseObj::init()
 	m_bVerticalTurn = false;//垂直翻转
 	m_bVisible = true;//是否显示
 	m_bDeleted = false;//是否删除
-	m_nStackOrder = 0;
+	m_nZValue = 0;
 
 	m_nPattern = 0;
     
@@ -81,7 +81,7 @@ void HBaseObj::readData(QDataStream *data)
     m_bDeleted = b;
     quint64 n64;
     *data>>n64;
-    m_nStackOrder = n64;
+	m_nZValue = n64;
  
     *data>>n8;
     m_nPattern = n8;
@@ -109,7 +109,7 @@ void HBaseObj::writeData(QDataStream *data)
     *data<<(bool)m_bVerticalTurn;
     *data<<(bool)m_bVisible;
     *data<<(bool)m_bDeleted;
-    *data<<(quint64)m_nStackOrder;
+    *data<<(quint64)m_nZValue;
     *data<<(quint8)m_nPattern;
     *data<<(bool)m_bModify;
 }
@@ -134,7 +134,7 @@ void HBaseObj::readXml(QDomElement* dom)
     m_bHorizonTurn = dom->attribute("HorizonTurn").toInt();
     m_bVerticalTurn = dom->attribute("VerticalTurn").toInt();
     m_bVisible = dom->attribute("Visible").toInt();
-    m_nStackOrder = dom->attribute("StackOrder").toInt();
+	m_nZValue = dom->attribute("StackOrder").toInt();
     m_nPattern = dom->attribute("nPattern").toUInt();
 }
 
@@ -157,7 +157,7 @@ void HBaseObj::writeXml(QDomElement* dom)
     dom->setAttribute("HorizonTurn",m_bHorizonTurn);
     dom->setAttribute("VerticalTurn",m_bVerticalTurn);
     dom->setAttribute("Visible",m_bVisible);
-    dom->setAttribute("StackOrder",m_nStackOrder);
+    dom->setAttribute("StackOrder", m_nZValue);
     dom->setAttribute("nPattern",m_nPattern);
 
 }
@@ -182,7 +182,7 @@ void HBaseObj::copyTo(HBaseObj* obj)
     obj->m_bVerticalTurn = m_bVerticalTurn;
     obj->m_bVisible = m_bVisible;
     obj->m_bDeleted = m_bDeleted;
-    obj->m_nStackOrder = m_nStackOrder;
+    obj->m_nZValue = m_nZValue;
     obj->m_nPattern = m_nPattern;
     obj->m_bModify = m_bModify;
 }
@@ -196,107 +196,107 @@ void HBaseObj::clone(HBaseObj* ob)
 //设置属性值 By Name
 void HBaseObj::setObjName(const QString strName)
 {
-   strObjName = strName;
+   m_strObjName = strName;
 }
 
 QString HBaseObj::getObjName()
 {
-   return strObjName;
+   return m_strObjName;
 }
 
 int HBaseObj::getObjID()
 {
-    return nObjectId;
+    return m_nObjectId;
 }
 
 void HBaseObj::setObjID(int nObjID)
 {
-    nObjectId = nObjID;
+    m_nObjectId = nObjID;
 }
 
 void HBaseObj::setOX(double x)
 {
-    originX = x;
+    m_dOriginX = x;
 }
 
 void HBaseObj::setOY(double y)
 {
-    originY = y;
+    m_dOriginY = y;
 }
 
 double HBaseObj::getOX()
 {
-    return originX;
+    return m_dOriginX;
 }
 
 double HBaseObj::getOY()
 {
-    return originY;
+    return m_dOriginY;
 }
 
 //形状类型
-DRAWSHAPE HBaseObj::getShapeType()
+DrawShape HBaseObj::getShapeType()
 {
-    return (DRAWSHAPE)drawShape;
+    return (DrawShape)m_eDrawShape;
 }
 
-void HBaseObj::setShapeType(DRAWSHAPE t)
+void HBaseObj::setShapeType(DrawShape t)
 {
-    drawShape = t;
+    m_eDrawShape = t;
 }
 
 //线条颜色
 void HBaseObj::setLineColorName(QString clrName)
 {
-    strLineColor = clrName;
+    m_strLineColor = clrName;
 }
 
 QString HBaseObj::getLineColorName()
 {
-   return strLineColor;
+   return m_strLineColor;
 }
 
 //线宽
 void HBaseObj::setLineWidth(quint8 lineWidth)
 {
-    nLineWidth = lineWidth;
+    m_nLineWidth = lineWidth;
 }
 
 quint8 HBaseObj::getLineWidth()
 {
-    return nLineWidth;
+    return m_nLineWidth;
 }
 
 void HBaseObj::setLineStyle(Qt::PenStyle style)
 {
-    nLineStyle = style;
+    m_nLineStyle = style;
 }
 
 Qt::PenStyle HBaseObj::getLineStyle()
 {
-    return (Qt::PenStyle)nLineStyle;
+    return (Qt::PenStyle)m_nLineStyle;
 }
 
 //线连接处形状
 void HBaseObj::setLineJoinStyle(Qt::PenJoinStyle style)
 {
-    nLineJoinStyle = style;
+    m_nLineJoinStyle = style;
 }
 
 Qt::PenJoinStyle HBaseObj::getLineJoinStyle()
 {
-    return (Qt::PenJoinStyle)nLineJoinStyle;
+    return (Qt::PenJoinStyle)m_nLineJoinStyle;
 }
 
 //线端形状
 void HBaseObj::setLineCapStyle(Qt::PenCapStyle style)
 {
-    nLineCapStyle = style;
+    m_nLineCapStyle = style;
 }
 
 Qt::PenCapStyle HBaseObj::getLineCapStyle()
 {
-    return (Qt::PenCapStyle)nLineCapStyle;
+    return (Qt::PenCapStyle)m_nLineCapStyle;
 }
 
 //边框色
@@ -324,56 +324,117 @@ QColor HBaseObj::getTextColor()
 
 void HBaseObj::setPattern(quint8 pattern)
 {
-    nPattern = pattern;
+    m_nPattern = pattern;
 }
 
 quint8 HBaseObj::getPattern()
 {
-    return nPattern;
+    return m_nPattern;
 }
 
+///绝对坐标
+bool HBaseObj::setPointList(QPolygonF& list, qint8 flag = 1)
+{
 
-
+}
 
 //设置转换
-bool HBaseObj::getTransform(QTransform& transform,quint8 flag)
+bool HBaseObj::transform(QTransform& transform1,quint8 flag)
 {
     bool bok = false;
     quint8 nFlag = flag;
 
     if(isTurned(nFlag))
     {
-        transform.translate(getOX(),getOY());
-        if(bHorizonTurn)
+		transform1.translate(getOX(),getOY());
+        if(m_bHorizonTurn)
         {
-            transform.scale(-1,1);
+			transform1.scale(-1,1);
             bok = true;
         }
-        if(bVerticalTurn)
+        if(m_bVerticalTurn)
         {
-            transform.scale(1,-1);
+			transform1.scale(1,-1);
             bok = true;
         }
-        transform.translate(-getOX(),-getOY());
+		transform1.translate(-getOX(),-getOY());
     }
 
     if(isRotated())
     {
-        transform.translate(getOX(),getOY());
-        transform.rotate(fRotateAngle);
+		transform1.translate(getOX(),getOY());
+		transform1.rotate(m_fRotateAngle);
         bok = true;
-        transform.translate(-getOX(),-getOY());
+		transform1.translate(-getOX(),-getOY());
     }
 
     return bok;
 }
 
-//设置映射
-void HBaseObj::Maps(QPolygonF& pylist,quint8 flag)
+//改变大小
+void HBaseObj::resize(double w, double h, bool scale)
 {
-    QTransform transform;
-    getTransform(transform,flag);
-    pylist = pylist*transform;
+
+}
+
+void HBaseObj::resetRectPoint(const QPointF& pt1, const QPointF& pt2)
+{
+
+}
+
+QRectF HBaseObj::boundingRect(qint8 flag)
+{
+	QRectF rectF = getPointList(flag).boundingRect();
+	return rectF;
+}
+
+
+void HBaseObj::rotate(float fAngle)
+{
+	m_fRotateAngle = fAngle;
+}
+
+//设置翻转
+void HBaseObj::turn(bool bHorizon, bool bVertical)
+{
+	m_bHorizonTurn = bHorizon;
+	m_bVerticalTurn = bVertical;
+}
+
+void HBaseObj::move(qreal dx, qreal dy, bool bscale)
+{
+	if (bscale)
+	{
+		m_dOriginX = m_dOriginX * dx;
+		m_dOriginY = m_dOriginY * dy;
+	}
+	else
+	{
+		m_dOriginX = dx;
+		m_dOriginY = dy;
+	}
+}
+
+void HBaseObj::moveBy(qreal dx, qreal dy, bool bscale)
+{
+	if (bscale)
+	{
+		m_dOriginX += m_dOriginX * dx;
+		m_dOriginY += m_dOriginY * dy;
+	}
+	else
+	{
+		m_dOriginX += dx;
+		m_dOriginY += dy;
+	}
+}
+
+//设置映射
+void HBaseObj::maps(QPolygonF& pylist,quint8 flag)
+{
+    QTransform transform1;
+    transform(transform1,flag);
+    pylist = pylist*transform1;
 }
 
 bool HBaseObj::isZero(double value)
@@ -391,189 +452,86 @@ bool HBaseObj::isZero(double value)
 
 bool HBaseObj::isRotated()
 {
-    return !isZero(fRotateAngle);
-}
-
-//旋转角度
-void HBaseObj::setRotateAngle(float rotate)
-{
-    fRotateAngle = rotate;
-}
-
-float HBaseObj::getRotateAngle()
-{
-    return fRotateAngle;
-}
-
-//增加一个角度
-void HBaseObj::setRotateAdd(float fAngle)
-{
-    fRotateAngle += fAngle;
+    return !isZero(m_fRotateAngle);
 }
 
 //翻转
 bool HBaseObj::isTurned(qint8 nFlag)
 {
-    return (bHorizonTurn||bVerticalTurn);
+	return (m_bHorizonTurn || m_bVerticalTurn);
+}
+
+float HBaseObj::rotateAngle()
+{
+    return m_fRotateAngle;
+}
+
+//增加一个角度
+void HBaseObj::rotateBy(float fAngle)
+{
+    m_fRotateAngle += fAngle;
 }
 
 void HBaseObj::setModify(bool modify)
 {
-    bModify = modify;
+    m_bModify = modify;
 }
 
-bool HBaseObj::getModify()
+bool HBaseObj::isModify()
 {
-    return bModify;
+    return m_bModify;
 }
 
-//设置翻转
-void HBaseObj::setTurn(bool bHorizon,bool bVertical)
-{
-    bHorizonTurn = bHorizon;
-    bVerticalTurn = bVertical;
-}
-
-//是否可见
 void HBaseObj::setVisible(bool bvisible,int nFlag)
 {
-    bVisible = bvisible;
+    m_bVisible = bvisible;
 }
 
 bool HBaseObj::isVisible()
 {
-    return bVisible;
+    return m_bVisible;
 }
 
-//是否删除
 void HBaseObj::setDeleted(bool bDel)
 {
-    bDeleted = bDel;
+    m_bDeleted = bDel;
 }
 
 bool HBaseObj::isDeleted()
 {
-    return bDeleted;
+    return m_bDeleted;
 }
 
-//叠放次序
-qint64 HBaseObj::getStackOrder()
+//就是zValue
+qint64 HBaseObj::zValue()
 {
-    return nStackOrder;
+    return m_nZValue;
 }
 
-void HBaseObj::setStackOrder(qint64 nStack)
+void HBaseObj::setZValue(qint64 nStack)
 {
-    nStackOrder = nStack;
+	m_nZValue = nStack;
 }
 
 bool HBaseObj::contains(int nPatternId)
 {
-    return nPattern == nPatternId;
-}
-
-void HBaseObj::move(qreal dx, qreal dy,bool bscale)
-{
-    if(bscale)
-    {
-        originX = originX * dx;
-        originY = originY * dy;
-    }
-    else
-    {
-        originX = dx;
-        originY = dy;
-    }
-}
-
-void HBaseObj::moveBy(qreal dx, qreal dy,bool bscale)
-{
-    if(bscale)
-    {
-        originX += originX * dx;
-        originY += originY * dy;
-    }
-    else
-    {
-        originX += dx;
-        originY += dy;
-    }
+    return m_nPattern == nPatternId;
 }
 
 void HBaseObj::paint(QPainter* painter)
 {
-
+	return;
 }
 
-//设置item对象
-void HBaseObj::setIconGraphicsItem(HIconGraphicsItem* item)
+void HBaseObj::setIconGraphicsItem(H5GraphicsItem* item)
 {
-    pIconGraphicsItem = item;
+    m_pIconGraphicsItem = item;
 }
 
-HIconGraphicsItem* HBaseObj::getIconGraphicsItem()
+H5GraphicsItem* HBaseObj::iconGraphicsItem()
 {
-    return pIconGraphicsItem;
+    return m_pIconGraphicsItem;
 }
 
-void HBaseObj::resize(double w,double h)
-{
 
-}
-
-void HBaseObj::resetRectPoint(const QPointF& pt1,const QPointF& pt2)
-{
-
-}
-
-QRectF HBaseObj::boundingRect() const
-{
-    return QRectF();
-}
-
-bool HBaseObj::contains(const QPointF &point) const
-{
-    return false;
-}
-
-QPainterPath HBaseObj::shape() const
-{
-    return QPainterPath();
-
-}
-
-void HBaseObj::setImagePath(const QString& path)
-{
-    strImagePath = path;
-}
-
-QString HBaseObj::getImagePath()
-{
-    return strImagePath;
-}
-
-bool HBaseObj::isValidImagePath() const
-{
-    return !strImagePath.isEmpty() && !strImagePath.isNull();
-}
-
-void HBaseObj::setKeepImageRatio(bool bcheck)
-{
-    bKeepImageRatio = bcheck;
-}
-
-bool HBaseObj::getKeepImageRatio()
-{
-    return bKeepImageRatio;
-}
-
-void HBaseObj::setImageDirect(quint8 direct)
-{
-    nImageDirect = direct;
-}
-
-quint8 HBaseObj::getImageDirect()
-{
-    return nImageDirect;
-}
 

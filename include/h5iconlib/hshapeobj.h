@@ -62,11 +62,14 @@ public:
 	virtual QPolygonF getPointList(qint8 flag = 0);
 
 	///获得包裹区域位置大小
-	virtual QRectF bounding(qint8 flag = 0);
+	virtual QRectF boundingRect(qint8 flag = 0);
 
 	///获得绘图路径
 	virtual QPainterPath shape(qint8 flag = 0);
 
+	virtual void setPainter(QPainter* painter,const QRectF& rect);
+
+	virtual bool getPath(QPainterPath& path);
     //透明度
     virtual void setTransparency(quint8 transparency);
     virtual quint8 getTransparency();
@@ -85,6 +88,8 @@ public:
 
     //////////////////////////////////////////设置属性//////////////////////////////////////
 public:
+	QPolygonF	m_list;
+	QRectF		m_rect;
     qreal m_width;
     qreal m_height;
 

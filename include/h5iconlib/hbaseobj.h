@@ -83,67 +83,47 @@ public:
     virtual bool isDeleted();
 
     //叠放次序
-    qint64 getStackOrder();
-    virtual void setStackOrder(qint64 nStack);
+    qint64 zValue();
+    virtual void setZValue(qint64 nStack);
 
     void setPattern(quint8 pattern);
     quint8 getPattern();
 
-	///区域位置大小
-	virtual QRectF getBounding(qint8 flag = 0);
-
-	///绘图路径
-	virtual QPainterPath getShape(qint8 flag = 0) = 0;
-
 	///绝对坐标
 	virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
-
-	///相对坐标
-	///flag:bit0是否绝对坐标, bit1是否不旋转, bit2是否不翻转
 	virtual QPolygonF getPointList(qint8 flag = 0) = 0;
 
+	virtual void setOX(double x);
+	virtual double getOX();
+	virtual void setOY(double y);
+	virtual double getOY();
+
+	virtual void setModify(bool modify);
+	virtual bool isModify();
+
     ///////////////////////////////////////////////////////操作属性/////////////////////////////
-    //设置转换
-    virtual bool getTransform(QTransform& transform,quint8 flag);
-
-    //设置映射
+	//改变大小
+	virtual void resize(double w, double h, bool scale);
+	virtual void resetRectPoint(const QPointF& pt1, const QPointF& pt2);
+    virtual bool transform(QTransform& transform1,quint8 flag);
     virtual void maps(QPolygonF& pylist,quint8 flag);
+	virtual void rotate(float fAngle);
+	virtual void turn(bool bHorizon, bool bVertical);
 
-    //是否0值
-    virtual bool isZero(double value);
-
-    /////////////////////////////////////旋转//////////////////////////////
-    //是否旋转
+	virtual void move(qreal dx, qreal dy, bool bscale = false);
+	virtual void moveBy(qreal dx, qreal dy,bool bscale = false);
+    
+	virtual bool isZero(double value);
+	virtual bool isTurned(qint8 nFlag);
     virtual bool isRotated();
 
-    //旋转角度
-    virtual void Rotate(float fAngle);
     virtual float rotateAngle();
 
     //增加角度
-    virtual void RotateBy(float fAngle);
+    virtual void rotateBy(float fAngle);
 
-    //翻转
-    virtual bool isTurned(qint8 nFlag);
-
-    //设置翻转
-    virtual void turn(bool bHorizon,bool bVertical);
-
-	virtual void move(qreal dx, qreal dy, bool bscale = false);
-	virtual void moveBy(qreal dx, qreal dy);
-
-
-    //obj的当前位置
-    QPointF pos();
-
-    virtual void setOX(double x);
-    virtual double getOX();
-    virtual void setOY(double y);
-    virtual double getOY();
-
-    virtual void setModify(bool modify);
-    virtual bool getModify();
-
+   
+    
     //当前画面的比例缩放
     double curZoomScale();
 
@@ -153,18 +133,18 @@ public:
 
     //设置item对象
     virtual void setIconGraphicsItem(H5GraphicsItem* item);
-    virtual H5GraphicsItem* getIconGraphicsItem();
+    virtual H5GraphicsItem* iconGraphicsItem();
 
-    //改变大小
-    virtual void resize(double w,double h,bool);
-    virtual void resetRectPoint(const QPointF& pt1,const QPointF& pt2);
+    
     //void setSubObjRect(qreal dx,qreal dy);
 
 public:
-    virtual void paint(QPainter* painter);
-    virtual QRectF boundingRect() const;
+	virtual QRectF boundingRect(qint8 flag = 0);
+	virtual QPainterPath shape(qint8 flag = 0) = 0;
+    virtual void paint(QPainter* painter) = 0;
+  //  virtual QRectF boundingRect() const;
     virtual bool contains(const QPointF &point) const;
-    virtual QPainterPath shape() const;
+   // virtual QPainterPath shape() const;
 
 //绘制对象的属性
 public:
@@ -188,7 +168,7 @@ public:
     bool m_bDeleted;//是否删除
 	bool m_bModify;
 
-    qint64 m_nStackOrder;
+    qint64 m_nZValue;
     quint8 m_nPattern;
 
     H5GraphicsItem* m_pIconGraphicsItem;

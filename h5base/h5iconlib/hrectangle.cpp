@@ -59,7 +59,6 @@ void HRectangle::copyTo(HBaseObj* obj)
     HRectangle* ob = (HRectangle*)obj;
 	ob->setXAxis(getXAxis());
 	ob->setYAxis(getYAxis());
-   
 }
 
 void HRectangle::clone(HBaseObj *obj)
@@ -69,14 +68,29 @@ void HRectangle::clone(HBaseObj *obj)
     copyTo(obj);
 }
 
-///获得包裹区域位置大小
-QRectF HRectangle::bounding(qint8 flag)
+bool HRectangle::getPath(QPainterPath& path)
 {
-	QRectF rect = HShapeObj::bounding(flag);
+	bool bRound = getRound();
+	int nXAxis = getXAxis();
+	int nYAxis = getYAxis();
+	QRectF rect = getPointList(0).boundingRect();
+	if (!bRound)
+	{
+		path.addRect(rect);
+	}
+	else
+	{
+		path.addRoundedRect(rect, nXAxis, nYAxis);
+	}
+	return true;
+}
+
+QRectF HRectangle::boundingRect(qint8 flag)
+{
+	QRectF rect = HShapeObj::boundingRect(flag);
 	return rect;
 }
 
-///获得绘图路径
 QPainterPath HRectangle::shape(qint8 flag)
 {
 	QPainterPath path;
@@ -89,6 +103,20 @@ QPainterPath HRectangle::shape(qint8 flag)
 	QRectF rect = points.boundingRect().adjusted(5, 5, -5, -5);
 	path.addRect(rect);
 	return path;
+}
+
+void HRectangle::paint(QPainter* painter)
+{
+	if (!painter)
+		return;
+	painter->save();
+	QRectF rect =  getPointList().boundingRect();
+	setPainter(painter, rect);//设置Painter
+	QPainterPath path;
+	if(getPath(path))
+		painter->drawPath(path);
+
+	painter->restore();
 }
 
 ///设置贴片

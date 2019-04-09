@@ -22,12 +22,9 @@ public:
     virtual void copyTo(HBaseObj* obj);
     virtual void clone(HBaseObj* obj);
 
-	///获得包裹区域位置大小
-	virtual QRectF bounding(qint8 flag = 0);
+	
 
-	///获得绘图路径
-	virtual QPainterPath shape(qint8 flag = 0);
-
+	virtual bool getPath(QPainterPath& path);
 	///设置贴片
 	virtual void setBkImagePath(const QString& s);
 
@@ -43,6 +40,11 @@ public:
 	virtual void setYAxis(int yAxis);
 	virtual quint8 getYAxis();
 
+
+public:
+	virtual QRectF boundingRect(qint8 flag = 0);
+	virtual QPainterPath shape(qint8 flag = 0);
+	virtual void paint(QPainter* painter);
 protected:
 	bool m_bRound;
 	quint8 m_nXAxis;

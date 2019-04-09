@@ -148,6 +148,7 @@ void HShapeObj::clone(HBaseObj* ob)
 	copyTo(ob);
 }
 
+//变化可能是按比例也可能是直接更改w,h
 void HShapeObj::resize(double w, double h, bool scale)
 {
 	HBaseObj::resize(w, h, scale);
@@ -261,10 +262,175 @@ bool HShapeObj::getFrameSee()
 	return m_bFrameSee;
 }
 
-///获得包裹区域位置大小
-QRectF HShapeObj::bounding(qint8 flag)
+void HShapeObj::setPainter(QPainter* painter, const QRectF& rect)
 {
+	painter->setRenderHint(QPainter::Antialiasing);
+	painter->setRenderHint(QPainter::TextAntialiasing);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
+	//设置属性
+	QColor penClr = QColor(getLineColorName()); //线条颜色
+	int penWidth = getLineWidth();//线条宽度
+	Qt::PenStyle penStyle = getLineStyle(); //线条形状
+	Qt::PenCapStyle capStyle = getLineCapStyle(); //线条角度
+	bool bFrameSee = getFrameSee();//边框可见
+	QPen pen = QPen(penClr);
+	pen.setStyle(penStyle);
+	pen.setWidth(penWidth);
+	pen.setCapStyle(capStyle);
+	if (bFrameSee)
+		painter->setPen(pen);
+	else
+		painter->setPen(Qt::NoPen);
+
+	//设置填充
+	quint8 nFillWay = getFillWay();//填充选择
+	quint8 nFillStyle = getFillStyle(); //填充风格
+	quint8 nTransparency = getTransparency(); //透明度
+	quint8 nFillDir = getFillDirection();//填充方向
+	QColor fillClr = QColor(getFillColorName());//填充颜色
+	//quint8 nFillPercentage = getFillPercentage(); //填充比例
+
+	QBrush brush;
+	if (nFillWay > 0)
+	{
+		painter->setOpacity(1 - (qreal)nTransparency / 100.00);
+		if (nFillWay == 1)
+		{
+			if (nFillStyle == Qt::LinearGradientPattern)
+			{
+				QPointF ps1, ps2;
+				switch (nFillDir)
+				{
+				case DIRECT_BOTTOM_TO_TOP:
+				{
+					ps2 = rect.topLeft();
+					ps1 = rect.bottomLeft();
+					break;
+				}
+				case DIRECT_TOP_TO_BOTTOM: //有顶到底
+				{
+					ps1 = rect.topLeft();
+					ps2 = rect.bottomLeft();
+					break;
+				}
+				case DIRECT_LEFT_TO_RIGHT: //由左到右
+				{
+					ps1 = rect.topLeft();
+					ps2 = rect.topRight();
+					break;
+				}
+				case DIRECT_RIGHT_TO_LEFT: //由右到左
+				{
+					ps1 = rect.topRight();
+					ps2 = rect.topLeft();
+					break;
+				}
+				case DIRECT_VER_TO_OUT: //垂直到外
+				{
+					ps1 = QPointF(rect.center().x(), rect.top());
+					ps2 = rect.topLeft();
+					break;
+				}
+				case DIRECT_HORi_TO_OUT: //水平向外
+				{
+					ps1 = QPointF(rect.left(), rect.center().y());
+					ps2 = rect.topLeft();
+					break;
+				}
+				case DIRECT_VER_TO_IN: //垂直向里
+				{
+					ps2 = QPointF(rect.center().x(), rect.top());
+					ps1 = rect.topLeft();
+					break;
+				}
+				case DIRECT_HORI_TO_IN: //垂直向里
+				{
+					ps2 = QPointF(rect.left(), rect.center().y());
+					ps1 = rect.topLeft();
+					break;
+				}
+				}
+				QLinearGradient lgrd(ps1, ps2);
+				lgrd.setColorAt(0.0, fillClr);
+				lgrd.setColorAt(0.5, fillClr.lighter(150));
+				lgrd.setColorAt(1.0, fillClr.lighter(250));
+				lgrd.setSpread(QGradient::ReflectSpread);
+				QBrush brush2(lgrd);
+				brush = brush2;
+			}
+			else if (nFillStyle == Qt::RadialGradientPattern)
+			{
+				QRadialGradient lgrd(rect.center(), qMin(rect.width(), rect.height()) / 2);
+				lgrd.setColorAt(0.0, fillClr);
+				lgrd.setColorAt(0.5, fillClr.dark(150));
+				lgrd.setColorAt(1.0, fillClr.dark(250));
+				lgrd.setSpread(QGradient::ReflectSpread);
+				QBrush brush2(lgrd);
+				brush = brush2;
+			}
+			else if (nFillStyle == Qt::ConicalGradientPattern)
+			{
+				QConicalGradient lgrd(rect.center(), 270);
+				lgrd.setColorAt(0.0, fillClr);
+				lgrd.setColorAt(0.5, fillClr.lighter(150));
+				lgrd.setColorAt(1.0, fillClr.lighter(250));
+				lgrd.setSpread(QGradient::ReflectSpread);
+				QBrush brush2(lgrd);
+				brush = brush2;
+			}
+			else
+			{
+				Qt::BrushStyle bs = (Qt::BrushStyle)nFillStyle;
+				QBrush brush1(fillClr, bs);
+				brush = brush1;
+			}
+			painter->setBrush(brush);
+		}
+		else if (nFillWay == 2)
+		{
+			QString strImagePath = getBkImagePath();//图片部分
+			if (!strImagePath.isEmpty() || !strImagePath.isNull())
+			{
+				QPixmap pix, pix1;
+				if (pix.load(strImagePath))
+				{
+					//painter->setClipPath(getPath());
+					if (!m_bKeepImageRatio)
+					{
+						pix1 = pix.scaled(rect.size().toSize());
+						painter->drawPixmap(rect.x(), rect.y(), pix1);
+					}
+					else
+					{
+						pix1 = pix.scaledToHeight(rect.height());
+						QRectF rectF = rect;
+						if (1 == m_nImageDirect)
+						{
+							double deltaX = (rect.width() - pix1.width()) / 2;
+							rectF.setX(rect.x() + deltaX);
+						}
+						else if (2 == m_nImageDirect)
+						{
+							double deltaX = (rect.width() - pix1.width());
+							rectF.setX(rect.x() + deltaX);
+						}
+						painter->drawPixmap(rectF.x(), rectF.y(), pix1);
+					}
+				}
+			}
+		}
+	}
+}
+
+bool HShapeObj::getPath(QPainterPath& path)
+{
+	return false;
+}
+///获得包裹区域位置大小
+QRectF HShapeObj::boundingRect(qint8 flag)
+{
+	return HShapeObj::boundingRect(flag);
 }
 
 //获得绘图路径
