@@ -332,9 +332,29 @@ quint8 HBaseObj::getPattern()
     return m_nPattern;
 }
 
-///绝对坐标
+
+//list中的点都是绝对坐标，变换操作后都是相对坐标
 bool HBaseObj::setPointList(QPolygonF& list, qint8 flag = 1)
 {
+	int i = 0; 
+	int sz = list.size();
+	if (flag)
+	{
+		QPointF pt = list.boundingRect().center();
+		m_dOriginX = pt.x();
+		m_dOriginY = pt.y();
+		for (i = 0; i < sz; i++)
+			list[i] -= pt;
+	}
+	QTransform mx;
+	bool bok = transform(mx, 1);
+	if (!bok)
+		return true;
+	mx = mx.inverted(&bok);
+	if (!bok)
+		return false;
+	for (int i = 0; i < sz; i++)
+		list[i] = mx.map(list[i]);
 
 }
 
@@ -343,10 +363,12 @@ bool HBaseObj::transform(QTransform& transform1,quint8 flag)
 {
     bool bok = false;
     quint8 nFlag = flag;
+	QPointF pt = QPointF(getOX(), getOY());
+	transform1 = transform1.translate(pt.x(), pt.y());
 
     if(isTurned(nFlag))
     {
-		transform1.translate(getOX(),getOY());
+		//transform1.translate(getOX(),getOY());
         if(m_bHorizonTurn)
         {
 			transform1.scale(-1,1);
@@ -357,15 +379,15 @@ bool HBaseObj::transform(QTransform& transform1,quint8 flag)
 			transform1.scale(1,-1);
             bok = true;
         }
-		transform1.translate(-getOX(),-getOY());
+		//transform1.translate(-getOX(),-getOY());
     }
 
     if(isRotated())
     {
-		transform1.translate(getOX(),getOY());
+		//transform1.translate(getOX(),getOY());
 		transform1.rotate(m_fRotateAngle);
         bok = true;
-		transform1.translate(-getOX(),-getOY());
+		//transform1.translate(-getOX(),-getOY());
     }
 
     return bok;
@@ -388,10 +410,23 @@ QRectF HBaseObj::boundingRect(qint8 flag)
 	return rectF;
 }
 
-
 void HBaseObj::rotate(float fAngle)
 {
 	m_fRotateAngle = fAngle;
+}
+
+void HBaseObj::moveBy(qreal dx, qreal dy, bool bscale)
+{
+	if (bscale)
+	{
+		m_dOriginX += m_dOriginX * dx;
+		m_dOriginY += m_dOriginY * dy;
+	}
+	else
+	{
+		m_dOriginX += dx;
+		m_dOriginY += dy;
+	}
 }
 
 //设置翻转
@@ -412,20 +447,6 @@ void HBaseObj::move(qreal dx, qreal dy, bool bscale)
 	{
 		m_dOriginX = dx;
 		m_dOriginY = dy;
-	}
-}
-
-void HBaseObj::moveBy(qreal dx, qreal dy, bool bscale)
-{
-	if (bscale)
-	{
-		m_dOriginX += m_dOriginX * dx;
-		m_dOriginY += m_dOriginY * dy;
-	}
-	else
-	{
-		m_dOriginX += dx;
-		m_dOriginY += dy;
 	}
 }
 
@@ -533,5 +554,17 @@ H5GraphicsItem* HBaseObj::iconGraphicsItem()
     return m_pIconGraphicsItem;
 }
 
+void HBaseObj::addPointList(QPolygonF& list, qint8 flag)
+{
 
+}
 
+void HBaseObj::pointList(QPolygonF&list, qint8 flag)
+{
+
+}
+
+void HBaseObj::clearPointList()
+{
+	m_points.clear();
+}

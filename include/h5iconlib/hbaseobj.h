@@ -65,7 +65,6 @@ public:
     virtual void setLineCapStyle(Qt::PenCapStyle style);
     virtual Qt::PenCapStyle getLineCapStyle();
 
-
     //边框色
     virtual void setBorderColor(const QColor* c);
     virtual QColor getBorderColor();
@@ -137,7 +136,10 @@ public:
 
     
     //void setSubObjRect(qreal dx,qreal dy);
-
+public:
+	void addPointList(QPolygonF& list, qint8 flag);
+	void pointList(QPolygonF&list,qint8 flag);
+	void clearPointList();
 public:
 	virtual QRectF boundingRect(qint8 flag = 0);
 	virtual QPainterPath shape(qint8 flag = 0) = 0;
@@ -177,7 +179,7 @@ public:
     quint32 m_nObjectId;
 
 private:
-
+	QHash<qint8, QPolygonF> m_points;
 protected:
 
     //父图符
