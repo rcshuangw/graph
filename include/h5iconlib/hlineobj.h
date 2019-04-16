@@ -5,7 +5,7 @@ obj都是继承HBaseObj 都是被其他类继承
 */
 #include "hshapeobj.h"
 ///////////////////////////////////////////HRectangleObj///////////////////////////////////////////
-class H5ICONLIB_EXPORT HLineObj : public HShapeObj
+class H5ICONLIB_EXPORT HLineObj : public HBaseObj
 {
 public:
 	HLineObj();
@@ -25,11 +25,11 @@ public:
 	virtual void copyTo(HBaseObj* obj);
 	virtual void clone(HBaseObj* obj);
 public:
-	void setArrowStart(quint8 start);
-	quint8 getArrowStart();
+	void setStartArrowType(quint8 start);
+	quint8 getStartArrowType();
 
-	void setArrowEnd(quint8 end);
-	quint8 getArrowEnd();
+	void setEndArrowType(quint8 end);
+	quint8 getEndArrowType();
 
 	void setArrowWidth(quint8 width);
 	quint8 getArrowWidth();
@@ -37,7 +37,8 @@ public:
 	void setArrowHeight(quint8 height);
 	quint8 getArrowHeight();
 
-	virtual bool getPath(QPainterPath& path);
+	virtual QPainterPath getArrowPath(HPointsList& points,bool head);
+	virtual void getBoundingRect(HPointsList& points,QPointF &ptStart,QPointF& ptEnd,double width);
 
 	///////////////////////////////////////////////////////操作属性/////////////////////////////
 	//改变大小
@@ -48,13 +49,12 @@ public:
 public:
 	///绝对坐标
 	virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
-	virtual QPolygonF getPointList(qint8 flag = 0) = 0;
 	//获得线条的矩形边框
 public:
-	virtual QRectF boundingRect(qint8 flag = 0);
-	virtual QPainterPath shape(qint8 flag = 0) = 0;
-	virtual void paint(QPainter* painter) = 0;
-	virtual bool contains(const QPointF &point) const;
+	//virtual QRectF boundingRect(qint8 flag = 0);
+	//virtual QPainterPath shape(qint8 flag = 0) = 0;
+	//virtual void paint(QPainter* painter) = 0;
+	//virtual bool contains(const QPointF &point) const;
 protected:
 	quint8 m_nArrowStart;//箭头的类型
 	quint8 m_nArrowEnd;//箭尾的类型

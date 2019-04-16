@@ -453,9 +453,9 @@ void HBaseObj::move(qreal dx, qreal dy, bool bscale)
 //设置映射
 void HBaseObj::maps(QPolygonF& pylist,quint8 flag)
 {
-    QTransform transform1;
-    transform(transform1,flag);
-    pylist = pylist*transform1;
+    QTransform trans;
+    transform(trans,flag);
+    pylist = pylist*trans;
 }
 
 bool HBaseObj::isZero(double value)
