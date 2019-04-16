@@ -1,11 +1,11 @@
 #include "h5graphicsitem.h"
-
-H5GraphicsItem::H5GraphicsItem(HBaseObj* obj,QGraphicsItem* parent):m_pBaseObj(obj),QGraphicsItem(parent)
+#include "hbaseobj.h"
+H5GraphicsItem::H5GraphicsItem(HBaseObj* obj,QGraphicsItem* parent):m_pBaseObj(obj),QGraphicsObject(parent)
 {
     if(m_pBaseObj)
     {
-        setPos(m_pBaseObj->pos());
-        setZValue(m_pBaseObj->getStackOrder());
+        //setPos(m_pBaseObj->pos());
+        setZValue(m_pBaseObj->zValue());
         m_pBaseObj->setIconGraphicsItem(this);
     }
     setFlag(QGraphicsItem::ItemIsMovable,true);

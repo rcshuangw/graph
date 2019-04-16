@@ -334,7 +334,7 @@ quint8 HBaseObj::getPattern()
 
 
 //list中的点都是绝对坐标，变换操作后都是相对坐标
-bool HBaseObj::setPointList(QPolygonF& list, qint8 flag = 1)
+bool HBaseObj::setPointList(QPolygonF& list, qint8 flag)
 {
 	int i = 0; 
 	int sz = list.size();

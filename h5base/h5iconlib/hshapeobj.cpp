@@ -176,6 +176,7 @@ bool HShapeObj::setPointList(QPolygonF& list, qint8 flag)
 	QRectF rect = list.boundingRect();
 	m_width = rect.width();
 	m_height = rect.height();
+	return true;
 }
 
 ///获取点列表

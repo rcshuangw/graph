@@ -5,6 +5,7 @@
 class HBaseObj;
 class H5ICONLIB_EXPORT H5GraphicsItem : public QGraphicsObject
 {
+	Q_OBJECT
 public:
     H5GraphicsItem(HBaseObj* obj,QGraphicsItem* parent = 0);
     virtual ~H5GraphicsItem();

@@ -216,6 +216,7 @@ QPainterPath HLineObj::getArrowPath(HPointsList& points, bool head)
 			path.closeSubpath();
 		}
 	}
+	return path;
 }
 
 //改变大小
@@ -236,7 +237,7 @@ void HLineObj::moveBy(qreal dx, qreal dy, bool bscale)
 
 bool HLineObj::setPointList(QPolygonF& list, qint8 flag)
 {
-	HBaseObj::setPointList(list, flag);
+	return HBaseObj::setPointList(list, flag);
 }
 
 void HLineObj::getBoundingRect(HPointsList& points, QPointF &headPoint, QPointF& tailPoint, double width)

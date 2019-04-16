@@ -32,12 +32,12 @@ public:
 public:
 	///¾ø¶Ô×ø±ê
 	virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
-	virtual QPolygonF getPointList(qint8 flag = 0) = 0;
+	virtual QPolygonF getPointList(qint8 flag = 0);
 
 public:
 	virtual QRectF boundingRect(qint8 flag = 0);
 	virtual QPainterPath shape(qint8 flag = 0);
-	virtual void paint(QPainter* painter) = 0;
+	virtual void paint(QPainter* painter);
 
 protected:
 	QPointF ptHeadPoint;
