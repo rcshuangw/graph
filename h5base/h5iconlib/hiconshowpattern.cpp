@@ -38,7 +38,7 @@ void HIconShowPattern::writeXml(QDomElement *dom)
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* pObj = (HBaseObj*)pObjList[i];
-        if(pObj->isDeleted())
+        if(!pObj && pObj->isDeleted())
         {
             pObjList.removeAt(i);
             delete pObj;

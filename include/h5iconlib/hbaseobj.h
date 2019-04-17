@@ -87,7 +87,7 @@ public:
 
     void setPattern(quint8 pattern);
     quint8 getPattern();
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 	///绝对坐标
 	virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
 	virtual QPolygonF getPointList(qint8 flag = 0) = 0;
@@ -100,6 +100,7 @@ public:
 	virtual void setModify(bool modify);
 	virtual bool isModify();
 
+	QPointF pos();
     ///////////////////////////////////////////////////////操作属性/////////////////////////////
 	//改变大小
 	virtual void resize(double w, double h, bool scale);
@@ -117,9 +118,7 @@ public:
     virtual bool isRotated();
 
     virtual float rotateAngle();
-
-    //增加角度
-    virtual void rotateBy(float fAngle);
+    virtual void rotateBy(float fAngle);//add rotate
 
    
     

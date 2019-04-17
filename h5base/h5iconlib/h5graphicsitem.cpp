@@ -4,7 +4,7 @@ H5GraphicsItem::H5GraphicsItem(HBaseObj* obj,QGraphicsItem* parent):m_pBaseObj(o
 {
     if(m_pBaseObj)
     {
-        //setPos(m_pBaseObj->pos());
+        setPos(m_pBaseObj->pos());
         setZValue(m_pBaseObj->zValue());
         m_pBaseObj->setIconGraphicsItem(this);
     }

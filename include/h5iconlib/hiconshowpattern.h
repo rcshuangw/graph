@@ -9,10 +9,7 @@ class H5ICONLIB_EXPORT HIconShowPattern
 public:
     HIconShowPattern(HIconSymbol* symbol);
     ~HIconShowPattern();
-
 public:
-    void readXml(QDomElement* dom);
-    void writeXml(QDomElement *dom);
     void addObj(HBaseObj* pObj,bool badd=true);
     void delObj(HBaseObj* pObj);
     void takeObj(HBaseObj* pObj);
@@ -24,7 +21,6 @@ public:
     int nPattern;
     QString strName;
     QString strAlias;
-    QList<HBaseObj*> pObjList;
     HIconSymbol* pSymbol;
 };
 

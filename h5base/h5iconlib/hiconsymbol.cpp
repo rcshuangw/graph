@@ -81,19 +81,8 @@ void HIconSymbol::writeXml(QDomElement *dom)
 {
     if(!dom)
         return;
-    dom->setAttribute("IconSymbolName",strSymbolName);
-    dom->setAttribute("IconSymbolType",usSymbolType);
-
-
-    //先创建所有子图元元素xml结构
-    QDomElement childDom = dom->ownerDocument().createElement("Children");
-    dom->appendChild(childDom);
-    for(int i = 0; i < pShowPatternVector.size();i++)
-    {
-        HIconShowPattern* pattern = (HIconShowPattern*)pShowPatternVector[i];
-        if(!pattern)continue;
-        pattern->writeXml(&childDom);
-    }
+	dom->setAttribute("CurPattern", m_nCurPattern);
+	HGroupObj::writeXml(dom);
 
 
     //再创建显示方案的xml结构
@@ -121,81 +110,7 @@ void HIconSymbol::writeData(int v,QDataStream *d)
 
 }
 
-HBaseObj* HIconSymbol::newObj(QString tagName)
-{
-    quint8 drawShape = No;
-    if(tagName == "Line")
-        drawShape = Line;
-    else if(tagName == "Rectangle")
-        drawShape = Rectangle;
-    else if(tagName == "Ellipse")
-        drawShape = Ellipse;
-    else if(tagName == "Circle")
-        drawShape = Circle;
-    else if(tagName == "Polyline")
-        drawShape = Polyline;
-    else if(tagName == "Arc")
-        drawShape = Arc;
-    else if(tagName == "Text")
-        drawShape = Text;
-    else if(tagName == "Polygon")
-        drawShape = Polygon;
-    else if(tagName == "Group")
-        drawShape = Group;
-    return newObj(drawShape);
-}
 
-HBaseObj* HIconSymbol::newObj(int nObjType)
-{
-    HBaseObj* pObj = NULL;
-    if(nObjType == Line)
-    {
-        pObj = new HLine();
-    }
-    else if(nObjType == Rectangle)
-    {
-        pObj = new HRectangle();
-    }
-    else if(nObjType == Ellipse)
-    {
-        pObj = new HEllipse();
-    }
-    else if(nObjType == Circle)
-    {
-        pObj = new HCircle();
-    }
-    else if(nObjType == Polygon)
-    {
-        pObj = new HPolygon();
-    }
-    else if(nObjType == Polyline)
-    {
-        pObj = new HPolyline();
-    }
-    else if(nObjType == enumArc)
-    {
-        pObj = new HArc();
-    }
-    else if(nObjType == enumPie)
-    {
-        pObj = new HPie();
-    }
-    else if(nObjType == enumText)
-    {
-        pObj = new HText();
-    }
-    else if(nObjType == enumGroup)
-    {
-        pObj = new HGroupObj();
-    }
-    pObj->setShapeType((DRAWSHAPE)nObjType);
-    if(pObj)
-    {
-        int objID = getObjID();
-        pObj->setObjID(objID);
-    }
-    return pObj;
-}
 
 void HIconSymbol::addObj(HBaseObj* pObj)
 {

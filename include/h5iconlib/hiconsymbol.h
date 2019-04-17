@@ -5,21 +5,11 @@
 #include <QtXml/QDomElement>
 //存放每个一个图元内部的信息和图元本身的显示信息
 #include "h5iconlibexport.h"
-/*
-#include "hpolygon.h"
-#include "hpolyline.h"
-#include "harc.h"
-#include "hpie.h"
-#include "htext.h"
-#include "hcircle.h"
-#include "hiconobj.h"
-#include "hellipse.h"
 #include "hgroupobj.h"
-*/
 class HIconShowPattern;
 class HIconTemplate;
 class HText;
-class H5ICONLIB_EXPORT HIconSymbol:public QObject
+class H5ICONLIB_EXPORT HIconSymbol:public HGroupObj
 {
 public:
     HIconSymbol(HIconTemplate* t);
@@ -27,23 +17,23 @@ public:
 
 public:
     void clear();
-    void readXml(QDomElement* dom);
-    void writeXml(QDomElement *dom);
+	virtual void readXml(QDomElement* dom);
+	virtual void writeXml(QDomElement *dom);
 
-    void readData(int,QDataStream* d);
-    void writeData(int,QDataStream *d);
+	virtual void readData(int,QDataStream* d);
+	virtual void writeData(int,QDataStream *d);
 
+	virtual void copyTo(HIconSymbol* isymbol);
+	virtual QString TagName();
 
-    //新建一个图元元素(按类型)
-    HBaseObj* newObj(int nObjType);
-    HBaseObj* newObj(QString tagName);
+   
 
     //增加删除一个图元元素
     void addObj(HBaseObj* pObj);
     void delObj(HBaseObj* pObj);
     void takeObj(HBaseObj* pObj);
 
-    void copyTo(HIconSymbol* isymbol);
+    
 
     void setSymbolName(const QString& strName);
     QString getSymolName();
@@ -96,7 +86,7 @@ private:
     QString strSymbolName;
     int usSymbolType;
     int nMaxPattern;
-    int nCurPattern;
+    int m_nCurPattern;
     HIconShowPattern* pCurPattern;
     HIconTemplate* pIconTemplate;
 

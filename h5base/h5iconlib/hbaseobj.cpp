@@ -234,6 +234,10 @@ double HBaseObj::getOY()
     return m_dOriginY;
 }
 
+QPointF HBaseObj::pos()
+{
+	return QPointF(m_dOriginX, m_dOriginY);
+}
 //形状类型
 DrawShape HBaseObj::getShapeType()
 {
