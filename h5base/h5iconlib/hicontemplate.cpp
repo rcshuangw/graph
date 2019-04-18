@@ -97,11 +97,12 @@ void HIconTemplate::readXml(const QString &strXmlFile)
     QDomElement root = doc.documentElement();
     if(root.isNull())
         return;
-    readXml(&root);
+	int n = QDataStream::Qt_5_10;
+    readXml(n,&root);
     file.close();
 }
 
-void HIconTemplate::readXml(QDomElement* dom)
+void HIconTemplate::readXml(int v,QDomElement* dom)
 {
     if(!dom)
         return;
@@ -114,7 +115,7 @@ void HIconTemplate::readXml(QDomElement* dom)
     QDomElement symbolDom = dom->namedItem("IconSymbol").toElement();
     if(!symbolDom.isNull())
     {
-        pIconSymbol->readXml(&symbolDom);
+        pIconSymbol->readXml(v,&symbolDom);
     }
 }
 
@@ -133,13 +134,14 @@ void HIconTemplate::writeXml(const QString &strXmlFile)
     if(root.isNull())
         return;
     doc.appendChild(root);
-    writeXml(&root);
+	int n = QDataStream::Qt_5_10;
+    writeXml(n,&root);
     dsm.setCodec("GB2312");
     doc.save(dsm,4);
     file.close();
 }
 
-void HIconTemplate::writeXml(QDomElement *dom)
+void HIconTemplate::writeXml(int v,QDomElement *dom)
 {
     if(!dom)
         return;
@@ -154,7 +156,7 @@ void HIconTemplate::writeXml(QDomElement *dom)
     dom->appendChild(symbolDom);
     if(pIconSymbol)
     {
-        pIconSymbol->writeXml(&symbolDom);
+        pIconSymbol->writeXml(v,&symbolDom);
     }
 }
 

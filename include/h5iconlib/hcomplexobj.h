@@ -2,31 +2,31 @@
 #define HGROUPOBJ_H
 #include "hshapeobj.h"
 /*
-组合形状类：继承形状类，子类画面类、图元类等等
-记录多个简单图元的组合的形状类
-注意此类必须是图元组合形状的类
+组合形状类：多个简单线条组成的复杂图符，多个复杂图符组成的图形画面等都属于此类
 */
-class H5ICONLIB_EXPORT HGroupObj : public HShapeObj
+class H5ICONLIB_EXPORT HComplexObj : public HShapeObj
 {
 	Q_OBJECT
 public:
-	HGroupObj();
-	virtual ~HGroupObj();
+	HComplexObj();
+	virtual ~HComplexObj();
 
 public:
 	//二进制读写
-	virtual void readData(QDataStream* data);
-	virtual void writeData(QDataStream* data);
+	virtual void readData(int v,QDataStream* data);
+	virtual void writeData(int v,QDataStream* data);
 
 	//xml文件读写
-	virtual void readXml(QDomElement* data);
-	virtual void writeXml(QDomElement* data);
+	virtual void readXml(int v,QDomElement* data);
+	virtual void writeXml(int v,QDomElement* data);
 
 	virtual QString TagName();
 
 	//拷贝克隆
 	virtual void copyTo(HBaseObj* obj);
 	virtual void clone(HBaseObj* obj);
+
+	QVector<HBaseObj*>& getObjList();
 
 public:
 	//新建一个图元元素(按类型)
@@ -51,7 +51,7 @@ public:
 	int size();
 	HBaseObj* at(int index);
 
-	QVector<HBaseObj*>& getObjList();
+	
 protected:
 	QVector<HBaseObj*> m_pObjList;
 };

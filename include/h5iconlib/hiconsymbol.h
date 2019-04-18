@@ -5,11 +5,11 @@
 #include <QtXml/QDomElement>
 //存放每个一个图元内部的信息和图元本身的显示信息
 #include "h5iconlibexport.h"
-#include "hgroupobj.h"
+#include "hcomplexobj.h"
 class HIconShowPattern;
 class HIconTemplate;
 class HText;
-class H5ICONLIB_EXPORT HIconSymbol:public HGroupObj
+class H5ICONLIB_EXPORT HIconSymbol:public HComplexObj
 {
 public:
     HIconSymbol(HIconTemplate* t);
@@ -17,13 +17,13 @@ public:
 
 public:
     void clear();
-	virtual void readXml(QDomElement* dom);
-	virtual void writeXml(QDomElement *dom);
+	virtual void readXml(int v,QDomElement* dom);
+	virtual void writeXml(int v,QDomElement *dom);
 
 	virtual void readData(int,QDataStream* d);
 	virtual void writeData(int,QDataStream *d);
 
-	virtual void copyTo(HIconSymbol* isymbol);
+	virtual void copyTo(HBaseObj* obj);
 	virtual QString TagName();
 
     //增加删除一个图元元素

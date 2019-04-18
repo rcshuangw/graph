@@ -148,7 +148,7 @@ public:
    // virtual QPainterPath shape() const;
 
 //绘制对象的属性
-public:
+protected:
 
     //基本信息
     QString m_strObjName; //对象名称

@@ -16,8 +16,8 @@ public:
 public:
     void readXml(const QString &strXmlFile);
     void writeXml(const QString &strXmlFile);
-    void readXml(QDomElement* dom);
-    void writeXml(QDomElement *dom);
+    void readXml(int,QDomElement* dom);
+    void writeXml(int,QDomElement *dom);
 
     void readData(int,QDataStream* d);
     void writeData(int,QDataStream *d);

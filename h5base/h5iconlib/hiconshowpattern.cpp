@@ -38,15 +38,7 @@ void HIconShowPattern::copyTo(HIconShowPattern* sp)
 
 void HIconShowPattern::clear()
 {
-    while(!m_pObjList.isEmpty())
-    {
-        HBaseObj* pObj = m_pObjList.takeFirst();
-        if(pObj)
-        {
-            delete pObj;
-            pObj = NULL;
-        }
-    }
+	//对象由HIconSymbol来释放
     m_pObjList.clear();
 }
 

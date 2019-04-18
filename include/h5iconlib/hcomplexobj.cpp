@@ -1,29 +1,61 @@
-#include "hgroupobj.h"
+#include "hcomplexobj.h"
 #include "hline.h"
 #include "hrectangle.h"
-HGroupObj::HGroupObj()
+HComplexObj::HComplexObj()
 {
 
 }
 
-HGroupObj::~HGroupObj()
+HComplexObj::~HComplexObj()
 {
-
+	clear();
 }
 
 //二进制读写
-void HGroupObj::readData(QDataStream* data)
+void HComplexObj::readData(int v,QDataStream* data)
 {
-
+	if (!data) return;
+	HShapeObj::readData(data);
+	int sz;
+	*data >> sz;
+	quint8 type = 0;
+	for (int i = 0; i < sz; i++)
+	{
+		*data >> type;
+		HBaseObj* pObj = newObj(DrawShape(type));
+		if (!pObj) continue;
+		pObj->readData(data);
+		addObj(pObj);
+	}
 }
 
-void HGroupObj::writeData(QDataStream* data)
+void HComplexObj::writeData(int v, QDataStream* data)
 {
+	if (!data) return;
+	HShapeObj::writeData(data);
 
+	int sz = (int)m_pObjList.size();
+	int count = 0;
+	for (int i = 0; i < sz; i++)
+	{
+		HBaseObj* pObj = (HBaseObj*)m_pObjList.at(i);
+		if (pObj && pObj->isDeleted())
+			continue;
+		count++;
+	}
+
+	*data<<(int)count;
+	for (int i = 0; i < sz; i++)
+	{
+		HBaseObj* pObj = (HBaseObj*)m_pObjList.at(i);
+		if (pObj && pObj->isDeleted()) continue;
+		*data << (quint8)pObj->getShapeType();
+		pObj->writeData(data);
+	}
 }
 
 //xml文件读写
-void HGroupObj::readXml(QDomElement* dom)
+void HComplexObj::readXml(int v, QDomElement* dom)
 {
 	if (!dom) return;
 	HShapeObj::readXml(dom);
@@ -41,7 +73,7 @@ void HGroupObj::readXml(QDomElement* dom)
 	}
 }
 
-void HGroupObj::writeXml(QDomElement* dom)
+void HComplexObj::writeXml(int v, QDomElement* dom)
 {
 	if (!dom) return;
 	HShapeObj::writeXml(dom);
@@ -53,9 +85,6 @@ void HGroupObj::writeXml(QDomElement* dom)
 		HBaseObj* pObj = (HBaseObj*)m_pObjList[i];
 		if (!pObj || pObj->isDeleted())
 		{
-			m_pObjList.removeAt(i);
-			delete pObj;
-			i--;
 			continue;
 		}
 		QDomElement childEle = dom->ownerDocument().createElement(pObj->TagName());
@@ -64,23 +93,36 @@ void HGroupObj::writeXml(QDomElement* dom)
 	}
 }
 
-QString HGroupObj::TagName()
+QString HComplexObj::TagName()
 {
 	return "GroupObj";
 }
 
 //拷贝克隆
-void HGroupObj::copyTo(HBaseObj* obj)
+void HComplexObj::copyTo(HBaseObj* obj)
+{
+	HComplexObj* pComplexObj = (HComplexObj*)obj;
+	HShapeObj::copyTo(pComplexObj);
+	pComplexObj->clear();
+	for (int i = 0; i < m_pObjList.count(); i++)
+	{
+		HBaseObj* pObj = (HBaseObj*)m_pObjList[i];
+		if (!pObj || pObj->isDeleted())
+		{
+			continue;
+		}
+		HBaseObj* pnewObj = newObj(pObj->getShapeType());
+		pnewObj->copyTo(pObj);
+		pComplexObj->addObj(pnewObj);
+	}
+}
+
+void HComplexObj::clone(HBaseObj* obj)
 {
 
 }
 
-void HGroupObj::clone(HBaseObj* obj)
-{
-
-}
-
-HBaseObj* HGroupObj::newObj(QString tagName)
+HBaseObj* HComplexObj::newObj(QString tagName)
 {
 	DrawShape drawShape = No;
 	if (tagName == "Line")
@@ -104,7 +146,7 @@ HBaseObj* HGroupObj::newObj(QString tagName)
 	return newObj(drawShape);
 }
 
-HBaseObj* HGroupObj::newObj(DrawShape nObjType)
+HBaseObj* HComplexObj::newObj(DrawShape nObjType)
 {
 	HBaseObj* pObj = NULL;
 	if (nObjType == Line)
@@ -157,7 +199,7 @@ HBaseObj* HGroupObj::newObj(DrawShape nObjType)
 }
 
 ///
-void HGroupObj::resize(double w, double h, bool scale)
+void HComplexObj::resize(double w, double h, bool scale)
 {
 	double dw, dh;
 	if (scale)
@@ -181,13 +223,13 @@ void HGroupObj::resize(double w, double h, bool scale)
 	transform(dw, dh);
 }
 
-void HGroupObj::expand(double dx1, double dx2, double dy1, double dy2, qint8 flag)
+void HComplexObj::expand(double dx1, double dx2, double dy1, double dy2, qint8 flag)
 {
 
 }
 
 //将列表的所有图符 由原始绘制的尺寸按照比例缩小同时改变其原点位置
-bool HGroupObj::transform(double dx, double dy)
+bool HComplexObj::transform(double dx, double dy)
 {
 	int count = m_pObjList.size();
 	for (int i = 0; i < count; i++)
@@ -199,7 +241,7 @@ bool HGroupObj::transform(double dx, double dy)
 	return true;
 }
 
-void HGroupObj::move(qreal dx, qreal dy, bool scale)
+void HComplexObj::move(qreal dx, qreal dy, bool scale)
 {
 	for (int i = 0; i < m_pObjList.size(); i++)
 	{
@@ -209,7 +251,7 @@ void HGroupObj::move(qreal dx, qreal dy, bool scale)
 	}
 }
 
-void HGroupObj::moveBy(qreal dx, qreal dy, bool scale)
+void HComplexObj::moveBy(qreal dx, qreal dy, bool scale)
 {
 	for (int i = 0; i < m_pObjList.size(); i++)
 	{
@@ -219,7 +261,7 @@ void HGroupObj::moveBy(qreal dx, qreal dy, bool scale)
 	}
 }
 
-QRectF HGroupObj::boundingRect(qint8 flag)
+QRectF HComplexObj::boundingRect(qint8 flag)
 {
 	QRectF rectF(0,0,0,0);
 	int count = m_pObjList.size();
@@ -233,7 +275,7 @@ QRectF HGroupObj::boundingRect(qint8 flag)
 	return rectF;
 }
 
-QPainterPath HGroupObj::shape(qint8 flag)
+QPainterPath HComplexObj::shape(qint8 flag)
 {
 	QPainterPath path;
 	int count = m_pObjList.size();
@@ -248,7 +290,7 @@ QPainterPath HGroupObj::shape(qint8 flag)
 }
 
 //针对objList的操作 参考QVector类的函数
-void HGroupObj::clear()
+void HComplexObj::clear()
 {
 	while (!m_pObjList.empty())
 	{
@@ -257,37 +299,37 @@ void HGroupObj::clear()
 	m_pObjList.clear();
 }
 
-void HGroupObj::addObj(HBaseObj* obj)
+void HComplexObj::addObj(HBaseObj* obj)
 {
 	if (!obj) return;
 	m_pObjList.append(obj);
 }
 
-void HGroupObj::removeObj(HBaseObj* obj)
+void HComplexObj::removeObj(HBaseObj* obj)
 {
 	if (!obj) return;
 	m_pObjList.removeOne(obj);
 }
 
-bool HGroupObj::contains(HBaseObj* obj)
+bool HComplexObj::contains(HBaseObj* obj)
 {
 	if (!obj) return false;
 	return m_pObjList.contains(obj);
 }
 
-int HGroupObj::size()
+int HComplexObj::size()
 {
 	return m_pObjList.size();
 }
 
-HBaseObj* HGroupObj::at(int index)
+HBaseObj* HComplexObj::at(int index)
 {
 	if (index < 0 || index > m_pObjList.size())
 		return NULL;
 	return m_pObjList.at(index);
 }
 
-QVector<HBaseObj*>& HGroupObj::getObjList()
+QVector<HBaseObj*>& HComplexObj::getObjList()
 {
 	return m_pObjList;
 }

@@ -1,7 +1,7 @@
 #include "hline.h"
 HLine::HLine()
 {
-	m_eDrawShape = Line;
+	setShapeType(Line);
 	ptHeadPoint = ptTailPoint = QPointF(0.0, 0.0);
 }
 

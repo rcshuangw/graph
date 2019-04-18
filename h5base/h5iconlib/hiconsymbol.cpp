@@ -15,6 +15,7 @@ HIconSymbol::HIconSymbol(HIconTemplate* t):m_pIconTemplate(t)
 HIconSymbol::~HIconSymbol()
 {
    clear();
+   HComplexObj::clear();
 }
 
 void HIconSymbol::clear()
@@ -36,12 +37,12 @@ QString HIconSymbol::TagName()
 	return "IconSymbol";
 }
 
-void HIconSymbol::readXml(QDomElement* dom)
+void HIconSymbol::readXml(int v,QDomElement* dom)
 {
     if(!dom)
         return;
 	int nCur = dom->attribute("CurPattern").toInt();
-	HGroupObj::readXml(dom);
+	HComplexObj::readXml(v,dom);
 
     QDomElement spEle = dom->namedItem("ShowPatterns").toElement();
     //构建下面的元素对象
@@ -67,12 +68,12 @@ void HIconSymbol::readXml(QDomElement* dom)
     //还要刷新一下 把对应的Obj 放到showPattern下面
 }
 
-void HIconSymbol::writeXml(QDomElement *dom)
+void HIconSymbol::writeXml(int v,QDomElement *dom)
 {
     if(!dom)
         return;
 	dom->setAttribute("CurPattern", m_nCurPattern);
-	HGroupObj::writeXml(dom);
+	HComplexObj::writeXml(v,dom);
 
 
     //再创建显示方案的xml结构
@@ -92,12 +93,45 @@ void HIconSymbol::writeXml(QDomElement *dom)
 
 void HIconSymbol::readData(int v,QDataStream* d)
 {
-
+	if (!d) return;
+	int n;
+	*d >> n;
+	m_nCurPattern = n;
+	*d >> n;
+	int count = n;
+	for (int i = 0; i < count; i++)
+	{
+		int nPattern;
+		*d >> nPattern;
+		HIconShowPattern* pSP = findPatternById(nPattern);
+		if (!pSP)
+		{
+			pSP = newPattern(nPattern);
+		}
+		QString s;
+		*d >> s;
+		pSP->strName = s;
+		*d >> s;
+		pSP->strAlias = s;
+	}
+	HComplexObj::readData(v, d);
 }
 
 void HIconSymbol::writeData(int v,QDataStream *d)
 {
-
+	if (!d) return;
+	*d << (int)m_nCurPattern;
+	int count = m_pShowPatternVector.size();
+	*d << (int)count;
+	for (int i = 0; i < count; i++)
+	{
+		HIconShowPattern* pSP = m_pShowPatternVector.at(i);
+		if (!pSP) continue;
+		*d << (int)pSP->nPattern;
+		*d << pSP->strName;
+		*d << pSP->strAlias;
+	}
+	HComplexObj::writeData(v, d);
 }
 
 void HIconSymbol::addBaseObj(HBaseObj* pObj)
@@ -105,10 +139,10 @@ void HIconSymbol::addBaseObj(HBaseObj* pObj)
     if(!pObj)
         return;
 
-	//先放到自己的列表中，不能采用delete方法删除
+	//先放到总列表中，这个list维护所有创建的图符
 	addObj(pObj);
 
-	//再放到pattern列表中，同一个对象，所以不能采用delete方法删除
+	//再放到对应的pattern列表中
     HIconShowPattern* pSP = getCurrentPatternPtr();
     if(!pSP)
         return;
@@ -119,30 +153,28 @@ void HIconSymbol::removeBaseObj(HBaseObj* pObj)
 {
     if(!pObj)
         return;
-	removeObj(pObj);
+	//从对应的pattern中删除，注意不能从总列表中删除。
     HIconShowPattern* pSP = getCurrentPatternPtr();
     if(!pSP)
         return;
     pSP->removeObj(pObj);
 }
 
-void HIconSymbol::copyTo(HIconSymbol *isymbol)
+void HIconSymbol::copyTo(HBaseObj *obj)
 {
-    if(!isymbol) return;
-    isymbol->clear();
-    isymbol->strSymbolName = strSymbolName;
-    isymbol->usSymbolType = usSymbolType;
-    isymbol->m_nMaxPattern = m_nMaxPattern;
-    isymbol->m_nCurPattern = m_nCurPattern;
+    if(!obj) return;
+	HIconSymbol* pSymbol = (HIconSymbol*)obj;
+	HComplexObj::copyTo(pSymbol);
+
     for(int i = 0; i < m_pShowPatternVector.size();i++)
     {
         HIconShowPattern* pattern = (HIconShowPattern*)m_pShowPatternVector[i];
-        HIconShowPattern* newPattern = new HIconShowPattern(isymbol);
+		HIconShowPattern* newPattern = pSymbol->newPattern(pattern->nPattern);
         pattern->copyTo(newPattern);
-        isymbol->m_pShowPatternVector.append(newPattern);
     }
-    if(m_pCurPattern)
-        isymbol->setCurrentPattern(m_pCurPattern->nPattern);
+	pSymbol->m_nMaxPattern = m_nMaxPattern;
+	pSymbol->updateShowPattern();
+    pSymbol->setCurrentPattern(m_nCurPattern);
 }
 
 //获取ObjID
@@ -173,7 +205,7 @@ bool HIconSymbol::findObjID(int nObjID)
 void HIconSymbol::updateShowPattern()
 {
     foreach (HBaseObj* pObj, m_pObjList) {
-        HIconShowPattern* pattern = findPatternById(pObj->m_nPattern);
+        HIconShowPattern* pattern = findPatternById(pObj->getPattern());
         if(!pattern) continue;
         pattern->addObj(pObj);
     }
@@ -313,5 +345,25 @@ HText* HIconSymbol::getFirstTextObj()
 
 void HIconSymbol::paint(QPainter* painter)
 {
+	if (!painter)
+		return;
+	painter->save();
+	HIconShowPattern* pattern = getCurrentPatternPtr();
+	if (!pattern)
+	{
+		painter->restore();
+		return;
+	}
+
+	//先要根据zvalue
+	for (int i = 0; i < pattern->getObjList().count(); i++)
+	{
+		HBaseObj* pObj = (HBaseObj*)(pattern->getObjList().at(i));
+		if (pObj)
+		{
+			pObj->paint(painter);
+		}
+	}
+	painter->restore();
 
 }
