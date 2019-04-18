@@ -4,12 +4,12 @@
 #include "hline.h"
 #include "hrectangle.h"
 #include <QVariant>
-HIconSymbol::HIconSymbol(HIconTemplate* t):pIconTemplate(t)
+HIconSymbol::HIconSymbol(HIconTemplate* t):m_pIconTemplate(t)
 {
     usSymbolType = DEVICE_TYPE_ICONSYMBOL;
-    nMaxPattern = 0;
-    nCurPattern = 0;
-    pCurPattern = NULL;
+    m_nMaxPattern = 0;
+    m_nCurPattern = 0;
+    m_pCurPattern = NULL;
 }
 
 HIconSymbol::~HIconSymbol()
@@ -19,47 +19,40 @@ HIconSymbol::~HIconSymbol()
 
 void HIconSymbol::clear()
 {
-    while(!pShowPatternVector.isEmpty())
+    while(!m_pShowPatternVector.isEmpty())
     {
-        HIconShowPattern* pattern = (HIconShowPattern*)pShowPatternVector.takeFirst();
+        HIconShowPattern* pattern = (HIconShowPattern*)m_pShowPatternVector.takeFirst();
         if(pattern)
         {
             delete pattern;
             pattern = NULL;
         }
     }
-    pShowPatternVector.clear();
+    m_pShowPatternVector.clear();
+}
+
+QString HIconSymbol::TagName()
+{
+	return "IconSymbol";
 }
 
 void HIconSymbol::readXml(QDomElement* dom)
 {
-    if(dom->isNull())
+    if(!dom)
         return;
-    strSymbolName = dom->attribute("IconSymbolName");
-    usSymbolType = dom->attribute("IconSymbolType").toUInt();
-
-    QDomElement objEle = dom->namedItem("Children").toElement();
-    QDomNode n = objEle.firstChild();
-    QList<HBaseObj*> pTempList;
-    for(int i = 0;!n.isNull();n=n.nextSibling(),i++)
-    {
-        QDomElement e = n.toElement();
-        QString strTagName = e.tagName();
-        HBaseObj* pObj = newObj(strTagName);
-        if(!pObj) continue;
-        pTempList.append(pObj);
-        pObj->readXml(&e);
-    }
+	int nCur = dom->attribute("CurPattern").toInt();
+	HGroupObj::readXml(dom);
 
     QDomElement spEle = dom->namedItem("ShowPatterns").toElement();
     //构建下面的元素对象
-    n = spEle.firstChild();
+	QDomNode n = spEle.firstChild();
     for(int i = 0;!n.isNull();n=n.nextSibling(),i++)
     {
         QDomElement e = n.toElement();
         if(e.tagName() != "ShowPattern") continue;
 
-        HIconShowPattern* pattern = newPattern();
+		int nPattern = e.attribute("PatternID").toInt();
+        HIconShowPattern* pattern = newPattern(nPattern);
         if(!pattern)
         {
             delete pattern;
@@ -68,12 +61,9 @@ void HIconSymbol::readXml(QDomElement* dom)
         }
         pattern->strName = e.attribute("Name");
         pattern->strAlias = e.attribute("Alias");
-        pattern->nPattern = e.attribute("PatternID").toInt();
-        //pShowPatternVector.append(pattern);
     }
-    updateShowPattern(pTempList);
+    updateShowPattern();
     setCurrentPattern(0);
-    pTempList.clear();
     //还要刷新一下 把对应的Obj 放到showPattern下面
 }
 
@@ -88,9 +78,9 @@ void HIconSymbol::writeXml(QDomElement *dom)
     //再创建显示方案的xml结构
     QDomElement patternDom = dom->ownerDocument().createElement("ShowPatterns");
     dom->appendChild(patternDom);
-    for(int i = 0; i < pShowPatternVector.size();i++)
+    for(int i = 0; i < m_pShowPatternVector.size();i++)
     {
-        HIconShowPattern* pattern = (HIconShowPattern*)pShowPatternVector[i];
+        HIconShowPattern* pattern = (HIconShowPattern*)m_pShowPatternVector[i];
         if(!pattern)continue;
         QDomElement patternChildDom = dom->ownerDocument().createElement("ShowPattern");
         patternChildDom.setAttribute("Name",pattern->strName);
@@ -110,37 +100,30 @@ void HIconSymbol::writeData(int v,QDataStream *d)
 
 }
 
-
-
-void HIconSymbol::addObj(HBaseObj* pObj)
+void HIconSymbol::addBaseObj(HBaseObj* pObj)
 {
     if(!pObj)
         return;
 
-    QString strObjName = QString("%1_%2_%3").arg(pObj->TagName()).arg(pObj->getShapeType()).arg(pObj->getObjID());
-    pObj->setObjName(strObjName);
+	//先放到自己的列表中，不能采用delete方法删除
+	addObj(pObj);
+
+	//再放到pattern列表中，同一个对象，所以不能采用delete方法删除
     HIconShowPattern* pSP = getCurrentPatternPtr();
     if(!pSP)
         return;
     pSP->addObj(pObj);
 }
 
-void HIconSymbol::delObj(HBaseObj* pObj)
+void HIconSymbol::removeBaseObj(HBaseObj* pObj)
 {
     if(!pObj)
         return;
+	removeObj(pObj);
     HIconShowPattern* pSP = getCurrentPatternPtr();
     if(!pSP)
         return;
-    pSP->delObj(pObj);
-}
-
-void HIconSymbol::takeObj(HBaseObj* pObj)
-{
-    HIconShowPattern* pSP = getCurrentPatternPtr();
-    if(!pSP)
-        return;
-    pSP->takeObj(pObj);
+    pSP->removeObj(pObj);
 }
 
 void HIconSymbol::copyTo(HIconSymbol *isymbol)
@@ -149,17 +132,17 @@ void HIconSymbol::copyTo(HIconSymbol *isymbol)
     isymbol->clear();
     isymbol->strSymbolName = strSymbolName;
     isymbol->usSymbolType = usSymbolType;
-    isymbol->nMaxPattern = nMaxPattern;
-    isymbol->nCurPattern = nCurPattern;
-    for(int i = 0; i < pShowPatternVector.size();i++)
+    isymbol->m_nMaxPattern = m_nMaxPattern;
+    isymbol->m_nCurPattern = m_nCurPattern;
+    for(int i = 0; i < m_pShowPatternVector.size();i++)
     {
-        HIconShowPattern* pattern = (HIconShowPattern*)pShowPatternVector[i];
+        HIconShowPattern* pattern = (HIconShowPattern*)m_pShowPatternVector[i];
         HIconShowPattern* newPattern = new HIconShowPattern(isymbol);
         pattern->copyTo(newPattern);
-        isymbol->pShowPatternVector.append(newPattern);
+        isymbol->m_pShowPatternVector.append(newPattern);
     }
-    if(pCurPattern)
-        isymbol->setCurrentPattern(pCurPattern->nPattern);
+    if(m_pCurPattern)
+        isymbol->setCurrentPattern(m_pCurPattern->nPattern);
 }
 
 //获取ObjID
@@ -173,13 +156,13 @@ int HIconSymbol::getObjID()
 
 bool HIconSymbol::findObjID(int nObjID)
 {
-    if(pShowPatternVector.count() == 0) return false;
-    for(int i = 0;i < pShowPatternVector.count();i++)
+    if(m_pShowPatternVector.count() == 0) return false;
+    for(int i = 0;i < m_pShowPatternVector.count();i++)
     {
-        HIconShowPattern* pattern = (HIconShowPattern*)pShowPatternVector[i];
-        for(int j = 0; j < pattern->pObjList.count();j++)
+        HIconShowPattern* pattern = (HIconShowPattern*)m_pShowPatternVector[i];
+        for(int j = 0; j < pattern->getObjList().count();j++)
         {
-            HBaseObj* pObj = (HBaseObj*)pattern->pObjList[j];
+			HBaseObj* pObj = (HBaseObj*)pattern->getObjList().at(j);
             if(pObj && pObj->getObjID() == nObjID)
                 return true;
         }
@@ -187,63 +170,12 @@ bool HIconSymbol::findObjID(int nObjID)
     return false;
 }
 
-void HIconSymbol::setSymbolName(const QString &strName)
+void HIconSymbol::updateShowPattern()
 {
-    strSymbolName = strName;
-}
-
-QString HIconSymbol::getSymolName()
-{
-    return strSymbolName;
-}
-
-void HIconSymbol::setIconSymbolWidth(double width)
-{
-    //fWidth = width;
-}
-
-void HIconSymbol::setIconSymbolHeight(double height)
-{
-    //fHeight = height;
-}
-
-
-void HIconSymbol::setModify(bool modify)
-{
-    foreach(HIconShowPattern* pattern,pShowPatternVector)
-    {
-        foreach(HBaseObj* pObj,pattern->pObjList)
-        {
-            if(pObj)
-            {
-                pObj->setModify(modify);
-            }
-        }
-    }
-}
-
-bool HIconSymbol::getModify()
-{
-    foreach(HIconShowPattern* pattern,pShowPatternVector)
-    {
-        foreach(HBaseObj* pObj,pattern->pObjList)
-        {
-            if(pObj && pObj->getModify())
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-
-void HIconSymbol::updateShowPattern(QList<HBaseObj*> &list)
-{
-    foreach (HBaseObj* pObj, list) {
-        HIconShowPattern* pattern = findPatternById(pObj->nPattern);
+    foreach (HBaseObj* pObj, m_pObjList) {
+        HIconShowPattern* pattern = findPatternById(pObj->m_nPattern);
         if(!pattern) continue;
-        pattern->addObj(pObj,false);
+        pattern->addObj(pObj);
     }
 }
 
@@ -259,9 +191,9 @@ HIconShowPattern* HIconSymbol::newPattern(const QString& name)
 {
     HIconShowPattern* newSP = new HIconShowPattern(this);
     newSP->strName = name;
-    newSP->nPattern = nMaxPattern;
-    nMaxPattern++;
-    pShowPatternVector.append(newSP);
+    newSP->nPattern = m_nMaxPattern;
+    m_nMaxPattern++;
+    m_pShowPatternVector.append(newSP);
     setCurrentPatternPtr(newSP);
     return newSP;
 }
@@ -271,9 +203,9 @@ HIconShowPattern* HIconSymbol::newPattern(int id)
     //if()
     HIconShowPattern* newSP = new HIconShowPattern(this);
     newSP->nPattern = id;
-    pShowPatternVector.append(newSP);
-    if(id >= nMaxPattern)
-        nMaxPattern++;
+    m_pShowPatternVector.append(newSP);
+    if(id >= m_nMaxPattern)
+        m_nMaxPattern++;
     setCurrentPatternPtr(newSP);
     return newSP;
 }
@@ -281,13 +213,13 @@ HIconShowPattern* HIconSymbol::newPattern(int id)
 //删除
 void HIconSymbol::delPattern(HIconShowPattern* sp)
 {
-    for(int i = 0; i< pShowPatternVector.size();i++)
+    for(int i = 0; i< m_pShowPatternVector.size();i++)
     {
-        HIconShowPattern* pPattern = pShowPatternVector.at(i);
+        HIconShowPattern* pPattern = m_pShowPatternVector.at(i);
         if(pPattern->nPattern == sp->nPattern)
         {
             pPattern->clear();
-            pShowPatternVector.remove(i);
+            m_pShowPatternVector.remove(i);
             delete pPattern;
             pPattern = NULL;
         }
@@ -296,13 +228,13 @@ void HIconSymbol::delPattern(HIconShowPattern* sp)
 
 void HIconSymbol::delPattern(int id)
 {
-    for(int i = 0; i< pShowPatternVector.size();i++)
+    for(int i = 0; i< m_pShowPatternVector.size();i++)
     {
-        HIconShowPattern* pPattern = pShowPatternVector.at(i);
+        HIconShowPattern* pPattern = m_pShowPatternVector.at(i);
         if(pPattern->nPattern == id)
         {
             pPattern->clear();
-            pShowPatternVector.remove(i);
+			m_pShowPatternVector.remove(i);
             delete pPattern;
             pPattern = NULL;
         }
@@ -311,8 +243,8 @@ void HIconSymbol::delPattern(int id)
 
 void HIconSymbol::clearPattern()
 {
-    while (!pShowPatternVector.isEmpty()) {
-        HIconShowPattern* pPattern = pShowPatternVector.takeFirst();
+    while (!m_pShowPatternVector.isEmpty()) {
+        HIconShowPattern* pPattern = m_pShowPatternVector.takeFirst();
         pPattern->clear();
         delete pPattern;
         pPattern = NULL;
@@ -322,9 +254,9 @@ void HIconSymbol::clearPattern()
 //查找和设置
 HIconShowPattern* HIconSymbol::findPatternById(int id)
 {
-    for(int i = 0; i< pShowPatternVector.size();i++)
+    for(int i = 0; i< m_pShowPatternVector.size();i++)
     {
-        HIconShowPattern* pPattern = pShowPatternVector.at(i);
+        HIconShowPattern* pPattern = m_pShowPatternVector.at(i);
         if(pPattern->nPattern == id)
             return pPattern;
     }
@@ -333,65 +265,53 @@ HIconShowPattern* HIconSymbol::findPatternById(int id)
 
 void HIconSymbol::setCurrentPattern(int id)
 {
-    nCurPattern = id;
+    m_nCurPattern = id;
     setCurrentPatternPtr(findPatternById(id));
 }
 
 int HIconSymbol::getCurrentPattern()
 {
-    return nCurPattern;
+    return m_nCurPattern;
 }
 
 int HIconSymbol::getCurrentPatternIndex()
 {
-    if(!pCurPattern || pShowPatternVector.isEmpty())
+    if(!m_pCurPattern || m_pShowPatternVector.isEmpty())
         return -1;
-    return pShowPatternVector.indexOf(pCurPattern);
+    return m_pShowPatternVector.indexOf(m_pCurPattern);
 }
 
 void HIconSymbol::setCurrentPatternPtr(HIconShowPattern* sp)
 {
-    pCurPattern = sp;
-    nCurPattern = sp->nPattern;
+	m_pCurPattern = sp;
+	m_nCurPattern = sp->nPattern;
 }
 
 HIconShowPattern* HIconSymbol::getCurrentPatternPtr()
 {
-    return pCurPattern;
-}
-
-void HIconSymbol::resetRectPoint(const QPointF& pt1,const QPointF& pt2)
-{
-    for(int i = 0; i < pShowPatternVector.count();i++)
-    {
-        HIconShowPattern* pattern = (HIconShowPattern*)(pShowPatternVector[i]);
-        pattern->resetRectPoint(pt1,pt2);
-    }
-}
-
-void HIconSymbol::resize(double w,double h)
-{
-    for(int i = 0; i < pShowPatternVector.count();i++)
-    {
-        HIconShowPattern* pattern = (HIconShowPattern*)(pShowPatternVector[i]);
-        pattern->resize(w,h);
-    }
+    return m_pCurPattern;
 }
 
 HText* HIconSymbol::getFirstTextObj()
 {
     HText* pTextObj = NULL;
     HIconShowPattern* curPattern = (HIconShowPattern*)findPatternById(0);
+	QVector<HBaseObj*> pObjList = curPattern->getObjList();
     if(curPattern)
     {
-        for(int i = 0; i < curPattern->pObjList.count();i++)
+        for(int i = 0; i < pObjList.count();i++)
         {
-            HBaseObj* pObj = curPattern->pObjList.at(i);
-            if(pObj->isDeleted() || !pObj || pObj->getShapeType() != enumText)
+            HBaseObj* pObj = pObjList.at(i);
+            if(pObj->isDeleted() || !pObj || pObj->getShapeType() != Text)
                 continue;
             pTextObj = (HText*)pObj;
             break;
         }
     }
     return pTextObj;
+}
+
+void HIconSymbol::paint(QPainter* painter)
+{
+
 }

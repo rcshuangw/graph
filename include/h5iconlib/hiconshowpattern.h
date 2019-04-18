@@ -10,18 +10,20 @@ public:
     HIconShowPattern(HIconSymbol* symbol);
     ~HIconShowPattern();
 public:
-    void addObj(HBaseObj* pObj,bool badd=true);
-    void delObj(HBaseObj* pObj);
-    void takeObj(HBaseObj* pObj);
+    void addObj(HBaseObj* pObj);
+    void removeObj(HBaseObj* pObj);
     void copyTo(HIconShowPattern* sp);
     void clear();
-    void resetRectPoint(const QPointF& pt1,const QPointF& pt2);
-    void resize(double w,double h);
+	QVector<HBaseObj*>& getObjList() {
+		return m_pObjList;
+	}
 public:
     int nPattern;
     QString strName;
     QString strAlias;
-    HIconSymbol* pSymbol;
+private:
+    HIconSymbol* m_pSymbol;
+	QVector<HBaseObj*> m_pObjList;//当前显示界面所包含的图元
 };
 
 #endif // HICONSHOWPATTERN_H

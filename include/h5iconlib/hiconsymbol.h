@@ -26,33 +26,14 @@ public:
 	virtual void copyTo(HIconSymbol* isymbol);
 	virtual QString TagName();
 
-   
-
     //增加删除一个图元元素
-    void addObj(HBaseObj* pObj);
-    void delObj(HBaseObj* pObj);
-    void takeObj(HBaseObj* pObj);
-
-    
-
-    void setSymbolName(const QString& strName);
-    QString getSymolName();
-
-    //void setSymbolType(const int& type);
-    //int getSymbolType();
-
-    void setIconSymbolWidth(double width);
-    void setIconSymbolHeight(double height);
-
+    void addBaseObj(HBaseObj* pObj);
+    void removeBaseObj(HBaseObj* pObj);
 
     int getObjID();
     bool findObjID(int nObjID);
 
-    void setModify(bool modify);
-    bool getModify();
-
-    void updateShowPattern(QList<HBaseObj*> &list);
-    //图元中多种状态的显示方案
+    void updateShowPattern();
     bool PatterIsValid(int nId);
 
     //新建
@@ -65,30 +46,31 @@ public:
     void clearPattern();
 
     //查找
-    int getMaxPattern(){return nMaxPattern;}
+    int getMaxPattern(){return m_nMaxPattern;}
 
     //查找和设置
-    int iconShowPatternCount(){return pShowPatternVector.count();}
+    int iconShowPatternCount(){return m_pShowPatternVector.count();}
     HIconShowPattern* findPatternById(int id);
     void setCurrentPattern(int id);
     int getCurrentPattern();
     int getCurrentPatternIndex();
     void setCurrentPatternPtr(HIconShowPattern* sp);
     HIconShowPattern* getCurrentPatternPtr();
-    void resetRectPoint(const QPointF& pt1,const QPointF& pt2);
-    void resize(double w,double h);
 
     //获取特定图元
     HText* getFirstTextObj();
+
 public:
-    QVector<HIconShowPattern*> pShowPatternVector;
+	virtual void paint(QPainter* painter);
+public:
+    QVector<HIconShowPattern*> m_pShowPatternVector;
 private:
     QString strSymbolName;
     int usSymbolType;
-    int nMaxPattern;
+    int m_nMaxPattern;
     int m_nCurPattern;
-    HIconShowPattern* pCurPattern;
-    HIconTemplate* pIconTemplate;
+    HIconShowPattern* m_pCurPattern;
+    HIconTemplate* m_pIconTemplate;
 
 };
 

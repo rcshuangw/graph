@@ -45,14 +45,14 @@ public:
 public:
 	//针对objList的操作 参考QVector类的函数
 	void clear();
-	void AddObj(HBaseObj* obj);
+	void addObj(HBaseObj* obj);
 	void removeObj(HBaseObj* obj);
 	bool contains(HBaseObj* obj);
 	int size();
 	HBaseObj* at(int index);
 
 	QVector<HBaseObj*>& getObjList();
-private:
+protected:
 	QVector<HBaseObj*> m_pObjList;
 };
 

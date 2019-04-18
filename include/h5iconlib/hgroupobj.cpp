@@ -37,7 +37,7 @@ void HGroupObj::readXml(QDomElement* dom)
 		HBaseObj* pObj = newObj(objType);
 		if (!pObj) continue;
 		pObj->readXml(&e);
-		AddObj(pObj);
+		addObj(pObj);
 	}
 }
 
@@ -82,7 +82,7 @@ void HGroupObj::clone(HBaseObj* obj)
 
 HBaseObj* HGroupObj::newObj(QString tagName)
 {
-	quint8 drawShape = No;
+	DrawShape drawShape = No;
 	if (tagName == "Line")
 		drawShape = Line;
 	else if (tagName == "Rectangle")
@@ -115,7 +115,7 @@ HBaseObj* HGroupObj::newObj(DrawShape nObjType)
 	{
 		pObj = new HRectangle();
 	}
-	else if (nObjType == Ellipse)
+	/*else if (nObjType == Ellipse)
 	{
 		pObj = new HEllipse();
 	}
@@ -146,8 +146,8 @@ HBaseObj* HGroupObj::newObj(DrawShape nObjType)
 	else if (nObjType == enumGroup)
 	{
 		pObj = new HGroupObj();
-	}
-	pObj->setShapeType((DRAWSHAPE)nObjType);
+	}*/
+	pObj->setShapeType((DrawShape)nObjType);
 	if (pObj)
 	{
 		int objID = getObjID();
@@ -196,6 +196,7 @@ bool HGroupObj::transform(double dx, double dy)
 		pObj->resize(dx, dy, true);
 		pObj->move(dx, dy, true);
 	}
+	return true;
 }
 
 void HGroupObj::move(qreal dx, qreal dy, bool scale)
@@ -218,7 +219,7 @@ void HGroupObj::moveBy(qreal dx, qreal dy, bool scale)
 	}
 }
 
-QRectF HGroupObj::boundingRect(qint8 flag = 0)
+QRectF HGroupObj::boundingRect(qint8 flag)
 {
 	QRectF rectF(0,0,0,0);
 	int count = m_pObjList.size();
@@ -256,7 +257,7 @@ void HGroupObj::clear()
 	m_pObjList.clear();
 }
 
-void HGroupObj::AddObj(HBaseObj* obj)
+void HGroupObj::addObj(HBaseObj* obj)
 {
 	if (!obj) return;
 	m_pObjList.append(obj);
