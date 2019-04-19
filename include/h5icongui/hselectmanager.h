@@ -2,7 +2,9 @@
 #define HICONSELECTMANAGER_H
 #include <QObject>
 #include <QPainter>
-
+/*
+管理选中的图元
+*/
 class HBaseObj;
 class HSelectManager : public QObject
 {

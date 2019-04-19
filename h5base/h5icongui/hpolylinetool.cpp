@@ -1,5 +1,5 @@
 #include "hpolylinetool.h"
-HPolylineTool::HPolylineTool(HToolManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
+HPolylineTool::HPolylineTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
         :HDrawTool(manager, objShape, name, uuid)//m_pDrawManager(manager),m_edrawShape(objShape),m_strObjName(name),m_strObjUuid(uuid)
 {
 

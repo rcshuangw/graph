@@ -5,7 +5,7 @@
 #include "hiconapi.h"
 #include "hbaseobj.h"
 #include "hiconeditormgr.h"
-#include "hdrawtoolmanager.h"
+#include "hdrawmanager.h"
 /*
  * 图符绘制管理类：主要是针对图符的绘制过程
 */

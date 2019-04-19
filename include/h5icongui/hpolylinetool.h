@@ -4,7 +4,7 @@
 class H5ICONGUI_EXPORT HPolylineTool: public HDrawTool
 {
 public:
-    HPolylineTool(HToolManager* manager,DrawShape objShape,const QString& name,const QString& uuid);
+    HPolylineTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid);
     virtual ~HPolylineTool();
 
 public:

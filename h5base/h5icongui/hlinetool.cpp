@@ -1,6 +1,6 @@
 #include "hlinetool.h"
 #include "htoolmanager.h"
-HLineTool::HLineTool(HToolManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
+HLineTool::HLineTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
     :HDrawTool(manager,objShape,name,uuid)
 {
 	m_bDrawStart = false;

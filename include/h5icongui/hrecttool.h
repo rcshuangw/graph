@@ -6,7 +6,7 @@ class H5ICONGUI_EXPORT HRectTool: public HDrawTool
 {
 public:
 public:
-    HRectTool(HToolManager* manager,DrawShape objShape,const QString& name,const QString& uuid);
+    HRectTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid);
     virtual ~HRectTool();
 
 public:

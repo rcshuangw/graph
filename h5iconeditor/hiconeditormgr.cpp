@@ -3,48 +3,47 @@
 HIconEditorMgr::HIconEditorMgr()
     :m_bShowGrid(true),m_bShowCenterLine(true)
 {
-    m_pIconFrame = new HIconEditorFrame(this);
+    m_pIconEditorFrame = new HIconEditorFrame(this);
     //pIconFrame->setIconMgr(this);
-    m_pIconDocument = new HIconDocument(this);
-    m_pIconState = new HIconState(this);
-    m_pIconOp = new HIconOp(this);
-    m_pIconUndoStack = new QUndoStack;
+	m_pIconEditorDoc = new HIconDocument(this);
+    //m_pIconState = new HIconState(this);
+   // m_pIconEditorOp = new HIconOp(this);
+    m_pIconEditorUndo = new QUndoStack;
     m_bShowGrid = true;
     m_bShowCenterLine = true;
     m_strBgClr = "#FFFFFF";
-    m_drawShape = enumNo;
-    m_selectMode = enumSelect;
+    m_drawShape = No;
 }
 
-HIconDocument* HIconEditorMgr::getIconDocument()
+HIconEditorDoc* HIconEditorMgr::iconEditorDocument()
 {
-    if(m_pIconDocument)
-        return m_pIconDocument;
+    if(m_pIconEditorDoc)
+        return m_pIconEditorDoc;
     return NULL;
 }
 
-HIconTemplate* HIconEditorMgr::getIconTemplate()
+HIconTemplate* HIconEditorMgr::iconTemplate()
 {
-    if(m_pIconDocument)
-        return m_pIconDocument->getCurrentTemplate();
+    if(m_pIconEditorDoc)
+        return m_pIconEditorDoc->getCurrentTemplate();
     return NULL;
 }
 
-HIconFrame* HIconEditorMgr::getIconFrame()
+HIconFrame* HIconEditorMgr::iconEditorFrame()
 {
     if(m_pIconFrame)
         return m_pIconFrame;
     return NULL;
 }
 
-QUndoStack* HIconEditorMgr::getIconUndoStack()
+QUndoStack* HIconEditorMgr::iconEditorUndoStack()
 {
     if(m_pIconUndoStack)
         return m_pIconUndoStack;
     return NULL;
 }
 
-HIconOp* HIconEditorMgr::getIconOp()
+HIconOp* HIconEditorMgr::iconEditorOp()
 {
     if(m_pIconOp)
         return m_pIconOp;

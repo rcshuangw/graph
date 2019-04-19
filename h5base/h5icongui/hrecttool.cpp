@@ -1,6 +1,6 @@
 #include "hrecttool.h"
 #include "htoolmanager.h"
-HRectTool::HRectTool(HToolManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
+HRectTool::HRectTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
     :HDrawTool(manager, objShape, name, uuid)
 {
 

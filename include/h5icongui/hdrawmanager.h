@@ -16,28 +16,26 @@ struct Path
  * 绘制工具管理类
 */
 class HDrawTool;
-class HToolManager : public QObject
+class HDrawManager : public QObject
 {
     Q_OBJECT
 public:
-	HToolManager();
-    ~HToolManager();
+	HDrawManager();
+    ~HDrawManager();
 public:
     virtual void onEvent(HEvent& e);
-
     virtual void selectTool(DrawShape shape,const QString& catalogName,const QString& uuid);
     virtual void appendObj(HBaseObj* obj) = 0;
 
 public:
     bool findTool(DrawShape shape,const QString& catalogName,const QString& uuid);
-
     void onDrawPath(const QList<Path> &pathList);
     void onEndDraw();
 
 signals:
     void drawPath(const QList<Path> &pathList);
     void endDraw();
-public:
+protected:
     int m_nCurdrawShape;
     HDrawTool *m_pDrawTool;
     QList<HDrawTool*> m_drawToolList;

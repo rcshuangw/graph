@@ -1,26 +1,26 @@
-#include "htoolmanager.h"
+#include "hdrawmanager.h"
 #include "h5drawtool.h"
 #include "hlinetool.h"
 #include "hpolylinetool.h"
 #include "hrecttool.h"
 #include "harctool.h"
-HToolManager::HToolManager()
+HDrawManager::HDrawManager()
 {
 
 }
 
-HToolManager::~HToolManager()
+HDrawManager::~HDrawManager()
 {
 
 }
 
-void HToolManager::onEvent(HEvent& e)
+void HDrawManager::onEvent(HEvent& e)
 {
     if(m_pDrawTool)
         m_pDrawTool->onEvent(e);
 }
 
-void HToolManager::selectTool(DrawShape shape,const QString& catalogName,const QString& uuid)
+void HDrawManager::selectTool(DrawShape shape,const QString& catalogName,const QString& uuid)
 {
     switch(shape)
     {
@@ -51,7 +51,7 @@ void HToolManager::selectTool(DrawShape shape,const QString& catalogName,const Q
     }
 }
 
-bool HToolManager::findTool(DrawShape shape,const QString& catalogName,const QString& uuid)
+bool HDrawManager::findTool(DrawShape shape,const QString& catalogName,const QString& uuid)
 {
     for(int i = 0;i < m_drawToolList.count();i++)
     {
@@ -64,12 +64,12 @@ bool HToolManager::findTool(DrawShape shape,const QString& catalogName,const QSt
     }
 }
 
-void HToolManager::onDrawPath(const QList<Path> &pathList)
+void HDrawManager::onDrawPath(const QList<Path> &pathList)
 {
     emit drawPath(pathList);
 }
 
-void HToolManager::onEndDraw()
+void HDrawManager::onEndDraw()
 {
     emit endDraw();
 }

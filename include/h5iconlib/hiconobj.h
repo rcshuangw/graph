@@ -6,7 +6,8 @@
 #include "hbaseobj.h"
 class HIconTemplate;
 class HIconSymbol;
-/***************************************图符**********************************/
+/*此图符类型是包含关联数据的，不仅可以作为4遥信基本图符使用，也可以作为一次设备图符使用，比如进线等基本图符关联数据使用
+*/
 class H5ICONLIB_EXPORT HIconObj : public HBaseObj //图符类
 {
 public:
@@ -25,8 +26,8 @@ public:
     virtual void readXml(int v, QDomElement* dom);
     virtual void writeXml(int v, QDomElement* dom);
 
-
     virtual QString TagName();
+
     //拷贝克隆
     virtual void copyTo(HBaseObj* obj);
     virtual void clone(HBaseObj* obj);

@@ -4,7 +4,7 @@
 class H5ICONGUI_EXPORT HArcTool: public HDrawTool
 {
 public:
-    HArcTool(HToolManager* manager,DrawShape objShape,const QString& name,const QString& uuid);
+    HArcTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid);
     virtual ~HArcTool();
 
 public:

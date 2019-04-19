@@ -1,14 +1,16 @@
 #ifndef H5DRAWTOOL_H
 #define H5DRAWTOOL_H
 #include "h5iconguiexport.h"
+#include <QObject>
 #include "h5event.h"
 #include "h5iconlib/hbaseobj.h"
-
-class HToolManager; //绘制管理
-class H5ICONGUI_EXPORT HDrawTool
+#include "hdrawmanager.h"
+//class HDrawManager; //绘制管理
+class H5ICONGUI_EXPORT HDrawTool : public QObject
 {
+	Q_OBJECT
 public:
-    HDrawTool(HToolManager* manager,DrawShape drawShape,const QString& name,const QString& uuid);
+    HDrawTool(HDrawManager* manager,DrawShape drawShape,const QString& name,const QString& uuid);
     virtual ~HDrawTool();
 
 public:
@@ -22,10 +24,10 @@ public:
     DrawShape drawShape() {return m_edrawShape;}
     QString objTypeName(){ return m_strObjName;}
     QString templateUuid() {return m_strObjUuid;}
-	HToolManager* toolManager(){return m_pToolManager;}
+	HDrawManager* toolManager(){return m_pToolManager;}
 
 protected:
-	HToolManager* m_pToolManager;
+	HDrawManager* m_pToolManager;
     DrawShape m_edrawShape;
     QString m_strObjName;
     QString m_strObjUuid;
