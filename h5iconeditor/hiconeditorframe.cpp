@@ -6,8 +6,6 @@
 #include "hiconeditorscene.h"
 #include "hiconeditormgr.h"
 #include "hicondrawtoolmanager.h"
-
-
 HIconEditorFrame::HIconEditorFrame(QWidget * parent, Qt::WindowFlags f )
     :HFrame(parent,f)
 {
@@ -16,35 +14,20 @@ HIconEditorFrame::HIconEditorFrame(QWidget * parent, Qt::WindowFlags f )
     m_pView->setDragMode(QGraphicsView::NoDrag);
 }
 
-HIconEditorFrame::HIconEditorFrame(HIconMgr* pMgr,QWidget * parent, Qt::WindowFlags f)
+HIconEditorFrame::HIconEditorFrame(HIconEditorMgr* pMgr,QWidget * parent, Qt::WindowFlags f)
 :m_pIconEditorMgr(pMgr),HFrame(parent,f)
 {
-    m_pView->setScene(new HIconScene(m_pIconEditorMgr));
+	m_pView->setInteractive(false);
+	m_pView->setDragMode(QGraphicsView::NoDrag);
+
+    m_pView->setScene(new HIconEditorScene(m_pIconEditorMgr));
+	m_pView->setSceneRect(m_pIconEditorMgr->getLogicRect());
+	m_pIconEditorMgr->setIconEditorFrame(this);
 }
 
 HIconEditorFrame::~HIconEditorFrame()
 {
 
-}
-
-void HIconEditorFrame::setIconMgr(HIconMgr *iconmgr)
-{
-    m_pIconEditorMgr = iconmgr;
-}
-
-void HIconEditorFrame::setLogicRect(QRectF &rectF)
-{
-    if(rectF == m_sceneRect)
-        return;
-    m_sceneRect = rectF;
-    if(m_pView)
-    {
-        m_pView->setSceneRect(rectF);
-        int f_width = width();
-        int f_height = height();
-        resize(f_width-1,f_height);
-        resize(f_width,f_height);
-    }
 }
 
 void HIconEditorFrame::drawPath(const QList<Path>& pathList)
@@ -80,7 +63,7 @@ void HIconEditorFrame::objCreated(HBaseObj* obj,bool isPaste)
         return;
     H5GraphicsItem *item = new H5GraphicsItem(obj);
     if(NULL == item) return;
-    item->setZValue(obj->getStackOrder());
+    item->setZValue(obj->zValue());
 
     if(isPaste)
     {
@@ -99,9 +82,9 @@ void HIconEditorFrame::objRemoved(HBaseObj* obj)
     if(!m_pView || !m_pView->scene())
         return;
     HIconEditorScene* scene = (HIconEditorScene*)m_pView->scene();
-    if(obj && obj->getIconGraphicsItem())
+    if(obj && obj->iconGraphicsItem())
     {
-        H5GraphicsItem* item = (H5GraphicsItem*)obj->getIconGraphicsItem();
+        H5GraphicsItem* item = (H5GraphicsItem*)obj->iconGraphicsItem();
         scene->removeItem(item);
         item->setBaseObj(NULL);
         disconnect(item,SIGNAL(objSelectChanged(HBaseObj*,bool)),this,SLOT(objSelectChanged(HBaseObj*,bool)));
@@ -120,19 +103,8 @@ void HIconEditorFrame::objSelectChanged(HBaseObj *obj, bool isSelected)
 
 void HIconEditorFrame::recalcSelect()
 {
-
-}
-
-QRectF HIconEditorFrame::getLogicRect()
-{
-    return m_sceneRect;
-}
-
-HIconScene* HIconEditorFrame::getIconScene()
-{
-    if(m_pView)
-        return (HIconScene*)m_pView->scene();
-    return NULL;
+	if (!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorOp())
+		return;
 }
 
 void HIconEditorFrame::refreshSelected(const QRectF& rect)
@@ -157,60 +129,3 @@ void HIconEditorFrame::cursorChanged(const QCursor& cursor)
         m_pView->setCursor(cursor);
     }
 }
-
-void HIconEditorFrame::setItemVisible(int nPatternId)
-{
-    HIconScene* pIconScene = getIconScene();
-    if(!m_pIconMgr && !pIconScene)
-        return;
-    pIconScene->setItemVisible(nPatternId);
-}
-
-//粘贴
-HIconGraphicsItem* HIconEditorFrame::addItemByIconObj(HBaseObj* pObj)
-{
-    HIconScene* pIconScene = getIconScene();
-    if(!m_pIconMgr && !pIconScene)
-        return NULL;
-    return pIconScene->addItemByIconObj(pObj);
-}
-
-//切换nPattern
-void HIconEditorFrame::refreshSceneByPatternId(int nPatternId)
-{
-    HIconScene* pIconScene = getIconScene();
-    if(!m_pIconMgr && !pIconScene)
-        return;
-    pIconScene->refreshItemByPatternId(nPatternId);
-
-}
-
-void HIconEditorFrame::clearSceneByPatternId(int nPatternId)
-{
-    HIconScene* pIconScene = getIconScene();
-    if(!m_pIconMgr && !pIconScene)
-        return;
-    pIconScene->clearItemByPatternId(nPatternId);
-}
-
-HIconGraphicsItem* HIconEditorFrame::getIconGraphicsItemByObj(HBaseObj *pObj)
-{
-    if(!pObj || !getIconScene()) return NULL;
-    QList<QGraphicsItem*> items = getIconScene()->items();
-    foreach (QGraphicsItem *item1, items)
-    {
-        HIconGraphicsItem* item = qgraphicsitem_cast<HIconGraphicsItem*>(item1);
-        if(!item) continue;
-        if(pObj->getShapeType() != item->type()) continue;
-        HBaseObj* obj = item->getItemObj();
-        if(obj->getObjID() == pObj->getObjID())
-            return item;
-    }
-    return NULL;
-}
-
-
-
-
-
-

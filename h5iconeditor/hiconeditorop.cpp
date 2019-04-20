@@ -2,47 +2,52 @@
 #include <QScrollBar>
 #include <QGraphicsView>
 #include <QDir>
-#include "hiconcommand.h"
-#include "hiconitemgroup.h"
-#include "publicdata.h"
+#include "hiconeditormgr.h"
+//#include "hiconitemgroup.h"
+//#include "publicdata.h"
 
-HIconEditorOp::HIconEditorOp(HIconMgr* mgr)
-    :pIconMgr(mgr)
+HIconEditorOp::HIconEditorOp(HIconEditorMgr* mgr)
+    :m_pIconEditorMgr(mgr)
+{
+
+}
+
+HIconEditorOp::~HIconEditorOp()
 {
 
 }
 
 void HIconEditorOp::fitWidth()
 {
-    if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->view())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorFrame() || !m_pIconEditorMgr->iconEditorFrame()->view())
         return;
     int nScrollWidth = 0;
 
-    if(pIconMgr->getIconFrame()->view()->verticalScrollBar())
-        nScrollWidth = pIconMgr->getIconFrame()->view()->verticalScrollBar()->width();
-    double frameWidth = pIconMgr->getIconFrame()->width()-nScrollWidth-pIconMgr->getIconFrame()->vRulerWidth()-5;
-    double screenWidth = pIconMgr->getIconFrame()->getLogicRect().width();
+    if(m_pIconEditorMgr->iconEditorFrame()->view()->verticalScrollBar())
+        nScrollWidth = m_pIconEditorMgr->iconEditorFrame()->view()->verticalScrollBar()->width();
+    double frameWidth = m_pIconEditorMgr->iconEditorFrame()->width()-nScrollWidth- m_pIconEditorMgr->iconEditorFrame()->vRulerWidth()-5;
+    double screenWidth = m_pIconEditorMgr->getLogicRect().width();
     double ratio = frameWidth/screenWidth;
     if(ratio<0 || qFuzzyCompare(ratio,1))
         return;
-    pIconMgr->getIconFrame()->scaleChangedTo(ratio);
+	m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(ratio);
 
 }
 
 void HIconEditorOp::fitHeight()
 {
-    if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->view())
-        return;
+	if (!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorFrame() || !m_pIconEditorMgr->iconEditorFrame()->view())
+		return;
     int nScrollHeight = 0;
-    if(pIconMgr->getIconFrame()->view()->horizontalScrollBar())
-        nScrollHeight = pIconMgr->getIconFrame()->view()->horizontalScrollBar()->height();
+    if(m_pIconEditorMgr->iconEditorFrame()->view()->horizontalScrollBar())
+        nScrollHeight = m_pIconEditorMgr->iconEditorFrame()->view()->horizontalScrollBar()->height();
 
-    double frameHeight = pIconMgr->getIconFrame()->height()-nScrollHeight-pIconMgr->getIconFrame()->hRulerHeight()-5;
-    double screenHeight = pIconMgr->getIconFrame()->getLogicRect().height();
+    double frameHeight = m_pIconEditorMgr->iconEditorFrame()->height()-nScrollHeight- m_pIconEditorMgr->iconEditorFrame()->hRulerHeight()-5;
+    double screenHeight = m_pIconEditorMgr->getLogicRect().height();
     double ratio = frameHeight/screenHeight;
     if(ratio<0 || qFuzzyCompare(ratio,1))
         return;
-    pIconMgr->getIconFrame()->scaleChangedTo(ratio);
+	m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(ratio);
 }
 
 void HIconEditorOp::cut()

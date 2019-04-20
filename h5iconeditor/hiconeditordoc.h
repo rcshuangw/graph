@@ -5,13 +5,13 @@
 #include "hiconapi.h"
 #include "hicontemplate.h"
 #include "hiconeditormgr.h"
-#include "hiconhelper.h"
-class HIconMgr;
-class HIconDocument : public QObject
+//#include "hiconhelper.h"
+class HIconEditorMgr;
+class HIconEditorDoc : public QObject
 {
 public:
-    HIconDocument(HIconMgr* iconMgr);
-    ~HIconDocument();
+	HIconEditorDoc(HIconEditorMgr* iconMgr);
+    ~HIconEditorDoc();
 public:
     void loadIconDoucument();
     void saveIconDoucument();
@@ -25,9 +25,9 @@ public:
     HIconTemplate* findIconTemplateByTypeAndUuid(int nTemplateType,const QString& strUuid);
     HIconTemplate* findIconTemplateByTemplateName(const QString& strTemplateName);
 public:
-    HIconTemplate* pCurIconTemplate;
-    HIconMgr* pIconMgr;
-    QList<HIconTemplate*> pIconTemplateList;
+    HIconTemplate* m_pCurIconTemplate;
+    HIconEditorMgr* m_pIconEditorMgr;
+    QList<HIconTemplate*> m_pIconTemplateList;
 };
 
 #endif // HICONDOCUMENT_H

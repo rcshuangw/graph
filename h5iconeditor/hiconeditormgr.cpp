@@ -5,14 +5,19 @@ HIconEditorMgr::HIconEditorMgr()
 {
     m_pIconEditorFrame = new HIconEditorFrame(this);
     //pIconFrame->setIconMgr(this);
-	m_pIconEditorDoc = new HIconDocument(this);
+	m_pIconEditorDoc = new HIconEditorDoc(this);
     //m_pIconState = new HIconState(this);
    // m_pIconEditorOp = new HIconOp(this);
-    m_pIconEditorUndo = new QUndoStack;
+    m_pIconUndoStack = new QUndoStack;
     m_bShowGrid = true;
     m_bShowCenterLine = true;
     m_strBgClr = "#FFFFFF";
     m_drawShape = No;
+}
+
+HIconEditorMgr::~HIconEditorMgr()
+{
+
 }
 
 HIconEditorDoc* HIconEditorMgr::iconEditorDocument()
@@ -29,11 +34,16 @@ HIconTemplate* HIconEditorMgr::iconTemplate()
     return NULL;
 }
 
-HIconFrame* HIconEditorMgr::iconEditorFrame()
+HIconEditorFrame* HIconEditorMgr::iconEditorFrame()
 {
-    if(m_pIconFrame)
-        return m_pIconFrame;
+    if(m_pIconEditorFrame)
+        return m_pIconEditorFrame;
     return NULL;
+}
+
+void HIconEditorMgr::setIconEditorFrame(HIconEditorFrame* frame)
+{
+	m_pIconEditorFrame = frame;
 }
 
 QUndoStack* HIconEditorMgr::iconEditorUndoStack()
@@ -43,10 +53,10 @@ QUndoStack* HIconEditorMgr::iconEditorUndoStack()
     return NULL;
 }
 
-HIconOp* HIconEditorMgr::iconEditorOp()
+HIconEditorOp* HIconEditorMgr::iconEditorOp()
 {
-    if(m_pIconOp)
-        return m_pIconOp;
+    if(m_pIconEditorOp)
+        return m_pIconEditorOp;
     return NULL;
 }
 
@@ -80,7 +90,7 @@ bool HIconEditorMgr::getShowCenterLine()
     return m_bShowCenterLine;
 }
 
-void HIconEditorMgr::setDrawShape(DRAWSHAPE ds)
+void HIconEditorMgr::setDrawShape(DrawShape ds)
 {
     m_drawShape = ds;
 }
@@ -90,35 +100,45 @@ DrawShape HIconEditorMgr::getDrawShape()
     return m_drawShape;
 }
 
-void HIconEditorMgr::setSelectMode(SELECTMODE ds)
+void HIconEditorMgr::setLogicRect(QRectF &rectF)
 {
-    m_selectMode = ds;
+	if (rectF == m_sceneRect)
+		return;
+	m_sceneRect = rectF;
+	if (m_pIconEditorFrame && m_pIconEditorFrame->view() && m_pIconEditorFrame->view()->scene())
+	{
+		m_pIconEditorFrame->view()->setSceneRect(rectF);
+		int f_width = m_pIconEditorFrame->width();
+		int f_height = m_pIconEditorFrame->height();
+		m_pIconEditorFrame->resize(f_width - 1, f_height);
+		m_pIconEditorFrame->resize(f_width, f_height);
+	}
 }
 
-SELECTMODE HIconEditorMgr::getSelectMode()
+QRectF HIconEditorMgr::getLogicRect()
 {
-    return m_selectMode;
+	return m_sceneRect;
 }
 
 
 void HIconEditorMgr::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
 {
-    m_pIconDocument->New(strTemplateName,strCatalogName,nCatalogType);
+    m_pIconEditorDoc->New(strTemplateName,strCatalogName,nCatalogType);
 }
 
 void HIconEditorMgr::Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
 {
-    m_pIconDocument->Del(strTemplateName,nTemplateType,strUuid);
+	m_pIconEditorDoc->Del(strTemplateName,nTemplateType,strUuid);
 }
 
 bool HIconEditorMgr::Save(bool savefile)
 {
-    return m_pIconDocument->Save(savefile);
+    return m_pIconEditorDoc->Save(savefile);
 }
 
 void HIconEditorMgr::Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
 {
-    m_pIconDocument->Open(strTemplateName,nTemplateType,strUuid);
+	m_pIconEditorDoc->Open(strTemplateName,nTemplateType,strUuid);
 }
 
 

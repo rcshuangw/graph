@@ -2,12 +2,13 @@
 #define HICONOP_H
 #include "hiconapi.h"
 #include "hbaseobj.h"
-#include "hgroupobj.h"
 #include "hiconeditormgr.h"
-class HIconEditorOp
+class HIconEditorMgr;
+class HIconEditorOp : public QObject
 {
+	Q_OBJECT
 public:
-    HIconEditorOp(HIconMgr* mgr);
+    HIconEditorOp(HIconEditorMgr* mgr);
     ~HIconEditorOp();
 public:
 
@@ -38,7 +39,7 @@ public:
     void ungroupObj();
 
     //增加对象到scene
-    void addIconGraphicsItem(HBaseObj* pObj);
+    //void addIconGraphicsItem(HBaseObj* pObj);
     /*
     //左对齐
     void alignLeft();
@@ -115,7 +116,7 @@ public:
     void setupMatrix();
 
 private:
-    HIconEditorMgr* pIconMgr;
+    HIconEditorMgr* m_pIconEditorMgr;
     Qt::Alignment m_Alignment;
     IconSize m_Equalway;
     IconFlip m_Flipway;

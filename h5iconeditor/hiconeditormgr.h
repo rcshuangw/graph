@@ -27,6 +27,7 @@ public:
 	HIconEditorDoc* iconEditorDocument();
 	HIconTemplate* iconTemplate();
     HIconEditorFrame* iconEditorFrame();
+	void setIconEditorFrame(HIconEditorFrame* frame);
 	//HIconEditorSelectMgr iconEditorSelectMgr();
 	QUndoStack* iconEditorUndoStack();
 	HIconEditorOp* iconEditorOp();
@@ -47,6 +48,9 @@ public:
     void setDrawShape(DrawShape ds);
     DrawShape getDrawShape();
 
+	//
+	void setLogicRect(QRectF& rectF);
+	QRectF getLogicRect();
 public:
     void New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType);
     void Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
@@ -58,12 +62,14 @@ private:
     bool m_bShowCenterLine;
     QString m_strBgClr;
 
+	QRectF m_sceneRect;
+
     HIconEditorFrame* m_pIconEditorFrame;
     HIconEditorDoc* m_pIconEditorDoc;
 	HIconEditorSelectMgr* m_pIconEditorSelectMgr;
 	HIconTemplate* m_pIconTemplate;
     HIconEditorOp* m_pIconEditorOp;
-	QUndoStack* m_pIconEditorUndo;
+	QUndoStack* m_pIconUndoStack;
 };
 
 #endif // HICONMGR_H

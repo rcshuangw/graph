@@ -1,12 +1,15 @@
 #ifndef HSELECTTOOL_H
 #define HSELECTTOOL_H
-#include "h5drawtool.h"
-class H5ICONGUI_EXPORT HSelectTool : public HDrawTool
+#include <QObject>
+#include "hiconapi.h"
+#include "../include/h5icongui/h5event.h"
+class HIconEditorMgr;
+class HIconEditorSelectTool : public QObject
 {
 	Q_OBJECT
 public:
-	HSelectTool(HToolManager* manager, DrawShape objShape, const QString& name, const QString& uuid);
-	virtual ~HSelectTool();
+	HIconEditorSelectTool(HIconEditorMgr* mgr, DrawShape objShape, const QString& name, const QString& uuid);
+	virtual ~HIconEditorSelectTool();
 
 public:
 	virtual void clear();

@@ -191,6 +191,7 @@
     <ClCompile Include="habout.cpp" />
     <ClCompile Include="hiconcommand.cpp" />
     <ClCompile Include="hicondrawtoolmanager.cpp" />
+    <ClCompile Include="hiconeditordoc.cpp" />
     <ClCompile Include="hiconeditorframe.cpp" />
     <ClCompile Include="hiconeditormgr.cpp" />
     <ClCompile Include="hiconeditorop.cpp" />
@@ -199,13 +200,21 @@
     <ClCompile Include="hiconmainwindow.cpp" />
     <ClCompile Include="hiconmainwindowactions.cpp" />
     <ClCompile Include="hiconpreview.cpp" />
-    <ClCompile Include="hiconselecttoolmanager.cpp" />
     <ClCompile Include="hicontreewidget.cpp" />
+    <ClCompile Include="hiconeditorselecttool.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="habout.h" />
     <ClInclude Include="hiconcommand.h" />
+    <QtMoc Include="hiconeditorselecttool.h">
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\temp\moc\moc_%(Filename).cpp</OutputFile>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\..\include;.\..\include\h5iconlib;.\..\include\h5icongui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;.\temp\moc;.\temp\ui;\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</Define>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\temp\moc\moc_%(Filename).cpp</OutputFile>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\..\include;.\..\include\h5iconlib;.\..\include\h5icongui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;.\temp\moc;.\temp\ui;\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</Define>
+    </QtMoc>
     <QtMoc Include="hiconeditorframe.h">
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB</Define>
       <CompilerFlavor Condition="'$(Configuration)|$(Platform)'=='Release|x64'">msvc</CompilerFlavor>
@@ -222,8 +231,16 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\..\include;.\..\include\h5iconlib;.\..\include\h5icongui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;.\temp\moc;.\temp\ui;\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</Define>
     </QtMoc>
+    <ClInclude Include="hiconeditordoc.h" />
     <ClInclude Include="hiconeditormgr.h" />
-    <ClInclude Include="hiconeditorop.h" />
+    <QtMoc Include="hiconeditorop.h">
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\temp\moc\moc_%(Filename).cpp</OutputFile>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\..\include;.\..\include\h5iconlib;.\..\include\h5icongui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;.\temp\moc;.\temp\ui;\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</Define>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\temp\moc\moc_%(Filename).cpp</OutputFile>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\..\include;.\..\include\h5iconlib;.\..\include\h5icongui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;.\temp\moc;.\temp\ui;\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</Define>
+    </QtMoc>
     <QtMoc Include="hiconeditorscene.h">
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB</Define>
       <CompilerFlavor Condition="'$(Configuration)|$(Platform)'=='Release|x64'">msvc</CompilerFlavor>
@@ -249,7 +266,6 @@
       <Include Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">temp/moc/moc_predefs.h;temp/moc/moc_predefs.h</Include>
     </QtMoc>
     <ClInclude Include="hiconpreview.h" />
-    <ClInclude Include="hiconselecttoolmanager.h" />
     <ClInclude Include="hicontreewidget.h" />
   </ItemGroup>
   <ItemGroup>

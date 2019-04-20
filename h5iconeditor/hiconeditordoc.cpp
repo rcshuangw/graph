@@ -1,70 +1,70 @@
-﻿#include "hicondocument.h"
+﻿#include "hiconeditordoc.h"
 #include <QDir>
 #include <QProcessEnvironment>
 #include <QMessageBox>
-#include "publicdata.h"
-HIconDocument::HIconDocument(HIconMgr* iconMgr):pIconMgr(iconMgr)
+//#include "publicdata.h"
+HIconEditorDoc::HIconEditorDoc(HIconEditorMgr* iconMgr):m_pIconEditorMgr(iconMgr)
 {
-    pCurIconTemplate = new HIconTemplate("0000");
+    m_pCurIconTemplate = new HIconTemplate("0000");
 }
 
-HIconDocument::~HIconDocument()
+HIconEditorDoc::~HIconEditorDoc()
 {
-    if(pCurIconTemplate)
+    if(m_pCurIconTemplate)
     {
-        delete pCurIconTemplate;
-        pCurIconTemplate = NULL;
+        delete m_pCurIconTemplate;
+		m_pCurIconTemplate = NULL;
     }
 }
 
-void HIconDocument::loadIconDoucument()
+void HIconEditorDoc::loadIconDoucument()
 {
-    HIconHelper::Instance()->loadIconDoucument(&pIconTemplateList);
+    //HIconHelper::Instance()->loadIconDoucument(&m_pIconTemplateList);
 }
 
-void HIconDocument::saveIconDoucument()
+void HIconEditorDoc::saveIconDoucument()
 {
-    if(!pIconTemplateList.isEmpty())
-        HIconHelper::Instance()->saveIconDoucument(&pIconTemplateList);
+   // if(!m_pIconTemplateList.isEmpty())
+  //      HIconHelper::Instance()->saveIconDoucument(&m_pIconTemplateList);
 }
 
-HIconTemplate* HIconDocument::getCurrentTemplate()
+HIconTemplate* HIconEditorDoc::getCurrentTemplate()
 {
-    return pCurIconTemplate;
+    return m_pCurIconTemplate;
 }
 
 
-void HIconDocument::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
+void HIconEditorDoc::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
 {
-    if(pCurIconTemplate)
+    if(m_pCurIconTemplate)
     {
-        pCurIconTemplate->clear();
+		m_pCurIconTemplate->clear();
     }
 
     HIconTemplate *pTemplate = new HIconTemplate("");
     pTemplate->setCatalogName(strCatalogName);//普通开关
     pTemplate->setCatalogType(nCatalogType);//遥信类
-    pTemplate->getSymbol()->setSymbolName(strTemplateName);
+    //pTemplate->getSymbol()->setSymbolName(strTemplateName);
     pTemplate->getSymbol()->newPattern(QStringLiteral("缺省"));
-    pIconTemplateList.append(pTemplate);
+    m_pIconTemplateList.append(pTemplate);
 
-    pTemplate->copyTo(pCurIconTemplate);
+    pTemplate->copyTo(m_pCurIconTemplate);
 }
 
-void HIconDocument::Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
+void HIconEditorDoc::Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
 {
 
     char szIconPath[128];
     getDataFilePath(DFPATH_ICON,szIconPath);
     QString iconsPath = QString(szIconPath);
-    if(pCurIconTemplate->getCatalogType() == nTemplateType && pCurIconTemplate->getUuid().toString() == strUuid)
+    if(m_pCurIconTemplate->getCatalogType() == nTemplateType && m_pCurIconTemplate->getUuid().toString() == strUuid)
     {
-        pCurIconTemplate->clear();
+		m_pCurIconTemplate->clear();
     }
 
-    for(int i = 0; i < pIconTemplateList.size();i++)
+    for(int i = 0; i < m_pIconTemplateList.size();i++)
     {
-        HIconTemplate* pIconTemplate = (HIconTemplate*)pIconTemplateList.at(i);
+        HIconTemplate* pIconTemplate = (HIconTemplate*)m_pIconTemplateList.at(i);
         if(!pIconTemplate)
             return;
         if(pIconTemplate->getCatalogType() == nTemplateType && pIconTemplate->getUuid().toString() == strUuid)
@@ -74,16 +74,16 @@ void HIconDocument::Del(const QString &strTemplateName, int nTemplateType, const
             {
                 QFile::remove(strFileName);
             }
-            pIconTemplateList.removeOne(pIconTemplate);
+			m_pIconTemplateList.removeOne(pIconTemplate);
             delete pIconTemplate;
             pIconTemplate = NULL;
         }
     }
 }
 
-void HIconDocument::Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
+void HIconEditorDoc::Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
 {
-    if(!pCurIconTemplate)
+    if(!m_pCurIconTemplate)
     {
         return;
     }
@@ -91,24 +91,24 @@ void HIconDocument::Open(const QString &strTemplateName, int nTemplateType, cons
     HIconTemplate* pTemplate = findIconTemplateByTypeAndUuid(nTemplateType,strUuid);
     if(pTemplate && pTemplate->getSymbol()->getSymolName() == strTemplateName)
     {
-        pCurIconTemplate->clear();
-        pTemplate->copyTo(pCurIconTemplate);
-        pCurIconTemplate->setModify(pTemplate->getModify());
+        m_pCurIconTemplate->clear();
+        pTemplate->copyTo(m_pCurIconTemplate);
+		m_pCurIconTemplate->setModify(pTemplate->getModify());
     }
 }
 
-bool HIconDocument::Save(bool savefile)
+bool HIconEditorDoc::Save(bool savefile)
 {
-    if(!pCurIconTemplate)
+    if(!m_pCurIconTemplate)
     {
         return false;
     }
 
-    HIconTemplate* pTemplate = findIconTemplateByTypeAndUuid(pCurIconTemplate->getCatalogType(),pCurIconTemplate->getUuid().toString());
+    HIconTemplate* pTemplate = findIconTemplateByTypeAndUuid(m_pCurIconTemplate->getCatalogType(),m_pCurIconTemplate->getUuid().toString());
     if(pTemplate)
     {
         pTemplate->clear();
-        pCurIconTemplate->copyTo(pTemplate);
+		m_pCurIconTemplate->copyTo(pTemplate);
     }
 
     if(savefile)
@@ -117,28 +117,29 @@ bool HIconDocument::Save(bool savefile)
     if(pTemplate)
     {
         pTemplate->setModify(false);
-        pCurIconTemplate->setModify(false);
+		m_pCurIconTemplate->setModify(false);
     }
     return true;
 }
 
-HIconTemplate* HIconDocument::findIconTemplateByTemplateName(const QString& strTemplateName)
+HIconTemplate* HIconEditorDoc::findIconTemplateByTemplateName(const QString& strTemplateName)
 {
-    for(int i = 0; i < pIconTemplateList.size();i++)
+	/*
+    for(int i = 0; i < m_pIconTemplateList.size();i++)
     {
-        HIconTemplate* pIconTemplate = (HIconTemplate*)pIconTemplateList.at(i);
+        HIconTemplate* pIconTemplate = (HIconTemplate*)m_pIconTemplateList.at(i);
         if(pIconTemplate && pIconTemplate->getSymbol()->getSymolName() == strTemplateName)
 
             return pIconTemplate;
-    }
+    }*/
     return NULL;
 }
 
-HIconTemplate* HIconDocument::findIconTemplateByTypeAndUuid(int nTemplateType, const QString &strUuid)
+HIconTemplate* HIconEditorDoc::findIconTemplateByTypeAndUuid(int nTemplateType, const QString &strUuid)
 {
-    for(int i = 0; i < pIconTemplateList.size();i++)
+    for(int i = 0; i < m_pIconTemplateList.size();i++)
     {
-        HIconTemplate* pIconTemplate = (HIconTemplate*)pIconTemplateList.at(i);
+        HIconTemplate* pIconTemplate = (HIconTemplate*)m_pIconTemplateList.at(i);
         if(!pIconTemplate)
             return NULL;
         if(pIconTemplate->getCatalogType() == nTemplateType && pIconTemplate->getUuid().toString() == strUuid)
