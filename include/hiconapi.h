@@ -91,8 +91,9 @@ enum DrawShape
     Circle,
     Text,
     Group,
-    Complex,
-	Icon
+    Container,
+    Icon,
+    TempContainer
 };
 
 //选择状态

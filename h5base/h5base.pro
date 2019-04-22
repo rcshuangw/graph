@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
-SUBDIRS += h5icongui \
-           h5iconhelp \
-           h5iconlib 
+SUBDIRS += h5basegui \
+           h5baselib \
+           h5basehelp

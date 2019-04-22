@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8251820D-83FF-3F8B-A894-A171B8EE2078}</ProjectGuid>
+    <ProjectGuid>{D4B12FB7-CDA4-3EC9-81B3-100F5C68D99F}</ProjectGuid>
     <RootNamespace>icon</RootNamespace>
     <Keyword>Qt4VSv1.0</Keyword>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
@@ -66,7 +66,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\include;..\include\h5iconlib;..\include\h5icongui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;temp\moc;temp\ui;\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\include;../include/h5iconlib;../include/h5icongui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;temp\moc;temp\ui;\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>temp\obj\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -110,11 +110,11 @@
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
       <InputFile>%(FullPath)</InputFile>
       <DynamicSource>output</DynamicSource>
-      <IncludePath>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\include;..\include\h5iconlib;..\include\h5icongui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;temp\moc;temp\ui;\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui;%(AdditionalIncludeDirectories)</IncludePath>
+      <IncludePath>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/mkspecs/win32-msvc;.;D:/qt-modify/graph/include;D:/qt-modify/graph/include/h5iconlib;D:/qt-modify/graph/include/h5icongui;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include/QtWidgets;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include/QtGui;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include/QtANGLE;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include/QtXml;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include/QtCore;C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Tools\MSVC\14.16.27023\ATLMFC\include;C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Tools\MSVC\14.16.27023\include;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\cppwinrt</IncludePath>
     </QtMoc>
     <QtRcc>
       <Compression>default</Compression>
-      <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
+      <OutputFile>$(Configuration)\qrc_%(Filename).cpp</OutputFile>
       <QTDIR>D:\QT\QT5.10.0\5.10.0\MSVC2017_64</QTDIR>
       <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
       <InputFile>%(FullPath)</InputFile>
@@ -128,7 +128,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\include;..\include\h5iconlib;..\include\h5icongui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;temp\moc;temp\ui;\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\include;../include/h5iconlib;../include/h5icongui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;temp\moc;temp\ui;\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>temp\obj\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -167,7 +167,7 @@
     </ResourceCompile>
     <QtRcc>
       <QTDIR>D:\QT\QT5.10.0\5.10.0\MSVC2017_64</QTDIR>
-      <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
+      <OutputFile>$(Configuration)\qrc_%(Filename).cpp</OutputFile>
       <Compression>default</Compression>
       <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
       <InputFile>%(FullPath)</InputFile>
@@ -178,7 +178,7 @@
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
       <InputFile>%(FullPath)</InputFile>
       <DynamicSource>output</DynamicSource>
-      <IncludePath>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\include;..\include\h5iconlib;..\include\h5icongui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;temp\moc;temp\ui;\include;..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui;%(AdditionalIncludeDirectories)</IncludePath>
+      <IncludePath>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/mkspecs/win32-msvc;.;D:/qt-modify/graph/include;D:/qt-modify/graph/include/h5iconlib;D:/qt-modify/graph/include/h5icongui;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include/QtWidgets;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include/QtGui;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include/QtANGLE;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include/QtXml;D:/QT/QT5.10.0/5.10.0/MSVC2017_64/include/QtCore;C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Tools\MSVC\14.16.27023\ATLMFC\include;C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Tools\MSVC\14.16.27023\include;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\cppwinrt</IncludePath>
     </QtMoc>
     <QtUic>
       <QTDIR>D:\QT\QT5.10.0\5.10.0\MSVC2017_64</QTDIR>
@@ -189,9 +189,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="habout.cpp" />
+    <ClCompile Include="hframe.cpp" />
     <ClCompile Include="hiconcommand.cpp" />
+    <ClCompile Include="hicondocument.cpp" />
     <ClCompile Include="hicondrawtoolmanager.cpp" />
-    <ClCompile Include="hiconeditordoc.cpp" />
     <ClCompile Include="hiconeditorframe.cpp" />
     <ClCompile Include="hiconeditormgr.cpp" />
     <ClCompile Include="hiconeditorop.cpp" />
@@ -200,20 +201,22 @@
     <ClCompile Include="hiconmainwindow.cpp" />
     <ClCompile Include="hiconmainwindowactions.cpp" />
     <ClCompile Include="hiconpreview.cpp" />
+    <ClCompile Include="hiconselecttoolmanager.cpp" />
     <ClCompile Include="hicontreewidget.cpp" />
-    <ClCompile Include="hiconeditorselecttool.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="habout.h" />
+    <ClInclude Include="hframe.h" />
     <ClInclude Include="hiconcommand.h" />
-    <QtMoc Include="hiconeditorselecttool.h">
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\temp\moc\moc_%(Filename).cpp</OutputFile>
-      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\..\include;.\..\include\h5iconlib;.\..\include\h5icongui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;.\temp\moc;.\temp\ui;\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui</IncludePath>
-      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</Define>
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\temp\moc\moc_%(Filename).cpp</OutputFile>
-      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\..\include;.\..\include\h5iconlib;.\..\include\h5icongui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;.\temp\moc;.\temp\ui;\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui</IncludePath>
-      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</Define>
+    <ClInclude Include="hicondocument.h" />
+    <QtMoc Include="hicondrawtoolmanager.h">
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB</Define>
+      <CompilerFlavor Condition="'$(Configuration)|$(Platform)'=='Release|x64'">msvc</CompilerFlavor>
+      <Include Condition="'$(Configuration)|$(Platform)'=='Release|x64'">temp/moc/moc_predefs.h</Include>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB</Define>
+      <CompilerFlavor Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">msvc</CompilerFlavor>
+      <Include Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">temp/moc/moc_predefs.h</Include>
     </QtMoc>
     <QtMoc Include="hiconeditorframe.h">
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB</Define>
@@ -223,23 +226,14 @@
       <CompilerFlavor Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">msvc</CompilerFlavor>
       <Include Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">temp/moc/moc_predefs.h</Include>
     </QtMoc>
-    <QtMoc Include="hicondrawtoolmanager.h">
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\temp\moc\moc_%(Filename).cpp</OutputFile>
-      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\..\include;.\..\include\h5iconlib;.\..\include\h5icongui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;.\temp\moc;.\temp\ui;\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc</IncludePath>
-      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</Define>
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\temp\moc\moc_%(Filename).cpp</OutputFile>
-      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\..\include;.\..\include\h5iconlib;.\..\include\h5icongui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;.\temp\moc;.\temp\ui;\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc</IncludePath>
-      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</Define>
-    </QtMoc>
-    <ClInclude Include="hiconeditordoc.h" />
     <ClInclude Include="hiconeditormgr.h" />
     <QtMoc Include="hiconeditorop.h">
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\temp\moc\moc_%(Filename).cpp</OutputFile>
-      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\..\include;.\..\include\h5iconlib;.\..\include\h5icongui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;.\temp\moc;.\temp\ui;\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui</IncludePath>
-      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</Define>
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\temp\moc\moc_%(Filename).cpp</OutputFile>
-      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\..\include;.\..\include\h5iconlib;.\..\include\h5icongui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtWidgets;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtGui;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtANGLE;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtXml;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\include\QtCore;.\temp\moc;.\temp\ui;\include;.\..\..\..\QT\QT5.10.0\5.10.0\MSVC2017_64\mkspecs\win32-msvc;.\temp\ui</IncludePath>
-      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</Define>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB</Define>
+      <CompilerFlavor Condition="'$(Configuration)|$(Platform)'=='Release|x64'">msvc</CompilerFlavor>
+      <Include Condition="'$(Configuration)|$(Platform)'=='Release|x64'">temp/moc/moc_predefs.h</Include>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB</Define>
+      <CompilerFlavor Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">msvc</CompilerFlavor>
+      <Include Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">temp/moc/moc_predefs.h</Include>
     </QtMoc>
     <QtMoc Include="hiconeditorscene.h">
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB</Define>
@@ -266,6 +260,7 @@
       <Include Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">temp/moc/moc_predefs.h;temp/moc/moc_predefs.h</Include>
     </QtMoc>
     <ClInclude Include="hiconpreview.h" />
+    <ClInclude Include="hiconselecttoolmanager.h" />
     <ClInclude Include="hicontreewidget.h" />
   </ItemGroup>
   <ItemGroup>
@@ -280,203 +275,74 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generate moc_predefs.h</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">temp\moc\moc_predefs.h;%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="temp\ui\ui_about.h" />
+    <ClInclude Include="temp\ui\ui_iconpreview.h" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="UI\about.ui">
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\temp\ui\ui_%(Filename).h</OutputFile>
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\temp\ui\ui_%(Filename).h</OutputFile>
     </QtUic>
     <QtUic Include="UI\iconpreview.ui">
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\temp\ui\ui_%(Filename).h</OutputFile>
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\temp\ui\ui_%(Filename).h</OutputFile>
-    </QtUic>
-    <QtUic Include="UI\propertydlg.ui">
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\temp\ui\ui_%(Filename).h</OutputFile>
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\temp\ui\ui_%(Filename).h</OutputFile>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="icon.qrc" />
-    <QtRcc Include="qmres.qrc" />
-    <QtRcc Include="qss.qrc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="images\about.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\apply.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\arc.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\center.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\circle.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\close.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\copy.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\cut.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\del.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\ellipse.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\grid.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\group.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\line.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\move_backward.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\move_forward.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\new.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\no.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\open.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\paste.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\pie.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\polygon.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\polyline.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\rectangle.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\redo.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\ruler.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\save.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\select.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\shape_align_bottom.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\shape_align_center.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\shape_align_left.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\shape_align_middle.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\shape_align_right.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\shape_align_top.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\shape_move_back.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\shape_move_front.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\text.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\tree.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\undo.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\ungroup.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\zoom_fit_height.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\zoom_fit_width.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\zoom_in.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\zoom_original.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
-    <Image Include="images\zoom_out.png">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Image>
+    <None Include="images\about.png" />
+    <None Include="images\apply.png" />
+    <None Include="images\arc.png" />
+    <None Include="images\center.png" />
+    <None Include="images\circle.png" />
+    <None Include="images\close.png" />
+    <None Include="images\copy.png" />
+    <None Include="images\cut.png" />
+    <None Include="images\del.png" />
+    <None Include="images\ellipse.png" />
+    <None Include="images\grid.png" />
+    <None Include="images\group.png" />
+    <QtRcc Include="icon.qrc">
+      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">icon</InitFuncName>
+      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">icon</InitFuncName>
+    </QtRcc>
+    <None Include="images\line.png" />
+    <None Include="images\move_backward.png" />
+    <None Include="images\move_forward.png" />
+    <None Include="images\new.png" />
+    <None Include="images\no.png" />
+    <None Include="images\open.png" />
+    <None Include="images\paste.png" />
+    <None Include="images\pie.png" />
+    <None Include="images\polygon.png" />
+    <None Include="images\polyline.png" />
+    <None Include="qss\propertystylesheet.qss" />
+    <QtRcc Include="qmres.qrc">
+      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">qmres</InitFuncName>
+      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">qmres</InitFuncName>
+    </QtRcc>
+    <QtRcc Include="qss.qrc">
+      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">qss</InitFuncName>
+      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">qss</InitFuncName>
+    </QtRcc>
+    <None Include="translations\qt_zh_CN.qm" />
+    <None Include="images\rectangle.png" />
+    <None Include="images\redo.png" />
+    <None Include="images\ruler.png" />
+    <None Include="images\save.png" />
+    <None Include="images\select.png" />
+    <None Include="images\shape_align_bottom.png" />
+    <None Include="images\shape_align_center.png" />
+    <None Include="images\shape_align_left.png" />
+    <None Include="images\shape_align_middle.png" />
+    <None Include="images\shape_align_right.png" />
+    <None Include="images\shape_align_top.png" />
+    <None Include="images\shape_move_back.png" />
+    <None Include="images\shape_move_front.png" />
+    <None Include="images\text.png" />
+    <None Include="images\tree.png" />
+    <None Include="images\undo.png" />
+    <None Include="images\ungroup.png" />
+    <None Include="images\zoom_fit_height.png" />
+    <None Include="images\zoom_fit_width.png" />
+    <None Include="images\zoom_in.png" />
+    <None Include="images\zoom_original.png" />
+    <None Include="images\zoom_out.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
