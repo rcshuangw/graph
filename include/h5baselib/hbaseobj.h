@@ -133,7 +133,9 @@ public:
     virtual void setIconGraphicsItem(H5GraphicsItem* item);
     virtual H5GraphicsItem* iconGraphicsItem();
 
-    
+    virtual bool isHorizonTurn();//水平翻转
+    virtual bool isVerticalTurn();//垂直翻转
+
     //void setSubObjRect(qreal dx,qreal dy);
 public:
 	void addPointList(QPolygonF& list, qint8 flag);

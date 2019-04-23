@@ -20,7 +20,7 @@ public:
     QCursor cursor(int index);
 
 private:
-    QCursor cursorOnPoint(DrawShape drawShape);
+    QCursor cursorOnPoint(DrawShape drawShape,int index);
     HPointsList selectedPointList(DrawShape drawshape);
 
 
