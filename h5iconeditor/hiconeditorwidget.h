@@ -17,7 +17,7 @@ class HIconEditorWidget : public QWidget
 public:
     HIconEditorWidget();
 
-    void setIconMgr(HIconEditorMgr* iconMgr);
+    void setIconEditorMgr(HIconEditorMgr* iconMgr);
 
     //新建一个icon图元
     void newIconWidget();
@@ -32,7 +32,8 @@ public:
     void refreshIconWidget();
 
     QTabBar* getTabBar(){return pTabBar;}
-
+public:
+    void refresh();
 protected:
     virtual bool eventFilter(QObject *watched, QEvent *event);
     //HIconFrame* getIconFrame(){return pIconFrame;}
@@ -42,8 +43,8 @@ public slots:
     void renameShowPattern();
     void patternChanged(int curPatternId);
 private:
-    HIconEditorMgr* pIconMgr;
-    QTabBar* pTabBar;
+    HIconEditorMgr* m_pIconEditorMgr;
+    QTabBar* m_pTabBar;
 };
 
 #endif // HICONWIDGET_H

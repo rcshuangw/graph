@@ -1,4 +1,4 @@
-#include "hiconeditorselectmgr.h"
+﻿#include "hiconeditorselectmgr.h"
 
 HIconEditorSelectMgr::HIconEditorSelectMgr()
 {

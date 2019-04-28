@@ -2,7 +2,7 @@
 #define HDRAWMANAGER_H
 
 #include <QList>
-#include "h5iconlib/hbaseobj.h"
+#include "hbaseobj.h"
 #include "h5event.h"
 struct Path
 {

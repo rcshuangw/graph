@@ -14,6 +14,11 @@
 #include "hicondocument.h"
 #include "hiconeditormgr.h"
 #include "hiconpreview.h"
+
+class HIconEditorFrame;
+class HIconEditorMgr;
+class HIconEditorTreeWidget;
+class HIconEditorWidget;
 class HIconMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -27,11 +32,11 @@ protected:
     virtual void resizeEvent(QResizeEvent* event);
     void closeEvent(QCloseEvent *event);
 private:
-    HIconMgr* pIconMgr;
-    HIconFrame* pIconFrame;
-    HIconWidget* pIconWidget;
-    HIconTreeWidget* pIconTreeWidget;
-    HIconPreview* pIconPreview;
+    HIconEditorMgr* m_pIconEditorMgr;
+    HIconEditorFrame* m_pIconEditorFrame;
+    HIconEditorWidget* m_pIconEditorWidget;
+    HIconEditorTreeWidget* m_pIconEditorTreeWidget;
+    //HIconPreview* pIconPreview;
 signals:
 
 

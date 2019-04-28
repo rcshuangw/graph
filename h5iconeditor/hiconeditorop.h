@@ -3,6 +3,7 @@
 #include "hiconapi.h"
 #include "hbaseobj.h"
 #include "hiconeditormgr.h"
+#include "hdrawmanager.h"
 class HIconEditorMgr;
 class HIconEditorOp : public QObject
 {
@@ -115,6 +116,12 @@ public:
 
     void setupMatrix();
 
+signals:
+    void selectChanged();
+public slots:
+    void onRefreshSelect(const QRectF& rect);
+    void onDrawPath(QList<Path>& path);
+    void onEndDraw();
 private:
     HIconEditorMgr* m_pIconEditorMgr;
     Qt::Alignment m_Alignment;

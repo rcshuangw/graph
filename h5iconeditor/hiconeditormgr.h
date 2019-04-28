@@ -1,24 +1,21 @@
-﻿#ifndef HICONMGR_H
-#define HICONMGR_H
-#include "hiconeditorscene.h"
-#include "hiconeditorframe.h"
-#include "hiconeditordoc.h"
-#include "hiconeditorop.h"
+﻿#ifndef HICONEDITORMGR_H
+#define HICONEDITORMGR_H
+#include "hiconapi.h"
 #include <QUndoStack>
 /*
  * 绘制图符管理类
- * 主要管理各种对象指针，以及背景相关设置，如颜色、中心线、网格线等
- * 以及对图符的基本操作
 */
 class HIconEditorFrame;
 class HIconEditorDoc;
 class HIconEditorSelectMgr;
 class HIconEditorOp;
 class HIconTemplate;
-
-
-class HIconEditorMgr
+class HSelectedMgr;
+class HIconEditorDrawToolMgr;
+class HIconEditorSelectToolMgr;
+class HIconEditorMgr : public QObject
 {
+    Q_OBJECT
 public:
     HIconEditorMgr();
     ~HIconEditorMgr();
@@ -27,12 +24,17 @@ public:
 	HIconEditorDoc* iconEditorDocument();
 	HIconTemplate* iconTemplate();
     HIconEditorFrame* iconEditorFrame();
-	void setIconEditorFrame(HIconEditorFrame* frame);
-	//HIconEditorSelectMgr iconEditorSelectMgr();
+
 	QUndoStack* iconEditorUndoStack();
 	HIconEditorOp* iconEditorOp();
+    HSelectedMgr* selectedMgr();
+    HIconEditorDrawToolMgr* iconEditorDrawToolMgr();
+    HIconEditorSelectToolMgr* iconEditorSelectToolMgr();
 
 public:
+    bool initIconEditorMgr();
+    void setIconEditorFrame(HIconEditorFrame* frame);
+
     //背景颜色
     void setBackgroundColor(QString clrName);
     QString getBackgroundColor();
@@ -48,7 +50,6 @@ public:
     void setDrawShape(DrawShape ds);
     DrawShape getDrawShape();
 
-	//
 	void setLogicRect(QRectF& rectF);
 	QRectF getLogicRect();
 public:
@@ -61,6 +62,7 @@ private:
     bool m_bShowGrid;
     bool m_bShowCenterLine;
     QString m_strBgClr;
+    bool m_bModify;
 
 	QRectF m_sceneRect;
 
@@ -70,6 +72,9 @@ private:
 	HIconTemplate* m_pIconTemplate;
     HIconEditorOp* m_pIconEditorOp;
 	QUndoStack* m_pIconUndoStack;
+    HSelectedMgr* m_pSelectedMgr;
+    HIconEditorDrawToolMgr* m_pIconEditorDrawToolMgr;
+    HIconEditorSelectToolMgr* m_pIconEditorSelectToolMgr;
 };
 
 #endif // HICONMGR_H

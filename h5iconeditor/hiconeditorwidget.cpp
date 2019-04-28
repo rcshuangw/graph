@@ -15,23 +15,63 @@
 //#include "hiconlineitem.h"
 HIconEditorWidget::HIconEditorWidget()
 {
-    pTabBar = new QTabBar;
-    pTabBar->installEventFilter(this);
-    connect(pTabBar,SIGNAL(currentChanged(int)),this,SLOT(patternChanged(int)));
+    m_pTabBar = new QTabBar;
+    m_pTabBar->installEventFilter(this);
+    connect(m_pTabBar,SIGNAL(currentChanged(int)),this,SLOT(patternChanged(int)));
 
 }
 
-void HIconEditorWidget::setIconMgr(HIconMgr *iconMgr)
+void HIconEditorWidget::setIconEditorMgr(HIconEditorMgr *iconMgr)
 {
-    pIconMgr = iconMgr;
-    if(!pIconMgr || !pIconMgr->getIconFrame())
+    m_pIconEditorMgr = iconMgr;
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorFrame())
         return;
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
-    layout->addWidget(pTabBar);
-    layout->addWidget(pIconMgr->getIconFrame());
+    layout->addWidget(m_pTabBar);
+    layout->addWidget(m_pIconEditorMgr->iconEditorFrame());
     setLayout(layout);
+
+    //增加一个刷新函数
+}
+
+void HIconEditorWidget::refresh()
+{
+    if(!m_pIconEditorMgr || !m_pTabBar)
+        return;
+    if(m_pIconEditorMgr->iconTemplate() || m_pIconEditorMgr->iconTemplate()->getSymbol())
+        return;
+    while(m_pTabBar->count() > 0)
+    {
+        m_pTabBar->blockSignals(true);
+        m_pTabBar->removeTab(0);
+        m_pTabBar->blockSignals(false);
+    }
+    HIconSymbol* pSymbol = (HIconSymbol*) m_pIconEditorMgr->iconTemplate()->getSymbol();
+    if(!pSymbol)
+        return;
+   for(int i = 0; i < pSymbol->patternCount();i++)
+   {
+       HIconShowPattern* pattern = (HIconShowPattern*)pSymbol->findPatternById(i);
+       if(pattern)
+       {
+           m_pTabBar->blockSignals(true);
+           m_pTabBar->addTab(pattern->strName);
+           m_pTabBar->setTabData(i,pattern->nPattern);
+           m_pTabBar->blockSignals(false);
+       }
+   }
+
+   if(m_pTabBar->count() > 0)
+   {
+       int index = pSymbol->getCurrentPatternIndex() - 1;
+       m_pTabBar->blockSignals(true);
+       m_pTabBar->setCurrentIndex(index);
+       m_pTabBar->blockSignals(false);
+       patternChanged(index);
+   }
+
 }
 
 void HIconEditorWidget::newIconWidget()
@@ -116,7 +156,9 @@ void HIconEditorWidget::delIconWidget()
 
 void HIconEditorWidget::addShowPattern()
 {
-    HIconSymbol* pSymbol = (HIconSymbol*)(pIconMgr->getIconTemplate()->getSymbol());
+    if(m_pIconEditorMgr->iconTemplate() || m_pIconEditorMgr->iconTemplate()->getSymbol())
+        return;
+    HIconSymbol* pSymbol = (HIconSymbol*)(m_pIconEditorMgr->iconTemplate()->getSymbol());
     if(!pSymbol)
         return;
     bool ok;
@@ -126,17 +168,17 @@ void HIconEditorWidget::addShowPattern()
     HIconShowPattern* pattern = (HIconShowPattern*)(pSymbol->newPattern(strName));
     if(!pattern)
         return;
-    int index = pTabBar->addTab(strName);
-    pTabBar->setTabData(index,pSymbol->getCurrentPattern());
-    pTabBar->setCurrentIndex(index);
+    int index = m_pTabBar->addTab(strName);
+    m_pTabBar->setTabData(index,pSymbol->getCurrentPattern());
+    m_pTabBar->setCurrentIndex(index);
 
 }
 
 void HIconEditorWidget::delShowPattern()
 {
-    if(pTabBar)
+    if(m_pTabBar && m_pIconEditorMgr)
     {
-        int curIndex = pTabBar->currentIndex();
+        int curIndex = m_pTabBar->currentIndex();
         if(curIndex == 0)
         {
             QMessageBox::warning(NULL,QStringLiteral("警告"),QStringLiteral("缺省样式不能删除!"),QMessageBox::Ok);
@@ -144,20 +186,20 @@ void HIconEditorWidget::delShowPattern()
         }
         else
         {
-            QVariant data = pTabBar->tabData(curIndex);
+            QVariant data = m_pTabBar->tabData(curIndex);
             if(!data.isValid())
                 return;
-            if(!pIconMgr->getIconFrame()||!pIconMgr->getIconTemplate()||!pIconMgr->getIconTemplate()->getSymbol())
+            if(!m_pIconEditorMgr->iconEditorFrame()||!m_pIconEditorMgr->iconTemplate()||!m_pIconEditorMgr->iconTemplate()->getSymbol())
                 return;
-            HIconTemplate* pTemplate = pIconMgr->getIconTemplate();
+            HIconTemplate* pTemplate = m_pIconEditorMgr->iconTemplate();
             QString strPatternName = pTemplate->getSymbol()->getCurrentPatternPtr()->strName;
             QString strWarning = QString(QStringLiteral("确定删除%1显示方案?")).arg(strPatternName);
             int ret = QMessageBox::warning(NULL,QStringLiteral("警告"),strWarning,QMessageBox::Ok|QMessageBox::Cancel);
             if(QMessageBox::Ok == ret)
             {
-                pIconMgr->getIconFrame()->clearSceneByPatternId(data.toInt());
+                m_pIconEditorMgr->iconTemplate()->clearSceneByPatternId(data.toInt());
                 pTemplate->getSymbol()->delPattern(data.toInt());
-                pTabBar->removeTab(curIndex);
+                m_pTabBar->removeTab(curIndex);
             }
         }
     }
@@ -165,17 +207,17 @@ void HIconEditorWidget::delShowPattern()
 
 void HIconEditorWidget::renameShowPattern()
 {
-    if(pTabBar)
+    if(m_pTabBar && m_pIconEditorMgr)
     {
-        int curIndex = pTabBar->currentIndex();
+        int curIndex = m_pTabBar->currentIndex();
 
-        QVariant data = pTabBar->tabData(curIndex);
+        QVariant data = m_pTabBar->tabData(curIndex);
         if(!data.isValid())
             return;
-        if(!pIconMgr->getIconFrame()||!pIconMgr->getIconTemplate()||!pIconMgr->getIconTemplate()->getSymbol())
+        if(!m_pIconEditorMgr->iconEditorFrame()||!m_pIconEditorMgr->iconTemplate()||!m_pIconEditorMgr->iconTemplate()->getSymbol())
             return;
 
-        HIconTemplate* pTemplate = pIconMgr->getIconTemplate();
+        HIconTemplate* pTemplate = m_pIconEditorMgr->iconTemplate();
         QString strPatternName = pTemplate->getSymbol()->getCurrentPatternPtr()->strName;
         bool ok;
         QString strNewName = QInputDialog::getText(this,QStringLiteral("输入显示方案名称"),QStringLiteral("显示方案名称:"),QLineEdit::Normal,strPatternName,&ok);
@@ -184,7 +226,7 @@ void HIconEditorWidget::renameShowPattern()
             if(strNewName.isEmpty())
                 return;
             pTemplate->getSymbol()->getCurrentPatternPtr()->strName = strNewName;
-            pTabBar->setTabText(curIndex,strNewName);
+            m_pTabBar->setTabText(curIndex,strNewName);
         }
     }
 }
@@ -197,56 +239,49 @@ void HIconEditorWidget::refreshIconWidget()
 
 void HIconEditorWidget::patternChanged(int index)
 {
-    if(!pTabBar||!pIconMgr->getIconFrame()||!pIconMgr->getIconTemplate()||!pIconMgr->getIconTemplate()->getSymbol())
+    if(!m_pTabBar||!m_pIconEditorMgr->iconEditorFrame()||!m_pIconEditorMgr->iconTemplate()||!m_pIconEditorMgr->iconTemplate()->getSymbol())
         return;
     bool ok;
-    QVariant data = pTabBar->tabData(index);
+    QVariant data = m_pTabBar->tabData(index);
     if(!data.isValid())
         return;
     int newPatternId = data.toInt(&ok);
     if(!ok)
         return;
-    HIconTemplate* pTemplate = pIconMgr->getIconTemplate();
-    if(!pTemplate || !pTemplate->getSymbol())
-        return;
-    for(int i = 0; i < pTemplate->getSymbol()->pShowPatternVector.count();i++)
+    HIconTemplate* pTemplate = m_pIconEditorMgr->iconTemplate();
+    for(int i = 0; i < pTemplate->getSymbol()->getObjList().count();i++)
     {
-        HIconShowPattern* pattern = (HIconShowPattern*)pTemplate->getSymbol()->pShowPatternVector[i];
-        if(pattern)
+        HBaseObj* pObj = pTemplate->getSymbol()->getObjList().at(i);
+        if(pObj && pObj->getPattern() != newPatternId)
         {
-            pIconMgr->getIconFrame()->setItemVisible(newPatternId);
-
+            H5GraphicsItem* item = (H5GraphicsItem*)pObj->iconGraphicsItem();
+            if(item)
+                item->setVisible(false);
         }
     }
     pTemplate->getSymbol()->setCurrentPattern(newPatternId);
 
-   /* //显示新的部分
+   ///显示新的部分
     pTemplate->getSymbol()->setCurrentPattern(newPatternId);
     HIconShowPattern* pattern = pTemplate->getSymbol()->findPatternById(newPatternId);
     if(pattern)
     {
-        for(int i = 0; i < pattern->pObjList.count();i++)
+        for(int i = 0; i < pattern->getObjList().count();i++)
         {
-            HBaseObj* pObj = (HBaseObj*)pattern->pObjList.at(i);
+            HBaseObj* pObj = (HBaseObj*)pattern->getObjList().at(i);
             if(pObj )
             {
-                if(pObj->getShapeType() == enumLine)
-                {
-                    HLineObj* pLineObj = (HLineObj*)pObj;
-                    HIconLineItem* pItem = (HIconLineItem*)(pLineObj->getIconLineItem());
-                    if(pItem)
-                    {
-                        pItem->setVisible(true);
-                    }
-                }
+                H5GraphicsItem* item = (H5GraphicsItem*)pObj->iconGraphicsItem();
+                if(item)
+                    item->setVisible(true);
             }
         }
-    }*/
+    }
 
     //刷新
-    if(pIconMgr->getIconFrame())
+    if(m_pIconEditorMgr->iconEditorFrame())
     {
-        pIconMgr->getIconFrame()->view()->invalidateScene(pIconMgr->getIconFrame()->view()->sceneRect());
+        m_pIconEditorMgr->iconEditorFrame()->view()->invalidateScene(m_pIconEditorMgr->iconEditorFrame()->view()->sceneRect());
     }
 }
 

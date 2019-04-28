@@ -49,7 +49,7 @@ public:
     int getMaxPattern(){return m_nMaxPattern;}
 
     //查找和设置
-    int iconShowPatternCount(){return m_pShowPatternVector.count();}
+    int patternCount(){return m_pShowPatternVector.count();}
     HIconShowPattern* findPatternById(int id);
     void setCurrentPattern(int id);
     int getCurrentPattern();

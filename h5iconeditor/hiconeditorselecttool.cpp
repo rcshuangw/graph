@@ -1,55 +1,55 @@
-#include "hiconeditorselecttool.h"
-HIconEditorSelectTool::HIconEditorSelectTool(HIconEditorMgr* manager, DrawShape objShape, const QString& name, const QString& uuid)
+﻿#include "hiconeditorselecttool.h"
+HIconEditorSelectToolMgr::HIconEditorSelectToolMgr(HIconEditorMgr* manager, DrawShape objShape, const QString& name, const QString& uuid)
 {
 
 }
 
-HIconEditorSelectTool::~HIconEditorSelectTool()
+HIconEditorSelectToolMgr::~HIconEditorSelectToolMgr()
 {
 
 }
 
-void HIconEditorSelectTool::clear()
+void HIconEditorSelectToolMgr::clear()
 {
 
 }
 
-void HIconEditorSelectTool::onEvent(HEvent& event)
+void HIconEditorSelectToolMgr::onEvent(HEvent& event)
 {
 
 }
 
-void HIconEditorSelectTool::onMousePress(QMouseEvent* event, QVariant &data)
+void HIconEditorSelectToolMgr::onMousePress(QMouseEvent* event, QVariant &data)
 {
 
 }
 
-void HIconEditorSelectTool::onMouseMove(QMouseEvent* event, QVariant &data)
+void HIconEditorSelectToolMgr::onMouseMove(QMouseEvent* event, QVariant &data)
 {
 
 }
 
-void HIconEditorSelectTool::onMouseRelease(QMouseEvent* event, QVariant &data)
+void HIconEditorSelectToolMgr::onMouseRelease(QMouseEvent* event, QVariant &data)
 {
 
 }
 
-void HIconEditorSelectTool::onMouseDoubleClickEvent(QMouseEvent* event, QVariant &data)
+void HIconEditorSelectToolMgr::onMouseDoubleClickEvent(QMouseEvent* event, QVariant &data)
 {
 
 }
 
-void HIconEditorSelectTool::onContextMenuEvent(QContextMenuEvent *event, QVariant &data)
+void HIconEditorSelectToolMgr::onContextMenuEvent(QContextMenuEvent *event, QVariant &data)
 {
 
 }
 
-void HIconEditorSelectTool::onKeyPressEvent(QKeyEvent *event, QVariant& data)
+void HIconEditorSelectToolMgr::onKeyPressEvent(QKeyEvent *event, QVariant& data)
 {
 
 }
 
-QCursor HIconEditorSelectTool::cursor()
+QCursor HIconEditorSelectToolMgr::cursor()
 {
 
 }

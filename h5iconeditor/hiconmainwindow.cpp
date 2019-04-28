@@ -10,19 +10,19 @@
 #include <QMessageBox>
 #include <QVariant>
 #include <qmath.h>
-#include "habout.h"
-#include "H5IconGui/hgroupobj.h"
-#include "H5IconGui/hiconitemgroup.h"
-HIconMainWindow::HIconMainWindow(HIconMgr *parent) : pIconMgr(parent)
+#include "hiconeditormgr.h"
+#include "hiconeditordoc.h"
+#include "hiconeditorwidget.h"
+HIconMainWindow::HIconMainWindow(HIconEditorMgr *parent) : m_pIconEditorMgr(parent)
 {
     createActions();
     createMenuBars();
     createToolBars();
     createDockWindows();
 
-    pIconWidget = new HIconWidget();
+    m_pIconEditorWidget = new HIconEditorWidget();
 
-    setCentralWidget(pIconWidget);
+    setCentralWidget(m_pIconEditorWidget);
     setWindowTitle(QStringLiteral("图元编辑器"));
     //setWindowModified(true);
 
@@ -42,15 +42,14 @@ HIconMainWindow::~HIconMainWindow()
 
 void HIconMainWindow::init()
 {
-    pIconFrame = pIconMgr->getIconFrame();
-    connect(pIconFrame,SIGNAL(mousePosChanged(const QPoint&,const QPointF&)),this,SLOT(viewMousePosChanged(const QPoint&,const QPointF&)));
-    connect(pIconFrame->getIconScene(),SIGNAL(itemInserted(int)),this,SLOT(itemInserted(int)));
-    showGridAct->setChecked(pIconMgr->getShowGrid());
-    showCLineAct->setChecked(pIconMgr->getShowCenterLine());
+    m_pIconEditorFrame = m_pIconEditorMgr->iconEditorFrame();
+    connect(m_pIconEditorFrame,SIGNAL(mousePosChanged(const QPoint&,const QPointF&)),this,SLOT(viewMousePosChanged(const QPoint&,const QPointF&)));
+    showGridAct->setChecked(m_pIconEditorMgr->getShowGrid());
+    showCLineAct->setChecked(m_pIconEditorMgr->getShowCenterLine());
     //改用函数来实现
-    pIconMgr->getIconFrame()->scaleChangedTo(0.6);
-    QString strScale = QString("%1%").arg(pIconMgr->getIconFrame()->scale()*100);
-    scaleComboBox->setCurrentText(strScale);
+   // m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(0.6);
+    //QString strScale = QString("%1%").arg(pIconMgr->getIconFrame()->scale()*100);
+    //scaleComboBox->setCurrentText(strScale);
 }
 
 void HIconMainWindow::createActions()
@@ -374,6 +373,7 @@ void HIconMainWindow::createMenuBars()
 
 void HIconMainWindow::createDockWindows()
 {
+    /*
     QDockWidget* browserIconDock = new QDockWidget(QStringLiteral("图元浏览框"),this);
     browserIconDock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
     pIconTreeWidget = new HIconTreeWidget(pIconMgr);
@@ -391,7 +391,7 @@ void HIconMainWindow::createDockWindows()
     iconPreviewDock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
     pIconPreview = new HIconPreview(pIconMgr);
     iconPreviewDock->setWidget(pIconPreview);
-    addDockWidget(Qt::RightDockWidgetArea,iconPreviewDock);
+    addDockWidget(Qt::RightDockWidgetArea,iconPreviewDock);*/
 }
 
 void HIconMainWindow::newFile()
@@ -407,7 +407,7 @@ void HIconMainWindow::open()
 
 void HIconMainWindow::save()
 {
-    pIconMgr->Save(true);
+    m_pIconEditorMgr->Save(true);
 }
 
 void HIconMainWindow::saveAs()
@@ -446,17 +446,17 @@ void HIconMainWindow::quit()
 
 void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
 {
-    if(!pIconMgr && !pIconMgr->getIconTemplate())
+    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconTemplate())
         return;
 
-    HIconTemplate* pTemplate = pIconMgr->getIconDocument()->findIconTemplateByTemplateName(strTemplateName);
+    HIconTemplate* pTemplate = m_pIconEditorMgr->iconEditorDocument()->findIconTemplateByTemplateName(strTemplateName);
     if(pTemplate)
     {
         QMessageBox::information(this,QStringLiteral("提醒"),QStringLiteral("已经存在相同名字的模板文件，请修改名称"),QMessageBox::Ok);
         return;
     }
 
-    if(pIconMgr->getIconTemplate()->getModify())
+    if(m_pIconEditorMgr->iconTemplate()->getModify())
     {
         if(QMessageBox::Ok == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的模板文件吗？"),QMessageBox::Yes|QMessageBox::No))
         {
@@ -465,12 +465,13 @@ void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatal
         }
     }
 
-    pIconWidget->delIconWidget();//先删除目前
-    pIconMgr->New(strTemplateName,strCatalogName,nCatalogType);
-    pIconWidget->setIconMgr(pIconMgr);
-    pIconWidget->newIconWidget();
-    pIconTreeWidget->addIconTreeWigetItem();
-    pIconPreview->init();
+    //pIconWidget->delIconWidget();//先删除目前
+    m_pIconEditorWidget->setIconMgr(m_pIconEditorMgr);
+    m_pIconEditorMgr->New(strTemplateName,strCatalogName,nCatalogType);
+    //pIconWidget->setIconMgr(pIconMgr);
+    //pIconWidget->newIconWidget();
+    //pIconTreeWidget->addIconTreeWigetItem();
+    //pIconPreview->init();
 }
 
 

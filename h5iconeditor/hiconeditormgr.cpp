@@ -1,5 +1,11 @@
 ﻿#include "hiconeditormgr.h"
-
+#include "hiconeditorscene.h"
+#include "hiconeditorframe.h"
+#include "hiconeditordoc.h"
+#include "hiconeditorop.h"
+#include "hselectedmgr.h"
+#include "hiconeditordrawtoolmgr.h"
+#include "hiconeditorselecttool.h"
 HIconEditorMgr::HIconEditorMgr()
     :m_bShowGrid(true),m_bShowCenterLine(true)
 {
@@ -57,6 +63,13 @@ HIconEditorOp* HIconEditorMgr::iconEditorOp()
 {
     if(m_pIconEditorOp)
         return m_pIconEditorOp;
+    return NULL;
+}
+
+HSelectedMgr* HIconEditorMgr::selectedMgr()
+{
+    if(m_pSelectedMgr)
+        return m_pSelectedMgr;
     return NULL;
 }
 
@@ -120,9 +133,25 @@ QRectF HIconEditorMgr::getLogicRect()
 	return m_sceneRect;
 }
 
+bool HIconEditorMgr::initIconEditorMgr()
+{
+    if(!m_pIconEditorDrawToolMgr)
+    {
+        m_pIconEditorDrawToolMgr = new m_pIconEditorDrawToolMgr;
+        connect(m_pIconEditorDrawToolMgr,SIGNAL(drawPath(QList<Path>&)),m_pIconEditorOp,SLOT(onDrawPath(QList<Path>&)));
+        connect(m_pIconEditorDrawToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
+
+        connect(m_pIconEditorSelectToolMgr,SIGNAL(refreshSelect(QRectF)),m_pIconEditorOp,SLOT(onRefreshSelect(QRectF)));
+        connect(m_pIconEditorSelectToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(endDraw()));
+
+        connect(m_pIconEditorOp,SIGNAL(selectChanged()),m_pIconEditorSelectToolMgr,SLOT(onSelectChanged()));
+
+    }
+}
 
 void HIconEditorMgr::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
 {
+    initIconEditorMgr();
     m_pIconEditorDoc->New(strTemplateName,strCatalogName,nCatalogType);
 }
 

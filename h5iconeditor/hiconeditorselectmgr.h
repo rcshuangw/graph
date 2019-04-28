@@ -1,7 +1,7 @@
-#ifndef HICONSELECTTOOLMANAGER_H
+ï»¿#ifndef HICONSELECTTOOLMANAGER_H
 #define HICONSELECTTOOLMANAGER_H
 //#include "hdrawtoolmanager.h"
-/*Ñ¡ÖĞÍ¼Ôª¹ÜÀíÀà£¬Õë¶ÔÑ¡ÖĞÍ¼Ôª*/
+/*é€‰ä¸­å›¾å…ƒç®¡ç†ç±»ï¼Œé’ˆå¯¹é€‰ä¸­å›¾å…ƒ*/
 class HIconEditorSelectMgr
 {
 public:
