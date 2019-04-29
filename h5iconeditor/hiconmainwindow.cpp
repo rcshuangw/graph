@@ -10,9 +10,12 @@
 #include <QMessageBox>
 #include <QVariant>
 #include <qmath.h>
+#include "htempcontainer.h"
+#include "hiconeditorop.h"
 #include "hiconeditormgr.h"
 #include "hiconeditordoc.h"
 #include "hiconeditorwidget.h"
+#include "hselectedmgr.h"
 HIconMainWindow::HIconMainWindow(HIconEditorMgr *parent) : m_pIconEditorMgr(parent)
 {
     createActions();
@@ -460,16 +463,12 @@ void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatal
     {
         if(QMessageBox::Ok == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的模板文件吗？"),QMessageBox::Yes|QMessageBox::No))
         {
-
              Save();
         }
     }
 
-    //pIconWidget->delIconWidget();//先删除目前
-    m_pIconEditorWidget->setIconMgr(m_pIconEditorMgr);
     m_pIconEditorMgr->New(strTemplateName,strCatalogName,nCatalogType);
-    //pIconWidget->setIconMgr(pIconMgr);
-    //pIconWidget->newIconWidget();
+    m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
     //pIconTreeWidget->addIconTreeWigetItem();
     //pIconPreview->init();
 }
@@ -576,5 +575,91 @@ void HIconMainWindow::itemInserted(int type)
     //setCursor(Qt::ArrowCursor);
 }
 
+void HIconMainWindow::updateMenu()
+{
 
+}
 
+void HIconMainWindow::updateViewMenu()
+{
+    showRulerAct->setEnabled(m_pIconEditorMgr);
+    showCLineAct->setEnabled(m_pIconEditorMgr);
+    showGridAct->setEnabled(m_pIconEditorMgr);
+}
+
+void HIconMainWindow::updateFileMenu()
+{
+
+}
+
+void HIconMainWindow::updateEditMenu()
+{
+    undoAct->setEnabled(m_pIconEditorMgr&&m_pIconEditorMgr->iconEditorUndoStack()&&m_pIconEditorMgr->iconEditorUndoStack()->canUndo());
+    redoAct->setEnabled(m_pIconEditorMgr&&m_pIconEditorMgr->iconEditorUndoStack()&&m_pIconEditorMgr->iconEditorUndoStack()->canRedo());
+
+    bool b = m_pIconEditorMgr&&m_pIconEditorMgr->selectedMgr()&&m_pIconEditorMgr->selectedMgr()->selectObj();
+    cutAct->setEnabled(b&&m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList().size()>0);
+    copyAct->setEnabled(b&&m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList().size()>0);
+    pasteAct->setEnabled(m_pIconEditorMgr&&m_pIconEditorMgr->iconEditorOp()->isClipboardAvailable());
+    deleteAct->setEnabled(b&&m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList().size()>0);
+
+    //editDeleteFromPattern->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>0);
+
+    //editSelectAll->setEnabled(m_pEditMgr);
+    //editFitView->setEnabled(m_pEditMgr);
+    //editOptions->setEnabled(m_pEditMgr);
+    //editProperty->setEnabled(b);
+
+    //editCustomProperty->setEnabled(m_pEditMgr);
+}
+
+void HIconMainWindow::updateToolMenu()
+{
+    bool b = m_pIconEditorMgr&&m_pIconEditorMgr->selectedMgr()&&m_pIconEditorMgr->selectedMgr()->selectObj();
+    int nSelectObjCount = m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList().size();
+    groupObjAct->setEnabled(b&&nSelectObjCount>1);
+    if(b&&nSelectObjCount==1&&
+        m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList().at(0)->getShapeType()==Group){
+            ungroupObjAct->setEnabled(true);
+        }
+    else{
+        ungroupObjAct->setEnabled(false);
+    }
+    /*
+    shapeAlignLeft->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
+    shapeAlignHCenter->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
+    shapeAlignRight->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
+    shapeAlignTop->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
+    shapeAlignVCenter->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
+    shapeAlignBottom->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
+    shapeSameWidth->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
+    shapeSameHeight->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
+    shapeSameSize->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
+    shapeSameHSpace->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>2);
+    shapeSameVSpace->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>2);
+    shapeHTurn->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>0);
+    shapeVTurn->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>0);
+    shapeRotLeft->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>0);
+    shapeRotRight->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>0);
+    shapeBringTop->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()==1);
+    shapeBringBottom->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()==1);*/
+
+    lineAct->setEnabled(m_pIconEditorMgr);
+    polylineAct->setEnabled(m_pIconEditorMgr);
+    rectAct->setEnabled(m_pIconEditorMgr);
+    circleAct->setEnabled(m_pIconEditorMgr);
+    ellipseAct->setEnabled(m_pIconEditorMgr);
+    hexagonAct->setEnabled(m_pIconEditorMgr);
+    arcAct->setEnabled(m_pIconEditorMgr);
+    textAct->setEnabled(m_pIconEditorMgr);
+}
+
+void HIconMainWindow::updateZoomMenus()
+{
+    fitWidthAct->setEnabled(m_pIconEditorMgr);
+    fitHeightAct->setEnabled(m_pIconEditorMgr);
+    zoomInAct->setEnabled(m_pIconEditorMgr);
+    zoomOutAct->setEnabled(m_pIconEditorMgr);
+    zoomOriAct->setEnabled(m_pIconEditorMgr);
+    zoomToolBar->setEnabled(m_pIconEditorMgr);
+}

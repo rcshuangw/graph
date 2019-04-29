@@ -3,7 +3,7 @@
 #include <QGraphicsView>
 #include <QDir>
 #include "hiconeditormgr.h"
-//#include "hiconitemgroup.h"
+#include "hicontemplate.h"
 //#include "publicdata.h"
 
 HIconEditorOp::HIconEditorOp(HIconEditorMgr* mgr)
@@ -13,6 +13,64 @@ HIconEditorOp::HIconEditorOp(HIconEditorMgr* mgr)
 }
 
 HIconEditorOp::~HIconEditorOp()
+{
+
+}
+
+void HIconEditorOp::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
+{
+    //iconTemplate()获取是临时对象
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconTemplate())
+        return;
+    QSizeF sizeF = m_pIconEditorMgr->iconTemplate()->getDefaultSize();//获取默认大小
+    if(sizeF.width() > 0 && sizeF.height())
+    {
+        QSizeF nSizeF = sizeF * m_pIconEditorMgr->getRatio();
+        QRectF rectF = QRectF(QPointF(-nSizeF.width()/2,-nSizeF.height()/2),sizeF.width(),sizeF.height());
+        m_pIconEditorMgr->iconTemplate()->getSymbol()->m_width = nSizeF.width();
+        m_pIconEditorMgr->iconTemplate()->getSymbol()->m_height = nSizeF.height();
+        m_pIconEditorMgr->setLogicRect(rectF);
+    }
+}
+
+void HIconEditorOp::Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
+{
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconTemplate())
+        return;
+
+    int width = m_pIconEditorMgr->iconTemplate()->getSymbol()->m_width;
+    int height = m_pIconEditorMgr->iconTemplate()->getSymbol()->m_height;
+    QSizeF sizeF = m_pIconEditorMgr->iconTemplate()->getDefaultSize();//获取默认大小
+    if(width > 0 && height > 0 && sizeF.width() > 0 && sizeF.height())
+    {
+        m_pIconEditorMgr->setRatio(qMin(width/sizeF.width(),height/sizeF.height()));
+        QRectF rectF = QRectF(QPointF(-width/2,-height/2),QSizeF(width,height));
+        m_pIconEditorMgr->setLogicRect(rectF);
+    }
+
+    //所有false
+    HIconTemplate* pTemplate = m_pIconEditorMgr->iconTemplate();
+    if(!pTemplate) return;
+    for(int i = 0; i < pTemplate->getSymbol()->getObjList().count();i++)
+    {
+        HBaseObj* pObj = pTemplate->getSymbol()->getObjList().at(i);
+        if(pObj && pObj->getPattern() != newPatternId)
+        {
+            H5GraphicsItem* item = (H5GraphicsItem*)pObj->iconGraphicsItem();
+            if(item)
+                item->setVisible(false);
+        }
+    }
+}
+
+void HIconEditorOp::Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
+{
+
+}
+
+
+
+bool HIconEditorOp::Save(bool savefile)
 {
 
 }
@@ -184,6 +242,12 @@ QString HIconEditorOp::getClipboardFile()
         dirClipboard.mkdir(clipboardPath);
     clipboardPath.append("/iconclipboard.data");
     return clipboardPath;
+}
+
+bool HIconEditorOp::isClipboardAvailable()
+{
+   QFile file(getClipboardFile());
+   return file.exists()&&file.size()!=0;
 }
 
 void HIconEditorOp::bringToTop()

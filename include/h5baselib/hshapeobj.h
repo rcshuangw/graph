@@ -93,6 +93,7 @@ public:
     qreal m_width;
     qreal m_height;
 
+private:
     //填充方面
 	bool m_bFill;
     quint8 m_nFillWay;//填充方式

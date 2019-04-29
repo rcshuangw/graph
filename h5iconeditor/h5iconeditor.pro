@@ -31,7 +31,8 @@ HEADERS       = \
     hiconeditordoc.h \
     hiconeditorwidget.h \
     hiconeditorselecttool.h \
-    hiconeditordrawtoolmgr.h
+    hiconeditordrawtoolmgr.h \
+    hicontreewidget.h
 
 SOURCES       = main.cpp \
     hiconmainwindow.cpp \

@@ -47,6 +47,9 @@ public:
     void setShowCenterLine(bool show);
     bool getShowCenterLine();
 
+    void setRatio(float f);
+    float getRatio();
+
     void setDrawShape(DrawShape ds);
     DrawShape getDrawShape();
 
@@ -63,6 +66,7 @@ private:
     bool m_bShowCenterLine;
     QString m_strBgClr;
     bool m_bModify;
+    float m_fRadio;
 
 	QRectF m_sceneRect;
 

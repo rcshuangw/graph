@@ -27,6 +27,7 @@ public:
     int isOnPoint(const QPointF& point,QPointF& selectPoint);
     bool isOnObj(const QPointF& point);//在point点上是否选中obj
     void recalcSelect();
+    HTempContainer* selectObj() {return m_pTempContainer;}
 
 private:
     void calcPoints();

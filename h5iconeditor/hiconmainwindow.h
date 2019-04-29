@@ -69,6 +69,19 @@ private slots:
     //scene
     void itemInserted(int type);
 
+    //
+    /*  QMenu *windowMenu;
+    QMenu *fileMenu;
+    QMenu *editMenu;
+    QMenu *viewMenu;
+    QMenu *toolMenu;
+    QMenu* helpMenu;
+*/
+    void updateMenu();
+    void updateViewMenu();
+    void updateFileMenu();
+    void updateEditMenu();
+    void updateToolMenu();
 #ifndef QT_NO_CLIPBOARD
     //void cut();
     //void copy();
@@ -205,7 +218,7 @@ private:
     void createMenuBars();
     void createToolBars();
     void createDockWindows();
-    //void updateMenus();
+    void updateZoomMenus();
 
 
 

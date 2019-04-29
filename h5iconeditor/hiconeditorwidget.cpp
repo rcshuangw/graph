@@ -34,6 +34,7 @@ void HIconEditorWidget::setIconEditorMgr(HIconEditorMgr *iconMgr)
     setLayout(layout);
 
     //增加一个刷新函数
+    refresh();
 }
 
 void HIconEditorWidget::refresh()
@@ -76,9 +77,9 @@ void HIconEditorWidget::refresh()
 
 void HIconEditorWidget::newIconWidget()
 {
-    if(!pIconMgr || !pIconMgr->getIconTemplate())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconTemplate())
         return;
-    HIconSymbol* pSymbol = (HIconSymbol*)(pIconMgr->getIconTemplate()->getSymbol());
+    /*HIconSymbol* pSymbol = (HIconSymbol*)(pIconMgr->getIconTemplate()->getSymbol());
     if(!pSymbol)
         return;
     HIconShowPattern* pattern = pSymbol->getCurrentPatternPtr();//(HIconShowPattern*)(pSymbol->newPattern(strName));
@@ -88,44 +89,49 @@ void HIconEditorWidget::newIconWidget()
     int index = pTabBar->addTab(pattern->strName);
     pTabBar->setTabData(index,pSymbol->getCurrentPattern());
     pTabBar->setCurrentIndex(index);
-    pIconMgr->getIconFrame()->setShowRuler(true);
-    QSizeF sizeF = pIconMgr->getIconTemplate()->getDefaultSize();//获取默认大小
+    pIconMgr->getIconFrame()->setShowRuler(true);*/
+    QSizeF sizeF = m_pIconEditorMgr->iconTemplate()->getDefaultSize();//获取默认大小
     if(sizeF.width() > 0 && sizeF.height())
     {
-        QRectF rectF = QRectF(-sizeF.width()*10,-sizeF.height()*10,sizeF.width()*20,sizeF.height()*20);
-        pIconMgr->getIconFrame()->setLogicRect(rectF);
+        QSizeF nSizeF = sizeF * m_pIconEditorMgr->getRatio();
+        QRectF rectF = QRectF(QPointF(-nSizeF.width()/2,-nSizeF.height()/2),sizeF.width(),sizeF.height());
+        m_pIconEditorMgr->iconTemplate()->getSymbol()->m_width = nSizeF.width();
+        m_pIconEditorMgr->iconTemplate()->getSymbol()->m_height = nSizeF.height();
+        m_pIconEditorMgr->setLogicRect(rectF);
     }
-    pIconMgr->getIconFrame()->show();
+    //pIconMgr->getIconFrame()->show();
 }
 
 
 void HIconEditorWidget::openIconWidget()
 {
-    if(!pIconMgr || !pIconMgr->getIconTemplate())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconTemplate())
         return;
-    HIconSymbol* pSymbol = (HIconSymbol*)(pIconMgr->getIconTemplate()->getSymbol());
-    if(!pSymbol)
-        return;
-    for(int i = 0; i < pSymbol->pShowPatternVector.count();i++)
+
+    int width = m_pIconEditorMgr->iconTemplate()->getSymbol()->m_width;
+    int height = m_pIconEditorMgr->iconTemplate()->getSymbol()->m_height;
+    QSizeF sizeF = m_pIconEditorMgr->iconTemplate()->getDefaultSize();//获取默认大小
+    if(width > 0 && height > 0 && sizeF.width() > 0 && sizeF.height())
     {
-        HIconShowPattern* pattern = (HIconShowPattern*)(pSymbol->pShowPatternVector[i]);
-        if(!pattern)
-            return;
-        int index = pTabBar->addTab(pattern->strName);
-        pTabBar->setTabData(index,pattern->nPattern);
-        pIconMgr->getIconFrame()->refreshSceneByPatternId(pattern->nPattern);
+        m_pIconEditorMgr->setRatio(qMin(width/sizeF.width(),height/sizeF.height()));
+        QRectF rectF = QRectF(QPointF(-width/2,-height/2),QSizeF(width,height));
+        m_pIconEditorMgr->setLogicRect(rectF);
     }
 
-    QSizeF sizeF = pIconMgr->getIconTemplate()->getDefaultSize();//获取默认大小
-    if(sizeF.width() > 0 && sizeF.height()>0)
+    //所有false
+    HIconTemplate* pTemplate = m_pIconEditorMgr->iconTemplate();
+    if(!pTemplate) return;
+    for(int i = 0; i < pTemplate->getSymbol()->getObjList().count();i++)
     {
-        QRectF rectF = QRectF(-sizeF.width()*10,-sizeF.height()*10,sizeF.width()*20,sizeF.height()*20);
-        pIconMgr->getIconFrame()->setLogicRect(rectF);
+        HBaseObj* pObj = pTemplate->getSymbol()->getObjList().at(i);
+        if(pObj && pObj->getPattern() != newPatternId)
+        {
+            H5GraphicsItem* item = (H5GraphicsItem*)pObj->iconGraphicsItem();
+            if(item)
+                item->setVisible(false);
+        }
     }
-    emit pTabBar->currentChanged(0);
-    pTabBar->show();
-    pIconMgr->getIconFrame()->show();
-    pIconMgr->getIconFrame()->setShowRuler(true);
+    //open之后会重新refresh然后触发patternChanged打开对应的pattern
 }
 
 void HIconEditorWidget::delIconWidget()
@@ -248,6 +254,7 @@ void HIconEditorWidget::patternChanged(int index)
     int newPatternId = data.toInt(&ok);
     if(!ok)
         return;
+    //所有false
     HIconTemplate* pTemplate = m_pIconEditorMgr->iconTemplate();
     for(int i = 0; i < pTemplate->getSymbol()->getObjList().count();i++)
     {
@@ -287,11 +294,11 @@ void HIconEditorWidget::patternChanged(int index)
 
 bool HIconEditorWidget::eventFilter(QObject *obj, QEvent *event)
 {
-    if(obj == pTabBar)
+    if(obj == m_pTabBar)
     {
         if(event->type() == QEvent::ContextMenu)
         {
-            QMenu menu(pTabBar);
+            QMenu menu(m_pTabBar);
             menu.addAction(QStringLiteral("增加"),this,SLOT(addShowPattern()));
             menu.addAction(QStringLiteral("删除"),this,SLOT(delShowPattern()));
             menu.addAction(QStringLiteral("改名"),this,SLOT(renameShowPattern()));

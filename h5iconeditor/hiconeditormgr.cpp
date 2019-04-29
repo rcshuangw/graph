@@ -7,7 +7,7 @@
 #include "hiconeditordrawtoolmgr.h"
 #include "hiconeditorselecttool.h"
 HIconEditorMgr::HIconEditorMgr()
-    :m_bShowGrid(true),m_bShowCenterLine(true)
+    :m_bShowGrid(true),m_bShowCenterLine(true),m_fRadio(20)
 {
     m_pIconEditorFrame = new HIconEditorFrame(this);
     //pIconFrame->setIconMgr(this);
@@ -103,6 +103,16 @@ bool HIconEditorMgr::getShowCenterLine()
     return m_bShowCenterLine;
 }
 
+void HIconEditorMgr::setRatio(float f)
+{
+    m_fRadio = f;
+}
+
+float HIconEditorMgr::getRatio()
+{
+    return m_fRadio;
+}
+
 void HIconEditorMgr::setDrawShape(DrawShape ds)
 {
     m_drawShape = ds;
@@ -143,7 +153,6 @@ bool HIconEditorMgr::initIconEditorMgr()
 
         connect(m_pIconEditorSelectToolMgr,SIGNAL(refreshSelect(QRectF)),m_pIconEditorOp,SLOT(onRefreshSelect(QRectF)));
         connect(m_pIconEditorSelectToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(endDraw()));
-
         connect(m_pIconEditorOp,SIGNAL(selectChanged()),m_pIconEditorSelectToolMgr,SLOT(onSelectChanged()));
 
     }
@@ -151,8 +160,16 @@ bool HIconEditorMgr::initIconEditorMgr()
 
 void HIconEditorMgr::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
 {
-    initIconEditorMgr();
+    //1.创建模板
     m_pIconEditorDoc->New(strTemplateName,strCatalogName,nCatalogType);
+
+    //2.设置模板画布信息
+    m_pIconEditorOp->New(strTemplateName,strCatalogName,nCatalogType);
+
+    //3.信号初始化
+    initIconEditorMgr();
+
+    //4.具体绘制 放在win里面
 }
 
 void HIconEditorMgr::Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
