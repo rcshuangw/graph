@@ -46,7 +46,7 @@ public:
     //QIcon getIcon();
 
     void setModify(bool modify);
-    bool getModify();
+    bool isModify();
 
 private:
     int nVersion;

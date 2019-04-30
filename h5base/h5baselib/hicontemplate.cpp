@@ -219,14 +219,14 @@ HIconSymbol* HIconTemplate::getSymbol()
 
 void HIconTemplate::setModify(bool modify)
 {
-   // pIconSymbol->setModify(modify);
+    pIconSymbol->setModify(modify);
 }
 
-bool HIconTemplate::getModify()
+bool HIconTemplate::isModify()
 {
     if(!pIconSymbol)
         return false;
-    //return pIconSymbol->getModify();
+    return pIconSymbol->isModify();
 }
 
 //huangw ?????

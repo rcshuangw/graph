@@ -7,7 +7,7 @@
 */
 class HIconEditorFrame;
 class HIconEditorDoc;
-class HIconEditorSelectMgr;
+//class HIconEditorSelectMgr;
 class HIconEditorOp;
 class HIconTemplate;
 class HSelectedMgr;
@@ -72,7 +72,7 @@ private:
 
     HIconEditorFrame* m_pIconEditorFrame;
     HIconEditorDoc* m_pIconEditorDoc;
-	HIconEditorSelectMgr* m_pIconEditorSelectMgr;
+    //HIconEditorSelectMgr* m_pIconEditorSelectMgr;
 	HIconTemplate* m_pIconTemplate;
     HIconEditorOp* m_pIconEditorOp;
 	QUndoStack* m_pIconUndoStack;

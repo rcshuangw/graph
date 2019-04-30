@@ -1,9 +1,9 @@
 ﻿#include "hicontreewidget.h"
 #include <QMenu>
-#include "hiconbrower.h"
 #include <QInputDialog>
 #include <QMessageBox>
-#include "hiconmgr.h"
+#include "hiconeditormgr.h"
+#include "hiconeditordoc.h"
 HIconTreeWidgetItem::HIconTreeWidgetItem(HIconTreeWidget* parent,int type):QTreeWidgetItem(parent,type)
 {
 
@@ -27,7 +27,7 @@ QString HIconTreeWidgetItem::getUuid()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-HIconTreeWidget::HIconTreeWidget(HIconMgr* iconmgr,QWidget* parent,int type):pIconMgr(iconmgr),
+HIconTreeWidget::HIconTreeWidget(HIconEditorMgr* iconmgr,QWidget* parent,int type):m_pIconEditorMgr(iconmgr),
     QTreeWidget(parent)
 {
     setSortingEnabled(false);
@@ -183,14 +183,14 @@ void HIconTreeWidget::initTemplateChildMenu(QContextMenuEvent *event)
     menu->addAction(delAct);
     connect(delAct,SIGNAL(triggered(bool)),SLOT(deleteIcon()));
 
-
-
     menu->popup(event->globalPos());
 }
 
 
 void HIconTreeWidget::newIcon()
 {
+    if(!m_pIconEditorMgr)
+        return;
     bool ok;
     QString strTemplateName = QInputDialog::getText(this,QStringLiteral("输入图元的名称"),QStringLiteral("图元名称:"),QLineEdit::Normal,"",&ok);
     if(!ok) return;
@@ -201,11 +201,13 @@ void HIconTreeWidget::newIcon()
 
 void HIconTreeWidget::openIcon(QTreeWidgetItem* item,int col)
 {
+    if(!m_pIconEditorMgr)
+        return;
     HIconTreeWidgetItem* pCurItem = dynamic_cast<HIconTreeWidgetItem*> (item);
-    setCurrentItem(pCurItem);
     if(!pCurItem) return;
+    setCurrentItem(pCurItem);
     int nTemplateType = pCurItem->type();
-    if(nTemplateType > TEMPLATE_TYPE_NULL && nTemplateType < TEMPLATE_TYPE_MAX)
+    if(nTemplateType > TEMPLATE_TYPE_NULL && nTemplateType < TEMPLATE_TYPE_MAX)//测点类型的种类(遥信、遥测、光字牌、两卷变、三卷变等)
     {
         expandIconItem(pCurItem);
     }
@@ -224,7 +226,7 @@ void HIconTreeWidget::openIcon(QTreeWidgetItem* item,int col)
 
 void HIconTreeWidget::deleteIcon()
 {
-    if(!pIconMgr)
+    if(!m_pIconEditorMgr)
         return;
     if(QMessageBox::Ok == QMessageBox::warning(NULL,QStringLiteral("删除图元"),QStringLiteral("确认删除此图元信息?"),QMessageBox::Ok|QMessageBox::Cancel))
     {
@@ -258,7 +260,7 @@ void HIconTreeWidget::importIcon()
 
 void HIconTreeWidget::addIconTreeWigetItem()
 {
-    if(!pIconMgr)
+    if(!m_pIconEditorMgr)
         return;
     HIconTreeWidgetItem *parentItem = (HIconTreeWidgetItem*)currentItem();
     if(!parentItem)
@@ -267,11 +269,11 @@ void HIconTreeWidget::addIconTreeWigetItem()
     if((type <= TEMPLATE_TYPE_NULL || type >= TEMPLATE_TYPE_MAX))
         return;
 
-    QString strUuid =  pIconMgr->getIconTemplate()->getUuid().toString();
+    QString strUuid =  m_pIconEditorMgr->iconTemplate()->getUuid().toString();
     HIconTreeWidgetItem* newItem = new HIconTreeWidgetItem(parentItem,TEMPLATE_TYPE_CHILD);
     newItem->setUuid(strUuid);
     newItem->setData(0,Qt::UserRole,QVariant(strUuid));
-    newItem->setText(0,pIconMgr->getIconTemplate()->getSymbol()->getSymolName());
+    newItem->setText(0,m_pIconEditorMgr->iconTemplate()->getSymbol()->getObjName());
     parentItem->addChild(newItem);
     setCurrentItem(newItem);
 
@@ -279,7 +281,7 @@ void HIconTreeWidget::addIconTreeWigetItem()
 
 void HIconTreeWidget::delIconTreeWidgetItem()
 {
-    if(!pIconMgr)
+    if(!m_pIconEditorMgr)
         return;
     HIconTreeWidgetItem *curItem = (HIconTreeWidgetItem*)currentItem();
     if(!curItem || curItem->type() != TEMPLATE_TYPE_CHILD) return;
@@ -295,12 +297,12 @@ void HIconTreeWidget::delIconTreeWidgetItem()
 
 void HIconTreeWidget::initTemplateFile()
 {
-    if(!pIconMgr || !pIconMgr->getIconDocument())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorDocument())
         return;
 
-    for(int i = 0; i < pIconMgr->getIconDocument()->pIconTemplateList.count();i++ )
+    for(int i = 0; i < m_pIconEditorMgr->iconEditorDocument()->m_pIconTemplateList.count();i++ )
     {
-        HIconTemplate* pTemplate = (HIconTemplate*)pIconMgr->getIconDocument()->pIconTemplateList[i];
+        HIconTemplate* pTemplate = (HIconTemplate*)m_pIconEditorMgr->iconEditorDocument()->m_pIconTemplateList.at(i);
         if(!pTemplate) continue;
         HIconTreeWidgetItem* treeItem = findIconTreeWigetItem(pTemplate->getCatalogType());
         if(!treeItem) continue;
@@ -310,7 +312,7 @@ void HIconTreeWidget::initTemplateFile()
         if(!newItem) continue;
         newItem->setUuid(strUuid);
         newItem->setData(0,Qt::UserRole,QVariant(strUuid));
-        newItem->setText(0,pTemplate->getSymbol()->getSymolName());
+        newItem->setText(0,pTemplate->getSymbol()->getObjName());
         treeItem->addChild(newItem);
 
         //collapseItem(treeItem);

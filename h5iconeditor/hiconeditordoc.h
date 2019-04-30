@@ -2,10 +2,7 @@
 #define HICONDOCUMENT_H
 
 #include <QObject>
-#include "hiconapi.h"
-#include "hicontemplate.h"
-#include "hiconeditormgr.h"
-//#include "hiconhelper.h"
+class HIconTemplate;
 class HIconEditorMgr;
 class HIconEditorDoc : public QObject
 {

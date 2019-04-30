@@ -12,10 +12,11 @@ public:
     HIconEditorOp(HIconEditorMgr* mgr);
     ~HIconEditorOp();
 public:
+    //画面
     void New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType);
-    void Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
     void Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
-    bool Save(bool savefile=false);
+
+
 
     void fitWidth();
 
@@ -125,6 +126,11 @@ public:
 signals:
     void selectChanged();
 public slots:
+
+    //图符创建、删除
+    void onCreateObj(HBaseObj* pObj,bool isPaste );
+    void onRemoveObj(HBaseObj* pObj);
+
     void onRefreshSelect(const QRectF& rect);
     void onDrawPath(QList<Path>& path);
     void onEndDraw();

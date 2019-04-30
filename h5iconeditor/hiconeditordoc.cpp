@@ -2,7 +2,10 @@
 #include <QDir>
 #include <QProcessEnvironment>
 #include <QMessageBox>
-//#include "publicdata.h"
+#include "hiconapi.h"
+#include "hicontemplate.h"
+#include "hiconeditormgr.h"
+#include "hiconhelper.h"
 HIconEditorDoc::HIconEditorDoc(HIconEditorMgr* iconMgr):m_pIconEditorMgr(iconMgr)
 {
     m_pCurIconTemplate = new HIconTemplate("0000");
@@ -19,13 +22,13 @@ HIconEditorDoc::~HIconEditorDoc()
 
 void HIconEditorDoc::loadIconDoucument()
 {
-    //HIconHelper::Instance()->loadIconDoucument(&m_pIconTemplateList);
+    HIconHelper::Instance()->loadIconDoucument(&m_pIconTemplateList);
 }
 
 void HIconEditorDoc::saveIconDoucument()
 {
-   // if(!m_pIconTemplateList.isEmpty())
-  //      HIconHelper::Instance()->saveIconDoucument(&m_pIconTemplateList);
+    if(!m_pIconTemplateList.isEmpty())
+        HIconHelper::Instance()->saveIconDoucument(&m_pIconTemplateList);
 }
 
 HIconTemplate* HIconEditorDoc::getCurrentTemplate()
@@ -44,7 +47,7 @@ void HIconEditorDoc::New(const QString& strTemplateName,const QString& strCatalo
     HIconTemplate *pTemplate = new HIconTemplate("");
     pTemplate->setCatalogName(strCatalogName);//普通开关
     pTemplate->setCatalogType(nCatalogType);//遥信类
-    //pTemplate->getSymbol()->setSymbolName(strTemplateName);
+    pTemplate->getSymbol()->setObjectName(strTemplateName);
     pTemplate->getSymbol()->newPattern(QStringLiteral("缺省"));
     m_pIconTemplateList.append(pTemplate);
 
@@ -89,7 +92,7 @@ void HIconEditorDoc::Open(const QString &strTemplateName, int nTemplateType, con
     }
 
     HIconTemplate* pTemplate = findIconTemplateByTypeAndUuid(nTemplateType,strUuid);
-    if(pTemplate && pTemplate->getSymbol()->getSymolName() == strTemplateName)
+    if(pTemplate && pTemplate->getSymbol()->getObjName() == strTemplateName)
     {
         m_pCurIconTemplate->clear();
         pTemplate->copyTo(m_pCurIconTemplate);
@@ -124,15 +127,15 @@ bool HIconEditorDoc::Save(bool savefile)
 
 HIconTemplate* HIconEditorDoc::findIconTemplateByTemplateName(const QString& strTemplateName)
 {
-	/*
+
     for(int i = 0; i < m_pIconTemplateList.size();i++)
     {
         HIconTemplate* pIconTemplate = (HIconTemplate*)m_pIconTemplateList.at(i);
-        if(pIconTemplate && pIconTemplate->getSymbol()->getSymolName() == strTemplateName)
+        if(pIconTemplate && pIconTemplate->getSymbol()->getObjName() == strTemplateName)
 
             return pIconTemplate;
-    }*/
-    return NULL;
+    }
+    //return NULL;
 }
 
 HIconTemplate* HIconEditorDoc::findIconTemplateByTypeAndUuid(int nTemplateType, const QString &strUuid)

@@ -6,7 +6,8 @@ TARGET = icon
 INCLUDEPATH += \
     ../include \
     ../include/h5baselib \
-    ../include/h5basegui
+    ../include/h5basegui \
+    ../include/h5basehelp
 
 HEADERS       = \
     hiconmainwindow.h \
@@ -32,7 +33,8 @@ HEADERS       = \
     hiconeditorwidget.h \
     hiconeditorselecttool.h \
     hiconeditordrawtoolmgr.h \
-    hicontreewidget.h
+    hicontreewidget.h \
+    hiconcommand.h
 
 SOURCES       = main.cpp \
     hiconmainwindow.cpp \

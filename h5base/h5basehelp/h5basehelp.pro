@@ -26,12 +26,35 @@ INCLUDEPATH += \
 	
 CONFIG += qt thread all
 SOURCES += \
-    hdrawhelper.cpp
+    hdrawhelper.cpp \
+    hanaloguepage.cpp \
+    hdatapropertydlg.cpp \
+    hdigitalpage.cpp \
+    hdrawhelper.cpp \
+    hfonthelper.cpp \
+    hgraph.cpp \
+    hgraphhelper.cpp \
+    hgraphpage.cpp \
+    hiconhelper.cpp \
+    hiconproperty.cpp \
+    hrelaypage.cpp \
+    hstation.cpp
        
 
 HEADERS +=\
     ../../include/h5basehelp/hdrawhelper.h \
-    ../../include/h5basehelp/h5basehelpexport.h
+    ../../include/h5basehelp/h5basehelpexport.h \
+    ../../include/h5basehelp/hanaloguepage.h \
+    ../../include/h5basehelp/hdatapropertydlg.h \
+    ../../include/h5basehelp/hdigitalpage.h \
+    ../../include/h5basehelp/hdrawhelper.h \
+    ../../include/h5basehelp/hfonthelper.h \
+    ../../include/h5basehelp/hgraphhelper.h \
+    ../../include/h5basehelp/hgraphpage.h \
+    ../../include/h5basehelp/hiconhelper.h \
+    ../../include/h5basehelp/hiconproperty.h \
+    ../../include/h5basehelp/hrelaypage.h \
+    ../../include/h5basehelp/hstation.h
         
 		  
 
@@ -51,4 +74,10 @@ win32{
     OBJECTS_DIR	= temp/obj
     LIBS += \
 }
+
+SUBDIRS += \
+    H5IconHelp.pro
+
+RESOURCES += \
+    images.qrc
 

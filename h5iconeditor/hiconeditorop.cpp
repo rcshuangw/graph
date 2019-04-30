@@ -4,8 +4,10 @@
 #include <QDir>
 #include "hiconeditormgr.h"
 #include "hicontemplate.h"
-//#include "publicdata.h"
-
+#include "hiconeditorframe.h"
+#include "hselectedmgr.h"
+#include "htempcontainer.h"
+#include "hiconcommand.h"
 HIconEditorOp::HIconEditorOp(HIconEditorMgr* mgr)
     :m_pIconEditorMgr(mgr)
 {
@@ -63,16 +65,16 @@ void HIconEditorOp::Open(const QString &strTemplateName, int nTemplateType, cons
     }
 }
 
-void HIconEditorOp::Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
+void HIconEditorOp::onCreateObj(HBaseObj* pObj,bool isPaste )
 {
-
+    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
+        m_pIconEditorMgr->iconEditorFrame()->objCreated(pObj,isPaste);
 }
 
-
-
-bool HIconEditorOp::Save(bool savefile)
+void HIconEditorOp::onRemoveObj(HBaseObj* pObj)
 {
-
+    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
+        m_pIconEditorMgr->iconEditorFrame()->objRemoved(pObj);
 }
 
 void HIconEditorOp::fitWidth()
@@ -116,20 +118,28 @@ void HIconEditorOp::cut()
 
 void HIconEditorOp::copy()
 {
-    if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->selectedMgr()->selectObj())
         return;
     //寻找当前页面的所有选择的图元
+    HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
     QByteArray bytes;
     QDataStream stream(&bytes,QIODevice::WriteOnly);
-    QList<QGraphicsItem*> itemSelectList = pIconMgr->getIconFrame()->getIconScene()->selectedItems();
-    stream<<itemSelectList.count();
-    stream<<pIconMgr->getIconTemplate()->getSymbol()->getCurrentPattern();
-    for(int i =0; i < itemSelectList.count();i++)
+    int num = 0;
+    for(int i = 0; i < tempContainer->getObjList().count();i++)
     {
-        HBaseObj* pObj = qgraphicsitem_cast<HIconGraphicsItem*>(itemSelectList[i])->getItemObj();
+        HBaseObj* pObj = (HBaseObj*)tempContainer->getObjList().at(i);
+        if(!pObj || pObj->isDeleted())
+            continue;
+        num++;
+    }
+    stream<<num;
+    stream<<m_pIconEditorMgr->iconTemplate()->getSymbol()->getCurrentPattern();
+    for(int i =0; i < tempContainer->getObjList().count();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)tempContainer->getObjList().at(i);
         if(!pObj) continue;
         stream<<(quint8)pObj->getShapeType();
-        HBaseObj* pNewObj = pIconMgr->getIconTemplate()->getSymbol()->newObj(pObj->getShapeType());
+        HBaseObj* pNewObj = m_pIconEditorMgr->iconTemplate()->getSymbol()->newObj(pObj->getShapeType());
         if(!pNewObj) continue;
         pObj->clone(pNewObj);//需要clone吗？
         pNewObj->writeData(&stream);
@@ -151,13 +161,13 @@ void HIconEditorOp::copy()
 
 void HIconEditorOp::paste()
 {
-    if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->selectedMgr()->selectObj())
         return;
     QString clipboardPath = getClipboardFile();
     QFile file(clipboardPath);
     if(!file.exists() || !file.open(QIODevice::ReadOnly))
         return;
-    QList<HIconGraphicsItem*> copyItemList;
+
     QDataStream stream(&file);
     int num;
     stream>>num;
@@ -168,66 +178,70 @@ void HIconEditorOp::paste()
     for(int i = 0; i < num;i++)
     {
         stream>>nType;
-        HBaseObj* pObj = pIconMgr->getIconTemplate()->getSymbol()->newObj(nType);
+        HBaseObj* pObj = m_pIconEditorMgr->iconTemplate()->getSymbol()->newObj(nType);
         if(!pObj) continue;
         pObj->readData(&stream);
         objList.append(pObj);
-        HIconGraphicsItem* item = pIconMgr->getIconFrame()->addItemByIconObj(pObj);
-        pObj->nPattern = pIconMgr->getIconTemplate()->getSymbol()->getCurrentPattern();
-        if(!item)
-        {
-            delete pObj;
-            pObj = NULL;
-            continue;
-        }
-        copyItemList.append(item);
-        pIconMgr->getIconTemplate()->getSymbol()->addObj(pObj);
+
+        m_pIconEditorMgr->iconEditorFrame()->objCreated(pObj,true);
+        m_pIconEditorMgr->iconTemplate()->getSymbol()->addBaseObj(pObj);
      }
 
-    //改变选择状态，只选择拷贝后的图元元素
-    foreach(QGraphicsItem* item,pIconMgr->getIconFrame()->getIconScene()->items())
+    //改变选择状态，原来选中图元取消选择
+    HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
+    for(int i = 0; i < tempContainer->getObjList().count();i++)
     {
-        item->setSelected(false);
-    }
-    foreach(HIconGraphicsItem* item,copyItemList)
-    {
-        item->setSelected(true);
+        HBaseObj* pObj = (HBaseObj*)tempContainer->getObjList().at(i);
+        if(!pObj || pObj->isDeleted() || !pObj->iconGraphicsItem())
+            continue;
+        (H5GraphicsItem*)pObj->iconGraphicsItem()->setVisible(false);
     }
 
-    if(nPattern == pIconMgr->getIconTemplate()->getSymbol()->getCurrentPattern())
+    //选择拷贝后的图元
+    for(int i = 0; i < objList.count();i++)
     {
-        for(int i = 0; i < copyItemList.count();i++)
-        {
-            HIconGraphicsItem* pItem = (HIconGraphicsItem*)copyItemList[i];
+        H5GraphicsItem* pItem = (H5GraphicsItem*)(objList.at(i)->iconGraphicsItem());
+        if(!pItem) continue;
+       pItem->setVisible(true);
+    }
+
+    //拷贝后的图元移动 防止覆盖
+    if(nPattern == m_pIconEditorMgr->iconTemplate()->getSymbol()->getCurrentPattern())
+    {
+        for(int i = 0; i < objList.count();i++)
+        { 
+            H5GraphicsItem* pItem = (H5GraphicsItem*)(objList.at(i)->iconGraphicsItem());
             if(!pItem) continue;
             QPointF pt(10,10);
             pItem->moveBy(pt.x(),pt.y());
-            pItem->getItemObj()->moveBy(pt.x(),pt.y());
         }
     }
-    pIconMgr->getIconFrame()->getIconScene()->update(pIconMgr->getIconFrame()->getLogicRect());
-    HPasteIconCommand* pasteIconCommand = new HPasteIconCommand(pIconMgr,objList);
-    pIconMgr->getIconUndoStack()->push(pasteIconCommand);
+
+    //还有一个--huangw
+    m_pIconEditorMgr->selectedMgr()->recalcSelect();
+
+    HPasteIconCommand* pasteIconCommand = new HPasteIconCommand(m_pIconEditorMgr,objList);
+    m_pIconEditorMgr->iconEditorUndoStack()->push(pasteIconCommand);
+    m_pIconEditorMgr->iconEditorFrame()->view()->setFocus();
 }
 
 void HIconEditorOp::del()
 {
-    if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->selectedMgr()->selectObj())
         return;
-    QList<QGraphicsItem*> itemSelectList = pIconMgr->getIconFrame()->getIconScene()->selectedItems();
+    HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
     QList<HBaseObj*> objList;
-    foreach(QGraphicsItem* item,itemSelectList)
+    for(int i = 0; i < tempContainer->getObjList().count();i++)
     {
-        if(!item) continue;
-        //不能直接删除 改成deleted=TRUE，只有到保存的时候才真正删除对象
-        HBaseObj* pObj = ((HIconGraphicsItem*)item)->getItemObj();
+        HBaseObj* pObj = (HBaseObj*)tempContainer->getObjList().at(i);
+        if(!pObj) continue;
         pObj->setDeleted(true);
-        pObj->setVisible(false);
-        item->setVisible(false);
         objList.append(pObj);
     }
-    HDelIconCommand *delIconCommand = new HDelIconCommand(pIconMgr,objList);
-    pIconMgr->getIconUndoStack()->push(delIconCommand);
+
+    m_pIconEditorMgr->selectedMgr()->clear();
+    HDelIconCommand *delIconCommand = new HDelIconCommand(m_pIconEditorMgr,objList);
+    m_pIconEditorMgr->iconEditorUndoStack()->push(delIconCommand);
 }
 
 

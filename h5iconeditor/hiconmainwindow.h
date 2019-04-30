@@ -9,15 +9,10 @@
 #include <QMenuBar>
 #include <QToolBar>
 #include <QComboBox>
-#include "hiconframe.h"
-#include "hiconwidget.h"
-#include "hicondocument.h"
-#include "hiconeditormgr.h"
-#include "hiconpreview.h"
 
 class HIconEditorFrame;
 class HIconEditorMgr;
-class HIconEditorTreeWidget;
+class HIconTreeWidget;
 class HIconEditorWidget;
 class HIconMainWindow : public QMainWindow
 {
@@ -35,7 +30,7 @@ private:
     HIconEditorMgr* m_pIconEditorMgr;
     HIconEditorFrame* m_pIconEditorFrame;
     HIconEditorWidget* m_pIconEditorWidget;
-    HIconEditorTreeWidget* m_pIconEditorTreeWidget;
+    HIconTreeWidget* m_pIconTreeWidget;
     //HIconPreview* pIconPreview;
 signals:
 
@@ -219,9 +214,6 @@ private:
     void createToolBars();
     void createDockWindows();
     void updateZoomMenus();
-
-
-
 //菜单的项
 private:
 

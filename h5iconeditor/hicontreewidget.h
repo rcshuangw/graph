@@ -8,8 +8,8 @@
 #include <QUuid>
 #include "hiconapi.h"
 #include "hicontemplate.h"
-#include "hiconbrower.h"
-class HIconMgr;
+
+class HIconEditorMgr;
 /*
  测点
   |-遥信
@@ -45,7 +45,7 @@ class HIconTreeWidget : public QTreeWidget
 {
     Q_OBJECT
 public:
-    HIconTreeWidget(HIconMgr* iconMgr,QWidget* parent = 0,int type = QTreeWidgetItem::UserType);
+    HIconTreeWidget(HIconEditorMgr* iconMgr,QWidget* parent = 0,int type = QTreeWidgetItem::UserType);
     ~HIconTreeWidget();
 public:
     void init();
@@ -99,7 +99,7 @@ private:
     QAction* renameAct;
     QAction* importAct;
 
-    HIconMgr* pIconMgr;
+    HIconEditorMgr* m_pIconEditorMgr;
 };
 
 #endif // HICONTREEWIDGET_H

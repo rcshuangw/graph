@@ -10,15 +10,18 @@ HIconEditorMgr::HIconEditorMgr()
     :m_bShowGrid(true),m_bShowCenterLine(true),m_fRadio(20)
 {
     m_pIconEditorFrame = new HIconEditorFrame(this);
-    //pIconFrame->setIconMgr(this);
 	m_pIconEditorDoc = new HIconEditorDoc(this);
-    //m_pIconState = new HIconState(this);
-   // m_pIconEditorOp = new HIconOp(this);
+    m_pIconEditorOp = new HIconEditorOp(this);
     m_pIconUndoStack = new QUndoStack;
+    m_pSelectedMgr = new HSelectedMgr;
+
     m_bShowGrid = true;
     m_bShowCenterLine = true;
     m_strBgClr = "#FFFFFF";
     m_drawShape = No;
+
+    //选择状态下的刷新
+    connect(m_pSelectedMgr,SIGNAL(refreshSelect(QRectF)),m_pIconEditorOp,SLOT(onRefreshSelect(QRectF)));
 }
 
 HIconEditorMgr::~HIconEditorMgr()
@@ -152,7 +155,7 @@ bool HIconEditorMgr::initIconEditorMgr()
         connect(m_pIconEditorDrawToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
 
         connect(m_pIconEditorSelectToolMgr,SIGNAL(refreshSelect(QRectF)),m_pIconEditorOp,SLOT(onRefreshSelect(QRectF)));
-        connect(m_pIconEditorSelectToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(endDraw()));
+        connect(m_pIconEditorSelectToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
         connect(m_pIconEditorOp,SIGNAL(selectChanged()),m_pIconEditorSelectToolMgr,SLOT(onSelectChanged()));
 
     }
@@ -172,6 +175,13 @@ void HIconEditorMgr::New(const QString& strTemplateName,const QString& strCatalo
     //4.具体绘制 放在win里面
 }
 
+void HIconEditorMgr::Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
+{
+    m_pIconEditorDoc->Open(strTemplateName,nTemplateType,strUuid);
+    m_pIconEditorOp->Open(strTemplateName,nTemplateType,strUuid);
+    initIconEditorMgr();
+}
+
 void HIconEditorMgr::Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
 {
 	m_pIconEditorDoc->Del(strTemplateName,nTemplateType,strUuid);
@@ -182,10 +192,7 @@ bool HIconEditorMgr::Save(bool savefile)
     return m_pIconEditorDoc->Save(savefile);
 }
 
-void HIconEditorMgr::Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
-{
-	m_pIconEditorDoc->Open(strTemplateName,nTemplateType,strUuid);
-}
+
 
 
 

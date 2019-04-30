@@ -1,21 +1,37 @@
 ﻿#include "hiconeditordrawtoolmgr.h"
-#include "hiconobj.h"
-
-HIconState::HIconState(HIconMgr* pMgr):pIconMgr(pMgr)
+#include <QObject>
+#include <QPainterPath>
+#include "hbaseobj.h"
+#include "hiconeditormgr.h"
+#include "hicontemplate.h"
+#include "hiconeditorop.h"
+#include "hiconcommand.h"
+HIconEditorDrawToolMgr::HIconEditorDrawToolMgr(HIconEditorMgr* pMgr):m_pIconEditorMgr(pMgr)
 {
     curDrawShape = enumSelection;
 }
 
-HIconState::~HIconState()
+HIconEditorDrawToolMgr::~HIconEditorDrawToolMgr()
 {
 
 }
 
 
-void HIconState::appendObj(HBaseObj *obj)
+void HIconEditorDrawToolMgr::appendObj(HBaseObj *obj)
 {
+    if(!m_pIconEditorMgr)
+        return;
     //模板里面增加
-    if(pIconMgr && pIconMgr->getIconTemplate() && pIconMgr->getIconTemplate()->getSymbol())
-        pIconMgr->getIconTemplate()->getSymbol()->addObj(obj);
+    if(m_pIconEditorMgr && m_pIconEditorMgr->iconTemplate() && m_pIconEditorMgr->iconTemplate()->getSymbol())
+        m_pIconEditorMgr->iconTemplate()->getSymbol()->addBaseObj(obj);
+
+    //画面增加
+    if(m_pIconEditorMgr && m_pIconEditorMgr->iconEditorOp())
+        m_pIconEditorMgr->iconEditorOp()->onCreateObj(obj,false);
+
+    //undostack增加
+    HNewIconCommand *newCommand = HNewIconCommand(m_pIconEditorMgr,obj);
+    if(!newCommand) return;
+    m_pIconEditorMgr->iconEditorUndoStack()->push(newCommand);
 }
 

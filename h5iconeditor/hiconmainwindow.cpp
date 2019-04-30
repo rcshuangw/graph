@@ -376,20 +376,21 @@ void HIconMainWindow::createMenuBars()
 
 void HIconMainWindow::createDockWindows()
 {
-    /*
+
     QDockWidget* browserIconDock = new QDockWidget(QStringLiteral("图元浏览框"),this);
     browserIconDock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
-    pIconTreeWidget = new HIconTreeWidget(pIconMgr);
-    pIconTreeWidget->setRootIsDecorated(true);
-    pIconTreeWidget->setSortingEnabled(false);
-    browserIconDock->setWidget(pIconTreeWidget);
+    m_pIconTreeWidget = new HIconTreeWidget(m_pIconEditorMgr);
+    m_pIconTreeWidget->setRootIsDecorated(true);
+    m_pIconTreeWidget->setSortingEnabled(false);
+    browserIconDock->setWidget(m_pIconTreeWidget);
     addDockWidget(Qt::LeftDockWidgetArea,browserIconDock);
-    pIconTreeWidget->init();
+    m_pIconTreeWidget->init();
 
-    connect(pIconTreeWidget,SIGNAL(IconNew(const QString&,const QString&,const int&)),this,SLOT(New(const QString&,const QString&,const int&)));
-    connect(pIconTreeWidget,SIGNAL(IconDel(const QString&,const int&,const QString&)),this,SLOT(Del(const QString&,const int&,const QString&)));
-    connect(pIconTreeWidget,SIGNAL(IconOpen(const QString&,const int&,const QString&)),this,SLOT(Open(const QString&,const int&,const QString&)));
+    connect(m_pIconTreeWidget,SIGNAL(IconNew(const QString&,const QString&,const int&)),this,SLOT(New(const QString&,const QString&,const int&)));
+    connect(m_pIconTreeWidget,SIGNAL(IconDel(const QString&,const int&,const QString&)),this,SLOT(Del(const QString&,const int&,const QString&)));
+    connect(m_pIconTreeWidget,SIGNAL(IconOpen(const QString&,const int&,const QString&)),this,SLOT(Open(const QString&,const int&,const QString&)));
 
+    /*
     QDockWidget* iconPreviewDock = new QDockWidget(QStringLiteral("图元预览框"),this);
     iconPreviewDock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
     pIconPreview = new HIconPreview(pIconMgr);
@@ -469,16 +470,18 @@ void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatal
 
     m_pIconEditorMgr->New(strTemplateName,strCatalogName,nCatalogType);
     m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
-    //pIconTreeWidget->addIconTreeWigetItem();
+    m_pIconTreeWidget->addIconTreeWigetItem();
     //pIconPreview->init();
+
+    updateMenu();
 }
 
 
 void HIconMainWindow::Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
 {
-    if(!pIconMgr && !pIconMgr->getIconTemplate())
+    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconTemplate())
         return;
-    if(pIconMgr->getIconTemplate()->getModify())
+    if(m_pIconEditorMgr->iconTemplate()->getModify())
     {
         if(QMessageBox::Ok == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的模板文件吗？"),QMessageBox::Ok|QMessageBox::Cancel))
         {
@@ -486,12 +489,11 @@ void HIconMainWindow::Open(const QString &strTemplateName, int nTemplateType, co
         }
     }
 
-    pIconWidget->delIconWidget();
-    pIconMgr->Open(strTemplateName,nTemplateType,strUuid);
-    pIconWidget->setIconMgr(pIconMgr);
-    pIconWidget->openIconWidget();
-    pIconPreview->init();
-    HIconTemplate *pIconTemplate = pIconMgr->getIconTemplate();
+    m_pIconEditorMgr->Open(strTemplateName,nTemplateType,strUuid);
+    m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
+    //pIconPreview->init();
+
+    HIconTemplate *pIconTemplate = m_pIconEditorMgr->iconTemplate();
     QString strTitle = pIconTemplate->getCatalogName() + "/" + pIconTemplate->getSymbol()->getSymolName() + pIconTemplate->getUuid().toString();
     strTitle = QString("%1[*] - %2").arg(strTitle).arg(QStringLiteral("图元编辑器"));
     setWindowTitle(strTitle);
@@ -499,18 +501,18 @@ void HIconMainWindow::Open(const QString &strTemplateName, int nTemplateType, co
 
 void HIconMainWindow::Save()
 {
-    pIconMgr->Save();
+    m_pIconEditorMgr->Save();
 }
 
 //
 void HIconMainWindow::Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
 {
-    if(!pIconTreeWidget || !pIconWidget || !pIconMgr)
+    if(!m_pIconEditorWidget || !m_pIconEditorMgr)
         return;
-    pIconTreeWidget->delIconTreeWidgetItem();
-    pIconWidget->delIconWidget();
-    pIconMgr->Del(strTemplateName,nTemplateType,strUuid);
-    pIconPreview->init();
+    m_pIconTreeWidget->delIconTreeWidgetItem();
+    m_pIconEditorMgr->Del(strTemplateName,nTemplateType,strUuid);
+    m_pIconEditorWidget->setIconEditorMgr(0);
+    //pIconPreview->init();
 }
 
 
@@ -536,7 +538,6 @@ void HIconMainWindow::closeEvent(QCloseEvent *event)
 
 void HIconMainWindow::viewMousePosChanged(const QPoint& pos,const QPointF &logPos)
 {
-
     QString strViewPos = QString("x=%1,y=%2").arg((int)pos.x()).arg((int)pos.y());
     QString strLogicPos =  QString("log:x=%1,y=%2").arg(logPos.x(),0,'f',1).arg(logPos.y(),0,'f',1);
     statusBar()->showMessage(strLogicPos + " " + strViewPos);
@@ -577,7 +578,10 @@ void HIconMainWindow::itemInserted(int type)
 
 void HIconMainWindow::updateMenu()
 {
-
+    updateViewMenu();
+    updateFileMenu();
+    updateEditMenu();
+    updateToolMenu();
 }
 
 void HIconMainWindow::updateViewMenu()
@@ -625,24 +629,6 @@ void HIconMainWindow::updateToolMenu()
     else{
         ungroupObjAct->setEnabled(false);
     }
-    /*
-    shapeAlignLeft->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
-    shapeAlignHCenter->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
-    shapeAlignRight->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
-    shapeAlignTop->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
-    shapeAlignVCenter->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
-    shapeAlignBottom->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
-    shapeSameWidth->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
-    shapeSameHeight->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
-    shapeSameSize->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>1);
-    shapeSameHSpace->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>2);
-    shapeSameVSpace->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>2);
-    shapeHTurn->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>0);
-    shapeVTurn->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>0);
-    shapeRotLeft->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>0);
-    shapeRotRight->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>0);
-    shapeBringTop->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()==1);
-    shapeBringBottom->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()==1);*/
 
     lineAct->setEnabled(m_pIconEditorMgr);
     polylineAct->setEnabled(m_pIconEditorMgr);

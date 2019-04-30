@@ -15,7 +15,7 @@ HIconSymbol::HIconSymbol(HIconTemplate* t):m_pIconTemplate(t)
 HIconSymbol::~HIconSymbol()
 {
    clear();
-   HComplexObj::clear();
+   HContainerObj::clear();
 }
 
 void HIconSymbol::clear()
@@ -42,7 +42,7 @@ void HIconSymbol::readXml(int v,QDomElement* dom)
     if(!dom)
         return;
 	int nCur = dom->attribute("CurPattern").toInt();
-	HComplexObj::readXml(v,dom);
+    HContainerObj::readXml(v,dom);
 
     QDomElement spEle = dom->namedItem("ShowPatterns").toElement();
     //构建下面的元素对象
@@ -73,7 +73,7 @@ void HIconSymbol::writeXml(int v,QDomElement *dom)
     if(!dom)
         return;
 	dom->setAttribute("CurPattern", m_nCurPattern);
-	HComplexObj::writeXml(v,dom);
+    HContainerObj::writeXml(v,dom);
 
 
     //再创建显示方案的xml结构
@@ -114,7 +114,7 @@ void HIconSymbol::readData(int v,QDataStream* d)
 		*d >> s;
 		pSP->strAlias = s;
 	}
-	HComplexObj::readData(v, d);
+    HContainerObj::readData(v, d);
 }
 
 void HIconSymbol::writeData(int v,QDataStream *d)
@@ -131,7 +131,7 @@ void HIconSymbol::writeData(int v,QDataStream *d)
 		*d << pSP->strName;
 		*d << pSP->strAlias;
 	}
-	HComplexObj::writeData(v, d);
+    HContainerObj::writeData(v, d);
 }
 
 void HIconSymbol::addBaseObj(HBaseObj* pObj)
@@ -366,4 +366,14 @@ void HIconSymbol::paint(QPainter* painter)
 	}
 	painter->restore();
 
+}
+
+void HIconSymbol::setModify(bool b)
+{
+    m_bModify = b;
+}
+
+bool HIconSymbol::isModify()
+{
+    return m_bModify;
 }

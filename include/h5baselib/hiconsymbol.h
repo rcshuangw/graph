@@ -60,6 +60,10 @@ public:
     //获取特定图元
     HText* getFirstTextObj();
 
+    //修改
+    void setModify(bool b);
+    bool isModify();
+
 public:
 	virtual void paint(QPainter* painter);
 public:
@@ -71,6 +75,7 @@ private:
     int m_nCurPattern;
     HIconShowPattern* m_pCurPattern;
     HIconTemplate* m_pIconTemplate;
+    bool m_bModify;
 
 };
 

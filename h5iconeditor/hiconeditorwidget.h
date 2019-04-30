@@ -19,20 +19,12 @@ public:
 
     void setIconEditorMgr(HIconEditorMgr* iconMgr);
 
-    //新建一个icon图元
-    void newIconWidget();
-
-    //删除一个Icon图元
-    void delIconWidget();
-
-    //打开一个图元
-    void openIconWidget();
-
     //刷新图元
     void refreshIconWidget();
 
     QTabBar* getTabBar(){return pTabBar;}
 public:
+    void clear();
     void refresh();
 protected:
     virtual bool eventFilter(QObject *watched, QEvent *event);
