@@ -175,3 +175,8 @@ void HSelectedMgr::calcPoints()
     else
         m_SelectBounding = m_selectedPoints.boundingRect().adjusted(-10,-10,10,10);
 }
+
+void HSelectedMgr::refreshObjs()
+{
+    m_pTempContainer->RePos();
+}

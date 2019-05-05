@@ -1,15 +1,15 @@
-﻿#ifndef HTEMPCONTAINER_H
-#define HTEMPCONTAINER_H
+﻿#ifndef HGROUP_H
+#define HGROUP_H
 #include "hcontainerobj.h"
 /*
 
 */
-class H5BASELIB_EXPORT HTempContainer : public HContainerObj
+class H5BASELIB_EXPORT HGroup : public HContainerObj
 {
 	Q_OBJECT
 public:
-	HTempContainer();
-	virtual ~HTempContainer();
+    HGroup();
+    virtual ~HGroup();
 public:
 	void move(qreal dx, qreal dy, bool bscale = false);
 	void moveBy(qreal dx, qreal dy, bool bscale = false);
@@ -21,5 +21,5 @@ public:
 	virtual QPainterPath shape(qint8 flag = 0);
 };
 
-#endif // HTEMPCONTAINER_H
+#endif // HGROUP_H
 

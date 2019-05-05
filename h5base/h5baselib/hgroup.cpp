@@ -1,24 +1,24 @@
-﻿#include "htempcontainer.h"
-HTempContainer::HTempContainer()
+﻿#include "hgroup.h"
+HGroup::HGroup()
 {
 
 }
-HTempContainer::~HTempContainer()
+HGroup::~HGroup()
 {
 	clear();
 }
 
-void HTempContainer::move(qreal dx, qreal dy, bool scale)
+void HGroup::move(qreal dx, qreal dy, bool scale)
 {
 	HContainerObj::move(dx, dy, scale);
 }
 
-void HTempContainer::moveBy(qreal dx, qreal dy, bool scale)
+void HGroup::moveBy(qreal dx, qreal dy, bool scale)
 {
 	HContainerObj::moveBy(dx, dy, scale);
 }
 
-HPointsList HTempContainer::getPointList(qint8 flag /* = 0 */)
+HPointsList HGroup::getPointList(qint8 flag /* = 0 */)
 {
 	QPointF po(-m_width / 2, -m_height / 2);
 	QRectF rectF(po, QSize(m_width, m_height));
@@ -31,7 +31,7 @@ HPointsList HTempContainer::getPointList(qint8 flag /* = 0 */)
 	return list;
 }
 
-QRectF HTempContainer::boundingRect(qint8 flag)
+QRectF HGroup::boundingRect(qint8 flag)
 {
 	QPointF po(-m_width / 2, -m_height / 2);
 	QRectF rectF(po, QSize(m_width, m_height));
@@ -39,7 +39,7 @@ QRectF HTempContainer::boundingRect(qint8 flag)
 	return rectF;
 }
 
-QPainterPath HTempContainer::shape(qint8 flag)
+QPainterPath HGroup::shape(qint8 flag)
 {
 	QPainterPath path;
 	int count = m_pObjList.size();
@@ -53,7 +53,7 @@ QPainterPath HTempContainer::shape(qint8 flag)
 	return path;
 }
 
-void HTempContainer::RePos()
+void HGroup::RePos()
 {
     QRectF rectF = boundingRect(1);
     QPointF pt = rectF.center();

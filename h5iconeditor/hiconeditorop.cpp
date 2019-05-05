@@ -2,6 +2,7 @@
 #include <QScrollBar>
 #include <QGraphicsView>
 #include <QDir>
+#include "hgroup.h"
 #include "hiconeditormgr.h"
 #include "hicontemplate.h"
 #include "hiconeditorframe.h"
@@ -266,14 +267,17 @@ bool HIconEditorOp::isClipboardAvailable()
 
 void HIconEditorOp::bringToTop()
 {
-    if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->selectedMgr()->selectObj())
         return;
 
+    HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
+    if(tempContainer->getObjList().count() != 1)
+        return;
     int maxZValue = 0;
-    QList<QGraphicsItem*> itemList = pIconMgr->getIconFrame()->getIconScene()->selectedItems();
-    if(itemList.count() > 1) return;
-    QGraphicsItem* pItem = itemList.at(0);
-    QList<QGraphicsItem*> collItemList = pItem->collidingItems();
+    HBaseObj* pObj = tempContainer->getObjList().at(0);
+    if(!pObj) return;
+    H5GraphicsItem* pItem = pObj->iconGraphicsItem();
+    QList<H5GraphicsItem*> collItemList = pItem->collidingItems();
     if(collItemList.count()<=0) return;
     maxZValue = collItemList.at(0)->zValue();
     for(int i = 1; i < collItemList.count();i++)
@@ -288,20 +292,24 @@ void HIconEditorOp::bringToTop()
     {
         maxZValue++;
         pItem->setZValue(maxZValue);
-        ((HIconGraphicsItem*)pItem)->getItemObj()->setStackOrder(maxZValue);
+        pObj->setZValue(maxZValue);
     }
 
 }
 
 void HIconEditorOp::bringToBottom()
 {
-    if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->selectedMgr()->selectObj())
+        return;
+
+    HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
+    if(tempContainer->getObjList().count() != 1)
         return;
     int minZValue = 0;
-    QList<QGraphicsItem*> itemList = pIconMgr->getIconFrame()->getIconScene()->selectedItems();
-    if(itemList.count() > 1) return;
-    QGraphicsItem* pItem = itemList.at(0);
-    QList<QGraphicsItem*> collItemList = pItem->collidingItems();
+    HBaseObj* pObj = tempContainer->getObjList().at(0);
+    if(!pObj) return;
+    H5GraphicsItem* pItem = pObj->iconGraphicsItem();
+    QList<H5GraphicsItem*> collItemList = pItem->collidingItems();
     if(collItemList.count()<=0) return;
     minZValue = (int)(collItemList.at(0)->zValue());
     for(int i = 1; i < collItemList.count();i++)
@@ -316,41 +324,33 @@ void HIconEditorOp::bringToBottom()
     {
         minZValue--;
         pItem->setZValue(minZValue);
-        ((HIconGraphicsItem*)pItem)->getItemObj()->setStackOrder(minZValue);
+        pObj->setZValue(minZValue);
     }
 }
 
 void HIconEditorOp::groupObj()
 {
-    if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene() ||!pIconMgr->getIconTemplate() || !pIconMgr->getIconTemplate()->getSymbol())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->selectedMgr()->selectObj())
         return;
-    QList<QGraphicsItem*> items = pIconMgr->getIconFrame()->getIconScene()->selectedItems();
-    if(items.count() < 2) return;
+    HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer) return;
+    if(tempContainer->getObjList().count() < 2) return;
 
-    HBaseObj* pGroupObj = pIconMgr->getIconTemplate()->getSymbol()->newObj(enumGroup);
-    QRectF groupRect;
-    for(int i = 0; i < items.count();i++)
+    HTempContainer* tempSelect = (HTempContainer*)tempContainer;
+    HGroup* pGroup =  m_pIconEditorMgr->iconTemplate()->getSymbol()->newObj(Group);
+    for(int i = 0; i < tempSelect->getObjList().count();i++)
     {
-        HIconGraphicsItem* item = (HIconGraphicsItem*)items.at(i);
-        HBaseObj* pObj = item->getItemObj();
-        groupRect = groupRect.united(item->rect());
-        pIconMgr->getIconTemplate()->getSymbol()->takeObj(pObj);//应该是take操作 不是删除
-        ((HGroupObj*)pGroupObj)->addObj(pObj);
+        HBaseObj* pObj = (HBaseObj*)tempSelect->getObjList().at(i);
+        if(!pObj) continue;
+        onRemoveObj(pObj);
+        m_pIconEditorMgr->iconTemplate()->getSymbol()->removeBaseObj(pObj);
+        pObj->setDeleted(true);
+        pGroup
     }
-    //矩形
-    ((HGroupObj*)pGroupObj)->setObjRect(QRectF(0,0,groupRect.width(),groupRect.height()));
-    HIconItemGroup *itemGroup = new HIconItemGroup(pGroupObj);
-    pIconMgr->getIconTemplate()->getSymbol()->addObj(pGroupObj);
-    itemGroup->setItemObj(pGroupObj);
-    itemGroup->setRect(groupRect);
-    foreach(QGraphicsItem* item,items)
-    {
-        pIconMgr->getIconFrame()->getIconScene()->removeItem(item);
-        HBaseObj* pObj = ((HIconGraphicsItem*)item)->getItemObj();
-        pObj->setIconGraphicsItem(NULL);
-    }
-    pIconMgr->getIconFrame()->getIconScene()->addItem(itemGroup);
-    pIconMgr->setDrawShape(enumSelection);
+
+    m_pIconEditorMgr->selectedMgr()->clear();
+    m_pIconEditorMgr->iconTemplate()->getSymbol()->addBaseObj(pGroup);
+    onCreateObj(pGroup,false);
 }
 
 void HIconEditorOp::ungroupObj()
