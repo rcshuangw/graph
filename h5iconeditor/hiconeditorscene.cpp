@@ -1,11 +1,13 @@
 ﻿#include "hiconeditorscene.h"
-#include "hiconeditorframe.h"
 #include <cmath>
 #include <QGraphicsSceneMouseEvent>
 #include <QCursor>
 #include <QMenu>
 #include <QMessageBox>
 #include <QDebug>
+#include "hiconeditorframe.h"
+#include "hiconeditormgr.h"
+#include "hdrawmanager.h"
 HIconEditorScene::HIconEditorScene(HIconEditorMgr* iconMgr)
     :m_pIconEditorMgr(iconMgr)
 {
@@ -14,7 +16,7 @@ HIconEditorScene::HIconEditorScene(HIconEditorMgr* iconMgr)
 
 void HIconEditorScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
-    if(!m_pIconEditorMgr && !m_pIconEditorMgr->getIconFrame())
+    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
         return;
     QRectF rectLogic = m_pIconEditorMgr->getLogicRect();
     QRectF finalRect = rectLogic;//rect.intersected(rectLogic);
@@ -31,7 +33,7 @@ void HIconEditorScene::drawBackground(QPainter *painter, const QRectF &rect)
                 painter->drawPoint(x,y);
     }
 
-    bool bShowCenterLine = pIconMgr->getShowCenterLine();
+    bool bShowCenterLine = m_pIconEditorMgr->getShowCenterLine();
     if(bShowCenterLine)
     {
         QPointF p1(rectLogic.left()+5,(rectLogic.topLeft().y()+rectLogic.bottomLeft().y())/2);
@@ -68,9 +70,47 @@ void HIconEditorScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
 void HIconEditorScene::drawPath(const QList<Path>& pathList)
 {
 
+    for(int i = 0;i < pathList.count();i++)
+    {
+        Path path = pathList.at(i);
+        QGraphicsPathItem* item;
+        //之前存在路径item直接拿出来用
+        if(i < m_pGraphicsPathItems.count())
+        {
+            item = m_pGraphicsPathItems.at(i);
+        }
+        else
+        {
+            item = new QGraphicsPathItem;
+            m_pGraphicsPathItems.append(item);
+            addItem(item);
+        }
+        item->setVisible(true);
+        item->setPen(path.pen);
+        item->setBrush(path.brush);
+        item->setPath(path.painterPath);
+    }
+
+    //多余的部分隐藏依赖
+    for(int i = pathList.count(); i < m_pGraphicsPathItems.count();i++)
+    {
+        QGraphicsPathItem* item = m_pGraphicsPathItems.at(i);
+        if(item)
+        {
+            item->setVisible(false);
+        }
+    }
 }
 
 void HIconEditorScene::endDraw()
 {
-
+    //绘制结束后绘制路径设为false，既看不到路径item，又防止后续选择上
+    for(int i = 0; i < m_pGraphicsPathItems.count();i++)
+    {
+        QGraphicsPathItem* item = m_pGraphicsPathItems.at(i);
+        if(item)
+        {
+            item->setVisible(false);
+        }
+    }
 }

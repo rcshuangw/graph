@@ -1,5 +1,5 @@
-#include "hlinetool.h"
-#include "htoolmanager.h"
+ï»¿#include "hlinetool.h"
+#include "hdrawmanager.h"
 HLineTool::HLineTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
     :HDrawTool(manager,objShape,name,uuid)
 {
@@ -59,11 +59,11 @@ void HLineTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
 	QPainterPath painterPath;
 	painterPath.moveTo(m_ptStPoint);
 	painterPath.lineTo(m_ptCurPoint);
-	//ÉèÖÃÊôĞÔ
+	//è®¾ç½®å±æ€§
 	Path path;
 	path.coordType = false;
 	path.painterPath = painterPath;
-	//ÓÉ»æÖÆ¹ÜÀí·¢ËÍ¸øeditor
+	//ç”±ç»˜åˆ¶ç®¡ç†å‘é€ç»™editor
 	QList<Path> pathList;
 	pathList.append(path);
 	m_pToolManager->onDrawPath(pathList);
@@ -85,7 +85,7 @@ void HLineTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
 	}
 	else
 	{
-		//´´½¨lineobj¶ÔÏó
+		//åˆ›å»ºlineobjå¯¹è±¡
 	}
 
 	if (pObj)

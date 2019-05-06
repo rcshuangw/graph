@@ -15,9 +15,9 @@ void HDrawHelper::setBaseObj(HBaseObj* pObj)
     m_pBaseObj = pObj;
 }
 
-HPointsList HDrawHelper::selectedPointList()
+HPointFList HDrawHelper::selectedPointList()
 {
-    HPointsList list;
+    HPointFList list;
     if(!m_pBaseObj)
         return list;
     list = selectedPointList(m_pBaseObj->getShapeType());
@@ -182,9 +182,9 @@ QCursor HDrawHelper::cursorOnPoint(DrawShape drawShape,int index)
     }
 }
 
-HPointsList HDrawHelper::selectedPointList(DrawShape drawshape)
+HPointFList HDrawHelper::selectedPointList(DrawShape drawshape)
 {
-    HPointsList list;
+    HPointFList list;
     switch(drawshape)
     {
     case Line:
@@ -202,7 +202,7 @@ HPointsList HDrawHelper::selectedPointList(DrawShape drawshape)
     case Text:
     {
         //获取四角点
-        HPointsList points = m_pBaseObj->getPointList(1);
+        HPointFList points = m_pBaseObj->getPointList(1);
         //再获取每个点的中间点
         list = getMidPoints(points);
     }
@@ -210,7 +210,7 @@ HPointsList HDrawHelper::selectedPointList(DrawShape drawshape)
     case Icon:
     {
         //获取四角点
-        HPointsList points = m_pBaseObj->getPointList(1);
+        HPointFList points = m_pBaseObj->getPointList(1);
         //再获取每个点的中间点
         list = getMidPoints(points);
     }
@@ -219,7 +219,7 @@ HPointsList HDrawHelper::selectedPointList(DrawShape drawshape)
     case Group:
     {
         //获取四角点
-        HPointsList points = m_pBaseObj->getPointList(1);
+        HPointFList points = m_pBaseObj->getPointList(1);
         //再获取每个点的中间点
         list = getMidPoints(points);
     }
@@ -231,9 +231,9 @@ HPointsList HDrawHelper::selectedPointList(DrawShape drawshape)
     return list;
 }
 
-HPointsList HDrawHelper::getMidPoints(HPointsList points,bool bclose)
+HPointFList HDrawHelper::getMidPoints(HPointFList points,bool bclose)
 {
-    HPointsList rPoints;
+    HPointFList rPoints;
     if(points.count() < 2) return rPoints;
     for(int i = 0; i < points.count();i++)
     {

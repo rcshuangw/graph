@@ -37,8 +37,8 @@ public:
 	void setArrowHeight(quint8 height);
 	quint8 getArrowHeight();
 
-	virtual QPainterPath getArrowPath(HPointsList& points,bool head);
-	virtual void getBoundingRect(HPointsList& points,QPointF &ptStart,QPointF& ptEnd,double width);
+	virtual QPainterPath getArrowPath(HPointFList& points,bool head);
+	virtual void getBoundingRect(HPointFList& points,QPointF &ptStart,QPointF& ptEnd,double width);
 
 	///////////////////////////////////////////////////////操作属性/////////////////////////////
 	//改变大小

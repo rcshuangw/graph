@@ -10,8 +10,8 @@ public:
 
 public:
     void setBaseObj(HBaseObj* pObj);
-    HPointsList selectedPointList();
-    HPointsList getMidPoints(HPointsList points,bool bclose = true);
+    HPointFList selectedPointList();
+    HPointFList getMidPoints(HPointFList points,bool bclose = true);
     void updatePoints();
 
     void ratate(int angle,QPointF* c=0);
@@ -21,7 +21,7 @@ public:
 
 private:
     QCursor cursorOnPoint(DrawShape drawShape,int index);
-    HPointsList selectedPointList(DrawShape drawshape);
+    HPointFList selectedPointList(DrawShape drawshape);
 
 
 private:

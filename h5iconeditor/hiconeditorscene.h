@@ -25,7 +25,7 @@ public:
 private:
    
     HIconEditorMgr* m_pIconEditorMgr;
-	QList< QGraphicsPathItem*> m_pGraphicsPathItems;
+    QList<QGraphicsPathItem*> m_pGraphicsPathItems;
 };
 
 #endif // HGRAPHICSSCENE_H

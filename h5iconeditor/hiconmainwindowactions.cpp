@@ -1,6 +1,7 @@
 ﻿#include "hiconmainwindow.h"
 #include <QMessageBox>
-
+#include "hiconeditormgr.h"
+#include "hiconeditordrawtoolmgr.h"
 //显示网格
 void HIconMainWindow::showGrid()
 {
@@ -33,6 +34,7 @@ void HIconMainWindow::drawLine()
     pIconMgr->setDrawShape(enumLine);
     pIconMgr->setSelectMode(enumDraw);
     //setCursor(Qt::CrossCursor);
+    //m_pIconEditorMgr->iconEditorDrawToolMgr()->selectTool();
 }
 
 void HIconMainWindow::drawPolyline()

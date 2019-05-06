@@ -42,7 +42,7 @@ public:
 public:
 	virtual QRectF boundingRect(qint8 flag = 0);
 	virtual QPainterPath shape(qint8 flag = 0);
-private:
+public:
 	//针对objList的操作 参考QVector类的函数
 	void clear();
 	void addObj(HBaseObj* obj);

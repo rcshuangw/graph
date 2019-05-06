@@ -130,7 +130,7 @@ QPolygonF HLine::getPointList(qint8 flag)
 QRectF HLine::boundingRect(qint8 flag)
 {
 	QPainterPath path;;
-	HPointsList points = getPointList(flag);
+    HPointFList points = getPointList(flag);
 	QPainterPath pathhead = getArrowPath(points, true);
 	if (!pathhead.isEmpty())
 		path.addPath(pathhead);
@@ -143,7 +143,7 @@ QRectF HLine::boundingRect(qint8 flag)
 
 QPainterPath HLine::shape(qint8 flag)
 {
-	HPointsList points;
+    HPointFList points;
 	double n = getLineWidth();
 	if (n < 5) n = 5;
 	getBoundingRect(points, ptHeadPoint, ptTailPoint, n);
@@ -168,7 +168,7 @@ void HLine::paint(QPainter* painter)
 	pen.setWidth(penWidth);
 	pen.setCapStyle(capStyle);
 	painter->setPen(pen);
-	HPointsList list = getPointList(1);
+    HPointFList list = getPointList(1);
 	//画箭头
 	if (getArrowWidth() > 0 && getArrowHeight() > 0)
 	{

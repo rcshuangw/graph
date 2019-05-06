@@ -41,10 +41,10 @@ public:
 public slots:
 
     //对象选择状态发生改变
-    void objSelectChanged(HBaseObj* obj,bool isSelected);
+    void onObjSelectChanged(HBaseObj* obj,bool isSelected);
 
     //重新计算选择状态情况下的obj
-    void recalcSelect();
+    void onRecalcSelect();
 protected:
 
     //事件过滤

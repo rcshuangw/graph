@@ -8,7 +8,7 @@
 #include "hiconcommand.h"
 HIconEditorDrawToolMgr::HIconEditorDrawToolMgr(HIconEditorMgr* pMgr):m_pIconEditorMgr(pMgr)
 {
-    curDrawShape = enumSelection;
+    //curDrawShape = enumSelection;
 }
 
 HIconEditorDrawToolMgr::~HIconEditorDrawToolMgr()

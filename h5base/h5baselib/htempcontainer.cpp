@@ -18,11 +18,11 @@ void HTempContainer::moveBy(qreal dx, qreal dy, bool scale)
 	HContainerObj::moveBy(dx, dy, scale);
 }
 
-HPointsList HTempContainer::getPointList(qint8 flag /* = 0 */)
+HPointFList HTempContainer::getPointList(qint8 flag /* = 0 */)
 {
 	QPointF po(-m_width / 2, -m_height / 2);
 	QRectF rectF(po, QSize(m_width, m_height));
-	HPointsList list;
+	HPointFList list;
 	list.append(rectF.topLeft());
 	list.append(rectF.topRight());
 	list.append(rectF.bottomRight());

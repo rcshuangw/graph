@@ -38,7 +38,7 @@ signals:
 private:
     HDrawHelper* m_pDrawHelper;
 	HTempContainer* m_pTempContainer;
-	HPointsList m_selectedPoints;//图元四周的点，供选择使用
+	HPointFList m_selectedPoints;//图元四周的点，供选择使用
 	QRectF m_SelectBounding;
 
 

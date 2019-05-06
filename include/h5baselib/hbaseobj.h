@@ -12,7 +12,7 @@
 #include "hiconapi.h"
 #include "h5baselibexport.h"
 #include "h5graphicsitem.h"
-typedef QPolygonF HPointsList;
+typedef QPolygonF HPointFList;
 class H5BASELIB_EXPORT HBaseObj: public QObject
 {
 public:

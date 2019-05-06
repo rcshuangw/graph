@@ -134,6 +134,9 @@ public slots:
     void onRefreshSelect(const QRectF& rect);
     void onDrawPath(QList<Path>& path);
     void onEndDraw();
+
+    void onSelectChanged(HBaseObj *obj, bool isSelected);
+
 private:
     HIconEditorMgr* m_pIconEditorMgr;
     Qt::Alignment m_Alignment;

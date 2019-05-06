@@ -99,11 +99,10 @@ enum DrawShape
 //选择状态
 enum SELECTMODE
 {
-    enumNone,
-    enumSelect, //选择对象
-    enumMove,   //移动对象
-    enumSize,   //改变对象
-    enumDraw
+    None,
+    Select, //选择对象
+    Move,   //移动对象
+    Size,   //改变对象
 };
 
 //填充方向

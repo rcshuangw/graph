@@ -6,6 +6,8 @@
 #include "hiconeditorscene.h"
 #include "hiconeditormgr.h"
 #include "hiconeditordrawtoolmgr.h"
+#include "hiconeditorop.h"
+#include "hselectedmgr.h"
 HIconEditorFrame::HIconEditorFrame(QWidget * parent, Qt::WindowFlags f )
     :HFrame(parent,f)
 {
@@ -72,8 +74,8 @@ void HIconEditorFrame::objCreated(HBaseObj* obj,bool isPaste)
 
     HIconEditorScene* scene = (HIconEditorScene*)m_pView->scene();
     scene->addItem(item);
-    connect(item,SIGNAL(objSelectChanged(HBaseObj*,bool)),this,SLOT(objSelectChanged(HBaseObj*,bool)));
-    connect(item,SIGNAL(recalcSelect()),this,SLOT(recalcSelect()));
+    connect(item,SIGNAL(objSelectChanged(HBaseObj*,bool)),this,SLOT(onObjSelectChanged(HBaseObj*,bool)));
+    connect(item,SIGNAL(recalcSelect()),this,SLOT(onRecalcSelect()));
 
 }
 
@@ -87,24 +89,23 @@ void HIconEditorFrame::objRemoved(HBaseObj* obj)
         H5GraphicsItem* item = (H5GraphicsItem*)obj->iconGraphicsItem();
         scene->removeItem(item);
         item->setBaseObj(NULL);
-        disconnect(item,SIGNAL(onObjSelectChanged(HBaseObj*,bool)),this,SLOT(objSelectChanged(HBaseObj*,bool)));
-        disconnect(item,SIGNAL(onRecalcSelect()),this,SLOT(recalcSelect()));
+        disconnect(item,SIGNAL(objSelectChanged(HBaseObj*,bool)),this,SLOT(objSelectChanged(HBaseObj*,bool)));
+        disconnect(item,SIGNAL(recalcSelect()),this,SLOT(recalcSelect()));
     }
 }
 
-void HIconEditorFrame::objSelectChanged(HBaseObj *obj, bool isSelected)
+void HIconEditorFrame::onObjSelectChanged(HBaseObj *obj, bool isSelected)
 {
-    if(!m_pIconEditorMgr)
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
         return;
-    //选择selectManager
-    //m_pEditMgr->m_pSelectionMgr->SelectChanged(obj,isSelected);
-    //m_pEditMgr->m_pSelectionMgr->RecalcSelect();
+    m_pIconEditorMgr->iconEditorOp()->onSelectChanged(obj,isSelected);
 }
 
-void HIconEditorFrame::recalcSelect()
+void HIconEditorFrame::onRecalcSelect()
 {
-	if (!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorOp())
+    if (!m_pIconEditorMgr && !m_pIconEditorMgr->selectedMgr())
 		return;
+    m_pIconEditorMgr->selectedMgr()->recalcSelect();
 }
 
 void HIconEditorFrame::refreshSelected(const QRectF& rect)

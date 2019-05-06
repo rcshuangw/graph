@@ -130,7 +130,7 @@ quint8 HLineObj::getArrowHeight()
 
 ///////////////////////////////////////////////////////操作属性/////////////////////////////
 //获取直线头尾的箭头绘制路径 
-QPainterPath HLineObj::getArrowPath(HPointsList& points, bool head)
+QPainterPath HLineObj::getArrowPath(HPointFList& points, bool head)
 {
 	QPointF ptS = points.at(0);
 	QPointF ptE = points.at(1);
@@ -240,7 +240,7 @@ bool HLineObj::setPointList(QPolygonF& list, qint8 flag)
 	return HBaseObj::setPointList(list, flag);
 }
 
-void HLineObj::getBoundingRect(HPointsList& points, QPointF &headPoint, QPointF& tailPoint, double width)
+void HLineObj::getBoundingRect(HPointFList& points, QPointF &headPoint, QPointF& tailPoint, double width)
 {
 	double range = width;
 	QLineF lnf(headPoint, tailPoint);

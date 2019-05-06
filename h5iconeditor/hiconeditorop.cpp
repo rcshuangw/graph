@@ -78,6 +78,24 @@ void HIconEditorOp::onRemoveObj(HBaseObj* pObj)
         m_pIconEditorMgr->iconEditorFrame()->objRemoved(pObj);
 }
 
+void HIconEditorOp::onRefreshSelect(const QRectF& rect)
+{
+    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
+        m_pIconEditorMgr->iconEditorFrame()->refreshSelected(rect);
+}
+
+void HIconEditorOp::onDrawPath(QList<Path>& path)
+{
+    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
+        m_pIconEditorMgr->iconEditorFrame()->drawPath(path);
+}
+
+void HIconEditorOp::onEndDraw()
+{
+    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
+        m_pIconEditorMgr->iconEditorFrame()->endDraw();
+}
+
 void HIconEditorOp::fitWidth()
 {
     if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorFrame() || !m_pIconEditorMgr->iconEditorFrame()->view())
@@ -342,38 +360,38 @@ void HIconEditorOp::groupObj()
     {
         HBaseObj* pObj = (HBaseObj*)tempSelect->getObjList().at(i);
         if(!pObj) continue;
-        onRemoveObj(pObj);
-        m_pIconEditorMgr->iconTemplate()->getSymbol()->removeBaseObj(pObj);
-        pObj->setDeleted(true);
-        pGroup
+        onRemoveObj(pObj);//画面删除
+        m_pIconEditorMgr->iconTemplate()->getSymbol()->removeBaseObj(pObj);//pattern删除
+        //pObj->setDeleted(true);
+        pGroup->addObj(pObj);//增加到pGroup
     }
-
     m_pIconEditorMgr->selectedMgr()->clear();
-    m_pIconEditorMgr->iconTemplate()->getSymbol()->addBaseObj(pGroup);
-    onCreateObj(pGroup,false);
+    m_pIconEditorMgr->iconTemplate()->getSymbol()->addBaseObj(pGroup);//增加到pattern
+    onCreateObj(pGroup,false);//画面增加
 }
 
 void HIconEditorOp::ungroupObj()
 {
-    if(!pIconMgr || !pIconMgr->getIconFrame() || !pIconMgr->getIconFrame()->getIconScene()||!pIconMgr->getIconTemplate() || !pIconMgr->getIconTemplate()->getSymbol())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->selectedMgr()->selectObj())
         return;
-    QList<QGraphicsItem*> items = pIconMgr->getIconFrame()->getIconScene()->selectedItems();
-    for(int i = 0; i < items.count();i++)
+    HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
+    if(tempContainer->getObjList().size() != 1 || tempContainer->getObjList().at(i)->getShapeType() != Group)
+        return;
+    HGroup* pGroup = tempContainer->getObjList().at(0);
+    if(!pGroup) return;
+    while(pGroup->getObjList().isEmpty())
     {
-        HIconGraphicsItem* item = (HIconGraphicsItem*)items.at(i);
-        if(item->type() != enumGroup) continue;
-        HBaseObj* pObj = item->getItemObj();
-        HGroupObj* pGroupObj = (HGroupObj*)pObj;
-        while(!pGroupObj->isEmpty())
-        {
-            HBaseObj* pObj = (HBaseObj*)pGroupObj->takeFirst();
-            pIconMgr->getIconTemplate()->getSymbol()->addObj(pObj);
-            pIconMgr->getIconFrame()->getIconScene()->addItemByIconObj(pObj);
-        }
-        pIconMgr->getIconFrame()->getIconScene()->removeItem(item);
-        pIconMgr->getIconTemplate()->getSymbol()->delObj(pObj);
+        HBaseObj* pObj = pGroup->getObjList().takeFirst();
+        if(!pObj) continue;
+        onCreateObj(pObj,false);
+        m_pIconEditorMgr->iconTemplate()->getSymbol()->addBaseObj(pObj);
     }
-    pIconMgr->setDrawShape(enumSelection);
+
+    onRemoveObj(pGroup);
+    m_pIconEditorMgr->iconTemplate()->getSymbol()->removeBaseObj(pGroup);
+
+    m_pIconEditorMgr->selectedMgr()->clear();
+
 }
 
 void HIconEditorOp::zoomIn()
@@ -386,3 +404,14 @@ void HIconEditorOp::zoomOut()
 {
 
 }
+
+void HIconEditorOp::onSelectChanged(HBaseObj *obj, bool isSelected)
+{
+    if(!m_pIconEditorMgr ||!m_pIconEditorMgr->selectedMgr())
+        return;
+    //选择selectManager
+    m_pIconEditorMgr->selectedMgr()->selectChanged(obj,isSelected);
+    m_pIconEditorMgr->selectedMgr()->recalcSelect();
+    emit selectChanged();
+}
+

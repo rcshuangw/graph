@@ -24,8 +24,8 @@ protected:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 signals:
-    void onObjSelectChanged(HBaseObj* obj,bool isSelected);
-    void onRecalcSelect();
+    void objSelectChanged(HBaseObj* obj,bool isSelected);
+    void recalcSelect();
 
 private:
     HBaseObj* m_pBaseObj;
