@@ -18,6 +18,6 @@ void HDrawTool::clear()
 
 void HDrawTool::onEvent(HEvent& e)
 {
-	if (!e.event)
+    if (!e.event())
 		return;
 }

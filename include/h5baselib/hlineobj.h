@@ -4,8 +4,9 @@
 obj都是继承HBaseObj 都是被其他类继承
 */
 #include "hshapeobj.h"
+#include "h5baselibexport.h"
 ///////////////////////////////////////////HRectangleObj///////////////////////////////////////////
-class H5ICONLIB_EXPORT HLineObj : public HBaseObj
+class H5BASELIB_EXPORT HLineObj : public HBaseObj
 {
 public:
 	HLineObj();

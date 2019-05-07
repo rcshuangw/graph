@@ -97,7 +97,7 @@ enum DrawShape
 };
 
 //选择状态
-enum SELECTMODE
+enum SelectMode
 {
     None,
     Select, //选择对象

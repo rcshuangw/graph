@@ -1,5 +1,7 @@
 #include "hdrawhelper.h"
 #include "htempcontainer.h"
+#include "hiconobj.h"
+#include <QCursor>
 HDrawHelper::HDrawHelper()
 {
     m_pBaseObj = NULL;
@@ -56,7 +58,7 @@ void HDrawHelper::ratate(int angle,QPointF* c)
             HBaseObj* pObj = (HBaseObj*)tempCon->getObjList().at(i);
             if(!pObj) continue;
             pObj->rotateBy(angle);
-            QPointF pt = obj->pos();
+            QPointF pt = pObj->pos();
             QPointF newPt = transform.map(pt);
             pObj->move(newPt.x(),newPt.y());
             ((H5GraphicsItem*)pObj->iconGraphicsItem())->setPos(pObj->pos());
@@ -117,7 +119,7 @@ void HDrawHelper::turn(bool b,QPointF* c)
                 {
                     pObj->turn(pObj->isHorizonTurn(),!pObj->isVerticalTurn());
                 }
-                QPointF pt = obj->pos();
+                QPointF pt = pObj->pos();
                 QPointF newPt = transform.map(pt);
                 pObj->move(newPt.x(),newPt.y());
                 ((H5GraphicsItem*)pObj->iconGraphicsItem())->setPos(pObj->pos());
@@ -129,11 +131,11 @@ void HDrawHelper::turn(bool b,QPointF* c)
     {
         if(b)
         {
-            m_pBaseObj->turn(!pObj->isHorizonTurn(),pObj->isVerticalTurn());
+            m_pBaseObj->turn(!m_pBaseObj->isHorizonTurn(),m_pBaseObj->isVerticalTurn());
         }
         else
         {
-            m_pBaseObj->turn(pObj->isHorizonTurn(),!pObj->isVerticalTurn());
+            m_pBaseObj->turn(m_pBaseObj->isHorizonTurn(),!m_pBaseObj->isVerticalTurn());
         }
     }
 }
@@ -141,7 +143,7 @@ void HDrawHelper::turn(bool b,QPointF* c)
 //获取某个点位置的鼠标状态
 QCursor HDrawHelper::cursor(int index)
 {
-
+    return cursorOnPoint(m_pBaseObj->getShapeType(),index);
 }
 
 QCursor HDrawHelper::cursorOnPoint(DrawShape drawShape,int index)
@@ -253,3 +255,108 @@ HPointFList HDrawHelper::getMidPoints(HPointFList points,bool bclose)
     return rPoints;
 
 }
+
+void HDrawHelper::movePoint(int index,QPointF& curPoint)
+{
+    if(!m_pBaseObj)
+        return;
+    movePoint(m_pBaseObj->getShapeType(),index,curPoint);
+}
+
+void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
+{
+    switch(drawShape)
+    {
+    case Line:
+        break;
+    case Rectangle:
+    case Text:
+    case Ellipse:
+    case Icon:
+    {
+        /*
+         *   0   1  2
+         *   7      3
+         *   6   5  4
+*/
+        QTransform trans;
+        m_pBaseObj->transform(trans,1);
+        QPointF point = trans.inverted().map(curPoint);
+        HPointFList ptList = m_pBaseObj->getPointList(1);
+        HPointFList points = trans.inverted().map(ptList);
+        QPointF topLeft = points.at(0);
+        QPointF bottomRight = points.at(2);
+        switch(index)
+        {
+        case 0:
+            topLeft = point;
+            break;
+        case 1:
+            topLeft.setY(point.y());
+            break;
+        case 2:
+            topLeft.setY(point.y());
+            bottomRight.setX(point.x());
+            break;
+        case 3:
+            bottomRight.setX(point.x());
+            break;
+        case 4:
+            bottomRight = point;
+            break;
+        case 5:
+            bottomRight.setY(point.y());
+            break;
+        case 6:
+            topLeft.setX(point.x());
+            bottomRight.setY(point.y());
+            break;
+        case 7:
+            topLeft.setX(point.x());
+            break;
+        default:
+            break;
+        }
+        points.clear();
+        points.append(topLeft);
+        points.append(bottomRight);
+
+        if(m_pBaseObj->getShapeType() == Icon)
+        {
+            HIconObj* pObj = (HIconObj*)m_pBaseObj;
+            QRectF rectF = points.boundingRect();
+            pObj->iconSymbol()->resize(rectF.width(),rectF.height());
+        }
+        points = trans.map(points);
+        //--huangw--
+        m_pBaseObj->setPointList(points,1);
+        H5GraphicsItem* item = m_pBaseObj->iconGraphicsItem();
+        if(item)
+            item->setPos(m_pBaseObj->pos());
+    }
+        break;
+    case Circle:
+        break;
+    case Group:
+        break;
+    case TempContainer:
+        break;
+    default:
+        break;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,15 +2,17 @@
 #include <QMessageBox>
 #include "hiconeditormgr.h"
 #include "hiconeditordrawtoolmgr.h"
+#include "hiconeditorframe.h"
+#include "hiconeditorop.h"
 //显示网格
 void HIconMainWindow::showGrid()
 {
     bool bcheck = showGridAct->isChecked();
-    if(pIconMgr && pIconMgr->getIconFrame())
+    if(m_pIconEditorMgr && m_pIconEditorMgr->iconEditorFrame())
     {
-        pIconMgr->setShowGrid(bcheck);
-        if(pIconMgr->getIconFrame()->view())
-            pIconMgr->getIconFrame()->view()->resetCachedContent();
+        m_pIconEditorMgr->setShowGrid(bcheck);
+        if(m_pIconEditorMgr->iconEditorFrame()->view())
+            m_pIconEditorMgr->iconEditorFrame()->view()->resetCachedContent();
 
     }
 }
@@ -19,203 +21,156 @@ void HIconMainWindow::showGrid()
 void HIconMainWindow::showCenterLine()
 {
     bool bcheck = showCLineAct->isChecked();
-    if(pIconMgr && pIconMgr->getIconFrame())
+    if(m_pIconEditorMgr && m_pIconEditorMgr->getIconFrame())
     {
-        pIconMgr->setShowCenterLine(bcheck);
-        if(pIconMgr->getIconFrame()->view())
-            pIconMgr->getIconFrame()->view()->resetCachedContent();
+        m_pIconEditorMgr->setShowCenterLine(bcheck);
+        if(m_pIconEditorMgr->iconEditorFrame()->view())
+            m_pIconEditorMgr->iconEditorFrame()->view()->resetCachedContent();
 
     }
 }
 
 //draw tool
-void HIconMainWindow::drawLine()
+void HIconMainWindow::drawTool()
 {
-    pIconMgr->setDrawShape(enumLine);
-    pIconMgr->setSelectMode(enumDraw);
-    //setCursor(Qt::CrossCursor);
-    //m_pIconEditorMgr->iconEditorDrawToolMgr()->selectTool();
+    QAction* action = qobject_cast<QAction*>(sender());
+    if(!action) return;
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
+        return;
+    QVariant var = action->data();
+    DrawShape shape = static_cast<DrawShape>(var.toInt());
+    m_pIconEditorMgr->iconEditorOp()->drawTool(shape);
+    if(m_pIconEditorMgr->iconEditorFrame()->view())
+        m_pIconEditorMgr->iconEditorFrame()->view()->setInteractive(false);
 }
 
-void HIconMainWindow::drawPolyline()
+void HIconMainWindow::selectTool()
 {
-    pIconMgr->setDrawShape(enumPolyline);
-    pIconMgr->setSelectMode(enumDraw);
-    //setCursor(Qt::CrossCursor);
-}
-
-void HIconMainWindow::drawEllipse()
-{
-    pIconMgr->setDrawShape(enumEllipse);
-    pIconMgr->setSelectMode(enumDraw);
-    //setCursor(Qt::CrossCursor);
-}
-
-void HIconMainWindow::drawRectangle()
-{
-    pIconMgr->setDrawShape(enumRectangle);
-    pIconMgr->setSelectMode(enumDraw);
-    //setCursor(Qt::CrossCursor);
-}
-
-void HIconMainWindow::drawCircle()
-{
-    pIconMgr->setDrawShape(enumCircle);
-    pIconMgr->setSelectMode(enumDraw);
-    //setCursor(Qt::CrossCursor);
-}
-
-void HIconMainWindow::drawHexagon()
-{
-    pIconMgr->setDrawShape(enumPolygon);
-    pIconMgr->setSelectMode(enumDraw);
-    //setCursor(Qt::CrossCursor);
-}
-
-void HIconMainWindow::drawArc()
-{
-    pIconMgr->setDrawShape(enumArc);
-    pIconMgr->setSelectMode(enumDraw);
-    //setCursor(Qt::CrossCursor);
-}
-
-void HIconMainWindow::drawFan()
-{
-    pIconMgr->setDrawShape(enumPie);
-    pIconMgr->setSelectMode(enumDraw);
-    //setCursor(Qt::CrossCursor);
-}
-
-void HIconMainWindow::drawText()
-{
-    pIconMgr->setDrawShape(enumText);
-    pIconMgr->setSelectMode(enumDraw);
-    //setCursor(Qt::CrossCursor);
-}
-
-void HIconMainWindow::drawSelection()
-{
-    pIconMgr->setDrawShape(enumSelection);
-    pIconMgr->setSelectMode(enumDraw);
-    //setCursor(Qt::ArrowCursor);
+    QAction* action = qobject_cast<QAction*>(sender());
+    if(!action) return;
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
+        return;
+    QVariant var = action->data();
+    SelectMode mode = static_cast<SelectMode>(var.toInt());
+    m_pIconEditorMgr->iconEditorOp()->selectTool(mode);
 }
 
 
 //撤销
 void HIconMainWindow::undo()
 {
-    if(!pIconMgr || !pIconMgr->getIconUndoStack())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconUndoStack())
         return;
-    pIconMgr->getIconUndoStack()->undo();
+    m_pIconEditorMgr->getIconUndoStack()->undo();
 }
 
 //重做
 void HIconMainWindow::redo()
 {
-    if(!pIconMgr || !pIconMgr->getIconUndoStack())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconUndoStack())
         return;
-    pIconMgr->getIconUndoStack()->redo();
+    m_pIconEditorMgr->getIconUndoStack()->redo();
 }
 
 //剪切
 void HIconMainWindow::cut()
 {
-    if(!pIconMgr || !pIconMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
         return;
-    pIconMgr->getIconOp()->cut();
+    m_pIconEditorMgr->getIconOp()->cut();
 
 }
 
 //复制
 void HIconMainWindow::copy()
 {
-    if(!pIconMgr || !pIconMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
         return;
-    pIconMgr->getIconOp()->copy();
+    m_pIconEditorMgr->getIconOp()->copy();
 
 }
 
 //粘贴
 void HIconMainWindow::paste()
 {
-    if(!pIconMgr || !pIconMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
         return;
-    pIconMgr->getIconOp()->paste();
+    m_pIconEditorMgr->getIconOp()->paste();
 
 }
 
 //删除
 void HIconMainWindow::del()
 {
-    if(!pIconMgr || !pIconMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
         return;
     if(QMessageBox::Cancel == QMessageBox::information(NULL,QStringLiteral("警告"),QStringLiteral("确认删除该图符吗？"),QMessageBox::Ok|QMessageBox::Cancel))
         return;
-    pIconMgr->getIconOp()->del();
+    m_pIconEditorMgr->getIconOp()->del();
 }
 
 //合适宽度
 void HIconMainWindow::fitWidth()
 {
-    if(!pIconMgr || !pIconMgr->getIconOp() || !pIconMgr->getIconFrame())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp() || !m_pIconEditorMgr->getIconFrame())
         return;
-    pIconMgr->getIconOp()->fitWidth();
+    m_pIconEditorMgr->getIconOp()->fitWidth();
 }
 
 //合适高度
 void HIconMainWindow::fitHeight()
 {
-    if(!pIconMgr || !pIconMgr->getIconOp() || !pIconMgr->getIconFrame())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp() || !m_pIconEditorMgr->getIconFrame())
         return;
-    pIconMgr->getIconOp()->fitHeight();
+    m_pIconEditorMgr->getIconOp()->fitHeight();
 }
 
 void HIconMainWindow::zoomIn()
 {
-    if(!pIconMgr || !pIconMgr->getIconFrame())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconFrame())
         return;
 
-    pIconMgr->getIconOp()->zoomIn();
+    m_pIconEditorMgr->getIconOp()->zoomIn();
 }
 
 void HIconMainWindow::zoomOut()
 {
-    if(!pIconMgr || !pIconMgr->getIconFrame())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconFrame())
         return;
-    pIconMgr->getIconOp()->zoomOut();
+    m_pIconEditorMgr->getIconOp()->zoomOut();
 }
 
 
 
 void HIconMainWindow::groupObj()
 {
-    if(!pIconMgr || !pIconMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
         return;
-    pIconMgr->getIconOp()->groupObj();
+    m_pIconEditorMgr->getIconOp()->groupObj();
 }
 
 //解除组合
 void HIconMainWindow::ungroupObj()
 {
-    if(!pIconMgr || !pIconMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
         return;
-    pIconMgr->getIconOp()->ungroupObj();
+    m_pIconEditorMgr->getIconOp()->ungroupObj();
 }
 
 //移动到顶层
 void HIconMainWindow::bringToTop()
 {
-    if(!pIconMgr || !pIconMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
         return;
-    pIconMgr->getIconOp()->bringToTop();
+    m_pIconEditorMgr->getIconOp()->bringToTop();
 }
 
 //移动到底层
 void HIconMainWindow::bringToBottom()
 {
-    if(!pIconMgr || !pIconMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
         return;
-    pIconMgr->getIconOp()->bringToBottom();
+    m_pIconEditorMgr->getIconOp()->bringToBottom();
 }
 
 //上移一层

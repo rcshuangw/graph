@@ -34,7 +34,7 @@ void HDrawManager::selectTool(DrawShape shape,const QString& catalogName,const Q
     case Circle:
     case Text:
     case Group:
-    case Complex:
+    case Icon:
         m_pDrawTool = new HRectTool(this,shape,catalogName,uuid);
         break;
     case Arc:
@@ -60,8 +60,10 @@ bool HDrawManager::findTool(DrawShape shape,const QString& catalogName,const QSt
         {
             m_pDrawTool = pTool;
             m_pDrawTool->clear();
+            return true;
         }
     }
+    return false;
 }
 
 void HDrawManager::onDrawPath(const QList<Path> &pathList)

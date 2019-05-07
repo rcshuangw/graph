@@ -7,10 +7,10 @@
 QT += xml
 QT += gui
 QT += widgets
-TARGET = H5BaseLib
+TARGET = h5baselib
 TEMPLATE = lib
 
-DESTDIR += ../lib
+DESTDIR += ../../../lib
 
 DEFINES += H5BASELIB_DLL
 

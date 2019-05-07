@@ -23,7 +23,7 @@ HSelectedMgr::~HSelectedMgr()
 }
 
 
-void HSelectedMgr::paint(QPainter* painter, const QRectF& rect, const QRectF &selectRect = QRectF())
+void HSelectedMgr::paint(QPainter* painter, const QRectF& rect, const QRectF &selectRect)
 {
 
 }
@@ -140,7 +140,7 @@ int HSelectedMgr::isOnPoint(const QPointF& point, QPointF& selectPoint)
 
 bool HSelectedMgr::isOnObj(const QPointF& point)//在point点上是否选中obj
 {
-    for(int i = ; i < m_pTempContainer->getObjList().count();i++)
+    for(int i = 0; i < m_pTempContainer->getObjList().count();i++)
     {
         HBaseObj* pObj = m_pTempContainer->getObjList().at(i);
         if(pObj && pObj->contains(point))

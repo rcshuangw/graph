@@ -9,10 +9,11 @@
 #include "hselectedmgr.h"
 #include "htempcontainer.h"
 #include "hiconcommand.h"
+#include "hiconeditordrawtoolmgr.h"
 HIconEditorOp::HIconEditorOp(HIconEditorMgr* mgr)
     :m_pIconEditorMgr(mgr)
 {
-
+    m_nToolType = ICON_SELECT_TOOL;
 }
 
 HIconEditorOp::~HIconEditorOp()
@@ -94,6 +95,22 @@ void HIconEditorOp::onEndDraw()
 {
     if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
         m_pIconEditorMgr->iconEditorFrame()->endDraw();
+}
+
+void HIconEditorOp::drawTool(DrawShape drawShape)
+{
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorDrawToolMgr())
+        return;
+    m_nToolType = ICON_DRAW_TOOL;
+    m_pIconEditorMgr->iconEditorDrawToolMgr()->selectTool(drawShape);
+    onEndDraw();
+}
+
+void HIconEditorOp::selectTool(SelectMode selMode)
+{
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorSelectToolMgr())
+        return;
+    m_nToolType = ICON_SELECT_TOOL;
 }
 
 void HIconEditorOp::fitWidth()

@@ -47,16 +47,8 @@ private slots:
     void showCenterLine();
 
     //draw tool
-    void drawLine();
-    void drawEllipse();
-    void drawRectangle();
-    void drawArc();
-    void drawCircle();
-    void drawHexagon();
-    void drawPolyline();
-    void drawFan();
-    void drawText();
-    void drawSelection();
+    void drawTool();
+    void selectTool();
 
     //scaleComboBox
     void scaleChanged(QString strScale);

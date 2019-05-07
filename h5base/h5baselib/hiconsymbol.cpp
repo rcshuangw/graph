@@ -164,7 +164,7 @@ void HIconSymbol::copyTo(HBaseObj *obj)
 {
     if(!obj) return;
 	HIconSymbol* pSymbol = (HIconSymbol*)obj;
-	HComplexObj::copyTo(pSymbol);
+    HContainerObj::copyTo(pSymbol);
 
     for(int i = 0; i < m_pShowPatternVector.size();i++)
     {

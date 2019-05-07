@@ -93,7 +93,6 @@ public:
     qreal m_width;
     qreal m_height;
 
-private:
     //填充方面
 	bool m_bFill;
     quint8 m_nFillWay;//填充方式
@@ -106,6 +105,7 @@ private:
     bool m_bFrameSee;//边框可见
     quint8 m_nTransparency; //透明度
 
+private:
     //图片
     QString m_strImagePath;//图片路径
     bool m_bKeepImageRatio; //保持图片比例

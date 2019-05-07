@@ -179,44 +179,53 @@ void HIconMainWindow::createActions()
     //绘制项
     lineAct = new QAction(QIcon(":/images/line.png"), QStringLiteral("直线"), this);
     lineAct->setCheckable(true);
-    connect(lineAct,SIGNAL(triggered()),this,SLOT(drawLine()));
+    lineAct->setData(Line);
+    connect(lineAct,SIGNAL(triggered()),this,SLOT(drawTool()));
 
     rectAct = new QAction(QIcon(":/images/rectangle.png"), QStringLiteral("矩形"), this);
     rectAct->setCheckable(true);
-    connect(rectAct,SIGNAL(triggered()),this,SLOT(drawRectangle()));
+    rectAct->setData(Rectangle);
+    connect(rectAct,SIGNAL(triggered()),this,SLOT(drawTool()));
 
     ellipseAct = new QAction(QIcon(":/images/ellipse.png"), QStringLiteral("椭圆"), this);
     ellipseAct->setCheckable(true);
-    connect(ellipseAct,SIGNAL(triggered()),this,SLOT(drawEllipse()));
+    ellipseAct->setData(Ellipse);
+    connect(ellipseAct,SIGNAL(triggered()),this,SLOT(drawTool()));
 
     circleAct = new QAction(QIcon(":/images/circle.png"),QStringLiteral("圆"),this);
     circleAct->setCheckable(true);
-    connect(circleAct,SIGNAL(triggered()),this,SLOT(drawCircle()));
+    circleAct->setData(Circle);
+    connect(circleAct,SIGNAL(triggered()),this,SLOT(drawTool()));
 
     hexagonAct = new QAction(QIcon(":/images/polygon.png"),QStringLiteral("多边形"),this);
     hexagonAct->setCheckable(true);
-    connect(hexagonAct,SIGNAL(triggered()),this,SLOT(drawHexagon()));
+    hexagonAct->setData(Polygon);
+    connect(hexagonAct,SIGNAL(triggered()),this,SLOT(drawTool()));
 
     polylineAct = new QAction(QIcon(":/images/polyline.png"),QStringLiteral("折线"),this);
     polylineAct->setCheckable(true);
-    connect(polylineAct,SIGNAL(triggered()),this,SLOT(drawPolyline()));
+    polylineAct->setData(Polyline);
+    connect(polylineAct,SIGNAL(triggered()),this,SLOT(drawTool()));
 
     arcAct = new QAction(QIcon(":/images/arc.png"), QStringLiteral("弧线"), this);
     arcAct->setCheckable(true);
-    connect(arcAct,SIGNAL(triggered()),this,SLOT(drawArc()));
+    arcAct->setData(Arc);
+    connect(arcAct,SIGNAL(triggered()),this,SLOT(drawTool()));
 
-    fanAct = new QAction(QIcon(":/images/pie.png"),QStringLiteral("饼型"),this);
-    fanAct->setCheckable(true);
-    connect(fanAct,SIGNAL(triggered()),this,SLOT(drawFan()));
+    //fanAct = new QAction(QIcon(":/images/pie.png"),QStringLiteral("饼型"),this);
+    //fanAct->setCheckable(true);
+    //connect(fanAct,SIGNAL(triggered()),this,SLOT(drawFan()));
 
     textAct = new QAction(QIcon(":/images/text.png"),QStringLiteral("文字"),this);
     textAct->setCheckable(true);
-    connect(textAct,SIGNAL(triggered()),this,SLOT(drawText()));
+    textAct->setData(Text);
+    connect(textAct,SIGNAL(triggered()),this,SLOT(drawTool()));
 
     selectAct = new QAction(QIcon(":/images/select.png"), QStringLiteral("选择"), this);
-    connect(selectAct,SIGNAL(triggered(bool)),this,SLOT(drawSelection()));
+    selectAct->setData(Select);
     selectAct->setCheckable(true);
     selectAct->setChecked(true);
+    connect(selectAct,SIGNAL(triggered(bool)),this,SLOT(selectTool()));
 
     QActionGroup * actionGroup = new QActionGroup(this);
     actionGroup->addAction(lineAct);
@@ -226,7 +235,7 @@ void HIconMainWindow::createActions()
     actionGroup->addAction(circleAct);
     actionGroup->addAction(hexagonAct);
     actionGroup->addAction(arcAct);
-    actionGroup->addAction(fanAct);
+    //actionGroup->addAction(fanAct);
     actionGroup->addAction(textAct);
     actionGroup->addAction(selectAct);
 

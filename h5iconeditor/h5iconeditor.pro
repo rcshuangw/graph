@@ -73,7 +73,7 @@ FORMS += \
     UI/iconpreview.ui \
     UI/about.ui
 
-LIBS += -L../lib -lH5IconGui -lH5IconHelp -ldatafile
+LIBS += -L../../../lib -lh5baselib -lh5basehelp -h5basegui
 unix{
     UI_DIR = temp/ui
     MOC_DIR = temp/moc

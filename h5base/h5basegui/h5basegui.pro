@@ -7,10 +7,10 @@
 QT += xml
 QT += gui
 QT += widgets
-TARGET = H5BaseGui
+TARGET = h5basegui
 TEMPLATE = lib
 
-DESTDIR += ../lib
+DESTDIR += ../../../lib
 
 DEFINES += H5BASEGUI_DLL
 
@@ -28,11 +28,12 @@ SOURCES += \
     hlinetool.cpp \
     harctool.cpp \
     hpolylinetool.cpp \
-    hdrawtoolmanager.cpp \
-    hselectmanager.cpp \
+    #hdrawtoolmanager.cpp \
+    #hselectmanager.cpp \
     hdrawmanager.cpp \
     hselectedmgr.cpp \
-    hselecttool.cpp
+    #hselecttool.cpp
+    hframe.cpp
 
 HEADERS +=\
     ../../include/hiconapi.h \
@@ -43,13 +44,14 @@ HEADERS +=\
     ../../include/h5basegui/hlinetool.h \
     ../../include/h5basegui/harctool.h \
     ../../include/h5basegui/hpolylinetool.h \
-    ../../include/h5basegui/hdrawtoolmanager.h \
-    ../../include/h5basegui/hselectmanager.h \
+    #../../include/h5basegui/hdrawtoolmanager.h \
+    #../../include/h5basegui/hselectmanager.h \
     ../../include/h5basegui/hdrawmanager.h \
     ../../include/h5basegui/hselectedmgr.h \
-    ../../include/h5basegui/hselecttool.h
+    #../../include/h5basegui/hselecttool.h
+    ../../include/h5basegui/hframe.h
    
-
+LIBS += -L../../../lib -lh5baselib -lh5basehelp
 unix{
     UI_DIR = temp/ui
     MOC_DIR = temp/moc

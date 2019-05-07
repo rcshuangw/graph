@@ -6,6 +6,7 @@
 #include "hiconeditorscene.h"
 #include "hiconeditormgr.h"
 #include "hiconeditordrawtoolmgr.h"
+#include "hiconeditorselecttool.h"
 #include "hiconeditorop.h"
 #include "hselectedmgr.h"
 HIconEditorFrame::HIconEditorFrame(QWidget * parent, Qt::WindowFlags f )
@@ -130,3 +131,36 @@ void HIconEditorFrame::cursorChanged(const QCursor& cursor)
         m_pView->setCursor(cursor);
     }
 }
+
+bool HIconEditorFrame::eventFilter(QObject* obj,QEvent* event)
+{
+    HFrame::eventFilter(obj,event);
+    if(obj == m_pView->viewport())
+    {
+        switch(((QMouseEvent*)event)->type())
+        {
+        case QEvent::MouseButtonDblClick:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseMove:
+        {
+            if(!m_pIconEditorMgr || !m_pView)
+                return false;
+            QPointF pos = m_pView->mapToScene((QMouseEvent*)event->pos());
+            HEvent hevent(event,QVariant(pos));
+            if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_DRAW_TOOL)
+                m_pIconEditorMgr->iconEditorDrawToolMgr()->onEvent(hevent);
+            else if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_SELECT_TOOL)
+                m_pIconEditorMgr->iconEditorSelectToolMgr()->onEvent(hevent);
+            return false;
+        }
+        case QEvent::Resize:
+            drawHRuler();
+            drawVRuler();
+            update();
+            return false;
+        }
+    }
+    return false;
+}
+

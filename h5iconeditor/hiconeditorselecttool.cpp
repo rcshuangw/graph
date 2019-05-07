@@ -112,6 +112,7 @@ void HIconEditorSelectToolMgr::onMouseMoveEvent(QMouseEvent* event, QVariant &da
     if(event->buttons() == Qt::NoButton)
     {
         QPointF selPoint;
+        //是否选择在四角或者中间
         m_nSelPointIndex = m_pIconEditorMgr->selectedMgr()->isOnPoint(m_ptCurPoint,selPoint);
         if(m_nSelPointIndex < 0)
         {
@@ -153,6 +154,7 @@ void HIconEditorSelectToolMgr::onMouseMoveEvent(QMouseEvent* event, QVariant &da
             }
             else
             {
+                //保存原来的点
                 m_vlOldPoints.clear();
                 HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
                 for(int i = 0; i < tempContainer->getObjList().size();i++)

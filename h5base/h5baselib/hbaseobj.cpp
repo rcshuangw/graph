@@ -545,7 +545,8 @@ bool HBaseObj::containsPattern(int nPatternId)
 
 bool HBaseObj::contains(const QPointF &point) const
 {
-    return boundingRect().contains(point);
+    //QRectF rectF = getPointList(1).boundingRect();
+    return false;
 }
 
 void HBaseObj::paint(QPainter* painter)
@@ -576,4 +577,14 @@ void HBaseObj::pointList(QPolygonF&list, qint8 flag)
 void HBaseObj::clearPointList()
 {
 	m_points.clear();
+}
+
+bool HBaseObj::isHorizonTurn()
+{
+    return m_bHorizonTurn;
+}
+
+bool HBaseObj::isVerticalTurn()
+{
+    return m_bVerticalTurn;
 }

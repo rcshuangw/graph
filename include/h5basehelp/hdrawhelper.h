@@ -19,9 +19,12 @@ public:
 
     QCursor cursor(int index);
 
+    void movePoint(int index,QPointF& pt);
+
 private:
     QCursor cursorOnPoint(DrawShape drawShape,int index);
     HPointFList selectedPointList(DrawShape drawshape);
+    void movePoint(DrawShape drawShape,int index,QPointF& pt);
 
 
 private:

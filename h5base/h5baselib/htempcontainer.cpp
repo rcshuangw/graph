@@ -65,3 +65,7 @@ void HTempContainer::RePos()
     turn(false,false);
 }
 
+void HTempContainer::paint(QPainter* painter)
+{
+
+}

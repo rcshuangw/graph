@@ -65,3 +65,7 @@ void HGroup::RePos()
     turn(false,false);
 }
 
+void HGroup::paint(QPainter* painter)
+{
+
+}

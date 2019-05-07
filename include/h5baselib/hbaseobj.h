@@ -96,11 +96,12 @@ public:
 	virtual double getOX();
 	virtual void setOY(double y);
 	virtual double getOY();
+    QPointF pos();
 
 	virtual void setModify(bool modify);
 	virtual bool isModify();
 
-	QPointF pos();
+
     ///////////////////////////////////////////////////////操作属性/////////////////////////////
 	//改变大小
 	virtual void resize(double w, double h, bool scale);

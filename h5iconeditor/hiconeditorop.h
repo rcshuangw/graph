@@ -4,6 +4,9 @@
 #include "hbaseobj.h"
 #include "hiconeditormgr.h"
 #include "hdrawmanager.h"
+
+#define ICON_DRAW_TOOL  0x01
+#define ICON_SELECT_TOOL 0x02
 class HIconEditorMgr;
 class HIconEditorOp : public QObject
 {
@@ -15,8 +18,6 @@ public:
     //画面
     void New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType);
     void Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
-
-
 
     void fitWidth();
 
@@ -123,6 +124,12 @@ public:
 
     void setupMatrix();
 
+    int toolType() {return m_nToolType;}
+
+    void drawTool(DrawShape drawShape);
+
+    void selectTool(SelectMode select);
+
 signals:
     void selectChanged();
 public slots:
@@ -143,6 +150,7 @@ private:
     IconSize m_Equalway;
     IconFlip m_Flipway;
     qreal m_scale;
+    int m_nToolType;
 
 };
 #endif // HICONOP_H

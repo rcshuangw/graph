@@ -16,7 +16,7 @@ public:
 public:
     virtual void RePos();
 	virtual HPointFList getPointList(qint8 flag /* = 0 */);
-	virtual void paint(QPainter* painter);
+    virtual void paint(QPainter* painter);
 	virtual QRectF boundingRect(qint8 flag = 0);
 	virtual QPainterPath shape(qint8 flag = 0);
 };
