@@ -7,6 +7,7 @@
 #include <QDebug>
 #include "hiconeditorframe.h"
 #include "hiconeditormgr.h"
+#include "hselectedmgr.h"
 #include "hdrawmanager.h"
 HIconEditorScene::HIconEditorScene(HIconEditorMgr* iconMgr)
     :m_pIconEditorMgr(iconMgr)
@@ -51,7 +52,10 @@ void HIconEditorScene::drawBackground(QPainter *painter, const QRectF &rect)
 
 void HIconEditorScene::drawForeground(QPainter *painter, const QRectF &rect)
 {
-
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr())
+        return;
+    QRectF selRect = m_pIconEditorMgr->iconEditorFrame()->m_pView->mapToScene(QRectF(QPoint(),QSize(6,6))).boundingRect();
+    m_pIconEditorMgr->selectedMgr()->paint(painter,rect,selRect);
 }
 
 

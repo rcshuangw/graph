@@ -170,7 +170,6 @@ void HIconEditorWidget::refreshIconWidget()
 
 }
 
-
 void HIconEditorWidget::patternChanged(int index)
 {
     if(!m_pTabBar||!m_pIconEditorMgr->iconEditorFrame()||!m_pIconEditorMgr->iconTemplate()||!m_pIconEditorMgr->iconTemplate()->getSymbol())
