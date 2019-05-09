@@ -320,7 +320,7 @@ void HIconMainWindow::createToolBars()
     drawToolBar->addAction(circleAct);
     drawToolBar->addAction(hexagonAct);
     drawToolBar->addAction(arcAct);
-    drawToolBar->addAction(fanAct);
+    //drawToolBar->addAction(fanAct);
     drawToolBar->addAction(textAct);
 /*
     shapeToolBar = new QToolBar(tr("shapeToolBar"),this);
@@ -377,7 +377,7 @@ void HIconMainWindow::createMenuBars()
     toolMenu->addAction(ellipseAct);
     toolMenu->addAction(hexagonAct);
     toolMenu->addAction(arcAct);
-    toolMenu->addAction(fanAct);
+    //toolMenu->addAction(fanAct);
     toolMenu->addAction(textAct);
 
     helpMenu = menuBar()->addMenu(QStringLiteral("帮助(&H)"));

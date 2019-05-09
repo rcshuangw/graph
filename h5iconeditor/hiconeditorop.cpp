@@ -30,7 +30,7 @@ void HIconEditorOp::New(const QString& strTemplateName,const QString& strCatalog
     if(sizeF.width() > 0 && sizeF.height())
     {
         QSizeF nSizeF = sizeF * m_pIconEditorMgr->getRatio();
-        QRectF rectF = QRectF(QPointF(-nSizeF.width()/2,-nSizeF.height()/2),QSizeF(sizeF.width(),sizeF.height()));
+        QRectF rectF = QRectF(QPointF(-nSizeF.width()/2,-nSizeF.height()/2),QSizeF(nSizeF.width(),nSizeF.height()));
         m_pIconEditorMgr->iconTemplate()->getSymbol()->m_width = nSizeF.width();
         m_pIconEditorMgr->iconTemplate()->getSymbol()->m_height = nSizeF.height();
         m_pIconEditorMgr->setLogicRect(rectF);

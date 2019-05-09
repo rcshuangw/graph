@@ -22,7 +22,6 @@ HEADERS       = \
     hiconeditorframe.h \
     hiconeditorwidget.h \
     #hicondocument.h \
-    hiconmainwindow.h \
     hiconeditormgr.h \
     hiconeditorop.h \
     hiconeditorscene.h \
@@ -50,8 +49,6 @@ SOURCES       = main.cpp \
     hiconeditorframe.cpp \
     hiconeditorwidget.cpp \
     #hicondocument.cpp \
-    hiconmainwindow.cpp \
-    hiconmainwindowactions.cpp \
     hiconeditormgr.cpp \
     hiconeditorop.cpp \
     hiconeditorscene.cpp \

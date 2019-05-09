@@ -60,8 +60,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QTranslator trans;
     QString str = QDir::currentPath();
-    bool ok = trans.load("qt_zh_CN.qm",":/translations/");
-    app.installTranslator(&trans);
+    //bool ok = trans.load("qt_zh_CN.qm",":/translations/");
+    //app.installTranslator(&trans);
     HIconEditorMgr* pIconEditorMgr = new HIconEditorMgr();
     //pIconMgr->getIconDocument()->loadIconDoucument();
     HIconMainWindow *mainWin = new HIconMainWindow(pIconEditorMgr);

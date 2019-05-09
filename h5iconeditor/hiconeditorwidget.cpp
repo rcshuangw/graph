@@ -54,7 +54,7 @@ void HIconEditorWidget::refresh()
     clear();
     if(!m_pIconEditorMgr || !m_pTabBar)
         return;
-    if(m_pIconEditorMgr->iconTemplate() || m_pIconEditorMgr->iconTemplate()->getSymbol())
+    if(!m_pIconEditorMgr->iconTemplate() || !m_pIconEditorMgr->iconTemplate()->getSymbol())
         return;
     while(m_pTabBar->count() > 0)
     {

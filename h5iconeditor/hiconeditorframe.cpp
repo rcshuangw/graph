@@ -135,6 +135,7 @@ void HIconEditorFrame::cursorChanged(const QCursor& cursor)
 bool HIconEditorFrame::eventFilter(QObject* obj,QEvent* event)
 {
     HFrame::eventFilter(obj,event);
+    return false;
     if(obj == m_pView->viewport())
     {
         switch(((QMouseEvent*)event)->type())
@@ -155,9 +156,6 @@ bool HIconEditorFrame::eventFilter(QObject* obj,QEvent* event)
             return false;
         }
         case QEvent::Resize:
-            drawHRuler();
-            drawVRuler();
-            update();
             return false;
         }
     }
