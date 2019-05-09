@@ -1,34 +1,33 @@
 TEMPLATE = app
-LANGUAGE = c++
 CONFIG += qt warn_off thread exceptions
 TARGET = icon
-
+DESTDIR += ../../lib
 INCLUDEPATH += \
-    ../include \
-    ../include/h5baselib \
-    ../include/h5basegui \
-    ../include/h5basehelp
+           ../include \
+           ../include/h5baselib \
+           ../include/h5basehelp \
+           ../include/h5basegui
 
 HEADERS       = \
     hiconmainwindow.h \
-    hframe.h \
+    #hframe.h \
     hicontreewidget.h \
     #hiconsymbol.h \
     #hicontemplate.h \
-    hicondocument.h \
-    hiconpreview.h \
+    #hicondocument.h \
+    #hiconpreview.h \
     #hiconshowpattern.h \
     hiconcommand.h \
-    habout.h \
+    #habout.h \
     hiconeditorframe.h \
     hiconeditorwidget.h \
-    hicondocument.h \
+    #hicondocument.h \
     hiconmainwindow.h \
     hiconeditormgr.h \
     hiconeditorop.h \
     hiconeditorscene.h \
     #hiconselectmanager.h \
-    hiconselecttoolmanager.h \
+    #hiconselecttoolmanager.h \
     hiconeditordoc.h \
     hiconeditorwidget.h \
     hiconeditorselecttool.h \
@@ -38,26 +37,26 @@ HEADERS       = \
 
 SOURCES       = main.cpp \
     hiconmainwindow.cpp \
-    hframe.cpp \
+    #hframe.cpp \
     hicontreewidget.cpp \
     #hiconsymbol.cpp \
     #hicontemplate.cpp \
-    hicondocument.cpp \
-    hiconpreview.cpp \
+    #hicondocument.cpp \
+    #hiconpreview.cpp \
     #hiconshowpattern.cpp \
     hiconcommand.cpp \
-    habout.cpp \
+    #habout.cpp \
     hiconmainwindowactions.cpp \
     hiconeditorframe.cpp \
     hiconeditorwidget.cpp \
-    hicondocument.cpp \
+    #hicondocument.cpp \
     hiconmainwindow.cpp \
     hiconmainwindowactions.cpp \
     hiconeditormgr.cpp \
     hiconeditorop.cpp \
     hiconeditorscene.cpp \
     #hiconselectmanager.cpp \
-    hiconselecttoolmanager.cpp \
+    #hiconselecttoolmanager.cpp \
     hiconeditordoc.cpp \
     hiconeditorselecttool.cpp \
     hiconeditordrawtoolmgr.cpp
@@ -73,7 +72,8 @@ FORMS += \
     UI/iconpreview.ui \
     UI/about.ui
 
-LIBS += -L../../../lib -lh5baselib -lh5basehelp -h5basegui
+LIBS += -L../../lib -lh5basehelp -lh5basegui -lh5baselib
+
 unix{
     UI_DIR = temp/ui
     MOC_DIR = temp/moc

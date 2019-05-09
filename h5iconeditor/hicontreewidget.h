@@ -10,6 +10,7 @@
 #include "hicontemplate.h"
 
 class HIconEditorMgr;
+class HIconTreeWidget;
 /*
  测点
   |-遥信

@@ -21,7 +21,7 @@ void HIconMainWindow::showGrid()
 void HIconMainWindow::showCenterLine()
 {
     bool bcheck = showCLineAct->isChecked();
-    if(m_pIconEditorMgr && m_pIconEditorMgr->getIconFrame())
+    if(m_pIconEditorMgr && m_pIconEditorMgr->iconEditorFrame())
     {
         m_pIconEditorMgr->setShowCenterLine(bcheck);
         if(m_pIconEditorMgr->iconEditorFrame()->view())
@@ -55,122 +55,121 @@ void HIconMainWindow::selectTool()
     m_pIconEditorMgr->iconEditorOp()->selectTool(mode);
 }
 
-
 //撤销
 void HIconMainWindow::undo()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconUndoStack())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorUndoStack())
         return;
-    m_pIconEditorMgr->getIconUndoStack()->undo();
+    m_pIconEditorMgr->iconEditorUndoStack()->undo();
 }
 
 //重做
 void HIconMainWindow::redo()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconUndoStack())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorUndoStack())
         return;
-    m_pIconEditorMgr->getIconUndoStack()->redo();
+    m_pIconEditorMgr->iconEditorUndoStack()->redo();
 }
 
 //剪切
 void HIconMainWindow::cut()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
         return;
-    m_pIconEditorMgr->getIconOp()->cut();
+    m_pIconEditorMgr->iconEditorOp()->cut();
 
 }
 
 //复制
 void HIconMainWindow::copy()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
         return;
-    m_pIconEditorMgr->getIconOp()->copy();
+    m_pIconEditorMgr->iconEditorOp()->copy();
 
 }
 
 //粘贴
 void HIconMainWindow::paste()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
         return;
-    m_pIconEditorMgr->getIconOp()->paste();
+    m_pIconEditorMgr->iconEditorOp()->paste();
 
 }
 
 //删除
 void HIconMainWindow::del()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
         return;
     if(QMessageBox::Cancel == QMessageBox::information(NULL,QStringLiteral("警告"),QStringLiteral("确认删除该图符吗？"),QMessageBox::Ok|QMessageBox::Cancel))
         return;
-    m_pIconEditorMgr->getIconOp()->del();
+    m_pIconEditorMgr->iconEditorOp()->del();
 }
 
 //合适宽度
 void HIconMainWindow::fitWidth()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp() || !m_pIconEditorMgr->getIconFrame())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp() || !m_pIconEditorMgr->iconEditorFrame())
         return;
-    m_pIconEditorMgr->getIconOp()->fitWidth();
+    m_pIconEditorMgr->iconEditorOp()->fitWidth();
 }
 
 //合适高度
 void HIconMainWindow::fitHeight()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp() || !m_pIconEditorMgr->getIconFrame())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp() || !m_pIconEditorMgr->iconEditorFrame())
         return;
-    m_pIconEditorMgr->getIconOp()->fitHeight();
+    m_pIconEditorMgr->iconEditorOp()->fitHeight();
 }
 
 void HIconMainWindow::zoomIn()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconFrame())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorFrame())
         return;
 
-    m_pIconEditorMgr->getIconOp()->zoomIn();
+    m_pIconEditorMgr->iconEditorOp()->zoomIn();
 }
 
 void HIconMainWindow::zoomOut()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconFrame())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorFrame())
         return;
-    m_pIconEditorMgr->getIconOp()->zoomOut();
+    m_pIconEditorMgr->iconEditorOp()->zoomOut();
 }
 
 
 
 void HIconMainWindow::groupObj()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
         return;
-    m_pIconEditorMgr->getIconOp()->groupObj();
+    m_pIconEditorMgr->iconEditorOp()->groupObj();
 }
 
 //解除组合
 void HIconMainWindow::ungroupObj()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
         return;
-    m_pIconEditorMgr->getIconOp()->ungroupObj();
+    m_pIconEditorMgr->iconEditorOp()->ungroupObj();
 }
 
 //移动到顶层
 void HIconMainWindow::bringToTop()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
         return;
-    m_pIconEditorMgr->getIconOp()->bringToTop();
+    m_pIconEditorMgr->iconEditorOp()->bringToTop();
 }
 
 //移动到底层
 void HIconMainWindow::bringToBottom()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->getIconOp())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
         return;
-    m_pIconEditorMgr->getIconOp()->bringToBottom();
+    m_pIconEditorMgr->iconEditorOp()->bringToBottom();
 }
 
 //上移一层

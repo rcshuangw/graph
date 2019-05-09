@@ -15,10 +15,10 @@ DESTDIR += ../../../lib
 DEFINES += H5BASEGUI_DLL
 
 INCLUDEPATH += \
-               ../../include \
-               ../../include/h5baselib \
-               ../../include/h5basehelp \
-               ../../include/h5basegui
+           ../../include \
+           ../../include/h5baselib \
+           ../../include/h5basehelp \
+           ../../include/h5basegui
 
 CONFIG += qt warn_off thread exceptions
 SOURCES += \

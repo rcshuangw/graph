@@ -1,12 +1,13 @@
 ﻿#ifndef HSELECTTOOL_H
 #define HSELECTTOOL_H
 #include <QObject>
+#include "hdrawmanager.h"
 #include "hiconapi.h"
 #include "h5event.h"
 #include "hbaseobj.h"
 class HIconEditorMgr;
 class HDrawHelper;
-class HIconEditorSelectToolMgr : public QObject
+class HIconEditorSelectToolMgr : public HDrawManager
 {
 	Q_OBJECT
 public:
@@ -35,7 +36,7 @@ public slots:
 private:
     QWidget* m_SelectWidget;
     bool m_bIsSelectPoint;
-    SELECTMODE m_SelectMode;
+    SelectMode m_SelectMode;
 
 
     QList<HPointFList> m_vlOldPoints;

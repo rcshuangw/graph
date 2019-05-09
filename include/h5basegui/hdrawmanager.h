@@ -16,7 +16,7 @@ struct Path
  * 绘制工具管理类
 */
 class HDrawTool;
-class HDrawManager : public QObject
+class H5BASEGUI_EXPORT HDrawManager : public QObject
 {
     Q_OBJECT
 public:

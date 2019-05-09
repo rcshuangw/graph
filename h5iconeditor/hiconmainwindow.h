@@ -18,7 +18,7 @@ class HIconMainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit HIconMainWindow(HIconMgr *parent = 0);
+    explicit HIconMainWindow(HIconEditorMgr *parent = 0);
     ~HIconMainWindow();
 public:
     void init();

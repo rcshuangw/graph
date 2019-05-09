@@ -146,7 +146,7 @@ bool HIconEditorFrame::eventFilter(QObject* obj,QEvent* event)
         {
             if(!m_pIconEditorMgr || !m_pView)
                 return false;
-            QPointF pos = m_pView->mapToScene((QMouseEvent*)event->pos());
+            QPointF pos = m_pView->mapToScene(((QMouseEvent*)event)->pos());
             HEvent hevent(event,QVariant(pos));
             if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_DRAW_TOOL)
                 m_pIconEditorMgr->iconEditorDrawToolMgr()->onEvent(hevent);

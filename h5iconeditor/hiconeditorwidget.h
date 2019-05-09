@@ -22,7 +22,7 @@ public:
     //刷新图元
     void refreshIconWidget();
 
-    QTabBar* getTabBar(){return pTabBar;}
+    QTabBar* getTabBar(){return m_pTabBar;}
 public:
     void clear();
     void refresh();

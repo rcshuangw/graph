@@ -30,7 +30,7 @@ void HIconEditorDrawToolMgr::appendObj(HBaseObj *obj)
         m_pIconEditorMgr->iconEditorOp()->onCreateObj(obj,false);
 
     //undostack增加
-    HNewIconCommand *newCommand = HNewIconCommand(m_pIconEditorMgr,obj);
+    HNewIconCommand *newCommand = new HNewIconCommand(m_pIconEditorMgr,obj);
     if(!newCommand) return;
     m_pIconEditorMgr->iconEditorUndoStack()->push(newCommand);
 }

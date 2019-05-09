@@ -22,13 +22,13 @@ HIconEditorDoc::~HIconEditorDoc()
 
 void HIconEditorDoc::loadIconDoucument()
 {
-    HIconHelper::Instance()->loadIconDoucument(&m_pIconTemplateList);
+    //HIconHelper::Instance()->loadIconDoucument(&m_pIconTemplateList);
 }
 
 void HIconEditorDoc::saveIconDoucument()
 {
-    if(!m_pIconTemplateList.isEmpty())
-        HIconHelper::Instance()->saveIconDoucument(&m_pIconTemplateList);
+   // if(!m_pIconTemplateList.isEmpty())
+    //    HIconHelper::Instance()->saveIconDoucument(&m_pIconTemplateList);
 }
 
 HIconTemplate* HIconEditorDoc::getCurrentTemplate()
@@ -58,7 +58,7 @@ void HIconEditorDoc::Del(const QString &strTemplateName, int nTemplateType, cons
 {
 
     char szIconPath[128];
-    getDataFilePath(DFPATH_ICON,szIconPath);
+    //getDataFilePath(DFPATH_ICON,szIconPath);
     QString iconsPath = QString(szIconPath);
     if(m_pCurIconTemplate->getCatalogType() == nTemplateType && m_pCurIconTemplate->getUuid().toString() == strUuid)
     {
@@ -72,7 +72,7 @@ void HIconEditorDoc::Del(const QString &strTemplateName, int nTemplateType, cons
             return;
         if(pIconTemplate->getCatalogType() == nTemplateType && pIconTemplate->getUuid().toString() == strUuid)
         {
-            QString strFileName = iconsPath + "/" + HIconHelper::Instance()->getIconFolder(pIconTemplate->getCatalogType())+ "/" +pIconTemplate->getUuid().toString() + ".xic";
+            QString strFileName = "";//iconsPath + "/" + HIconHelper::Instance()->getIconFolder(pIconTemplate->getCatalogType())+ "/" +pIconTemplate->getUuid().toString() + ".xic";
             if(QFile::exists(strFileName))
             {
                 QFile::remove(strFileName);
@@ -96,7 +96,7 @@ void HIconEditorDoc::Open(const QString &strTemplateName, int nTemplateType, con
     {
         m_pCurIconTemplate->clear();
         pTemplate->copyTo(m_pCurIconTemplate);
-		m_pCurIconTemplate->setModify(pTemplate->getModify());
+        m_pCurIconTemplate->setModify(pTemplate->isModify());
     }
 }
 

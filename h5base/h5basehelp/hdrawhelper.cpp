@@ -179,8 +179,9 @@ QCursor HDrawHelper::cursorOnPoint(DrawShape drawShape,int index)
         default:
             return QCursor();
         }
-        break;
     }
+    default:
+        return QCursor();
     }
 }
 

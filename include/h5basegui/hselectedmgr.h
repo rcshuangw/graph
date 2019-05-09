@@ -2,6 +2,7 @@
 #define HSELECTEDMGR_H
 #include <QObject>
 #include <QPainter>
+#include "h5iconguiexport.h"
 #include "hbaseobj.h"
 /*
 管理选中的图元
@@ -9,7 +10,7 @@
 class HBaseObj;
 class HTempContainer;
 class HDrawHelper;
-class HSelectedMgr : public QObject
+class H5BASEGUI_EXPORT HSelectedMgr : public QObject
 {
     Q_OBJECT
 public:

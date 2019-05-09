@@ -340,12 +340,17 @@ void HIconEditorSelectToolMgr::onKeyPressEvent(QKeyEvent *event, QVariant& data)
 
     if(ndx == 0 && ndy == 0)
         return;
-
-    HMoveIconCommand* moveCommand = new HMoveIconCommand(m_pIconEditorMgr,objs,dx,dy);
+    QList<HBaseObj*> objs;
+    HMoveIconCommand* moveCommand = new HMoveIconCommand(m_pIconEditorMgr,objs,ndx,ndy);
     m_pIconEditorMgr->iconEditorUndoStack()->push(moveCommand);
 }
 
 QCursor HIconEditorSelectToolMgr::cursor()
+{
+    return QCursor();
+}
+
+void HIconEditorSelectToolMgr::onSelectChanged()
 {
 
 }

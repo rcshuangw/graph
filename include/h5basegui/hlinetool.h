@@ -1,6 +1,7 @@
 #ifndef HLINETOOL_H
 #define HLINETOOL_H
 #include "h5drawtool.h"
+
 class H5BASEGUI_EXPORT HLineTool: public HDrawTool
 {
 public:

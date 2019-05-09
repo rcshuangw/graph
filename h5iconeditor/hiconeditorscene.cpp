@@ -26,7 +26,7 @@ void HIconEditorScene::drawBackground(QPainter *painter, const QRectF &rect)
     painter->fillRect(finalRect,bgclr);
 
 
-    bool bShowGrid = pIconMgr->getShowGrid();
+    bool bShowGrid = m_pIconEditorMgr->getShowGrid();
     if(bShowGrid)
     {
         for(qreal x=finalRect.left();x < finalRect.right()+25;x+=25)
@@ -54,7 +54,8 @@ void HIconEditorScene::drawForeground(QPainter *painter, const QRectF &rect)
 {
     if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr())
         return;
-    QRectF selRect = m_pIconEditorMgr->iconEditorFrame()->m_pView->mapToScene(QRectF(QPoint(),QSize(6,6))).boundingRect();
+    QRect rectTemp = QRect(QPoint(),QSize(6,6));
+    QRectF selRect = m_pIconEditorMgr->iconEditorFrame()->view()->mapToScene(rectTemp).boundingRect();
     m_pIconEditorMgr->selectedMgr()->paint(painter,rect,selRect);
 }
 

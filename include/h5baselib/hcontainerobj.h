@@ -31,7 +31,7 @@ public:
 public:
 	//新建一个图元元素(按类型)
 	HBaseObj* newObj(DrawShape nObjType);
-	HBaseObj* newObj(QString tagName);
+    //HBaseObj* newObj(QString tagName);
 public:
 	///改变大小
 	void resize(double w, double h, bool scale = false);

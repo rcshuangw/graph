@@ -1,6 +1,7 @@
 #ifndef HARCTOOL_H
 #define HARCTOOL_H
 #include "h5drawtool.h"
+
 class H5BASEGUI_EXPORT HArcTool: public HDrawTool
 {
 public:

@@ -131,7 +131,7 @@ void HIconEditorWidget::delShowPattern()
             int ret = QMessageBox::warning(NULL,QStringLiteral("警告"),strWarning,QMessageBox::Ok|QMessageBox::Cancel);
             if(QMessageBox::Ok == ret)
             {
-                m_pIconEditorMgr->iconTemplate()->clearSceneByPatternId(data.toInt());
+                m_pIconEditorMgr->iconTemplate()->getSymbol()->delPattern(data.toInt());
                 pTemplate->getSymbol()->delPattern(data.toInt());
                 m_pTabBar->removeTab(curIndex);
             }

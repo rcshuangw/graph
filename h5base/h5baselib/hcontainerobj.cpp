@@ -1,4 +1,5 @@
 ﻿#include "hcontainerobj.h"
+#include "hgroup.h"
 #include "hline.h"
 #include "hrectangle.h"
 HContainerObj::HContainerObj()
@@ -122,6 +123,7 @@ void HContainerObj::clone(HBaseObj* obj)
 
 }
 
+/*
 HBaseObj* HContainerObj::newObj(QString tagName)
 {
 	DrawShape drawShape = No;
@@ -144,7 +146,7 @@ HBaseObj* HContainerObj::newObj(QString tagName)
 	else if (tagName == "Group")
 		drawShape = Group;
 	return newObj(drawShape);
-}
+}*/
 
 HBaseObj* HContainerObj::newObj(DrawShape nObjType)
 {
@@ -157,38 +159,34 @@ HBaseObj* HContainerObj::newObj(DrawShape nObjType)
 	{
 		pObj = new HRectangle();
 	}
-	/*else if (nObjType == Ellipse)
+    else if (nObjType == Ellipse)
 	{
-		pObj = new HEllipse();
+        //pObj = new HEllipse();
 	}
 	else if (nObjType == Circle)
 	{
-		pObj = new HCircle();
+        //pObj = new HCircle();
 	}
 	else if (nObjType == Polygon)
 	{
-		pObj = new HPolygon();
+        //pObj = new HPolygon();
 	}
 	else if (nObjType == Polyline)
 	{
-		pObj = new HPolyline();
+        //pObj = new HPolyline();
 	}
-	else if (nObjType == enumArc)
+    else if (nObjType == Arc)
 	{
-		pObj = new HArc();
+        //pObj = new HArc();
 	}
-	else if (nObjType == enumPie)
+    else if (nObjType == Text)
 	{
-		pObj = new HPie();
+        //pObj = new HText();
 	}
-	else if (nObjType == enumText)
+    else if (nObjType == Group)
 	{
-		pObj = new HText();
-	}
-	else if (nObjType == enumGroup)
-	{
-		pObj = new HGroupObj();
-	}*/
+        //pObj = new HGroup();
+    }
 	pObj->setShapeType((DrawShape)nObjType);
 	if (pObj)
 	{

@@ -2,6 +2,7 @@
 #define HICONEDITORMGR_H
 #include "hiconapi.h"
 #include <QUndoStack>
+#include <QRectF>
 /*
  * 绘制图符管理类
 */

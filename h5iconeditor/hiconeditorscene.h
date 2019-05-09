@@ -3,6 +3,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsPathItem>
+#include "hdrawmanager.h"
 class HIconEditorMgr;
 class HIconEditorScene : public QGraphicsScene
 {

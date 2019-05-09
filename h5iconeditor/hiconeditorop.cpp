@@ -30,7 +30,7 @@ void HIconEditorOp::New(const QString& strTemplateName,const QString& strCatalog
     if(sizeF.width() > 0 && sizeF.height())
     {
         QSizeF nSizeF = sizeF * m_pIconEditorMgr->getRatio();
-        QRectF rectF = QRectF(QPointF(-nSizeF.width()/2,-nSizeF.height()/2),sizeF.width(),sizeF.height());
+        QRectF rectF = QRectF(QPointF(-nSizeF.width()/2,-nSizeF.height()/2),QSizeF(sizeF.width(),sizeF.height()));
         m_pIconEditorMgr->iconTemplate()->getSymbol()->m_width = nSizeF.width();
         m_pIconEditorMgr->iconTemplate()->getSymbol()->m_height = nSizeF.height();
         m_pIconEditorMgr->setLogicRect(rectF);
@@ -53,6 +53,7 @@ void HIconEditorOp::Open(const QString &strTemplateName, int nTemplateType, cons
     }
 
     //所有false
+    /*
     HIconTemplate* pTemplate = m_pIconEditorMgr->iconTemplate();
     if(!pTemplate) return;
     for(int i = 0; i < pTemplate->getSymbol()->getObjList().count();i++)
@@ -64,7 +65,7 @@ void HIconEditorOp::Open(const QString &strTemplateName, int nTemplateType, cons
             if(item)
                 item->setVisible(false);
         }
-    }
+    }*/ //huangw
 }
 
 void HIconEditorOp::onCreateObj(HBaseObj* pObj,bool isPaste )
@@ -214,7 +215,7 @@ void HIconEditorOp::paste()
     for(int i = 0; i < num;i++)
     {
         stream>>nType;
-        HBaseObj* pObj = m_pIconEditorMgr->iconTemplate()->getSymbol()->newObj(nType);
+        HBaseObj* pObj = m_pIconEditorMgr->iconTemplate()->getSymbol()->newObj((DrawShape)nType);
         if(!pObj) continue;
         pObj->readData(&stream);
         objList.append(pObj);
@@ -230,7 +231,7 @@ void HIconEditorOp::paste()
         HBaseObj* pObj = (HBaseObj*)tempContainer->getObjList().at(i);
         if(!pObj || pObj->isDeleted() || !pObj->iconGraphicsItem())
             continue;
-        (H5GraphicsItem*)pObj->iconGraphicsItem()->setVisible(false);
+        pObj->iconGraphicsItem()->setVisible(false);
     }
 
     //选择拷贝后的图元
@@ -284,7 +285,7 @@ void HIconEditorOp::del()
 QString HIconEditorOp::getClipboardFile()
 {
     char szDataPath[128];
-    getDataFilePath(DFPATH_DATA,szDataPath);
+    //getDataFilePath(DFPATH_DATA,szDataPath);
     QString clipboardPath = QString(szDataPath);
     clipboardPath.append("/icon");
     QDir dirClipboard(clipboardPath);
@@ -312,7 +313,7 @@ void HIconEditorOp::bringToTop()
     HBaseObj* pObj = tempContainer->getObjList().at(0);
     if(!pObj) return;
     H5GraphicsItem* pItem = pObj->iconGraphicsItem();
-    QList<H5GraphicsItem*> collItemList = pItem->collidingItems();
+    QList<QGraphicsItem*> collItemList = pItem->collidingItems();
     if(collItemList.count()<=0) return;
     maxZValue = collItemList.at(0)->zValue();
     for(int i = 1; i < collItemList.count();i++)
@@ -344,7 +345,7 @@ void HIconEditorOp::bringToBottom()
     HBaseObj* pObj = tempContainer->getObjList().at(0);
     if(!pObj) return;
     H5GraphicsItem* pItem = pObj->iconGraphicsItem();
-    QList<H5GraphicsItem*> collItemList = pItem->collidingItems();
+    QList<QGraphicsItem*> collItemList = pItem->collidingItems();
     if(collItemList.count()<=0) return;
     minZValue = (int)(collItemList.at(0)->zValue());
     for(int i = 1; i < collItemList.count();i++)
@@ -372,7 +373,7 @@ void HIconEditorOp::groupObj()
     if(tempContainer->getObjList().count() < 2) return;
 
     HTempContainer* tempSelect = (HTempContainer*)tempContainer;
-    HGroup* pGroup =  m_pIconEditorMgr->iconTemplate()->getSymbol()->newObj(Group);
+    HGroup* pGroup =  (HGroup*)m_pIconEditorMgr->iconTemplate()->getSymbol()->newObj(Group);
     for(int i = 0; i < tempSelect->getObjList().count();i++)
     {
         HBaseObj* pObj = (HBaseObj*)tempSelect->getObjList().at(i);
@@ -392,9 +393,9 @@ void HIconEditorOp::ungroupObj()
     if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->selectedMgr()->selectObj())
         return;
     HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
-    if(tempContainer->getObjList().size() != 1 || tempContainer->getObjList().at(i)->getShapeType() != Group)
+    if(tempContainer->getObjList().size() != 1 || tempContainer->getObjList().at(0)->getShapeType() != Group)
         return;
-    HGroup* pGroup = tempContainer->getObjList().at(0);
+    HGroup* pGroup = (HGroup*)tempContainer->getObjList().at(0);
     if(!pGroup) return;
     while(pGroup->getObjList().isEmpty())
     {

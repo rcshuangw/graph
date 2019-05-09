@@ -6,6 +6,7 @@
 #include "hselectedmgr.h"
 #include "hiconeditordrawtoolmgr.h"
 #include "hiconeditorselecttool.h"
+
 HIconEditorMgr::HIconEditorMgr()
     :m_bShowGrid(true),m_bShowCenterLine(true),m_fRadio(20)
 {
@@ -73,6 +74,20 @@ HSelectedMgr* HIconEditorMgr::selectedMgr()
 {
     if(m_pSelectedMgr)
         return m_pSelectedMgr;
+    return NULL;
+}
+
+HIconEditorDrawToolMgr* HIconEditorMgr::iconEditorDrawToolMgr()
+{
+    if(m_pIconEditorDrawToolMgr)
+        return m_pIconEditorDrawToolMgr;
+    return NULL;
+}
+
+HIconEditorSelectToolMgr* HIconEditorMgr::iconEditorSelectToolMgr()
+{
+    if(m_pIconEditorSelectToolMgr)
+        return m_pIconEditorSelectToolMgr;
     return NULL;
 }
 
@@ -150,7 +165,7 @@ bool HIconEditorMgr::initIconEditorMgr()
 {
     if(!m_pIconEditorDrawToolMgr)
     {
-        m_pIconEditorDrawToolMgr = new m_pIconEditorDrawToolMgr;
+        m_pIconEditorDrawToolMgr = new HIconEditorDrawToolMgr(this);
         connect(m_pIconEditorDrawToolMgr,SIGNAL(drawPath(QList<Path>&)),m_pIconEditorOp,SLOT(onDrawPath(QList<Path>&)));
         connect(m_pIconEditorDrawToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
 
@@ -158,7 +173,9 @@ bool HIconEditorMgr::initIconEditorMgr()
         connect(m_pIconEditorSelectToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
         connect(m_pIconEditorOp,SIGNAL(selectChanged()),m_pIconEditorSelectToolMgr,SLOT(onSelectChanged()));
 
+        return true;
     }
+    return false;
 }
 
 void HIconEditorMgr::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)

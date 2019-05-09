@@ -6,7 +6,7 @@
  * 图符绘制管理类：主要是针对图符的绘制过程
 */
 class HIconEditorMgr;
-class HIconEditorDrawToolMgr : HDrawManager
+class HIconEditorDrawToolMgr : public HDrawManager
 {
     Q_OBJECT
 public:

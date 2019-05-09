@@ -16,6 +16,7 @@
 #include "hiconeditordoc.h"
 #include "hiconeditorwidget.h"
 #include "hselectedmgr.h"
+#include "hiconeditorframe.h"
 HIconMainWindow::HIconMainWindow(HIconEditorMgr *parent) : m_pIconEditorMgr(parent)
 {
     createActions();
@@ -222,7 +223,7 @@ void HIconMainWindow::createActions()
     connect(textAct,SIGNAL(triggered()),this,SLOT(drawTool()));
 
     selectAct = new QAction(QIcon(":/images/select.png"), QStringLiteral("选择"), this);
-    selectAct->setData(Select);
+    selectAct->setData(None);
     selectAct->setCheckable(true);
     selectAct->setChecked(true);
     connect(selectAct,SIGNAL(triggered(bool)),this,SLOT(selectTool()));
@@ -469,7 +470,7 @@ void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatal
         return;
     }
 
-    if(m_pIconEditorMgr->iconTemplate()->getModify())
+    if(m_pIconEditorMgr->iconTemplate()->isModify())
     {
         if(QMessageBox::Ok == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的模板文件吗？"),QMessageBox::Yes|QMessageBox::No))
         {
@@ -490,7 +491,7 @@ void HIconMainWindow::Open(const QString &strTemplateName, int nTemplateType, co
 {
     if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconTemplate())
         return;
-    if(m_pIconEditorMgr->iconTemplate()->getModify())
+    if(m_pIconEditorMgr->iconTemplate()->isModify())
     {
         if(QMessageBox::Ok == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的模板文件吗？"),QMessageBox::Ok|QMessageBox::Cancel))
         {
@@ -503,7 +504,7 @@ void HIconMainWindow::Open(const QString &strTemplateName, int nTemplateType, co
     //pIconPreview->init();
 
     HIconTemplate *pIconTemplate = m_pIconEditorMgr->iconTemplate();
-    QString strTitle = pIconTemplate->getCatalogName() + "/" + pIconTemplate->getSymbol()->getSymolName() + pIconTemplate->getUuid().toString();
+    QString strTitle = pIconTemplate->getCatalogName() + "/" + pIconTemplate->getSymbol()->getObjName() + pIconTemplate->getUuid().toString();
     strTitle = QString("%1[*] - %2").arg(strTitle).arg(QStringLiteral("图元编辑器"));
     setWindowTitle(strTitle);
 }
@@ -527,8 +528,8 @@ void HIconMainWindow::Del(const QString &strTemplateName, int nTemplateType, con
 
 void HIconMainWindow::about()
 {
-    HAbout about;
-    about.exec();
+    //HAbout about;
+    //about.exec();
 }
 
 void HIconMainWindow::resizeEvent(QResizeEvent *event)
@@ -562,11 +563,11 @@ void HIconMainWindow::scaleChanged(QString strScale)
     double newscale = strScale.toDouble(&bOk)/100;
     if(!bOk)
         return;
-    pIconMgr->getIconFrame()->scaleChangedTo(newscale);
-    strScale = QString("%1%").arg(pIconMgr->getIconFrame()->scale()*100);
-    scaleComboBox->blockSignals(true);
-    scaleComboBox->lineEdit()->setText(strScale);
-    scaleComboBox->blockSignals(false);
+    //m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(newscale);
+    //strScale = QString("%1%").arg(m_pIconEditorMgr->iconEditorFrame()->scale()*100);
+   // scaleComboBox->blockSignals(true);
+   // scaleComboBox->lineEdit()->setText(strScale);
+   // scaleComboBox->blockSignals(false);
 }
 
 void HIconMainWindow::scaleChanged()

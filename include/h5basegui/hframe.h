@@ -1,6 +1,6 @@
 ﻿#ifndef HFRAME_H
 #define HFRAME_H
-
+#include "h5iconguiexport.h"
 #include <QFrame>
 #include <QGraphicsView>
 #include <QPaintEvent>
@@ -10,7 +10,7 @@
 
 class QGraphicsView;
 
-class HFrame : public QFrame
+class H5BASEGUI_EXPORT HFrame : public QFrame
 {
     Q_OBJECT
 public:
