@@ -10,6 +10,7 @@ HIconSymbol::HIconSymbol(HIconTemplate* t):m_pIconTemplate(t)
     m_nMaxPattern = 0;
     m_nCurPattern = 0;
     m_pCurPattern = NULL;
+    m_bModify = false;
 }
 
 HIconSymbol::~HIconSymbol()

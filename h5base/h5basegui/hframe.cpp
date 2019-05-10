@@ -8,7 +8,7 @@ HFrame::HFrame(QWidget* parent, Qt::WindowFlags f):QFrame(parent,f)
 {
     m_nHRulerHeight = 25;
     m_nVRulerWidth = 25;
-    m_bIsShowRuler = false;
+    m_bIsShowRuler = true;
     m_fScale = 0.6;
     m_pView = new QGraphicsView(this);
     m_pView->setBackgroundRole(QPalette::Dark);

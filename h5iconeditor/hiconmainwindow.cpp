@@ -51,9 +51,11 @@ void HIconMainWindow::init()
     showGridAct->setChecked(m_pIconEditorMgr->getShowGrid());
     showCLineAct->setChecked(m_pIconEditorMgr->getShowCenterLine());
     //改用函数来实现
-   // m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(0.6);
+    m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(0.6);
     //QString strScale = QString("%1%").arg(pIconMgr->getIconFrame()->scale()*100);
     //scaleComboBox->setCurrentText(strScale);
+
+    connect(m_pIconEditorMgr->iconEditorOp(),SIGNAL(setSelectTool()),this,SLOT(onSelectTool()));
 }
 
 void HIconMainWindow::createActions()
@@ -147,7 +149,7 @@ void HIconMainWindow::createActions()
     toBottomAct = new QAction(QIcon(":/images/move_backward.png"),QStringLiteral("置底"),this);
     connect(toBottomAct,SIGNAL(triggered(bool)),this,SLOT(bringToBottom()));
 
-
+/*
     alignLeftAct = new QAction(QIcon(":/images/shape_align_left.png"),QStringLiteral("左对齐"),this);
     connect(alignLeftAct,SIGNAL(triggered(bool)),this,SLOT(alignLeft()));
     alignLeftAct->setEnabled(false);
@@ -162,7 +164,7 @@ void HIconMainWindow::createActions()
     connect(alignHCenterAct,SIGNAL(triggered(bool)),this,SLOT(alignHCenter()));
     alignBottomAct = new QAction(QIcon(":/images/shape_align_bottom.png"),QStringLiteral("下对齐"),this);;
     connect(alignBottomAct,SIGNAL(triggered(bool)),this,SLOT(alignBottom()));
-
+*/
     //同等单元
    /* QAction *equlHSpaceAct;
     QAction *equlVSpaceAct;
@@ -658,4 +660,9 @@ void HIconMainWindow::updateZoomMenus()
     zoomOutAct->setEnabled(m_pIconEditorMgr);
     zoomOriAct->setEnabled(m_pIconEditorMgr);
     zoomToolBar->setEnabled(m_pIconEditorMgr);
+}
+
+void HIconMainWindow::onSelectTool()
+{
+    selectAct->trigger();
 }

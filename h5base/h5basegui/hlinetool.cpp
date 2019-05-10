@@ -1,5 +1,7 @@
 ﻿#include "hlinetool.h"
 #include "hdrawmanager.h"
+#include "hline.h"
+#include <QDebug>
 HLineTool::HLineTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
     :HDrawTool(manager,objShape,name,uuid)
 {
@@ -49,10 +51,14 @@ void HLineTool::onMousePressEvent(QMouseEvent* event,QVariant &data)
 
 void HLineTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
 {
-	if (!m_pToolManager)
+    if(!m_pToolManager)
 		return;
-	if (!(event->button()&Qt::LeftButton))
-		return;
+    if(!(event->buttons()&Qt::LeftButton))
+    {
+        qDebug()<<"return";
+        return;
+    }
+    qDebug()<<"go on";
 	QPointF pt = data.toPointF();
 	m_ptCurPoint = pt;
 	
@@ -86,12 +92,15 @@ void HLineTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
 	else
 	{
 		//创建lineobj对象
+        pObj = new HLine();
 	}
 
 	if (pObj)
 	{
 		QPolygonF points;
 		points << m_ptStPoint << m_ptCurPoint;
+        pObj->setPointList(points);
+        pObj->setShapeType(m_edrawShape);
 		m_pToolManager->appendObj(pObj);
 	}
 	m_pToolManager->endDraw();

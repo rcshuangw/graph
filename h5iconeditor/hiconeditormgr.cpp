@@ -8,7 +8,7 @@
 #include "hiconeditorselecttool.h"
 
 HIconEditorMgr::HIconEditorMgr()
-    :m_bShowGrid(true),m_bShowCenterLine(true),m_fRadio(20)
+    :m_bShowGrid(true),m_bShowCenterLine(true),m_fRadio(20),m_pIconEditorDrawToolMgr(NULL)
 {
     m_pIconEditorFrame = new HIconEditorFrame(this);
 	m_pIconEditorDoc = new HIconEditorDoc(this);
@@ -166,12 +166,12 @@ bool HIconEditorMgr::initIconEditorMgr()
     if(!m_pIconEditorDrawToolMgr)
     {
         m_pIconEditorDrawToolMgr = new HIconEditorDrawToolMgr(this);
-        connect(m_pIconEditorDrawToolMgr,SIGNAL(drawPath(QList<Path>&)),m_pIconEditorOp,SLOT(onDrawPath(QList<Path>&)));
+        connect(m_pIconEditorDrawToolMgr,SIGNAL(drawPath(const QList<Path>&)),m_pIconEditorOp,SLOT(onDrawPath(const QList<Path>)));
         connect(m_pIconEditorDrawToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
 
-        connect(m_pIconEditorSelectToolMgr,SIGNAL(refreshSelect(QRectF)),m_pIconEditorOp,SLOT(onRefreshSelect(QRectF)));
-        connect(m_pIconEditorSelectToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
-        connect(m_pIconEditorOp,SIGNAL(selectChanged()),m_pIconEditorSelectToolMgr,SLOT(onSelectChanged()));
+        //connect(m_pIconEditorSelectToolMgr,SIGNAL(refreshSelect(QRectF)),m_pIconEditorOp,SLOT(onRefreshSelect(QRectF)));
+        //connect(m_pIconEditorSelectToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
+        //connect(m_pIconEditorOp,SIGNAL(selectChanged()),m_pIconEditorSelectToolMgr,SLOT(onSelectChanged()));
 
         return true;
     }

@@ -369,6 +369,7 @@ bool HBaseObj::transform(QTransform& transform1,quint8 flag)
     quint8 nFlag = flag;
 	QPointF pt = QPointF(getOX(), getOY());
 	transform1 = transform1.translate(pt.x(), pt.y());
+    bok = true;
 
     if(isTurned(nFlag))
     {

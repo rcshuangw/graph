@@ -70,31 +70,31 @@ void HIconEditorOp::Open(const QString &strTemplateName, int nTemplateType, cons
 
 void HIconEditorOp::onCreateObj(HBaseObj* pObj,bool isPaste )
 {
-    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
+    if(m_pIconEditorMgr && m_pIconEditorMgr->iconEditorFrame())
         m_pIconEditorMgr->iconEditorFrame()->objCreated(pObj,isPaste);
 }
 
 void HIconEditorOp::onRemoveObj(HBaseObj* pObj)
 {
-    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
+    if(m_pIconEditorMgr && m_pIconEditorMgr->iconEditorFrame())
         m_pIconEditorMgr->iconEditorFrame()->objRemoved(pObj);
 }
 
 void HIconEditorOp::onRefreshSelect(const QRectF& rect)
 {
-    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
+    if(m_pIconEditorMgr && m_pIconEditorMgr->iconEditorFrame())
         m_pIconEditorMgr->iconEditorFrame()->refreshSelected(rect);
 }
 
-void HIconEditorOp::onDrawPath(QList<Path>& path)
+void HIconEditorOp::onDrawPath(const QList<Path>& path)
 {
-    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
+    if(m_pIconEditorMgr && m_pIconEditorMgr->iconEditorFrame())
         m_pIconEditorMgr->iconEditorFrame()->drawPath(path);
 }
 
 void HIconEditorOp::onEndDraw()
 {
-    if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
+    if(m_pIconEditorMgr && m_pIconEditorMgr->iconEditorFrame())
         m_pIconEditorMgr->iconEditorFrame()->endDraw();
 }
 
@@ -128,7 +128,6 @@ void HIconEditorOp::fitWidth()
     if(ratio<0 || qFuzzyCompare(ratio,1))
         return;
 	m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(ratio);
-
 }
 
 void HIconEditorOp::fitHeight()
@@ -433,3 +432,7 @@ void HIconEditorOp::onSelectChanged(HBaseObj *obj, bool isSelected)
     emit selectChanged();
 }
 
+void HIconEditorOp::switchSelectTool()
+{
+  emit setSelectTool();
+}

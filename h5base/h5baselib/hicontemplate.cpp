@@ -15,7 +15,7 @@ HIconTemplate::HIconTemplate(const QUuid& uuid,QObject* parent)
         uUid = QUuid::createUuid();
     }
     pIconSymbol = new HIconSymbol(this);
-    sDefaultSize = QSizeF(50,50);
+    sDefaultSize = QSizeF(30,30);
     nCatalogType = 0;
     nVersion = 1;
 }

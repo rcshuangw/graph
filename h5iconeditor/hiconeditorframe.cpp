@@ -135,7 +135,6 @@ void HIconEditorFrame::cursorChanged(const QCursor& cursor)
 bool HIconEditorFrame::eventFilter(QObject* obj,QEvent* event)
 {
     HFrame::eventFilter(obj,event);
-    return false;
     if(obj == m_pView->viewport())
     {
         switch(((QMouseEvent*)event)->type())
@@ -147,12 +146,23 @@ bool HIconEditorFrame::eventFilter(QObject* obj,QEvent* event)
         {
             if(!m_pIconEditorMgr || !m_pView)
                 return false;
+
             QPointF pos = m_pView->mapToScene(((QMouseEvent*)event)->pos());
             HEvent hevent(event,QVariant(pos));
             if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_DRAW_TOOL)
                 m_pIconEditorMgr->iconEditorDrawToolMgr()->onEvent(hevent);
-            else if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_SELECT_TOOL)
-                m_pIconEditorMgr->iconEditorSelectToolMgr()->onEvent(hevent);
+            //else if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_SELECT_TOOL)
+            //    m_pIconEditorMgr->iconEditorSelectToolMgr()->onEvent(hevent);
+
+            if(event->type() == QEvent::MouseButtonRelease)
+            {
+                if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_DRAW_TOOL)
+                {
+                    m_pIconEditorMgr->iconEditorOp()->switchSelectTool();
+                    return true;
+                }
+            }
+
             return false;
         }
         case QEvent::Resize:

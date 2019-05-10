@@ -17,18 +17,25 @@ HIconEditorWidget::HIconEditorWidget()
 {
     m_pTabBar = new QTabBar;
     m_pTabBar->installEventFilter(this);
+    m_pTabBar->setShape(QTabBar::TriangularNorth);
     connect(m_pTabBar,SIGNAL(currentChanged(int)),this,SLOT(patternChanged(int)));
 
 }
 
 void HIconEditorWidget::setIconEditorMgr(HIconEditorMgr *iconMgr)
 {
+    clear();
     m_pIconEditorMgr = iconMgr;
     if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorFrame())
         return;
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
+    //QHBoxLayout *hLayout = new QHBoxLayout;
+    //hLayout->addWidget(m_pTabBar);
+    //QSpacerItem *hSpacer = new QSpacerItem(40, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+    //hLayout->addSpacerItem(hSpacer);
+    //layout->addLayout(hLayout);
     layout->addWidget(m_pTabBar);
     layout->addWidget(m_pIconEditorMgr->iconEditorFrame());
     setLayout(layout);
@@ -51,7 +58,7 @@ void HIconEditorWidget::clear()
 
 void HIconEditorWidget::refresh()
 {
-    clear();
+
     if(!m_pIconEditorMgr || !m_pTabBar)
         return;
     if(!m_pIconEditorMgr->iconTemplate() || !m_pIconEditorMgr->iconTemplate()->getSymbol())
@@ -90,7 +97,7 @@ void HIconEditorWidget::refresh()
 
 void HIconEditorWidget::addShowPattern()
 {
-    if(m_pIconEditorMgr->iconTemplate() || m_pIconEditorMgr->iconTemplate()->getSymbol())
+    if(!m_pIconEditorMgr->iconTemplate() || !m_pIconEditorMgr->iconTemplate()->getSymbol())
         return;
     HIconSymbol* pSymbol = (HIconSymbol*)(m_pIconEditorMgr->iconTemplate()->getSymbol());
     if(!pSymbol)

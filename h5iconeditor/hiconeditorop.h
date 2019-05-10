@@ -130,8 +130,11 @@ public:
 
     void selectTool(SelectMode select);
 
+    void switchSelectTool();
+
 signals:
     void selectChanged();
+    void setSelectTool();
 public slots:
 
     //图符创建、删除
@@ -139,7 +142,7 @@ public slots:
     void onRemoveObj(HBaseObj* pObj);
 
     void onRefreshSelect(const QRectF& rect);
-    void onDrawPath(QList<Path>& path);
+    void onDrawPath(const QList<Path>& path);
     void onEndDraw();
 
     void onSelectChanged(HBaseObj *obj, bool isSelected);
