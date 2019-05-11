@@ -37,7 +37,7 @@ private:
 signals:
 	void refreshSelect(const QRectF& rect);
 private:
-    HDrawHelper* m_pDrawHelper;
+    //HDrawHelper* m_pDrawHelper;
 	HTempContainer* m_pTempContainer;
 	HPointFList m_selectedPoints;//图元四周的点，供选择使用
 	QRectF m_SelectBounding;

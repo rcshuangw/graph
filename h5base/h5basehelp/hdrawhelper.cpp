@@ -2,6 +2,27 @@
 #include "htempcontainer.h"
 #include "hiconobj.h"
 #include <QCursor>
+
+HDrawHelper* HDrawHelper::m_pInstance = NULL;
+
+HDrawHelper* HDrawHelper::Instance()
+{
+    if(!m_pInstance)
+    {
+        m_pInstance = new HDrawHelper();
+    }
+    return m_pInstance;
+}
+
+void HDrawHelper::Exstance()
+{
+    if(m_pInstance)
+    {
+        delete m_pInstance;
+        m_pInstance = NULL;
+    }
+}
+
 HDrawHelper::HDrawHelper()
 {
     m_pBaseObj = NULL;

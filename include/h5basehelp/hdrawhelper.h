@@ -4,9 +4,14 @@
 #include "hbaseobj.h"
 class H5BASEHELP_EXPORT HDrawHelper
 {
+
 public:
+    static HDrawHelper* Instance();
+    static void Exstance();
+protected:
     HDrawHelper();
     ~HDrawHelper();
+    static HDrawHelper* m_pInstance;
 
 public:
     void setBaseObj(HBaseObj* pObj);

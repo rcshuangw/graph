@@ -47,7 +47,7 @@ void HIconEditorDoc::New(const QString& strTemplateName,const QString& strCatalo
     HIconTemplate *pTemplate = new HIconTemplate("");
     pTemplate->setCatalogName(strCatalogName);//普通开关
     pTemplate->setCatalogType(nCatalogType);//遥信类
-    pTemplate->getSymbol()->setObjectName(strTemplateName);
+    pTemplate->getSymbol()->setObjName(strTemplateName);
     pTemplate->getSymbol()->newPattern(QStringLiteral("缺省"));
     m_pIconTemplateList.append(pTemplate);
 

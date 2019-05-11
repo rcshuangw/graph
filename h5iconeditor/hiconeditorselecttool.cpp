@@ -8,7 +8,7 @@
 #include "hselectedmgr.h"
 #include "hiconcommand.h"
 #include "hdrawhelper.h"
-HIconEditorSelectToolMgr::HIconEditorSelectToolMgr(HIconEditorMgr* manager)
+HIconEditorSelectTool::HIconEditorSelectTool(HIconEditorMgr* manager)
     :m_pIconEditorMgr(manager),m_bIsSelectPoint(false)
 {
     m_SelectMode = None;
@@ -19,24 +19,47 @@ HIconEditorSelectToolMgr::HIconEditorSelectToolMgr(HIconEditorMgr* manager)
     m_SelectWidget->hide();
     m_SelectWidget->installEventFilter(this);
 
-    m_pDrawHelper = new HDrawHelper;
+    //m_pDrawHelper = new HDrawHelper;
 }
 
-HIconEditorSelectToolMgr::~HIconEditorSelectToolMgr()
+HIconEditorSelectTool::~HIconEditorSelectTool()
 {
-    if(m_pDrawHelper)
+
+}
+
+void HIconEditorSelectTool::setSelectMode(SelectMode mode)
+{
+    if(None == mode)
     {
-        delete m_pDrawHelper;
-        m_pDrawHelper = NULL;
+        HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
+        if(tempContainer && tempContainer->getObjList().size() == 0)
+        {
+            m_SelectMode = None;
+        }
+        else
+            m_SelectMode = Select;
+        m_pIconEditorMgr->iconEditorFrame()->view()->setInteractive(true);
+        m_pIconEditorMgr->iconEditorFrame()->view()->setDragMode(QGraphicsView::RubberBandDrag);
+    }
+    else
+    {
+        m_SelectMode = mode;
+        m_pIconEditorMgr->iconEditorFrame()->view()->setInteractive(false);
+        m_pIconEditorMgr->iconEditorFrame()->view()->setDragMode(QGraphicsView::NoDrag);
     }
 }
 
-void HIconEditorSelectToolMgr::clear()
+SelectMode HIconEditorSelectTool::selectMode()
+{
+    return m_SelectMode;
+}
+
+void HIconEditorSelectTool::clear()
 {
 
 }
 
-bool HIconEditorSelectToolMgr::eventFilter(QObject *obj, QEvent *ev)
+bool HIconEditorSelectTool::eventFilter(QObject *obj, QEvent *ev)
 {
     if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorFrame() || !m_pIconEditorMgr->iconEditorFrame()->view())
         return false;
@@ -60,7 +83,7 @@ bool HIconEditorSelectToolMgr::eventFilter(QObject *obj, QEvent *ev)
     }
 }
 
-void HIconEditorSelectToolMgr::onEvent(HEvent& e)
+void HIconEditorSelectTool::onEvent(HEvent& e)
 {
     if(e.event()->type() == QEvent::MouseButtonPress)
     {
@@ -89,7 +112,7 @@ void HIconEditorSelectToolMgr::onEvent(HEvent& e)
 }
 
 //鼠标左键
-void HIconEditorSelectToolMgr::onMousePressEvent(QMouseEvent* event, QVariant &data)
+void HIconEditorSelectTool::onMousePressEvent(QMouseEvent* event, QVariant &data)
 {
     if(!event || !m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr())
         return;
@@ -103,7 +126,7 @@ void HIconEditorSelectToolMgr::onMousePressEvent(QMouseEvent* event, QVariant &d
 
 }
 
-void HIconEditorSelectToolMgr::onMouseMoveEvent(QMouseEvent* event, QVariant &data)
+void HIconEditorSelectTool::onMouseMoveEvent(QMouseEvent* event, QVariant &data)
 {
     if(!event || !m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->selectedMgr()->selectObj())
         return;
@@ -141,9 +164,10 @@ void HIconEditorSelectToolMgr::onMouseMoveEvent(QMouseEvent* event, QVariant &da
             }
             else
             {
-                if(m_pDrawHelper)
+                HDrawHelper* pDrawHelper = HDrawHelper::Instance();
+                if(pDrawHelper)
                 {
-                    m_SelectWidget->setCursor(m_pDrawHelper->cursor(m_nSelPointIndex));
+                    m_SelectWidget->setCursor(pDrawHelper->cursor(m_nSelPointIndex));
                 }
             }
             m_SelectWidget->show();
@@ -206,7 +230,8 @@ void HIconEditorSelectToolMgr::onMouseMoveEvent(QMouseEvent* event, QVariant &da
             }
             else
             {
-                if(m_pDrawHelper)
+                HDrawHelper* pDrawHelper = HDrawHelper::Instance();
+                if(pDrawHelper)
                 {
                     //m_pDrawHelper->
                 }
@@ -215,7 +240,7 @@ void HIconEditorSelectToolMgr::onMouseMoveEvent(QMouseEvent* event, QVariant &da
     }
 }
 
-void HIconEditorSelectToolMgr::onMouseReleaseEvent(QMouseEvent* event, QVariant &data)
+void HIconEditorSelectTool::onMouseReleaseEvent(QMouseEvent* event, QVariant &data)
 {
     if(!event || !m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr())
         return;
@@ -286,17 +311,17 @@ void HIconEditorSelectToolMgr::onMouseReleaseEvent(QMouseEvent* event, QVariant 
     }
 }
 
-void HIconEditorSelectToolMgr::onMouseDoubleClickEvent(QMouseEvent* event, QVariant &data)
+void HIconEditorSelectTool::onMouseDoubleClickEvent(QMouseEvent* event, QVariant &data)
 {
 
 }
 
-void HIconEditorSelectToolMgr::onContextMenuEvent(QContextMenuEvent *event, QVariant &data)
+void HIconEditorSelectTool::onContextMenuEvent(QContextMenuEvent *event, QVariant &data)
 {
 
 }
 
-void HIconEditorSelectToolMgr::onKeyPressEvent(QKeyEvent *event, QVariant& data)
+void HIconEditorSelectTool::onKeyPressEvent(QKeyEvent *event, QVariant& data)
 {
     if(!event || !m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr())
         return;
@@ -345,12 +370,12 @@ void HIconEditorSelectToolMgr::onKeyPressEvent(QKeyEvent *event, QVariant& data)
     m_pIconEditorMgr->iconEditorUndoStack()->push(moveCommand);
 }
 
-QCursor HIconEditorSelectToolMgr::cursor()
+QCursor HIconEditorSelectTool::cursor()
 {
     return QCursor();
 }
 
-void HIconEditorSelectToolMgr::onSelectChanged()
+void HIconEditorSelectTool::onSelectChanged()
 {
 
 }

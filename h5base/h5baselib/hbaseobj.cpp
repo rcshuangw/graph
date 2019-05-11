@@ -24,7 +24,7 @@ void HBaseObj::init()
     m_dOriginY = 0;
 
     //线条方面
-	m_strLineColor = "#00FF00";//线条颜色
+    m_strLineColor = "#000000";//线条颜色
 	m_nLineWidth = 0;//线宽
 	m_nLineStyle = (qint8)Qt::SolidLine;//线型
 	m_nLineJoinStyle = (qint8)Qt::BevelJoin;//线连接处形状
@@ -350,6 +350,8 @@ bool HBaseObj::setPointList(QPolygonF& list, qint8 flag)
 		for (i = 0; i < sz; i++)
 			list[i] -= pt;
 	}
+    if(!isTurned(flag) && !isRotated())
+        return true;
 	QTransform mx;
 	bool bok = transform(mx, 1);
 	if (!bok)
@@ -367,9 +369,12 @@ bool HBaseObj::transform(QTransform& transform1,quint8 flag)
 {
     bool bok = false;
     quint8 nFlag = flag;
-	QPointF pt = QPointF(getOX(), getOY());
-	transform1 = transform1.translate(pt.x(), pt.y());
-    bok = true;
+    if(flag)
+    {
+        QPointF pt = QPointF(getOX(), getOY());
+        transform1 = transform1.translate(pt.x(), pt.y());
+        bok = true;
+    }
 
     if(isTurned(nFlag))
     {
@@ -460,7 +465,7 @@ void HBaseObj::maps(QPolygonF& pylist,quint8 flag)
 {
     QTransform trans;
     transform(trans,flag);
-    pylist = pylist*trans;
+    pylist = trans.map(pylist);
 }
 
 bool HBaseObj::isZero(double value)

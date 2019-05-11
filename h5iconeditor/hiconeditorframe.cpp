@@ -151,8 +151,8 @@ bool HIconEditorFrame::eventFilter(QObject* obj,QEvent* event)
             HEvent hevent(event,QVariant(pos));
             if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_DRAW_TOOL)
                 m_pIconEditorMgr->iconEditorDrawToolMgr()->onEvent(hevent);
-            //else if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_SELECT_TOOL)
-            //    m_pIconEditorMgr->iconEditorSelectToolMgr()->onEvent(hevent);
+            else if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_SELECT_TOOL)
+                m_pIconEditorMgr->iconEditorSelectTool()->onEvent(hevent);
 
             if(event->type() == QEvent::MouseButtonRelease)
             {

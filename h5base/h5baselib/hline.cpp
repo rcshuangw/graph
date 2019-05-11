@@ -168,7 +168,7 @@ void HLine::paint(QPainter* painter)
 	pen.setWidth(penWidth);
 	pen.setCapStyle(capStyle);
 	painter->setPen(pen);
-    HPointFList list = getPointList(1);
+    HPointFList list = getPointList(0);
 	//画箭头
 	if (getArrowWidth() > 0 && getArrowHeight() > 0)
 	{

@@ -8,7 +8,7 @@
 #include "hiconeditorselecttool.h"
 
 HIconEditorMgr::HIconEditorMgr()
-    :m_bShowGrid(true),m_bShowCenterLine(true),m_fRadio(20),m_pIconEditorDrawToolMgr(NULL)
+    :m_bShowGrid(true),m_bShowCenterLine(true),m_fRadio(20),m_pIconEditorDrawToolMgr(NULL),m_pIconEditorSelectTool(NULL)
 {
     m_pIconEditorFrame = new HIconEditorFrame(this);
 	m_pIconEditorDoc = new HIconEditorDoc(this);
@@ -84,10 +84,10 @@ HIconEditorDrawToolMgr* HIconEditorMgr::iconEditorDrawToolMgr()
     return NULL;
 }
 
-HIconEditorSelectToolMgr* HIconEditorMgr::iconEditorSelectToolMgr()
+HIconEditorSelectTool* HIconEditorMgr::iconEditorSelectTool()
 {
-    if(m_pIconEditorSelectToolMgr)
-        return m_pIconEditorSelectToolMgr;
+    if(m_pIconEditorSelectTool)
+        return m_pIconEditorSelectTool;
     return NULL;
 }
 
@@ -163,19 +163,23 @@ QRectF HIconEditorMgr::getLogicRect()
 
 bool HIconEditorMgr::initIconEditorMgr()
 {
-    if(!m_pIconEditorDrawToolMgr)
+    if(!m_pIconEditorDrawToolMgr )
     {
         m_pIconEditorDrawToolMgr = new HIconEditorDrawToolMgr(this);
         connect(m_pIconEditorDrawToolMgr,SIGNAL(drawPath(const QList<Path>&)),m_pIconEditorOp,SLOT(onDrawPath(const QList<Path>)));
         connect(m_pIconEditorDrawToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
 
-        //connect(m_pIconEditorSelectToolMgr,SIGNAL(refreshSelect(QRectF)),m_pIconEditorOp,SLOT(onRefreshSelect(QRectF)));
-        //connect(m_pIconEditorSelectToolMgr,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
-        //connect(m_pIconEditorOp,SIGNAL(selectChanged()),m_pIconEditorSelectToolMgr,SLOT(onSelectChanged()));
 
-        return true;
     }
-    return false;
+    if(!m_pIconEditorSelectTool)
+    {
+        m_pIconEditorSelectTool = new HIconEditorSelectTool(this);
+        connect(m_pIconEditorSelectTool,SIGNAL(refreshSelect(QRectF)),m_pIconEditorOp,SLOT(onRefreshSelect(QRectF)));
+        connect(m_pIconEditorSelectTool,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
+        connect(m_pIconEditorOp,SIGNAL(selectChanged()),m_pIconEditorSelectTool,SLOT(onSelectChanged()));
+
+    }
+    return true;
 }
 
 void HIconEditorMgr::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)

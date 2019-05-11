@@ -62,7 +62,15 @@ void HIconEditorScene::drawForeground(QPainter *painter, const QRectF &rect)
 
 void HIconEditorScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-   
+    bool multiSelect = (mouseEvent->modifiers()&Qt::ControlModifier)!=0;
+    QTransform trans;
+    if(multiSelect){
+        if(!itemAt(mouseEvent->scenePos(),trans)){
+            mouseEvent->ignore();
+            return;
+        }
+    }
+    QGraphicsScene::mousePressEvent(mouseEvent);
 }
 
 

@@ -7,13 +7,15 @@
 #include "hbaseobj.h"
 class HIconEditorMgr;
 class HDrawHelper;
-class HIconEditorSelectToolMgr : public HDrawManager
+class HIconEditorSelectTool : public QObject
 {
 	Q_OBJECT
 public:
-    HIconEditorSelectToolMgr(HIconEditorMgr* mgr);
-    virtual ~HIconEditorSelectToolMgr();
-
+    HIconEditorSelectTool(HIconEditorMgr* mgr);
+    virtual ~HIconEditorSelectTool();
+public:
+    void setSelectMode(SelectMode mode);
+    SelectMode selectMode();
 public:
 	virtual void clear();
 	virtual void onEvent(HEvent& event);
@@ -22,7 +24,7 @@ public:
     virtual void onMouseReleaseEvent(QMouseEvent* event, QVariant &data);
 
 	virtual void onMouseDoubleClickEvent(QMouseEvent* event, QVariant &data);
-	virtual void onContextMenuEvent(QContextMenuEvent *event, QVariant &data);//ÓÒ¼ü
+    virtual void onContextMenuEvent(QContextMenuEvent *event, QVariant &data);
 
 	virtual void onKeyPressEvent(QKeyEvent *event, QVariant& data);
 	virtual QCursor cursor();
@@ -45,6 +47,5 @@ private:
 	QPointF m_ptStPoint;
 	QPointF m_ptCurPoint;
     HIconEditorMgr* m_pIconEditorMgr;
-    HDrawHelper* m_pDrawHelper;
 }; 
 #endif

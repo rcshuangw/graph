@@ -15,7 +15,7 @@ public:
 
     void setDrawShape(DrawShape drawShape){curDrawShape = drawShape;}
     DrawShape getDrawShape(){return curDrawShape;}
-     void appendObj(HBaseObj* obj);
+    void appendObj(HBaseObj* obj);
 
 public:
     DrawShape curDrawShape;//当前绘制对象

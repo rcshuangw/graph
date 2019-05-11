@@ -4,7 +4,7 @@
 HSelectedMgr::HSelectedMgr()
 {
 	m_pTempContainer = new HTempContainer;
-    m_pDrawHelper = new HDrawHelper;
+    //m_pDrawHelper = new HDrawHelper;
 }
 
 HSelectedMgr::~HSelectedMgr()
@@ -14,36 +14,49 @@ HSelectedMgr::~HSelectedMgr()
 		delete m_pTempContainer;
 		m_pTempContainer = NULL;
 	}
-
-    if(m_pDrawHelper)
-    {
-        delete m_pDrawHelper;
-        m_pDrawHelper = NULL;
-    }
 }
 
 
 void HSelectedMgr::paint(QPainter* painter, const QRectF& rect, const QRectF &selectRect)
 {
+    if(m_pTempContainer->getObjList().size() == 0)
+        return;
 
+    painter->save();
+    painter->setPen(Qt::green);
+    if(1)
+    {
+        QRectF rect1 = selectRect.isNull()?QRectF(QPoint(),QSize(6,6)):selectRect;
+        for(int i = 0; i < m_selectedPoints.count();i++)
+        {
+            rect1.moveCenter(m_selectedPoints.at(i));
+            painter->drawRect(rect1);
+        }
+    }
+    else
+    {
+
+    }
+    painter->restore();
 }
 
 void HSelectedMgr::addObj(HBaseObj* obj)
 {
 	m_pTempContainer->addObj(obj);
-    if(m_pDrawHelper)
+    HDrawHelper* pDrawHelper = HDrawHelper::Instance();
+    if(pDrawHelper)
     {
         if(m_pTempContainer->getObjList().count() == 0)
         {
-            m_pDrawHelper->setBaseObj(NULL);
+            pDrawHelper->setBaseObj(NULL);
         }
        else if(m_pTempContainer->getObjList().count() == 1)
         {
-            m_pDrawHelper->setBaseObj(m_pTempContainer->getObjList().at(0));
+            pDrawHelper->setBaseObj(m_pTempContainer->getObjList().at(0));
         }
         else
         {
-            m_pDrawHelper->setBaseObj(m_pTempContainer);
+            pDrawHelper->setBaseObj(m_pTempContainer);
         }
     }
 }
@@ -51,19 +64,20 @@ void HSelectedMgr::addObj(HBaseObj* obj)
 void HSelectedMgr::removeObj(HBaseObj* obj)
 {
 	m_pTempContainer->removeObj(obj);
-    if(m_pDrawHelper)
+    HDrawHelper* pDrawHelper = HDrawHelper::Instance();
+    if(pDrawHelper)
     {
         if(m_pTempContainer->getObjList().count() == 0)
         {
-            m_pDrawHelper->setBaseObj(NULL);
+            pDrawHelper->setBaseObj(NULL);
         }
        else if(m_pTempContainer->getObjList().count() == 1)
         {
-            m_pDrawHelper->setBaseObj(m_pTempContainer->getObjList().at(0));
+            pDrawHelper->setBaseObj(m_pTempContainer->getObjList().at(0));
         }
         else
         {
-            m_pDrawHelper->setBaseObj(m_pTempContainer);
+            pDrawHelper->setBaseObj(m_pTempContainer);
         }
     }
 }
@@ -71,19 +85,20 @@ void HSelectedMgr::removeObj(HBaseObj* obj)
 void HSelectedMgr::setSelectObj(QList<HBaseObj*> objs)
 {
 	m_pTempContainer->addObjList(objs);
-    if(m_pDrawHelper)
+    HDrawHelper* pDrawHelper = HDrawHelper::Instance();
+    if(pDrawHelper)
     {
         if(m_pTempContainer->getObjList().count() == 0)
         {
-            m_pDrawHelper->setBaseObj(NULL);
+            pDrawHelper->setBaseObj(NULL);
         }
        else if(m_pTempContainer->getObjList().count() == 1)
         {
-            m_pDrawHelper->setBaseObj(m_pTempContainer->getObjList().at(0));
+            pDrawHelper->setBaseObj(m_pTempContainer->getObjList().at(0));
         }
         else
         {
-            m_pDrawHelper->setBaseObj(m_pTempContainer);
+            pDrawHelper->setBaseObj(m_pTempContainer);
         }
     }
 }
@@ -168,8 +183,9 @@ void HSelectedMgr::recalcSelect()
 void HSelectedMgr::calcPoints()
 {
     m_selectedPoints.clear();
-    if(m_pDrawHelper)
-        m_selectedPoints = m_pDrawHelper->selectedPointList();
+    HDrawHelper* pDrawHelper = HDrawHelper::Instance();
+    if(pDrawHelper)
+        m_selectedPoints = pDrawHelper->selectedPointList();
     if(m_selectedPoints.count() <=0)
         m_SelectBounding = QRectF();
     else

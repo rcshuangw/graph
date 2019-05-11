@@ -10,6 +10,7 @@
 #include "htempcontainer.h"
 #include "hiconcommand.h"
 #include "hiconeditordrawtoolmgr.h"
+#include "hiconeditorselecttool.h"
 HIconEditorOp::HIconEditorOp(HIconEditorMgr* mgr)
     :m_pIconEditorMgr(mgr)
 {
@@ -109,9 +110,14 @@ void HIconEditorOp::drawTool(DrawShape drawShape)
 
 void HIconEditorOp::selectTool(SelectMode selMode)
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorSelectToolMgr())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorSelectTool())
         return;
     m_nToolType = ICON_SELECT_TOOL;
+    m_pIconEditorMgr->iconEditorSelectTool()->setSelectMode(selMode);
+    onEndDraw();
+    QCursor cursor = m_pIconEditorMgr->iconEditorSelectTool()->cursor();
+    if(m_pIconEditorMgr->iconEditorFrame())
+        m_pIconEditorMgr->iconEditorFrame()->cursorChanged(cursor);
 }
 
 void HIconEditorOp::fitWidth()

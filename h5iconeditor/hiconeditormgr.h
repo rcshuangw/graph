@@ -13,7 +13,7 @@ class HIconEditorOp;
 class HIconTemplate;
 class HSelectedMgr;
 class HIconEditorDrawToolMgr;
-class HIconEditorSelectToolMgr;
+class HIconEditorSelectTool;
 class HIconEditorMgr : public QObject
 {
     Q_OBJECT
@@ -30,7 +30,7 @@ public:
 	HIconEditorOp* iconEditorOp();
     HSelectedMgr* selectedMgr();
     HIconEditorDrawToolMgr* iconEditorDrawToolMgr();
-    HIconEditorSelectToolMgr* iconEditorSelectToolMgr();
+    HIconEditorSelectTool* iconEditorSelectTool();
 
 public:
     bool initIconEditorMgr();
@@ -79,7 +79,7 @@ private:
 	QUndoStack* m_pIconUndoStack;
     HSelectedMgr* m_pSelectedMgr;
     HIconEditorDrawToolMgr* m_pIconEditorDrawToolMgr;
-    HIconEditorSelectToolMgr* m_pIconEditorSelectToolMgr;
+    HIconEditorSelectTool* m_pIconEditorSelectTool;
 };
 
 #endif // HICONMGR_H

@@ -227,7 +227,7 @@ void HIconMainWindow::createActions()
     selectAct = new QAction(QIcon(":/images/select.png"), QStringLiteral("选择"), this);
     selectAct->setData(None);
     selectAct->setCheckable(true);
-    selectAct->setChecked(true);
+    //selectAct->setChecked(true);
     connect(selectAct,SIGNAL(triggered(bool)),this,SLOT(selectTool()));
 
     QActionGroup * actionGroup = new QActionGroup(this);
@@ -480,10 +480,12 @@ void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatal
         }
     }
 
+
     m_pIconEditorMgr->New(strTemplateName,strCatalogName,nCatalogType);
     m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
     m_pIconTreeWidget->addIconTreeWigetItem();
     //pIconPreview->init();
+    selectAct->trigger();
 
     updateMenu();
 }
