@@ -1,7 +1,7 @@
 ﻿#include "htempcontainer.h"
 HTempContainer::HTempContainer()
 {
-
+    setShapeType(TempContainer);
 }
 HTempContainer::~HTempContainer()
 {

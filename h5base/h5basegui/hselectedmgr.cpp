@@ -31,7 +31,7 @@ void HSelectedMgr::paint(QPainter* painter, const QRectF& rect, const QRectF &se
         pen.setStyle(Qt::DashLine);
         painter->setPen(pen);
         painter->drawPolygon(m_selectedPoints.toPolygon());
-        qDebug()<<"count："<<m_selectedPoints.count();
+        qDebug()<<"count:"<<m_selectedPoints.count();
         painter->restore();
         if(m_pTempContainer->getObjList().size() > 0)
         {
@@ -233,6 +233,7 @@ void HSelectedMgr::calcPoints()
     HDrawHelper* pDrawHelper = HDrawHelper::Instance();
     if(pDrawHelper)
         m_selectedPoints = pDrawHelper->selectedPointList();
+    qDebug()<<"calcPoints:"<<m_selectedPoints.count();
     if(m_selectedPoints.count() <=0)
         m_SelectBounding = QRectF();
     else
