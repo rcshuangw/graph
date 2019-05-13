@@ -16,12 +16,56 @@ HSelectedMgr::~HSelectedMgr()
 	}
 }
 
-
+#include <QDebug>
 void HSelectedMgr::paint(QPainter* painter, const QRectF& rect, const QRectF &selectRect)
 {
-    if(m_pTempContainer->getObjList().size() == 0)
+    if(m_pTempContainer->getObjList().size() <=0)
         return;
 
+    if(m_pTempContainer->getObjList().size() > 1)
+    {
+        painter->save();
+        QPen pen;
+        pen.setCosmetic(true);
+        pen.setColor(Qt::green);
+        pen.setStyle(Qt::DashLine);
+        painter->setPen(pen);
+        painter->drawPolygon(m_selectedPoints.toPolygon());
+        qDebug()<<"count："<<m_selectedPoints.count();
+        painter->restore();
+        if(m_pTempContainer->getObjList().size() > 0)
+        {
+            painter->save();
+            pen.setColor(Qt::magenta);
+            pen.setStyle(Qt::SolidLine);
+            painter->setPen(pen);
+            for(int i=0; i<m_pTempContainer->getObjList().size(); i++){
+                HBaseObj* obj = m_pTempContainer->getObjList().at(i);
+                if(!obj||obj->isDeleted()||!obj->isVisible()){
+                    continue;
+                }
+                if(i==0){
+                    pen.setWidth(3);
+                    painter->setPen(pen);
+                }
+                HPointFList points = obj->getPointList(1);
+                if(obj->getShapeType()==Arc)
+                {
+                    //QRectF bounding = obj->boundingRect(1);
+                    //painter->drawRect(bounding);
+                }
+                else
+                {
+                    painter->drawPolygon(points);
+                }
+                if(i==0){
+                    pen.setWidth(1);
+                    painter->setPen(pen);
+                }
+            }
+            painter->restore();
+        }
+    }
     painter->save();
     painter->setPen(Qt::green);
     if(1)
@@ -35,7 +79,10 @@ void HSelectedMgr::paint(QPainter* painter, const QRectF& rect, const QRectF &se
     }
     else
     {
-
+        QPen pen = painter->pen();
+        pen.setStyle(Qt::DotLine);
+        painter->setPen(pen);
+        painter->drawPolygon(m_selectedPoints.toPolygon());
     }
     painter->restore();
 }
@@ -142,7 +189,7 @@ int HSelectedMgr::isOnPoint(const QPointF& point, QPointF& selectPoint)
     for(int i = 0; i < m_selectedPoints.count();i++)
     {
         QPointF pos = m_selectedPoints.at(i);
-        rectF.setSize(QSizeF(3,3));
+        rectF.setSize(QSizeF(6,6));
         rectF.moveCenter(pos);
         if(rectF.contains(point))
         {

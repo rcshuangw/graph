@@ -56,6 +56,8 @@ void HIconMainWindow::init()
     //scaleComboBox->setCurrentText(strScale);
 
     connect(m_pIconEditorMgr->iconEditorOp(),SIGNAL(setSelectTool()),this,SLOT(onSelectTool()));
+    connect(m_pIconEditorMgr->iconEditorUndoStack(),SIGNAL(canUndoChanged(bool)),undoAct, SLOT(setEnabled(bool)));
+    connect(m_pIconEditorMgr->iconEditorUndoStack(),SIGNAL(canRedoChanged(bool)),redoAct, SLOT(setEnabled(bool)));
 }
 
 void HIconMainWindow::createActions()

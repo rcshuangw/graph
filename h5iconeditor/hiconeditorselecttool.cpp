@@ -186,7 +186,7 @@ void HIconEditorSelectTool::onMouseMoveEvent(QMouseEvent* event, QVariant &data)
                     HBaseObj* pObj = tempContainer->getObjList().at(i);
                     if(pObj)
                     {
-                        m_vlOldPoints.append(pObj->getPointList(1));
+                        m_vlOldPoints.append(pObj->getPointList(0));
                     }
                 }
             }
@@ -208,6 +208,7 @@ void HIconEditorSelectTool::onMouseMoveEvent(QMouseEvent* event, QVariant &data)
             else
                 m_SelectMode = Select;
 
+
             if(Select == m_SelectMode)
             {
                 qreal dx = m_ptCurPoint.x() - m_ptStPoint.x();
@@ -222,7 +223,7 @@ void HIconEditorSelectTool::onMouseMoveEvent(QMouseEvent* event, QVariant &data)
         {
             HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
             if(!tempContainer) return;
-            if(!tempContainer || !tempContainer->getObjList().size() <= 0)
+            if(!tempContainer || tempContainer->getObjList().size() <= 0)
                 return;
             if(0)
             {
@@ -233,9 +234,10 @@ void HIconEditorSelectTool::onMouseMoveEvent(QMouseEvent* event, QVariant &data)
                 HDrawHelper* pDrawHelper = HDrawHelper::Instance();
                 if(pDrawHelper)
                 {
-                    //m_pDrawHelper->
+                    pDrawHelper->movePoint(m_nSelPointIndex,m_ptCurPoint);
                 }
             }
+            m_pIconEditorMgr->selectedMgr()->recalcSelect();
         }
     }
 }

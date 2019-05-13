@@ -549,10 +549,10 @@ bool HBaseObj::containsPattern(int nPatternId)
     return m_nPattern == nPatternId;
 }
 
-bool HBaseObj::contains(const QPointF &point) const
+bool HBaseObj::contains(const QPointF &point)
 {
-    //QRectF rectF = getPointList(1).boundingRect();
-    return false;
+    QRectF rectF = getPointList(0).boundingRect();
+    return shape(1).contains(point);
 }
 
 void HBaseObj::paint(QPainter* painter)

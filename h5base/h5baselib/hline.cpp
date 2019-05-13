@@ -129,7 +129,7 @@ QPolygonF HLine::getPointList(qint8 flag)
 
 QRectF HLine::boundingRect(qint8 flag)
 {
-	QPainterPath path;;
+    QPainterPath path;
     HPointFList points = getPointList(flag);
 	QPainterPath pathhead = getArrowPath(points, true);
 	if (!pathhead.isEmpty())
@@ -198,8 +198,6 @@ void HLine::paint(QPainter* painter)
 			painter->restore();
 		}
 	}
-
 	painter->drawPolyline(list);
-
 	painter->restore();
 }

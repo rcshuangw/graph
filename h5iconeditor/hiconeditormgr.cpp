@@ -179,6 +179,7 @@ bool HIconEditorMgr::initIconEditorMgr()
         connect(m_pIconEditorOp,SIGNAL(selectChanged()),m_pIconEditorSelectTool,SLOT(onSelectChanged()));
 
     }
+
     return true;
 }
 

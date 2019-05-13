@@ -147,7 +147,7 @@ public:
 	virtual QPainterPath shape(qint8 flag = 0) = 0;
     virtual void paint(QPainter* painter) = 0;
   //  virtual QRectF boundingRect() const;
-    virtual bool contains(const QPointF &point) const;
+    virtual bool contains(const QPointF &point);
    // virtual QPainterPath shape() const;
 
 //绘制对象的属性

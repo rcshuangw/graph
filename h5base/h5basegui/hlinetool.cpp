@@ -55,10 +55,8 @@ void HLineTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
 		return;
     if(!(event->buttons()&Qt::LeftButton))
     {
-        qDebug()<<"return";
         return;
     }
-    qDebug()<<"go on";
 	QPointF pt = data.toPointF();
 	m_ptCurPoint = pt;
 	

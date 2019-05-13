@@ -1,5 +1,6 @@
 #include "hdrawhelper.h"
 #include "htempcontainer.h"
+#include "hbaseobj.h"
 #include "hiconobj.h"
 #include <QCursor>
 
@@ -290,6 +291,20 @@ void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
     switch(drawShape)
     {
     case Line:
+    {
+        HPointFList points = m_pBaseObj->getPointList(1);
+        if(points.size() < 2) return;
+        if(0 == index)
+        {
+            points[0] = curPoint;
+        }
+        else
+        {
+            points[1] = curPoint;
+        }
+        m_pBaseObj->setPointList(points,1);
+        ((H5GraphicsItem*)m_pBaseObj->iconGraphicsItem())->setPos(m_pBaseObj->pos());
+    }
         break;
     case Rectangle:
     case Text:

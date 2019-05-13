@@ -61,6 +61,7 @@ void HIconMainWindow::undo()
     if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorUndoStack())
         return;
     m_pIconEditorMgr->iconEditorUndoStack()->undo();
+    updateEditMenu();
 }
 
 //重做
@@ -69,6 +70,7 @@ void HIconMainWindow::redo()
     if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorUndoStack())
         return;
     m_pIconEditorMgr->iconEditorUndoStack()->redo();
+    updateEditMenu();
 }
 
 //剪切

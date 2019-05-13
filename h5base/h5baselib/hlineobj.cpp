@@ -251,7 +251,7 @@ void HLineObj::getBoundingRect(HPointFList& points, QPointF &headPoint, QPointF&
 	}
 
 	QPointF po2 = lnf.pointAt(fw);
-	QPointF pos ;
+    QPointF pos = headPoint - po2;
 	points.resize(4);
 	QMatrix mx;
 	mx.reset();
@@ -261,9 +261,9 @@ void HLineObj::getBoundingRect(HPointFList& points, QPointF &headPoint, QPointF&
 	pos = mx.map(po2);
 	points[0] = pos;
 
-	pos.setX(pos.x() + lnf.dx());
-	pos.setY(pos.y() + lnf.dy());
-	points[3] = pos;
+    pos.setX(-pos.x() );
+    pos.setY(-pos.y() );
+    points[2] = pos;
 
 	mx.reset();
 	mx.translate(headPoint.x(), headPoint.y());
@@ -272,8 +272,8 @@ void HLineObj::getBoundingRect(HPointFList& points, QPointF &headPoint, QPointF&
 	pos = mx.map(po2);
 	points[1] = pos;
 
-	pos.setX(pos.x() + lnf.dx());
-	pos.setY(pos.y() + lnf.dy());
-	points[2] = pos;
+    pos.setX(-pos.x() );
+    pos.setY(-pos.y() );
+    points[3] = pos;
 
 }

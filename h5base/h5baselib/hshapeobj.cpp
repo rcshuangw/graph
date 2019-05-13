@@ -1,18 +1,18 @@
-#include "hshapeobj.h"
+ï»¿#include "hshapeobj.h"
 HShapeObj::HShapeObj()
 {
 	m_bFill = false;
     m_nFillWay = 0;
 	m_nFillStyle = (quint8)Qt::NoBrush;
-	m_strFillColor = "#00FF00"; //Ìî³äÑÕÉ«
+	m_strFillColor = "#00FF00"; //å¡«å……é¢œè‰²
 	m_nFillDirection = DIRECT_BOTTOM_TO_TOP;
 	m_nFillPercentage = 100;
 
-	//±ß¿òÍ¸Ã÷¶È
+	//è¾¹æ¡†é€æ˜åº¦
 	m_bFrameSee = true;
 	m_nTransparency = 0; 
 	
-	//Í¼Æ¬
+	//å›¾ç‰‡
 	m_strImagePath = "";
 	bool m_bKeepImageRatio = false; 
 	m_nImageDirect = 0; 
@@ -23,7 +23,7 @@ HShapeObj::~HShapeObj()
 
 }
 
-//¶ş½øÖÆ¶ÁĞ´
+//äºŒè¿›åˆ¶è¯»å†™
 void HShapeObj::readData(QDataStream* data)
 {
 	if (!data) return;
@@ -77,7 +77,7 @@ void HShapeObj::writeData(QDataStream* data)
 	*data << (quint8)m_nImageDirect;
 }
 
-//xmlÎÄ¼ş¶ÁĞ´
+//xmlæ–‡ä»¶è¯»å†™
 void HShapeObj::readXml(QDomElement* dom)
 {
 	if (!dom)
@@ -120,7 +120,7 @@ QString HShapeObj::TagName()
 	return "Shape";
 }
 
-//¿½±´¿ËÂ¡
+//æ‹·è´å…‹éš†
 void HShapeObj::copyTo(HBaseObj* ob)
 {
 	if (!ob) return;
@@ -148,7 +148,7 @@ void HShapeObj::clone(HBaseObj* ob)
 	copyTo(ob);
 }
 
-//±ä»¯¿ÉÄÜÊÇ°´±ÈÀıÒ²¿ÉÄÜÊÇÖ±½Ó¸ü¸Äw,h
+//å˜åŒ–å¯èƒ½æ˜¯æŒ‰æ¯”ä¾‹ä¹Ÿå¯èƒ½æ˜¯ç›´æ¥æ›´æ”¹w,h
 void HShapeObj::resize(double w, double h, bool scale)
 {
 	HBaseObj::resize(w, h, scale);
@@ -169,7 +169,7 @@ void HShapeObj::expand(double dx1, double dx2, double dy1, double dy2, qint8 fla
 
 }
 
-///¾ø¶Ô×ø±ê
+///ç»å¯¹åæ ‡
 bool HShapeObj::setPointList(QPolygonF& list, qint8 flag)
 {
 	HBaseObj::setPointList(list, flag);
@@ -179,7 +179,7 @@ bool HShapeObj::setPointList(QPolygonF& list, qint8 flag)
 	return true;
 }
 
-///»ñÈ¡µãÁĞ±í
+///è·å–ç‚¹åˆ—è¡¨
 QPolygonF HShapeObj::getPointList(qint8 flag)
 {
 	QPointF po(-m_width / 2, -m_height / 2);
@@ -197,7 +197,7 @@ QPolygonF HShapeObj::getPointList(qint8 flag)
 	return list;
 }
 
-//Ìî³äÑ¡Ôñ
+//å¡«å……é€‰æ‹©
 void HShapeObj::setFillWay(quint8 fillWay)
 {
 	m_nFillWay = fillWay;
@@ -208,7 +208,7 @@ quint8 HShapeObj::getFillWay()
 	return m_nFillWay;
 }
 
-//Ìî³ä·½Ê½(·ç¸ñ)
+//å¡«å……æ–¹å¼(é£æ ¼)
 void HShapeObj::setFillStyle(quint8 style)
 {
 	m_nFillStyle = style;
@@ -219,7 +219,7 @@ quint8 HShapeObj::getFillStyle()
 	return m_nFillStyle;
 }
 
-//Ìî³äÉ«
+//å¡«å……è‰²
 void HShapeObj::setFillColorName(QString clrName)
 {
 	m_strFillColor = clrName;
@@ -230,7 +230,7 @@ QString HShapeObj::getFillColorName()
 	return m_strFillColor;
 }
 
-//Ìî³ä·½Ïò
+//å¡«å……æ–¹å‘
 void HShapeObj::setFillDirection(quint8 fillDirection)
 {
 	m_nFillDirection = fillDirection;
@@ -241,7 +241,7 @@ quint8 HShapeObj::getFillDirection()
 	return m_nFillDirection;
 }
 
-//Ìî³ä±ÈÀı
+//å¡«å……æ¯”ä¾‹
 void HShapeObj::setFillPercentage(quint8 fillPer)
 {
 	m_nFillPercentage = fillPer;
@@ -252,7 +252,7 @@ quint8 HShapeObj::getFillPercentage()
 	return m_nFillPercentage;
 }
 
-//±ß¿ò¿É¼û
+//è¾¹æ¡†å¯è§
 void HShapeObj::setFrameSee(bool frameSee)
 {
 	m_bFrameSee = frameSee;
@@ -269,12 +269,12 @@ void HShapeObj::setPainter(QPainter* painter, const QRectF& rect)
 	painter->setRenderHint(QPainter::TextAntialiasing);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
-	//ÉèÖÃÊôĞÔ
-	QColor penClr = QColor(getLineColorName()); //ÏßÌõÑÕÉ«
-	int penWidth = getLineWidth();//ÏßÌõ¿í¶È
-	Qt::PenStyle penStyle = getLineStyle(); //ÏßÌõĞÎ×´
-	Qt::PenCapStyle capStyle = getLineCapStyle(); //ÏßÌõ½Ç¶È
-	bool bFrameSee = getFrameSee();//±ß¿ò¿É¼û
+	//è®¾ç½®å±æ€§
+	QColor penClr = QColor(getLineColorName()); //çº¿æ¡é¢œè‰²
+	int penWidth = getLineWidth();//çº¿æ¡å®½åº¦
+	Qt::PenStyle penStyle = getLineStyle(); //çº¿æ¡å½¢çŠ¶
+	Qt::PenCapStyle capStyle = getLineCapStyle(); //çº¿æ¡è§’åº¦
+	bool bFrameSee = getFrameSee();//è¾¹æ¡†å¯è§
 	QPen pen = QPen(penClr);
 	pen.setStyle(penStyle);
 	pen.setWidth(penWidth);
@@ -284,13 +284,13 @@ void HShapeObj::setPainter(QPainter* painter, const QRectF& rect)
 	else
 		painter->setPen(Qt::NoPen);
 
-	//ÉèÖÃÌî³ä
-	quint8 nFillWay = getFillWay();//Ìî³äÑ¡Ôñ
-	quint8 nFillStyle = getFillStyle(); //Ìî³ä·ç¸ñ
-	quint8 nTransparency = getTransparency(); //Í¸Ã÷¶È
-	quint8 nFillDir = getFillDirection();//Ìî³ä·½Ïò
-	QColor fillClr = QColor(getFillColorName());//Ìî³äÑÕÉ«
-	//quint8 nFillPercentage = getFillPercentage(); //Ìî³ä±ÈÀı
+	//è®¾ç½®å¡«å……
+	quint8 nFillWay = getFillWay();//å¡«å……é€‰æ‹©
+	quint8 nFillStyle = getFillStyle(); //å¡«å……é£æ ¼
+	quint8 nTransparency = getTransparency(); //é€æ˜åº¦
+	quint8 nFillDir = getFillDirection();//å¡«å……æ–¹å‘
+	QColor fillClr = QColor(getFillColorName());//å¡«å……é¢œè‰²
+	//quint8 nFillPercentage = getFillPercentage(); //å¡«å……æ¯”ä¾‹
 
 	QBrush brush;
 	if (nFillWay > 0)
@@ -309,43 +309,43 @@ void HShapeObj::setPainter(QPainter* painter, const QRectF& rect)
 					ps1 = rect.bottomLeft();
 					break;
 				}
-				case DIRECT_TOP_TO_BOTTOM: //ÓĞ¶¥µ½µ×
+				case DIRECT_TOP_TO_BOTTOM: //æœ‰é¡¶åˆ°åº•
 				{
 					ps1 = rect.topLeft();
 					ps2 = rect.bottomLeft();
 					break;
 				}
-				case DIRECT_LEFT_TO_RIGHT: //ÓÉ×óµ½ÓÒ
+				case DIRECT_LEFT_TO_RIGHT: //ç”±å·¦åˆ°å³
 				{
 					ps1 = rect.topLeft();
 					ps2 = rect.topRight();
 					break;
 				}
-				case DIRECT_RIGHT_TO_LEFT: //ÓÉÓÒµ½×ó
+				case DIRECT_RIGHT_TO_LEFT: //ç”±å³åˆ°å·¦
 				{
 					ps1 = rect.topRight();
 					ps2 = rect.topLeft();
 					break;
 				}
-				case DIRECT_VER_TO_OUT: //´¹Ö±µ½Íâ
+				case DIRECT_VER_TO_OUT: //å‚ç›´åˆ°å¤–
 				{
 					ps1 = QPointF(rect.center().x(), rect.top());
 					ps2 = rect.topLeft();
 					break;
 				}
-				case DIRECT_HORi_TO_OUT: //Ë®Æ½ÏòÍâ
+				case DIRECT_HORi_TO_OUT: //æ°´å¹³å‘å¤–
 				{
 					ps1 = QPointF(rect.left(), rect.center().y());
 					ps2 = rect.topLeft();
 					break;
 				}
-				case DIRECT_VER_TO_IN: //´¹Ö±ÏòÀï
+				case DIRECT_VER_TO_IN: //å‚ç›´å‘é‡Œ
 				{
 					ps2 = QPointF(rect.center().x(), rect.top());
 					ps1 = rect.topLeft();
 					break;
 				}
-				case DIRECT_HORI_TO_IN: //´¹Ö±ÏòÀï
+				case DIRECT_HORI_TO_IN: //å‚ç›´å‘é‡Œ
 				{
 					ps2 = QPointF(rect.left(), rect.center().y());
 					ps1 = rect.topLeft();
@@ -390,7 +390,7 @@ void HShapeObj::setPainter(QPainter* painter, const QRectF& rect)
 		}
 		else if (nFillWay == 2)
 		{
-			QString strImagePath = getBkImagePath();//Í¼Æ¬²¿·Ö
+			QString strImagePath = getBkImagePath();//å›¾ç‰‡éƒ¨åˆ†
 			if (!strImagePath.isEmpty() || !strImagePath.isNull())
 			{
 				QPixmap pix, pix1;
@@ -428,13 +428,13 @@ bool HShapeObj::getPath(QPainterPath& path)
 {
 	return false;
 }
-///»ñµÃ°ü¹üÇøÓòÎ»ÖÃ´óĞ¡
+///è·å¾—åŒ…è£¹åŒºåŸŸä½ç½®å¤§å°
 QRectF HShapeObj::boundingRect(qint8 flag)
 {
 	return HShapeObj::boundingRect(flag);
 }
 
-//»ñµÃ»æÍ¼Â·¾¶
+//è·å¾—ç»˜å›¾è·¯å¾„
 QPainterPath HShapeObj::shape(qint8 flag)
 {
 	QPolygonF points = getPointList(flag);
@@ -444,7 +444,7 @@ QPainterPath HShapeObj::shape(qint8 flag)
 	return path;
 }
 
-//Í¸Ã÷¶È
+//é€æ˜åº¦
 void HShapeObj::setTransparency(quint8 transparency)
 {
 	m_nTransparency = transparency;
