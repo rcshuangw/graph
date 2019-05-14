@@ -248,11 +248,9 @@ void HMoveIconCommand::redo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        oldBounding = oldBounding.united(item->boundingRect());
-        newBounding = newBounding.united(item->boundingRect().translated(dxList[i],dyList[i]));
-        item->moveBy(dxList[i],dyList[i]);
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        newBounding = newBounding.united(obj->boundingRect(1).translated(dxList[i],dyList[i]));
+        obj->iconGraphicsItem()->moveBy(dxList[i],dyList[i]);
     }
     m_pIconEditorMgr->iconEditorFrame()->refreshSelected(oldBounding);
     m_pIconEditorMgr->iconEditorFrame()->refreshSelected(newBounding);
@@ -269,11 +267,10 @@ void HMoveIconCommand::undo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        oldBounding = oldBounding.united(item->boundingRect());
-        newBounding = newBounding.united(item->boundingRect().translated(dxList[i],dyList[i]));
-        item->moveBy(-dxList[i],-dyList[i]);
+
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        newBounding = newBounding.united(obj->boundingRect(1).translated(dxList[i],dyList[i]));
+        obj->iconGraphicsItem()->moveBy(-dxList[i],-dyList[i]);
     }
     m_pIconEditorMgr->iconEditorFrame()->refreshSelected(oldBounding);
     m_pIconEditorMgr->iconEditorFrame()->refreshSelected(newBounding);

@@ -130,14 +130,19 @@ QPolygonF HLine::getPointList(qint8 flag)
 QRectF HLine::boundingRect(qint8 flag)
 {
     QPainterPath path;
-    HPointFList points = getPointList(flag);
+    HPointFList points;
+    double n = getLineWidth();
+    if (n < 5) n = 5;
+    getBoundingRect(points, ptHeadPoint, ptTailPoint, n);
+    maps(points, flag);
+
 	QPainterPath pathhead = getArrowPath(points, true);
 	if (!pathhead.isEmpty())
 		path.addPath(pathhead);
 	QPainterPath pathtail = getArrowPath(points, false);
 	if (!pathtail.isEmpty())
 		path.addPath(pathtail);
-	QRectF rectF = shape(flag).boundingRect().united(path.boundingRect());
+    QRectF rectF = points.boundingRect().united(path.boundingRect());
 	return rectF;
 }
 

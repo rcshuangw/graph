@@ -14,7 +14,7 @@ public:
 	void move(qreal dx, qreal dy, bool bscale = false);
 	void moveBy(qreal dx, qreal dy, bool bscale = false);
 public:
-    virtual void RePos();
+    virtual void rePos();
 	virtual HPointFList getPointList(qint8 flag /* = 0 */);
     virtual void paint(QPainter* painter);
 	virtual QRectF boundingRect(qint8 flag = 0);

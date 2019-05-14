@@ -14,8 +14,10 @@ HShapeObj::HShapeObj()
 	
 	//图片
 	m_strImagePath = "";
-	bool m_bKeepImageRatio = false; 
-	m_nImageDirect = 0; 
+    m_bKeepImageRatio = false;
+    m_nImageDirect = 0;
+
+    m_width = m_height = 50;
 }
 
 HShapeObj::~HShapeObj()

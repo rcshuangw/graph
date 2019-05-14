@@ -265,14 +265,14 @@ HPointFList HDrawHelper::getMidPoints(HPointFList points,bool bclose)
         if(i == 0) rPoints.append(points[i]);
         else
         {
-            QPointF pt((points.at(i-1).x()+points.at(i).x()),(points.at(i-1).y()+points.at(i).y()));
+            QPointF pt((points.at(i-1).x()+points.at(i).x())/2,(points.at(i-1).y()+points.at(i).y())/2);
             rPoints.append(pt);
             rPoints.append(points.at(i));
         }
     }
     if(bclose)
     {
-        QPointF pt((points.first().x()+points.last().x()),(points.first().y()+points.last().y()));
+        QPointF pt((points.first().x()+points.last().x())/2,(points.first().y()+points.last().y())/2);
         rPoints.append(pt);
     }
     return rPoints;
@@ -377,6 +377,111 @@ void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
     case Group:
         break;
     case TempContainer:
+    {
+        QTransform trans;
+        m_pBaseObj->transform(trans,1);
+        QPointF point = trans.inverted().map(curPoint);
+        HPointFList ptList = m_pBaseObj->getPointList(1);
+        HPointFList points = trans.inverted().map(ptList);
+        QPointF topLeft = points.at(0);
+        QPointF bottomRight = points.at(2);
+        qreal dx,dy = 0;
+        switch(index)
+        {
+        case 0:
+        {
+            //如果point太靠近bottomRight就返回
+            if(qAbs(point.x() - bottomRight.x())<5 || qAbs(point.y() - bottomRight.y())<5)
+                break;
+            dx = point.x() - topLeft.x();
+            dy = point.y() - topLeft.y();
+            topLeft = point;
+        }
+            break;
+        case 1:
+        {
+            if(qAbs(point.y() - bottomRight.y())<5)
+                break;
+            dx = 0;
+            dy = point.y() - topLeft.y();
+            topLeft.setY(point.y());
+        }
+            break;
+        case 2:
+        {
+            if(qAbs(point.y() - bottomRight.y())<5 || qAbs(point.x() - bottomRight.x())<5 )
+                break;
+            dx = point.x() - bottomRight.x();
+            dy = point.y() - topLeft.y();
+            topLeft.setY(point.y());
+            bottomRight.setX(point.x());
+        }
+            break;
+        case 3:
+        {
+            if(qAbs(point.x() - topLeft.x())<5)
+                break;
+            dy = 0;
+            dx = point.x() - bottomRight.x();
+            bottomRight.setX(point.x());
+        }
+            break;
+        case 4:
+        {
+            if(qAbs(point.x() - topLeft.x())<5 || qAbs(point.y() - topLeft.y())<5)
+                break;
+            dx = point.x() - bottomRight.x();
+            dy = point.y() - bottomRight.y();
+            bottomRight = point;
+        }
+            break;
+        case 5:
+        {
+            if(qAbs(point.y() - topLeft.y())<5)
+                break;
+            dx = 0;
+            dy = point.y() - bottomRight.y();
+            bottomRight.setY(point.y());
+        }
+            break;
+        case 6:
+        {
+            if(qAbs(point.x() - bottomRight.x())<5 || qAbs(point.y() - topLeft.y())<5)
+                break;
+            dx = point.x() - topLeft.x();
+            dy = point.y() - bottomRight.y();
+            topLeft.setX(point.x());
+            bottomRight.setY(point.y());
+        }
+            break;
+        case 7:
+        {
+            if(qAbs(point.x() - bottomRight.x())<5)
+                break;
+            dy = 0;
+            dx = point.x() - topLeft.x();
+            topLeft.setX(point.x());
+        }
+            break;
+        default:
+            break;
+        }
+        qreal width = qAbs(topLeft.x() - bottomRight.x());
+        qreal height = qAbs(topLeft.y() - bottomRight.y());
+        HTempContainer* pObj = (HTempContainer*)m_pBaseObj;
+        pObj->resize(width,height);
+        pObj->moveBy(dx/2,dy/2);
+
+        for(int i = 0; i < pObj->getObjList().size();i++)
+        {
+            HBaseObj* obj = pObj->getObjList().at(i);
+            if(obj && obj->iconGraphicsItem())
+            {
+                obj->moveBy(dx/2,dy/2);
+                obj->iconGraphicsItem()->setPos(obj->pos());
+            }
+        }
+    }
         break;
     default:
         break;

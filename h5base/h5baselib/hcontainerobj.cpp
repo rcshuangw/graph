@@ -218,7 +218,7 @@ void HContainerObj::resize(double w, double h, bool scale)
 		m_height = h;
 	}
 
-	transform(dw, dh);
+    transform(dw, dh);
 }
 
 void HContainerObj::expand(double dx1, double dx2, double dy1, double dy2, qint8 flag)
@@ -234,7 +234,7 @@ bool HContainerObj::transform(double dx, double dy)
 	{
 		HBaseObj* pObj = m_pObjList.at(i);
 		pObj->resize(dx, dy, true);
-		pObj->move(dx, dy, true);
+        //pObj->move(dx, dy, true);
 	}
 	return true;
 }
@@ -249,6 +249,7 @@ void HContainerObj::move(qreal dx, qreal dy, bool scale)
 	}
 }
 
+/*
 void HContainerObj::moveBy(qreal dx, qreal dy, bool scale)
 {
 	for (int i = 0; i < m_pObjList.size(); i++)
@@ -257,7 +258,7 @@ void HContainerObj::moveBy(qreal dx, qreal dy, bool scale)
 		if (!pObj) continue;
 		pObj->moveBy(dx, dy, scale);
 	}
-}
+}*/
 
 QRectF HContainerObj::boundingRect(qint8 flag)
 {
@@ -268,7 +269,7 @@ QRectF HContainerObj::boundingRect(qint8 flag)
 		HBaseObj* pObj = m_pObjList.at(i);
 		if (!pObj || pObj->isDeleted())
 			continue;
-		rectF = rectF.united(pObj->boundingRect().normalized());
+        rectF = rectF.united(pObj->getPointList(1).boundingRect().normalized());
 	}
 	return rectF;
 }
@@ -287,6 +288,10 @@ QPainterPath HContainerObj::shape(qint8 flag)
 	return path;
 }
 
+void HContainerObj::rePos()
+{
+
+}
 //针对objList的操作 参考QVector类的函数
 void HContainerObj::clear()
 {
@@ -301,12 +306,14 @@ void HContainerObj::addObj(HBaseObj* obj)
 {
 	if (!obj) return;
 	m_pObjList.append(obj);
+    rePos();
 }
 
 void HContainerObj::removeObj(HBaseObj* obj)
 {
 	if (!obj) return;
 	m_pObjList.removeOne(obj);
+    rePos();
 }
 
 bool HContainerObj::contains(HBaseObj* obj)
@@ -337,6 +344,7 @@ void HContainerObj::addObjList(QList<HBaseObj*> objs)
 		if (!obj) continue;
 		addObj(obj);
 	}
+    rePos();
 }
 
 QVector<HBaseObj*>& HContainerObj::getObjList()

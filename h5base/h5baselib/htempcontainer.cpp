@@ -53,9 +53,19 @@ QPainterPath HTempContainer::shape(qint8 flag)
 	return path;
 }
 
-void HTempContainer::RePos()
+void HTempContainer::rePos()
 {
-    QRectF rectF = boundingRect(1);
+    QRectF rectF(0,0,0,0);
+    int count = m_pObjList.size();
+    if(count < 2) return;
+    for (int i = 0; i < count; i++)
+    {
+        HBaseObj* pObj = m_pObjList.at(i);
+        if (!pObj || pObj->isDeleted())
+            continue;
+        rectF = rectF.united(pObj->getPointList(1).boundingRect().normalized());
+    }
+
     QPointF pt = rectF.center();
     setOX(pt.x());
     setOY(pt.y());

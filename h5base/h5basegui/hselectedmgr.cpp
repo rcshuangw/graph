@@ -31,7 +31,6 @@ void HSelectedMgr::paint(QPainter* painter, const QRectF& rect, const QRectF &se
         pen.setStyle(Qt::DashLine);
         painter->setPen(pen);
         painter->drawPolygon(m_selectedPoints.toPolygon());
-        qDebug()<<"count:"<<m_selectedPoints.count();
         painter->restore();
         if(m_pTempContainer->getObjList().size() > 0)
         {
@@ -221,7 +220,7 @@ void HSelectedMgr::recalcSelect()
 	for (int i = 0; i < objLists.count(); i++)
 	{
 		HBaseObj* pObj = objLists.at(i);
-		if (pObj && pObj->iconGraphicsItem())
+        if (pObj && pObj->iconGraphicsItem())
 			pObj->iconGraphicsItem()->update();
 	}
 	emit refreshSelect(m_SelectBounding.united(rectF));
@@ -233,7 +232,6 @@ void HSelectedMgr::calcPoints()
     HDrawHelper* pDrawHelper = HDrawHelper::Instance();
     if(pDrawHelper)
         m_selectedPoints = pDrawHelper->selectedPointList();
-    qDebug()<<"calcPoints:"<<m_selectedPoints.count();
     if(m_selectedPoints.count() <=0)
         m_SelectBounding = QRectF();
     else
@@ -242,5 +240,5 @@ void HSelectedMgr::calcPoints()
 
 void HSelectedMgr::refreshObjs()
 {
-    m_pTempContainer->RePos();
+    m_pTempContainer->rePos();
 }

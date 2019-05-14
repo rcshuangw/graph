@@ -11,6 +11,7 @@
 HIconEditorSelectTool::HIconEditorSelectTool(HIconEditorMgr* manager)
     :m_pIconEditorMgr(manager),m_bIsSelectPoint(false)
 {
+    m_nSelPointIndex = -1;
     m_SelectMode = None;
     m_SelectWidget = new QWidget;
     m_SelectWidget->setPalette(QPalette(Qt::blue));
@@ -71,6 +72,7 @@ bool HIconEditorSelectTool::eventFilter(QObject *obj, QEvent *ev)
         case QEvent::MouseButtonRelease:
         case QEvent::MouseMove:
         {
+            m_bIsSelectPoint = true;
             QPoint gp = ((QMouseEvent*)ev)->globalPos();
             QPoint vp = m_pIconEditorMgr->iconEditorFrame()->view()->viewport()->mapFromGlobal(gp);
             QPointF fp = m_pIconEditorMgr->iconEditorFrame()->view()->mapToScene(vp);
@@ -282,14 +284,14 @@ void HIconEditorSelectTool::onMouseReleaseEvent(QMouseEvent* event, QVariant &da
     {
         if(None == m_SelectMode)
         {
-            if(tempContainer && tempContainer->getObjList().count() > 0)
+            if(tempContainer && tempContainer->getObjList().size() > 0)
             {
                 m_SelectMode = Select;
             }
         }
         else if(Select == m_SelectMode)
         {
-            if(tempContainer && tempContainer->getObjList().count() > 0)
+            if(tempContainer && tempContainer->getObjList().count() == 0)
             {
                 m_SelectMode = None;
             }

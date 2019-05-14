@@ -38,8 +38,9 @@ public:
 	void expand(double dx1, double dx2, double dy1, double dy2, qint8 flag = 0);
 	bool transform(double dx,double dy);
 	void move(qreal dx, qreal dy, bool bscale = false);
-	void moveBy(qreal dx, qreal dy, bool bscale = false);
+    //void moveBy(qreal dx, qreal dy, bool bscale = false);
 public:
+    virtual void rePos();
 	virtual QRectF boundingRect(qint8 flag = 0);
 	virtual QPainterPath shape(qint8 flag = 0);
 public:
