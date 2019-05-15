@@ -223,7 +223,7 @@ void HSelectedMgr::recalcSelect()
         if (pObj && pObj->iconGraphicsItem())
 			pObj->iconGraphicsItem()->update();
 	}
-	emit refreshSelect(m_SelectBounding.united(rectF));
+    emit refreshSelect(m_SelectBounding.united(rectF));
 }
 
 void HSelectedMgr::calcPoints()

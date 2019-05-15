@@ -104,10 +104,10 @@ void HLine::resize(double w, double h, bool scale)
 	if (qFuzzyCompare(dy, 0))
 		dy = 1.0;
 
-	ptHeadPoint.rx() *= dx;
-	ptHeadPoint.ry() *= dy;
-	ptTailPoint.rx() *= dx;
-	ptTailPoint.ry() *= dy;
+    ptHeadPoint.rx()*=dx;
+    ptHeadPoint.ry()*=dy;
+    ptTailPoint.rx()*=dx;
+    ptTailPoint.ry()*=dy;
 }
 
 bool HLine::setPointList(QPolygonF& list, qint8 flag)
