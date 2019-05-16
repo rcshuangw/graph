@@ -63,8 +63,8 @@ void HRectTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
         if(event->modifiers()&Qt::ControlModifier)
         {
             //正方形
-            qreal dx = qAbs(m_ptCurPoint.x() - m_ptStPoint.x());
-            qreal dy = qAbs(m_ptCurPoint.y() - m_ptStPoint.x());
+            double dx = qAbs(m_ptCurPoint.x() - m_ptStPoint.x());
+            double dy = qAbs(m_ptCurPoint.y() - m_ptStPoint.x());
             bounding.setWidth(qMin(dx,dy));
             bounding.setHeight(qMin(dx,dy));
             bounding.setTopLeft(topLeft);
@@ -124,8 +124,8 @@ void HRectTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
             if(event->modifiers()&Qt::ControlModifier)
             {
                 //正方形
-                qreal dx = qAbs(m_ptCurPoint.x() - m_ptStPoint.x());
-                qreal dy = qAbs(m_ptCurPoint.y() - m_ptStPoint.x());
+                double dx = qAbs(m_ptCurPoint.x() - m_ptStPoint.x());
+                double dy = qAbs(m_ptCurPoint.y() - m_ptStPoint.x());
                 bounding.setWidth(qMin(dx,dy));
                 bounding.setHeight(qMin(dx,dy));
                 bounding.setTopLeft(topLeft);

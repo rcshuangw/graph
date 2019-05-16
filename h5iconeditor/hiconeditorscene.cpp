@@ -29,8 +29,8 @@ void HIconEditorScene::drawBackground(QPainter *painter, const QRectF &rect)
     bool bShowGrid = m_pIconEditorMgr->getShowGrid();
     if(bShowGrid)
     {
-        for(qreal x=finalRect.left();x < finalRect.right()+25;x+=25)
-            for(qreal y=finalRect.top();y<finalRect.bottom()+25;y+=25)
+        for(double x=finalRect.left();x < finalRect.right()+25;x+=25)
+            for(double y=finalRect.top();y<finalRect.bottom()+25;y+=25)
                 painter->drawPoint(x,y);
     }
 

@@ -30,7 +30,7 @@ void HShapeObj::readData(QDataStream* data)
 {
 	if (!data) return;
 	HBaseObj::readData(data);
-	qreal r;
+    double r;
 	*data >> r;
 	m_width = r;
 	*data >> r;
@@ -65,8 +65,8 @@ void HShapeObj::writeData(QDataStream* data)
 {
 	if (!data) return;
 	HBaseObj::writeData(data);
-	*data << (qreal)m_width;
-	*data << (qreal)m_height;
+    *data << (double)m_width;
+    *data << (double)m_height;
 	*data << (quint8)m_nFillWay;
 	*data << (quint8)m_nFillStyle;
 	*data << (QString)m_strFillColor;
@@ -297,7 +297,7 @@ void HShapeObj::setPainter(QPainter* painter, const QRectF& rect)
 	QBrush brush;
 	if (nFillWay > 0)
 	{
-		painter->setOpacity(1 - (qreal)nTransparency / 100.00);
+        painter->setOpacity(1 - (double)nTransparency / 100.00);
 		if (nFillWay == 1)
 		{
 			if (nFillStyle == Qt::LinearGradientPattern)

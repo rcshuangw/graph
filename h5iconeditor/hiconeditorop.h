@@ -152,7 +152,7 @@ private:
     Qt::Alignment m_Alignment;
     IconSize m_Equalway;
     IconFlip m_Flipway;
-    qreal m_scale;
+    double m_scale;
     int m_nToolType;
 
 };

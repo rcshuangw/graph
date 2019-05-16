@@ -225,12 +225,12 @@ void HLineObj::resize(double w, double h, bool scale)
 	HBaseObj::resize(w, h, scale);
 }
 
-void HLineObj::move(qreal dx, qreal dy, bool bscale)
+void HLineObj::move(double dx, double dy, bool bscale)
 {
 	HBaseObj::move(dx, dy, bscale);
 }
 
-void HLineObj::moveBy(qreal dx, qreal dy, bool bscale)
+void HLineObj::moveBy(double dx, double dy, bool bscale)
 {
 	HBaseObj::moveBy(dx, dy, bscale);
 }

@@ -32,6 +32,7 @@ void HSelectedMgr::paint(QPainter* painter, const QRectF& rect, const QRectF &se
         painter->setPen(pen);
         painter->drawPolygon(m_selectedPoints.toPolygon());
         painter->restore();
+
         if(m_pTempContainer->getObjList().size() > 0)
         {
             painter->save();

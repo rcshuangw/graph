@@ -8,12 +8,12 @@ HTempContainer::~HTempContainer()
 	clear();
 }
 
-void HTempContainer::move(qreal dx, qreal dy, bool scale)
+void HTempContainer::move(double dx, double dy, bool scale)
 {
 	HContainerObj::move(dx, dy, scale);
 }
 
-void HTempContainer::moveBy(qreal dx, qreal dy, bool scale)
+void HTempContainer::moveBy(double dx, double dy, bool scale)
 {
 	HContainerObj::moveBy(dx, dy, scale);
 }
@@ -36,7 +36,10 @@ QRectF HTempContainer::boundingRect(qint8 flag)
 	QPointF po(-m_width / 2, -m_height / 2);
 	QRectF rectF(po, QSize(m_width, m_height));
 	rectF.adjust(-5, -5, 5, 5);
-	return rectF;
+    if(0 == flag)
+        return rectF;
+    rectF.translate(getOX(),getOY());
+    return rectF;
 }
 
 QPainterPath HTempContainer::shape(qint8 flag)
@@ -55,16 +58,7 @@ QPainterPath HTempContainer::shape(qint8 flag)
 
 void HTempContainer::rePos()
 {
-    QRectF rectF(0,0,0,0);
-    int count = m_pObjList.size();
-    if(count < 2) return;
-    for (int i = 0; i < count; i++)
-    {
-        HBaseObj* pObj = m_pObjList.at(i);
-        if (!pObj || pObj->isDeleted())
-            continue;
-        rectF = rectF.united(pObj->getPointList(1).boundingRect().normalized());
-    }
+    QRectF rectF = objsRect(1);
 
     QPointF pt = rectF.center();
     setOX(pt.x());
@@ -77,5 +71,4 @@ void HTempContainer::rePos()
 
 void HTempContainer::paint(QPainter* painter)
 {
-
 }

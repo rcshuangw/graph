@@ -11,8 +11,8 @@ public:
     HGroup();
     virtual ~HGroup();
 public:
-	void move(qreal dx, qreal dy, bool bscale = false);
-	void moveBy(qreal dx, qreal dy, bool bscale = false);
+	void move(double dx, double dy, bool bscale = false);
+	void moveBy(double dx, double dy, bool bscale = false);
 public:
     virtual void RePos();
     virtual HPointFList getPointList(qint8 flag /* = 0 */);

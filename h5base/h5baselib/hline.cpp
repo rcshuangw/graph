@@ -15,7 +15,7 @@ void HLine::readData(QDataStream* data)
 {
 	if (!data)return;
 	HLineObj::readData(data);
-	qreal qr;
+    double qr;
 	*data >> qr;
 	ptHeadPoint.setX(qr);
 	*data >> qr;
@@ -30,10 +30,10 @@ void HLine::writeData(QDataStream* data)
 {
 	if (!data) return;
 	HLineObj::writeData(data);
-	*data << (qreal)ptHeadPoint.x();
-	*data << (qreal)ptHeadPoint.y();
-	*data << (qreal)ptTailPoint.x();
-	*data << (qreal)ptTailPoint.y();
+    *data << (double)ptHeadPoint.x();
+    *data << (double)ptHeadPoint.y();
+    *data << (double)ptTailPoint.x();
+    *data << (double)ptTailPoint.y();
 }
 
 //xml文件读写
@@ -132,7 +132,7 @@ QRectF HLine::boundingRect(qint8 flag)
     QPainterPath path;
     HPointFList points;
     double n = getLineWidth();
-    if (n < 5) n = 5;
+    if (n < 4) n = 4;
     getBoundingRect(points, ptHeadPoint, ptTailPoint, n);
     maps(points, flag);
 

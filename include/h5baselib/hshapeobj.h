@@ -90,8 +90,8 @@ public:
 public:
 	QPolygonF	m_list;
 	QRectF		m_rect;
-    qreal m_width;
-    qreal m_height;
+    double m_width;
+    double m_height;
 
     //填充方面
 	bool m_bFill;

@@ -44,8 +44,8 @@ public:
 	///////////////////////////////////////////////////////操作属性/////////////////////////////
 	//改变大小
 	virtual void resize(double w, double h, bool scale);
-	virtual void move(qreal dx, qreal dy, bool bscale = false);
-	virtual void moveBy(qreal dx, qreal dy, bool bscale = false);
+	virtual void move(double dx, double dy, bool bscale = false);
+	virtual void moveBy(double dx, double dy, bool bscale = false);
 
 public:
 	///绝对坐标

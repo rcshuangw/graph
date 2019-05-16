@@ -57,7 +57,7 @@ void HIconTemplate::readData(int v,QDataStream* d)
     strCatalogName = s;
     *d>>n;
     nCatalogType = n;
-    qreal r;
+    double r;
     *d>>r;
     sDefaultSize.setWidth(r);
     *d>>r;

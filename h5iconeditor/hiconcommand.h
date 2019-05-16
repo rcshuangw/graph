@@ -84,8 +84,8 @@ protected:
 class HMoveIconCommand : public HIconCommand
 {
 public:
-    HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObjs,qreal dx,qreal dy);
-    HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObjs,QList<qreal> dxs,QList<qreal> dys);
+    HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObjs,double dx,double dy);
+    HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObjs,QList<double> dxs,QList<double> dys);
     HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObjs,QList<QPointF> oldPt,QList<QPointF> newPt);
     ~HMoveIconCommand();
 public:
@@ -95,9 +95,9 @@ public:
 protected:
     QList<HBaseObj*> pObjList;
 
-    QList<qreal> dxList;
+    QList<double> dxList;
 
-    QList<qreal> dyList;
+    QList<double> dyList;
 };
 
 //旋转

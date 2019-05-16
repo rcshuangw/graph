@@ -8,12 +8,12 @@ HGroup::~HGroup()
 	clear();
 }
 
-void HGroup::move(qreal dx, qreal dy, bool scale)
+void HGroup::move(double dx, double dy, bool scale)
 {
 	HContainerObj::move(dx, dy, scale);
 }
 
-void HGroup::moveBy(qreal dx, qreal dy, bool scale)
+void HGroup::moveBy(double dx, double dy, bool scale)
 {
 	HContainerObj::moveBy(dx, dy, scale);
 }

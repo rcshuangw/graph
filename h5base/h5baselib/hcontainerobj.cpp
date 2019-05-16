@@ -196,7 +196,7 @@ HBaseObj* HContainerObj::newObj(DrawShape nObjType)
 	return pObj;
 }
 
-///
+#include <QDebug>
 void HContainerObj::resize(double w, double h, bool scale)
 {
 	double dw, dh;
@@ -218,7 +218,31 @@ void HContainerObj::resize(double w, double h, bool scale)
 		m_height = h;
 	}
 
-    transform(dw, dh);
+  objsTransform(dw, dh);
+}
+
+bool HContainerObj::objsTransform(double dx,double dy)
+{
+    int sz = m_pObjList.size();
+    for (int i = 0; i < sz; i++)
+    {
+        HBaseObj* pObj = m_pObjList.at(i);
+        pObj->resize(dx, dy, true);
+
+        QPointF po = pObj->pos();
+        QPointF ce = pos();
+        po -=ce;
+        po.rx()*=dx;
+        po.ry()*=dy;
+        po +=ce;
+        /*
+        if(obj->Parent()){
+            QPointF p = obj->Parent()->GetPosition(1);
+            po-=p;
+        }*/
+        pObj->move(po.x(),po.y(),false);
+    }
+    return true;
 }
 
 void HContainerObj::expand(double dx1, double dx2, double dy1, double dy2, qint8 flag)
@@ -227,6 +251,7 @@ void HContainerObj::expand(double dx1, double dx2, double dy1, double dy2, qint8
 }
 
 //将列表的所有图符 由原始绘制的尺寸按照比例缩小同时改变其原点位置
+/*
 bool HContainerObj::transform(double dx, double dy)
 {
 	int count = m_pObjList.size();
@@ -237,9 +262,9 @@ bool HContainerObj::transform(double dx, double dy)
         //pObj->move(dx, dy, true);
 	}
 	return true;
-}
+}*/
 
-void HContainerObj::move(qreal dx, qreal dy, bool scale)
+void HContainerObj::move(double dx, double dy, bool scale)
 {
 	for (int i = 0; i < m_pObjList.size(); i++)
 	{
@@ -250,7 +275,7 @@ void HContainerObj::move(qreal dx, qreal dy, bool scale)
 }
 
 /*
-void HContainerObj::moveBy(qreal dx, qreal dy, bool scale)
+void HContainerObj::moveBy(double dx, double dy, bool scale)
 {
 	for (int i = 0; i < m_pObjList.size(); i++)
 	{
@@ -259,18 +284,45 @@ void HContainerObj::moveBy(qreal dx, qreal dy, bool scale)
 		pObj->moveBy(dx, dy, scale);
 	}
 }*/
+QRectF HContainerObj::objsRect(qint8 flag)
+{
+    QRectF rectF;
+    int count = m_pObjList.size();
+    for (int i = 0; i < count; i++)
+    {
+        HBaseObj* pObj = m_pObjList.at(i);
+        if (!pObj || pObj->isDeleted())
+            continue;
+        if(rectF.isNull())
+        {
+            rectF = pObj->getPointList(flag).boundingRect();
+            if(rectF.isValid())
+            {
+                if(rectF.width() < 0) rectF.setWidth(1);
+                if(rectF.height()< 0) rectF.setHeight(1);
+            }
+        }
+        else
+        {
+            QRectF sRectF = pObj->getPointList(flag).boundingRect().normalized();
+            if(sRectF.isValid())
+            {
+                if(sRectF.width() < 0) sRectF.setWidth(1);
+                if(sRectF.height()< 0) sRectF.setHeight(1);
+            }
+            rectF = rectF.united(sRectF);
+        }
+    }
+    return rectF;
+}
+
 
 QRectF HContainerObj::boundingRect(qint8 flag)
 {
-	QRectF rectF(0,0,0,0);
-	int count = m_pObjList.size();
-	for (int i = 0; i < count; i++)
-	{
-		HBaseObj* pObj = m_pObjList.at(i);
-		if (!pObj || pObj->isDeleted())
-			continue;
-        rectF = rectF.united(pObj->getPointList(1).boundingRect().normalized());
-	}
+    QRectF rectF = objsRect(flag);
+
+    m_width = rectF.width();
+    m_height = rectF.height();
 	return rectF;
 }
 
@@ -283,7 +335,7 @@ QPainterPath HContainerObj::shape(qint8 flag)
 		HBaseObj* pObj = m_pObjList.at(i);
 		if (!pObj || pObj->isDeleted())
 			continue;
-		path.addPath(pObj->shape());
+        path.addPath(pObj->shape(flag));
 	}
 	return path;
 }

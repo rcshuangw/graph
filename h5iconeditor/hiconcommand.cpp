@@ -194,7 +194,7 @@ void HPasteIconCommand::undo()
 
 
 ////////////////////////////////////////移动///////////////////////////////////////////
-HMoveIconCommand::HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObjs,qreal dx,qreal dy)
+HMoveIconCommand::HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObjs,double dx,double dy)
     :HIconCommand(iconMgr),pObjList(pObjs)
 {
     for(int i = 0; i < pObjList.count();i++)
@@ -205,7 +205,7 @@ HMoveIconCommand::HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObj
     setText("Move Object(s)");
 }
 
-HMoveIconCommand::HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObjs,QList<qreal> dxs,QList<qreal> dys)
+HMoveIconCommand::HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObjs,QList<double> dxs,QList<double> dys)
     :HIconCommand(iconMgr),pObjList(pObjs),dxList(dxs),dyList(dys)
 {
     setText("Move Object(s)");

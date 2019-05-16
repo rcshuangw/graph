@@ -420,12 +420,19 @@ QRectF HBaseObj::boundingRect(qint8 flag)
 	return rectF;
 }
 
+//设置翻转
+void HBaseObj::turn(bool bHorizon, bool bVertical)
+{
+    m_bHorizonTurn = bHorizon;
+    m_bVerticalTurn = bVertical;
+}
+
 void HBaseObj::rotate(float fAngle)
 {
 	m_fRotateAngle = fAngle;
 }
 
-void HBaseObj::moveBy(qreal dx, qreal dy, bool bscale)
+void HBaseObj::moveBy(double dx, double dy, bool bscale)
 {
 	if (bscale)
 	{
@@ -439,14 +446,7 @@ void HBaseObj::moveBy(qreal dx, qreal dy, bool bscale)
 	}
 }
 
-//设置翻转
-void HBaseObj::turn(bool bHorizon, bool bVertical)
-{
-	m_bHorizonTurn = bHorizon;
-	m_bVerticalTurn = bVertical;
-}
-
-void HBaseObj::move(qreal dx, qreal dy, bool bscale)
+void HBaseObj::move(double dx, double dy, bool bscale)
 {
 	if (bscale)
 	{

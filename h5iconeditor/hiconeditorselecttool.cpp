@@ -20,6 +20,7 @@ HIconEditorSelectTool::HIconEditorSelectTool(HIconEditorMgr* manager)
     m_SelectWidget->hide();
     m_SelectWidget->installEventFilter(this);
 
+    m_bMoveGrab = false;
     //m_pDrawHelper = new HDrawHelper;
 }
 
@@ -78,11 +79,30 @@ bool HIconEditorSelectTool::eventFilter(QObject *obj, QEvent *ev)
             QPointF fp = m_pIconEditorMgr->iconEditorFrame()->view()->mapToScene(vp);
             QMouseEvent e(ev->type(),vp,gp,((QMouseEvent*)ev)->button(),((QMouseEvent*)ev)->buttons(),((QMouseEvent*)ev)->modifiers());
             HEvent he(&e,QVariant(fp));
-            onEvent(he);
+            //onEvent(he);
+            if ( ev->type() == QEvent::MouseMove )
+            {
+                QVariant data( fp );
+                onMouseMoveEvent( &e, data );
+            }
+            else
+            {
+                onEvent(he);
+                if ( ev->type() == QEvent::MouseButtonPress&&e.button()==Qt::LeftButton )
+                {
+                    m_bMoveGrab = true;
+                }
+                else if( ev->type() == QEvent::MouseButtonRelease )
+                {
+                    m_bMoveGrab = false;
+                }
+            }
+            return true;
         }
             break;
         }
     }
+    return false;
 }
 
 void HIconEditorSelectTool::onEvent(HEvent& e)
@@ -93,7 +113,8 @@ void HIconEditorSelectTool::onEvent(HEvent& e)
     }
     else if(e.event()->type() == QEvent::MouseMove)
     {
-        onMouseMoveEvent((QMouseEvent*)e.event(), e.m_data);
+        if(!m_bMoveGrab)
+            onMouseMoveEvent((QMouseEvent*)e.event(), e.m_data);
     }
     else if(e.event()->type() == QEvent::MouseButtonRelease)
     {
@@ -213,8 +234,8 @@ void HIconEditorSelectTool::onMouseMoveEvent(QMouseEvent* event, QVariant &data)
 
             if(Select == m_SelectMode)
             {
-                qreal dx = m_ptCurPoint.x() - m_ptStPoint.x();
-                qreal dy = m_ptCurPoint.y() - m_ptStPoint.y();
+                double dx = m_ptCurPoint.x() - m_ptStPoint.x();
+                double dy = m_ptCurPoint.y() - m_ptStPoint.y();
                 tempContainer->moveBy(dx,dy);
             }
         }
@@ -304,8 +325,8 @@ void HIconEditorSelectTool::onMouseReleaseEvent(QMouseEvent* event, QVariant &da
                     if(pObj)
                         objs.append(pObj);
                 }
-                qreal dx = m_ptCurPoint.x() - m_ptOriPoint.x();
-                qreal dy = m_ptCurPoint.y() - m_ptOriPoint.y();
+                double dx = m_ptCurPoint.x() - m_ptOriPoint.x();
+                double dy = m_ptCurPoint.y() - m_ptOriPoint.y();
                 if(qFuzzyCompare(dx,0) && qFuzzyCompare(dy,0))
                     return;
                 HMoveIconCommand* moveCommand = new HMoveIconCommand(m_pIconEditorMgr,objs,dx,dy);

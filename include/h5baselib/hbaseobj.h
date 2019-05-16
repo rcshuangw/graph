@@ -111,8 +111,8 @@ public:
 	virtual void rotate(float fAngle);
 	virtual void turn(bool bHorizon, bool bVertical);
 
-	virtual void move(qreal dx, qreal dy, bool bscale = false);
-	virtual void moveBy(qreal dx, qreal dy,bool bscale = false);
+    virtual void move(double dx, double dy, bool bscale = false);
+    virtual void moveBy(double dx, double dy,bool bscale = false);
     
 	virtual bool isZero(double value);
 	virtual bool isTurned(qint8 nFlag);
@@ -137,7 +137,7 @@ public:
     virtual bool isHorizonTurn();//水平翻转
     virtual bool isVerticalTurn();//垂直翻转
 
-    //void setSubObjRect(qreal dx,qreal dy);
+    //void setSubObjRect(double dx,double dy);
 public:
 	void addPointList(QPolygonF& list, qint8 flag);
 	void pointList(QPolygonF&list,qint8 flag);

@@ -3,7 +3,7 @@
 #include "hbaseobj.h"
 #include "hiconobj.h"
 #include <QCursor>
-
+#include <QDebug>
 HDrawHelper* HDrawHelper::m_pInstance = NULL;
 
 HDrawHelper* HDrawHelper::Instance()
@@ -385,7 +385,8 @@ void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
         HPointFList points = trans.inverted().map(ptList);
         QPointF topLeft = points.at(0);
         QPointF bottomRight = points.at(2);
-        qreal dx,dy = 0;
+        double dx = 0;
+        double dy = 0;
         switch(index)
         {
         case 0:
@@ -404,6 +405,7 @@ void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
                 break;
             dx = 0;
             dy = point.y() - topLeft.y();
+
             topLeft.setY(point.y());
         }
             break;
@@ -466,9 +468,15 @@ void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
         default:
             break;
         }
-        qreal width = qAbs(topLeft.x() - bottomRight.x());
-        qreal height = qAbs(topLeft.y() - bottomRight.y());
+
+        //huangw 这样写不行不知道为什么
+        double width = qAbs(topLeft.x() - bottomRight.x());
+        double height = qAbs(topLeft.y() - bottomRight.y());
+
         HTempContainer* pObj = (HTempContainer*)m_pBaseObj;
+        //这样写没问题
+        width = pObj->m_width + dx;
+        height = pObj->m_height + dy;
         pObj->resize(width,height);
         pObj->moveBy(dx/2,dy/2);
 
@@ -481,6 +489,7 @@ void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
                 obj->iconGraphicsItem()->setPos(obj->pos());
             }
         }
+
     }
         break;
     default:

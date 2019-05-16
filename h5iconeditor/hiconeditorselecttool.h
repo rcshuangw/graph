@@ -47,5 +47,7 @@ private:
 	QPointF m_ptStPoint;
 	QPointF m_ptCurPoint;
     HIconEditorMgr* m_pIconEditorMgr;
+    ///是否在选中点上移动
+        bool m_bMoveGrab;
 }; 
 #endif

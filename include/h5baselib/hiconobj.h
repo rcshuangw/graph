@@ -40,9 +40,9 @@ public:
 	virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
 	virtual QPolygonF getPointList(qint8 flag = 0);
 	//操作函数
-	virtual void move(qreal dx, qreal dy, bool bscale = false);
-    virtual void moveBy(qreal dx,qreal dy,bool bscale = false);
-    virtual void resize(qreal w,qreal h, bool bscale = false);
+	virtual void move(double dx, double dy, bool bscale = false);
+    virtual void moveBy(double dx,double dy,bool bscale = false);
+    virtual void resize(double w,double h, bool bscale = false);
 
 public:
 	//HGrphicsItem的虚函数

@@ -295,17 +295,17 @@ DrawShape HIconObj::getShapeType()
 }
 
 
-void HIconObj::resize(qreal w, qreal h, bool bscale)
+void HIconObj::resize(double w, double h, bool bscale)
 {
 	iconSymbol()->resize(w, h);
 }
 
-void HIconObj::move(qreal dx, qreal dy, bool bscale)
+void HIconObj::move(double dx, double dy, bool bscale)
 {
 	HBaseObj::move(dx, dy,bscale);
 }
 
-void HIconObj::moveBy(qreal dx,qreal dy, bool bscale)
+void HIconObj::moveBy(double dx,double dy, bool bscale)
 {
 	HBaseObj::moveBy(dx, dy,bscale);
 }
