@@ -54,7 +54,9 @@ void HRectTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
     QRectF bounding;
     if(m_edrawShape == Circle)
     {
-
+        double r = distance(m_ptStPoint,m_ptCurPoint);
+        bounding.setSize(QSizeF(r*2,r*2));
+        bounding.moveCenter(m_ptStPoint);
     }
     else
     {

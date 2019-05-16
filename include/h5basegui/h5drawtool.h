@@ -21,6 +21,11 @@ public:
     virtual void onMousePressEvent(QMouseEvent* event,QVariant &data) = 0;
     virtual void onMouseMoveEvent(QMouseEvent* event,QVariant &data) = 0;
     virtual void onMouseReleaseEvent(QMouseEvent* event,QVariant &data) = 0;
+
+    inline double distance(QPointF pt1,QPointF pt2)
+    {
+        return sqrt(pow((pt1.x() - pt2.x()),2)+pow((pt1.y() - pt2.y()),2));
+    }
 public:
     DrawShape drawShape() {return m_edrawShape;}
     QString objTypeName(){ return m_strObjName;}
