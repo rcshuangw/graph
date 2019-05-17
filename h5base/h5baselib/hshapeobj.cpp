@@ -1,4 +1,5 @@
 ﻿#include "hshapeobj.h"
+#include "hrectangle.h"
 HShapeObj::HShapeObj()
 {
 	m_bFill = false;
@@ -428,12 +429,32 @@ void HShapeObj::setPainter(QPainter* painter, const QRectF& rect)
 
 bool HShapeObj::getPath(QPainterPath& path)
 {
+    DrawShape drawShape = getShapeType();
+    HPointFList points = getPointList();
+    if(drawShape == Rectangle || drawShape == Text)
+    {
+        HRectangle* obj = (HRectangle*)this;
+        if(obj && obj->getRound())
+        {
+            path.addRoundedRect(points.boundingRect(),obj->getXAxis(),obj->getYAxis());
+        }
+        else
+        {
+            path.addRect(points.boundingRect());
+        }
+    }
+    else
+    {
+        path.addPolygon(points);
+        path.closeSubpath();
+    }
 	return false;
 }
+
 ///获得包裹区域位置大小
 QRectF HShapeObj::boundingRect(qint8 flag)
 {
-	return HShapeObj::boundingRect(flag);
+    return HBaseObj::boundingRect(flag);
 }
 
 //获得绘图路径

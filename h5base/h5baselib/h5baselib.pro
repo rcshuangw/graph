@@ -33,7 +33,10 @@ SOURCES += \
         hlineobj.cpp \
         htempcontainer.cpp  \
         hcontainerobj.cpp \
-    hgroup.cpp
+    hgroup.cpp \
+    hcircle.cpp \
+    hellipse.cpp \
+    htext.cpp
 
 HEADERS += \
     ../../include/hiconapi.h \
@@ -51,7 +54,10 @@ HEADERS += \
     ../../include/h5baselib/hrectangle.h \
     ../../include/h5baselib/hshapeobj.h \
     ../../include/h5baselib/htempcontainer.h \
-    ../../include/h5baselib/hgroup.h
+    ../../include/h5baselib/hgroup.h \
+    ../../include/h5baselib/hcircle.h \
+    ../../include/h5baselib/hellipse.h \
+    ../../include/h5baselib/htext.h
 
 
 unix{

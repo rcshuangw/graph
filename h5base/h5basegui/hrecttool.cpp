@@ -1,5 +1,6 @@
 #include "hrecttool.h"
 //#include "htoolmanager.h"
+#include "hrectangle.h"
 HRectTool::HRectTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
     :HDrawTool(manager, objShape, name, uuid)
 {
@@ -47,7 +48,7 @@ void HRectTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
 {
     if(!m_pToolManager)
         return;
-    if(!(event->button()&Qt::LeftButton))
+    if(!(event->buttons()&Qt::LeftButton))
         return;
     QPointF pt = data.toPointF();
     m_ptCurPoint = pt;
@@ -106,8 +107,16 @@ void HRectTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
     HBaseObj* pObj = NULL;
     switch(m_edrawShape)
     {
+    case Rectangle:
+        pObj = new HRectangle();
+        break;
+    case Text:
+        pObj = new Text();
+        break;
+    case Ellipse:
+        //pObj = new HEllipse();
+
     default:
-        //pObj = create
         break;
     }
 
@@ -144,6 +153,7 @@ void HRectTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
 
             //obj设置points
             //设置obj属性
+            pObj->setPointList(points);
 			m_pToolManager->appendObj(pObj);
         }
     }
