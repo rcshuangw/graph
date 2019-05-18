@@ -36,7 +36,9 @@ SOURCES += \
     hgroup.cpp \
     hcircle.cpp \
     hellipse.cpp \
-    htext.cpp
+    htext.cpp \
+    hpolygon.cpp \
+    hpolyline.cpp
 
 HEADERS += \
     ../../include/hiconapi.h \
@@ -57,7 +59,9 @@ HEADERS += \
     ../../include/h5baselib/hgroup.h \
     ../../include/h5baselib/hcircle.h \
     ../../include/h5baselib/hellipse.h \
-    ../../include/h5baselib/htext.h
+    ../../include/h5baselib/htext.h \
+    ../../include/h5baselib/hpolygon.h \
+    ../../include/h5baselib/hpolyline.h
 
 
 unix{

@@ -1,162 +1,308 @@
-#include "hrectangle.h"
-/////////////////////////////////////HRectObj//////////////////////////////////////
-HRectangle::HRectangle()
+#include "htext.h"
+#include <QApplication>
+HText::HText()
+    :HRectangle()
 {
-	m_eDrawShape = Rectangle;
-	m_nXAxis = m_nYAxis = 0;
-    m_bRound = false;
+    setShapeType(Text);
+    m_strText = QString("text example");
+
+    m_strTextClr = "#000000";//线条颜色
+    m_strFontFamily = QStringLiteral("微软雅黑");
+    m_nLayout = LAYOUT_TEXT_NULL;
+    m_nHorizontalAlign = Qt::AlignHCenter;
+    m_nVerticalAlign = Qt::AlignVCenter;
+    setFontSize(18);
+    m_nFontWeight = QFont::Normal;//粗体
+    m_nFontItalic = false;//斜体
+
+    m_bFrameSee = false;
+    m_nFillStyle = (quint8)Qt::NoBrush;
+    m_strPrefix.clear();//前缀
+    m_strSuffix.clear();//后缀
+    m_btFormat = TEXT_TWO_POINT;//格式
 }
 
-HRectangle::~HRectangle()
+HText::~HText()
 {
 
 }
 
 //二进制读写
-void HRectangle::readData(QDataStream* data)
+void HText::readData(QDataStream* data)
 {
     if(!data) return;
-    HBaseObj::readData(data);
+    HRectangle::readData(data);
+    QString s;
+    *data>>s;
+    m_strText = s;
+    *data>>s;
+    m_strTextClr = s;
     quint8 n8;
     *data>>n8;
-	setXAxis(n8);
-    *data>>n8;
-    setYAxis(n8);
+    m_nLayout = n8;
+    int n;
+    *data>>n;
+    m_nHorizontalAlign = n;
+    *data>>n;
+    m_nVerticalAlign = n;
+    *data>>s;
+    m_strFontFamily = s;
+    *data>>n;
+    m_nFontSize = n;
+    *data>>n;
+    m_nFontWeight = n;
+    *data>>n;
+    m_nFontItalic = n;
+    *data>>s;
+    m_strPrefix = s;
+    *data>>s;
+    m_strSuffix = s;
+    uchar bt;
+    *data>>bt;
+    m_btFormat = bt;
 }
 
-void HRectangle::writeData(QDataStream* data)
+void HText::writeData(QDataStream* data)
 {
     if(!data) return;
-    HBaseObj::writeData(data);
-    *data<<(quint8)getXAxis();
-    *data<<(quint8)getYAxis();
+    HRectangle::writeData(data);
+    *data<<(QString)m_strText;
+    *data<<(QString)m_strTextClr;
+    *data<<(quint8)m_nLayout;
+    *data<<(int)m_nHorizontalAlign;
+    *data<<(int)m_nVerticalAlign;
+    *data<<(QString)m_strFontFamily;
+    *data<<(int)m_nFontSize;
+    *data<<(int)m_nFontWeight;
+    *data<<(int)m_nFontItalic;
+    *data<<(QString)m_strPrefix;
+    *data<<(QString)m_strSuffix;
+    *data<<(uchar)m_btFormat;
 }
 
-void HRectangle::readXml(QDomElement* dom)
+//xml文件读写
+void HText::readXml(QDomElement* dom)
 {
     if(!dom) return;
-    HBaseObj::readXml(dom);
-    m_nXAxis = dom->attribute("XAxis").toDouble();
-    m_nYAxis = dom->attribute("YAxis").toDouble();
+    HRectangle::readXml(dom);
+    m_strText = dom->attribute("Text");
+    m_strTextClr = dom->attribute("TextColor");
+    m_nLayout = dom->attribute("Layout").toInt();
+    m_nHorizontalAlign = dom->attribute("HorizontalAlign").toInt();
+    m_nVerticalAlign = dom->attribute("VerticalAlign").toInt();
+    m_strFontFamily = dom->attribute("FontFamily");
+    m_nFontSize = dom->attribute("FontSize").toInt();
+    m_nFontWeight = dom->attribute("FontWeight").toInt();
+    m_nFontItalic = dom->attribute("FontItalic").toInt();
+    m_strPrefix = dom->attribute("Prefix");
+    m_strSuffix = dom->attribute("Suffix");
+    m_btFormat = dom->attribute("Format").toUInt();
 }
 
-void HRectangle::writeXml(QDomElement* dom)
+void HText::writeXml(QDomElement* dom)
 {
     if(!dom)return;
-    HBaseObj::writeXml(dom);
-    dom->setAttribute("XAxis",m_nXAxis);
-    dom->setAttribute("YAxis",m_nYAxis);
+    HRectangle::writeXml(dom);
+    dom->setAttribute("Text",m_strText);
+    dom->setAttribute("TextColor",m_strTextClr);
+    dom->setAttribute("Layout",m_nLayout);
+    dom->setAttribute("HorizontalAlign",m_nHorizontalAlign);
+    dom->setAttribute("VerticalAlign",m_nVerticalAlign);
+    dom->setAttribute("FontFamily",m_strFontFamily);
+    dom->setAttribute("FontSize",m_nFontSize);
+    dom->setAttribute("FontWeight",m_nFontWeight);
+    dom->setAttribute("FontItalic",m_nFontItalic);
+    dom->setAttribute("Prefix",m_strPrefix);
+    dom->setAttribute("Suffix",m_strSuffix);
+    dom->setAttribute("Format",m_btFormat);
 }
 
-QString HRectangle::TagName()
+QString HText::tagName()
 {
-    return "Rectangle";
+    return "Text";
 }
 
 //拷贝克隆
-void HRectangle::copyTo(HBaseObj* obj)
+void HText::copyTo(HBaseObj* obj)
 {
-	HShapeObj::copyTo(obj);
-    HRectangle* ob = (HRectangle*)obj;
-	ob->setXAxis(getXAxis());
-	ob->setYAxis(getYAxis());
+    HText* ob = (HText*)obj;
+    ob->m_strText = m_strText;
+    ob->m_strTextClr = m_strTextClr;
+    ob->m_nLayout = m_nLayout;
+    ob->m_nHorizontalAlign = m_nHorizontalAlign;
+    ob->m_nVerticalAlign = m_nVerticalAlign;
+    ob->m_strFontFamily = m_strFontFamily;
+    ob->m_nFontSize = m_nFontSize;
+    ob->m_nFontWeight = m_nFontWeight;
+    ob->m_nFontItalic = m_nFontItalic;
+    ob->m_strPrefix = m_strPrefix;
+    ob->m_strSuffix = m_strSuffix;
+    ob->m_btFormat = m_btFormat;
 }
 
-void HRectangle::clone(HBaseObj *obj)
+void HText::clone(HBaseObj *obj)
 {
-    if(!obj) return;
-    HShapeObj::clone(obj);
-    copyTo(obj);
+
 }
 
-
-bool HRectangle::getPath(QPainterPath& path)
+void HText::setTextClr(QString strClrName)
 {
-	bool bRound = getRound();
-	int nXAxis = getXAxis();
-	int nYAxis = getYAxis();
-	QRectF rect = getPointList(0).boundingRect();
-	if (!bRound)
-	{
-		path.addRect(rect);
-	}
-	else
-	{
-		path.addRoundedRect(rect, nXAxis, nYAxis);
-	}
-	return true;
+    m_strTextClr = strClrName;
 }
 
-QRectF HRectangle::boundingRect(qint8 flag)
+QString HText::textClrName()
 {
-	QRectF rect = HShapeObj::boundingRect(flag);
-	return rect;
+    return m_strTextClr;
 }
 
-QPainterPath HRectangle::shape(qint8 flag)
+void HText::setLayout(ushort layout)
 {
-	QPainterPath path;
-	if (m_bFill && m_nFillWay > 0)
-	{
-		HShapeObj::shape(flag);
-	}
-	QPolygonF points = getPointList(flag);
-	path.addPolygon(points);
-	QRectF rect = points.boundingRect().adjusted(5, 5, -5, -5);
-	path.addRect(rect);
-	return path;
+    this->m_nLayout = layout;
 }
 
-void HRectangle::paint(QPainter* painter)
+ushort HText::layout()
 {
-	if (!painter)
-		return;
-	painter->save();
-	QRectF rect =  getPointList().boundingRect();
-	setPainter(painter, rect);//设置Painter
-	QPainterPath path;
-	if(getPath(path))
-		painter->drawPath(path);
-
-	painter->restore();
+    return m_nLayout;
 }
 
-///设置贴片
-void HRectangle::setBkImagePath(const QString& s)
+void HText::setHorizontalAlign(int hAlign)
 {
-	HShapeObj::setBkImagePath(s);
+    m_nHorizontalAlign = hAlign;
 }
 
-//矩形框的x,y轴弯曲度  放到rect里面
-void HRectangle::setRound(bool bcheck)
+int HText::horizontalAlign()
 {
-	m_bRound = bcheck;
+    return m_nHorizontalAlign;
 }
 
-bool HRectangle::getRound()
+void HText::setVerticalAlign(int vAlign)
 {
-	return m_bRound;
+    m_nVerticalAlign = vAlign;
 }
 
-//圆角x轴
-void HRectangle::setXAxis(int xAxis)
+int HText::verticalAlign()
 {
-	m_nXAxis = xAxis;
+    return m_nVerticalAlign;
 }
 
-quint8 HRectangle::getXAxis()
+void HText::setFontFamily(QString strFontName)
 {
-	return m_nXAxis;
+    m_strFontFamily = strFontName;
 }
 
-//圆角y轴
-void HRectangle::setYAxis(int yAxis)
+QString HText::fontFamily()
 {
-	m_nYAxis = yAxis;
+    return m_strFontFamily;
 }
 
-quint8 HRectangle::getYAxis()
+void HText::setFontSize(int ptSize)
 {
-	return m_nYAxis;
+    m_nFontSize = ptSize;
 }
 
+int HText::fontSize()
+{
+    return m_nFontSize;
+}
+
+void HText::setFontWeight(int weight)
+{
+    this->m_nFontWeight = weight;
+}
+
+int HText::fontWeight()
+{
+    return m_nFontWeight;
+}
+
+void HText::setFontItalic(bool bitalic)
+{
+    m_nFontItalic = bitalic;
+}
+
+bool HText::fontItalic()
+{
+    return m_nFontItalic;
+}
+
+void HText::setText(QString text)
+{
+    m_strText = text;
+}
+
+QString HText::text()
+{
+    return m_strText;
+}
+
+void HText::setTextFormat(uchar btType)
+{
+    m_btFormat = btType;
+}
+
+uchar HText::textFormat()
+{
+    return m_btFormat;
+}
+
+void HText::setTextPrefix(const QString& strPrefix)
+{
+    this->m_strPrefix = strPrefix;
+}
+
+QString HText::textPrefix()
+{
+    return this->m_strPrefix;
+}
+
+void HText::setTextSuffix(const QString& strSuffix)
+{
+    this->m_strSuffix = strSuffix;
+}
+
+QString HText::textSuffix()
+{
+    return this->m_strSuffix;
+}
+
+QPainterPath HText::shape(qint8 flag)
+{
+    return HShapeObj::shape(flag);
+}
+
+void HText::paint(QPainter* painter)
+{
+    ushort nLayout = layout();
+    painter->save();
+    QRectF rect = boundingRect();
+    QRectF mainRectF = rect;
+    setPainter(painter);
+    QPainterPath path;
+    if(getPath(path))
+        painter->drawPath(path);
+
+    //设置字体部分
+    QString strFontFamily = fontFamily();
+    int nFontSize = fontSize();
+    int nFontWeight = fontWeight();
+    bool bFontItalic = (bool)fontItalic();
+    QFont font(strFontFamily,nFontSize,nFontWeight,bFontItalic);
+
+    QPen textPen = QPen(QColor(textClrName()));
+    painter->setPen(textPen);
+    painter->setFont(font);
+
+    int nAlign = horizontalAlign()|verticalAlign();
+    QFontMetricsF fm(font);
+    if(nLayout == LAYOUT_TEXT_FULL)
+    {
+        double fw = fm.width(text());
+        double fh = fm.height();
+        fh = mainRectF.height()/fh;
+        fw = (mainRectF.width()+fh)/fw;
+        painter->scale(fw,fh);
+        mainRectF = QRectF(mainRectF.x()/fw,mainRectF.y()/fh,mainRectF.width()/fw,mainRectF.height()/fh);
+        nAlign = Qt::AlignCenter | Qt::TextSingleLine;
+    }
+    painter->drawText(mainRectF,nAlign,textSuffix()+text()+textPrefix());
+}

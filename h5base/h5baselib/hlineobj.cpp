@@ -62,7 +62,7 @@ void HLineObj::writeXml(QDomElement* dom)
 	dom->setAttribute("arrowHeight", m_nArrowHeight);
 }
 
-QString HLineObj::TagName()
+QString HLineObj::tagName()
 {
 	return "Line";
 }

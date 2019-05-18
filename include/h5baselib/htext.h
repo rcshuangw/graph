@@ -1,12 +1,12 @@
-﻿#ifndef HRECTANGLE_H
-#define HRECTANGLE_H
-#include "hshapeobj.h"
+﻿#ifndef HTEXT_H
+#define HTEXT_H
+#include "hrectangle.h"
 ///////////////////////////////////////////HRectangleObj///////////////////////////////////////////
-class H5BASELIB_EXPORT HRectangle : public HShapeObj
+class H5BASELIB_EXPORT HText : public HRectangle
 {
 public:
-    HRectangle();
-    virtual ~HRectangle();
+    HText();
+    virtual ~HText();
 
     //二进制读写
     virtual void readData(QDataStream* data);
@@ -16,39 +16,76 @@ public:
     virtual void readXml(QDomElement* data);
     virtual void writeXml(QDomElement* data);
 
-    virtual QString TagName();
+    virtual QString tagName();
 
     //拷贝克隆
     virtual void copyTo(HBaseObj* obj);
     virtual void clone(HBaseObj* obj);
-
-	
-
-    virtual bool getPath(QPainterPath& path);
-	///设置贴片
-	virtual void setBkImagePath(const QString& s);
-
-	//矩形框的x,y轴弯曲度  放到rect里面
-	virtual void setRound(bool bcheck);
-	virtual bool getRound();
-
-	//圆角x轴
-	virtual void setXAxis(int xAxis);
-	virtual quint8 getXAxis();
-
-	//圆角y轴
-	virtual void setYAxis(int yAxis);
-	virtual quint8 getYAxis();
-
+    //virtual bool getPath(QPainterPath& path);
 
 public:
-	virtual QRectF boundingRect(qint8 flag = 0);
-	virtual QPainterPath shape(qint8 flag = 0);
-	virtual void paint(QPainter* painter);
-protected:
-	bool m_bRound;
-	quint8 m_nXAxis;
-	quint8 m_nYAxis;
+   // virtual QRectF boundingRect(qint8 flag = 0);
+    virtual QPainterPath shape(qint8 flag = 0);
+    virtual void paint(QPainter* painter);
+public:
+    void setTextClr(QString strClrName);
+    QString textClrName();
+
+    void setLayout(ushort layout);
+    ushort layout();
+
+    void setHorizontalAlign(int hAlign);
+    int horizontalAlign();
+
+    void setVerticalAlign(int vAlign);
+    int verticalAlign();
+
+    //字体部分
+    void setFont(QFont& font);
+    QFont font();
+
+    void setFontFamily(QString strFontName);
+    QString fontFamily();
+
+    void setFontSize(int ptSize);
+    int fontSize();
+
+    void setFontWeight(int weight);
+    int fontWeight();
+
+    void setFontItalic(bool bitalic);
+    bool fontItalic();
+
+    //内容、格式、前后缀
+    void setText(QString strContent);
+    QString text();
+
+    void setTextFormat(uchar btType);
+    uchar textFormat();
+
+    void setTextPrefix(const QString& strPrefix);
+    QString textPrefix();
+
+    void setTextSuffix(const QString& strSuffix);
+    QString textSuffix();
+
+private:
+    QString m_strText;//文字
+    //文字颜色,文字字体,水平对齐，垂直对齐,布局方式
+    ushort m_nLayout;
+    int m_nHorizontalAlign;
+    int m_nVerticalAlign;
+    QString m_strPrefix;//前缀
+    QString m_strSuffix;//后缀
+    uchar   m_btFormat;//格式
+
+    QString m_strTextClr;
+    QFont m_Font;
+
+    QString m_strFontFamily;
+    int m_nFontSize;//字体大小
+    int m_nFontWeight;//粗体
+    bool m_nFontItalic;//斜体
 };
 
 

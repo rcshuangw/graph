@@ -160,7 +160,7 @@ void HIconObj::readXml(int v, QDomElement* dom)
         pText = new HText();
         if(pText)
         {
-            QDomElement textDom = dom->namedItem(pText->TagName()).toElement();
+            QDomElement textDom = dom->namedItem(pText->tagName()).toElement();
             if(!textDom.isNull())
             {
                 pText->readXml(&textDom);
@@ -204,7 +204,7 @@ void HIconObj::writeXml(int v, QDomElement* dom)
     {
         if(pText)
         {
-            QDomElement childEle = dom->ownerDocument().createElement(pText->TagName());
+            QDomElement childEle = dom->ownerDocument().createElement(pText->tagName());
             dom->appendChild(childEle);
             pText->writeXml(&childEle);
         }
@@ -220,7 +220,7 @@ void HIconObj::writeXml(int v, QDomElement* dom)
 }
 
 
-QString HIconObj::TagName()
+QString HIconObj::tagName()
 {
     return "IconObj";
 }

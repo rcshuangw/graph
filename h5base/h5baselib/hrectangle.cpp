@@ -48,7 +48,7 @@ void HRectangle::writeXml(QDomElement* dom)
     dom->setAttribute("YAxis",m_nYAxis);
 }
 
-QString HRectangle::TagName()
+QString HRectangle::tagName()
 {
     return "Rectangle";
 }
@@ -69,7 +69,7 @@ void HRectangle::clone(HBaseObj *obj)
     copyTo(obj);
 }
 
-
+/*
 bool HRectangle::getPath(QPainterPath& path)
 {
 	bool bRound = getRound();
@@ -85,7 +85,7 @@ bool HRectangle::getPath(QPainterPath& path)
 		path.addRoundedRect(rect, nXAxis, nYAxis);
 	}
 	return true;
-}
+}*/
 
 QRectF HRectangle::boundingRect(qint8 flag)
 {
@@ -112,8 +112,8 @@ void HRectangle::paint(QPainter* painter)
 	if (!painter)
 		return;
 	painter->save();
-	QRectF rect =  getPointList().boundingRect();
-	setPainter(painter, rect);//设置Painter
+    //QRectF rect =  getPointList().boundingRect();
+    setPainter(painter);//设置Painter
 	QPainterPath path;
 	if(getPath(path))
 		painter->drawPath(path);

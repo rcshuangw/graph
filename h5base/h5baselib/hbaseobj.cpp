@@ -11,7 +11,7 @@ HBaseObj::~HBaseObj()
 {
 }
 
-QString HBaseObj::TagName()
+QString HBaseObj::tagName()
 {
     return QString("base");
 }

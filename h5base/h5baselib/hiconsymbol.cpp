@@ -33,7 +33,7 @@ void HIconSymbol::clear()
     m_pShowPatternVector.clear();
 }
 
-QString HIconSymbol::TagName()
+QString HIconSymbol::tagName()
 {
 	return "IconSymbol";
 }

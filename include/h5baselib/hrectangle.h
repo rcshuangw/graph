@@ -16,15 +16,13 @@ public:
     virtual void readXml(QDomElement* data);
     virtual void writeXml(QDomElement* data);
 
-    virtual QString TagName();
+    virtual QString tagName();
 
     //拷贝克隆
     virtual void copyTo(HBaseObj* obj);
     virtual void clone(HBaseObj* obj);
 
-	
-
-    virtual bool getPath(QPainterPath& path);
+    //virtual bool getPath(QPainterPath& path);
 	///设置贴片
 	virtual void setBkImagePath(const QString& s);
 

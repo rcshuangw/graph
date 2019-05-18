@@ -57,7 +57,7 @@ void HLine::writeXml(QDomElement* dom)
 	dom->setAttribute("TailPointy", ptTailPoint.y());
 }
 
-QString HLine::TagName()
+QString HLine::tagName()
 {
 	return "Line";
 }

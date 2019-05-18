@@ -11,7 +11,7 @@ HEllipse::~HEllipse()
 
 }
 
-QString HEllipse::TagName()
+QString HEllipse::tagName()
 {
     return "Ellipse";
 }
@@ -20,7 +20,7 @@ QPainterPath HEllipse::shape(qint8 flag)
 {
     QPainterPath path;
 
-    QRect rectF = boundingRect(flag);
+    QRectF rectF = boundingRect(flag);
     QPainterPath p;
     if (m_bFill && m_nFillWay > 0)
     {
@@ -33,8 +33,22 @@ QPainterPath HEllipse::shape(qint8 flag)
         p.addEllipse(rectF.adjusted(n,n,-n,-n));
         p.addEllipse(rectF.adjusted(-n,-n,n,n));
     }
-    path.addPath(path);
+    path.addPath(p);
     return path;
+}
+
+void HEllipse::paint(QPainter *painter)
+{
+    if (!painter)
+        return;
+    painter->save();
+    QRectF rect =  getPointList().boundingRect();
+    setPainter(painter);//设置Painter
+    QPainterPath path;
+    path.addEllipse(rect);
+    painter->drawPath(path);
+
+    painter->restore();
 }
 
 

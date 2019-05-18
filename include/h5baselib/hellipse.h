@@ -8,8 +8,9 @@ public:
     HEllipse();
     virtual ~HEllipse();
 public:
-    virtual QString TagName();
+    virtual QString tagName();
     virtual QPainterPath shape(qint8 flag = 0);
+    virtual void paint(QPainter* painter);
 
 };
 

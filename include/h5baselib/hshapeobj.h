@@ -17,7 +17,7 @@ public:
     virtual void readXml(QDomElement* data);
     virtual void writeXml(QDomElement* data);
 
-    virtual QString TagName();
+    virtual QString tagName();
 
     //拷贝克隆
     virtual void copyTo(HBaseObj* obj);
@@ -67,7 +67,7 @@ public:
 	///获得绘图路径
 	virtual QPainterPath shape(qint8 flag = 0);
 
-	virtual void setPainter(QPainter* painter,const QRectF& rect);
+    virtual void setPainter(QPainter* painter);
 
 	virtual bool getPath(QPainterPath& path);
     //透明度

@@ -30,7 +30,7 @@ public:
     virtual void readXml(QDomElement* data);
     virtual void writeXml(QDomElement* data);
 
-    virtual QString TagName();
+    virtual QString tagName();
 
     //拷贝克隆
     virtual void copyTo(HBaseObj* obj);

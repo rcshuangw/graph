@@ -118,7 +118,7 @@ void HShapeObj::writeXml(QDomElement* dom)
 	dom->setAttribute("ImageDirect", m_nImageDirect);
 }
 
-QString HShapeObj::TagName()
+QString HShapeObj::tagName()
 {
 	return "Shape";
 }
@@ -266,12 +266,13 @@ bool HShapeObj::getFrameSee()
 	return m_bFrameSee;
 }
 
-void HShapeObj::setPainter(QPainter* painter, const QRectF& rect)
+void HShapeObj::setPainter(QPainter* painter)
 {
 	painter->setRenderHint(QPainter::Antialiasing);
 	painter->setRenderHint(QPainter::TextAntialiasing);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
+    QRectF rect = getPointList().boundingRect();
 	//设置属性
 	QColor penClr = QColor(getLineColorName()); //线条颜色
 	int penWidth = getLineWidth();//线条宽度
@@ -448,7 +449,7 @@ bool HShapeObj::getPath(QPainterPath& path)
         path.addPolygon(points);
         path.closeSubpath();
     }
-	return false;
+    return true;
 }
 
 ///获得包裹区域位置大小

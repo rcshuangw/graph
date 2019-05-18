@@ -8,7 +8,7 @@ public:
     HCircle();
     virtual ~HCircle();
 public:
-    virtual QString TagName();
+    virtual QString tagName();
     virtual void resize(double w, double h, bool scale = false);
     virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
 

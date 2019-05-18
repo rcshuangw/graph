@@ -15,9 +15,21 @@ void HPolylineTool::clear()
 
 }
 
-void HPolylineTool::onEvent(HEvent& event)
+void HPolylineTool::onEvent(HEvent& e)
 {
-
+    HDrawTool::onEvent(e);
+    if(e.event()->type() == QMouseEvent::MouseButtonPress)
+    {
+        onMousePressEvent((QMouseEvent*)e.event(),e.m_data);
+    }
+    else if(e.event()->type() == QMouseEvent::MouseMove)
+    {
+        onMouseMoveEvent((QMouseEvent*)e.event(), e.m_data);
+    }
+    else if(e.event()->type() == QMouseEvent::MouseButtonRelease)
+    {
+        onMouseReleaseEvent((QMouseEvent*)e.event(), e.m_data);
+    }
 }
 
 void HPolylineTool::onMousePressEvent(QMouseEvent* event,QVariant &data)

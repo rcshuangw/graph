@@ -373,6 +373,72 @@ void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
     }
         break;
     case Circle:
+    {
+        QTransform trans;
+        m_pBaseObj->transform(trans,1);
+        QPointF point = trans.inverted().map(curPoint);
+        HPointFList ptList = m_pBaseObj->getPointList(1);
+        HPointFList points = trans.inverted().map(ptList);
+        QPointF topLeft = points.at(0);
+        QPointF bottomRight = points.at(2);
+        switch(index)
+        {
+        case 0:
+            topLeft = point;
+            break;
+        case 1:
+            topLeft.setY(point.y());
+            break;
+        case 2:
+            topLeft.setY(point.y());
+            bottomRight.setX(point.x());
+            break;
+        case 3:
+            bottomRight.setX(point.x());
+            break;
+        case 4:
+            bottomRight = point;
+            break;
+        case 5:
+            bottomRight.setY(point.y());
+            break;
+        case 6:
+            topLeft.setX(point.x());
+            bottomRight.setY(point.y());
+            break;
+        case 7:
+            topLeft.setX(point.x());
+            break;
+        default:
+            break;
+        }
+        QRectF bounding = points.boundingRect();
+        QPointF center = bounding.center();
+        QRectF newBounding(topLeft,bottomRight);
+        qreal size = 0;
+        if(bounding.size().width()<newBounding.size().width() ||
+            bounding.size().height()<newBounding.size().height())
+        {
+            size = qMax(newBounding.size().width(),newBounding.size().height());
+        }
+        else{
+            size = qMin(newBounding.size().width(),newBounding.size().height());
+        }
+        if(size<=5){
+            size = 5;
+        }
+        newBounding.setSize(QSizeF(size,size));
+        newBounding.moveCenter(center);
+
+        points.clear();
+        points.append(newBounding.topLeft());
+        points.append(newBounding.bottomRight());
+        points = trans.map(points);
+        m_pBaseObj->setPointList(points,1);
+        H5GraphicsItem* item = m_pBaseObj->iconGraphicsItem();
+        if(item)
+            item->setPos(m_pBaseObj->pos());
+    }
         break;
     case Group:
         break;

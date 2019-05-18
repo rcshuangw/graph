@@ -2,6 +2,9 @@
 #include "hgroup.h"
 #include "hline.h"
 #include "hrectangle.h"
+#include "hellipse.h"
+#include "htext.h"
+#include "hcircle.h"
 HContainerObj::HContainerObj()
 {
 
@@ -78,7 +81,7 @@ void HContainerObj::writeXml(int v, QDomElement* dom)
 {
 	if (!dom) return;
 	HShapeObj::writeXml(dom);
-	dom->setTagName(TagName());
+	dom->setTagName(tagName());
 	QDomElement childDom = dom->ownerDocument().createElement("Children");
 	dom->appendChild(childDom);
 	for (int i = 0; i < m_pObjList.count(); i++)
@@ -88,13 +91,13 @@ void HContainerObj::writeXml(int v, QDomElement* dom)
 		{
 			continue;
 		}
-		QDomElement childEle = dom->ownerDocument().createElement(pObj->TagName());
+		QDomElement childEle = dom->ownerDocument().createElement(pObj->tagName());
 		childDom.appendChild(childEle);
 		pObj->writeXml(&childEle);
 	}
 }
 
-QString HContainerObj::TagName()
+QString HContainerObj::tagName()
 {
 	return "GroupObj";
 }
@@ -161,11 +164,11 @@ HBaseObj* HContainerObj::newObj(DrawShape nObjType)
 	}
     else if (nObjType == Ellipse)
 	{
-        //pObj = new HEllipse();
+        pObj = new HEllipse();
 	}
 	else if (nObjType == Circle)
 	{
-        //pObj = new HCircle();
+        pObj = new HCircle();
 	}
 	else if (nObjType == Polygon)
 	{
@@ -181,7 +184,7 @@ HBaseObj* HContainerObj::newObj(DrawShape nObjType)
 	}
     else if (nObjType == Text)
 	{
-        //pObj = new HText();
+        pObj = new HText();
 	}
     else if (nObjType == Group)
 	{

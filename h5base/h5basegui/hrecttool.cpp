@@ -1,6 +1,9 @@
 #include "hrecttool.h"
 //#include "htoolmanager.h"
+#include "hellipse.h"
+#include "hcircle.h"
 #include "hrectangle.h"
+#include "htext.h"
 HRectTool::HRectTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
     :HDrawTool(manager, objShape, name, uuid)
 {
@@ -87,7 +90,12 @@ void HRectTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
     //设置属性
     Path path;
     path.coordType = false;
+    path.pen.setStyle(Qt::DashLine);
     path.painterPath = painterPath;
+    if(m_edrawShape == Text)
+    {
+        path.pen.setWidth(0);
+    }
     //由绘制管理发送给editor
     QList<Path> pathList;
     pathList.append(path);
@@ -111,10 +119,14 @@ void HRectTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
         pObj = new HRectangle();
         break;
     case Text:
-        pObj = new Text();
+        pObj = new HText();
         break;
     case Ellipse:
-        //pObj = new HEllipse();
+        pObj = new HEllipse();
+        break;
+    case Circle:
+        pObj = new HCircle();
+        break;
 
     default:
         break;
@@ -126,7 +138,9 @@ void HRectTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
         QRectF bounding;
         if(m_edrawShape == Circle)
         {
-
+            double r = distance(m_ptStPoint,m_ptCurPoint);
+            bounding.setSize(QSizeF(r*2,r*2));
+            bounding.moveCenter(m_ptStPoint);
         }
         else
         {
@@ -141,21 +155,20 @@ void HRectTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
                 bounding.setHeight(qMin(dx,dy));
                 bounding.setTopLeft(topLeft);
             }
-            bounding = bounding.normalized();
-            QPointF center = bounding.center();
-            if(bounding.width() < 5)
-                bounding.setWidth(5);
-            if(bounding.height() < 5)
-                bounding.setHeight(5);
-            bounding.moveCenter(center);
-            points.append(bounding.topLeft());
-            points.append(bounding.bottomRight());
-
-            //obj设置points
-            //设置obj属性
-            pObj->setPointList(points);
-			m_pToolManager->appendObj(pObj);
         }
+        //obj设置points
+        //设置obj属性
+        bounding = bounding.normalized();
+        QPointF center = bounding.center();
+        if(bounding.width() < 5)
+            bounding.setWidth(5);
+        if(bounding.height() < 5)
+            bounding.setHeight(5);
+        bounding.moveCenter(center);
+        points.append(bounding.topLeft());
+        points.append(bounding.bottomRight());
+        pObj->setPointList(points);
+        m_pToolManager->appendObj(pObj);
     }
 	m_pToolManager->endDraw();
 }

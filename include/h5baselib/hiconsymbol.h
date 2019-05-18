@@ -24,7 +24,7 @@ public:
 	virtual void writeData(int,QDataStream *d);
 
 	virtual void copyTo(HBaseObj* obj);
-	virtual QString TagName();
+	virtual QString tagName();
 
     //增加删除一个图元元素
     void addBaseObj(HBaseObj* pObj);

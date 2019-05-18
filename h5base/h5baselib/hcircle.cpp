@@ -11,7 +11,7 @@ HCircle::~HCircle()
 
 }
 
-QString HCircle::TagName()
+QString HCircle::tagName()
 {
     return "Circle";
 }
@@ -27,4 +27,5 @@ bool HCircle::setPointList(QPolygonF& list, qint8 flag)
     double v = qMin(m_width,m_height);
     m_width = v;
     m_height = v;
+    return true;
 }

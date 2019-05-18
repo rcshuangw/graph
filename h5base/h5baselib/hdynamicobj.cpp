@@ -65,7 +65,7 @@ void HDynamicObj::writeXml(QDomElement* dom)
     dom->setAttribute("Formula",wFormula);
 }
 
-QString HDynamicObj::TagName()
+QString HDynamicObj::tagName()
 {
     return "DynamicData";
 }
