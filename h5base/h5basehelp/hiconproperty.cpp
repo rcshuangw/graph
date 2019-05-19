@@ -66,13 +66,13 @@ void HPropertyDlg::initTab()
     initBaseTab();
     initLineTab();
     initShapeTab();
-    DRAWSHAPE drawShape = pCurObj->getShapeType();
+    DrawShape drawShape = pCurObj->getShapeType();
     ui->verticalLayout_18->setStretch(0,3);
     ui->verticalLayout_18->setStretch(1,3);
     ui->verticalLayout_18->setStretch(2,3);
     ui->verticalLayout_18->setStretch(3,3);
     ui->verticalLayout_18->setStretch(4,1);
-    if(drawShape == enumText)
+    if(drawShape == Text)
     {
         ui->groupBox_2->hide();
         ui->groupBox_8->hide();
@@ -80,7 +80,7 @@ void HPropertyDlg::initTab()
         ui->verticalLayout_18->setStretch(1,3);
         ui->verticalLayout_18->setStretch(4,7);
     }
-    if(drawShape == enumLine)
+    if(drawShape == Line)
     {
         ui->propertyTab->removeTab(1);//文字
         ui->propertyTab->removeTab(3);//形状
@@ -92,7 +92,7 @@ void HPropertyDlg::initTab()
         ui->verticalLayout_18->setStretch(1,3);
         ui->verticalLayout_18->setStretch(4,7);
     }
-    else if(drawShape == enumRectangle)
+    else if(drawShape == Rectangle)
     {
         ui->propertyTab->removeTab(1);//文字
         ui->groupBox_2->hide();
@@ -101,7 +101,7 @@ void HPropertyDlg::initTab()
         ui->verticalLayout_18->setStretch(3,3);
         ui->verticalLayout_18->setStretch(4,7);
     }
-    else if(drawShape == enumEllipse ||drawShape == enumCircle || drawShape == enumPolyline || drawShape == enumPolygon)
+    else if(drawShape == Ellipse ||drawShape == Circle || drawShape == Polyline || drawShape == Polygon)
     {
         ui->propertyTab->removeTab(1);//文字
         ui->groupBox_2->hide();
@@ -111,7 +111,7 @@ void HPropertyDlg::initTab()
         ui->verticalLayout_18->setStretch(4,10);
         //ui->verticalLayout_18->setStretch(4,7);
     }
-    else if(drawShape == enumArc || drawShape == enumPie)
+    else if(drawShape ==Arc )
     {
        ui->propertyTab->removeTab(1);//文字
        ui->groupBox_2->hide();
@@ -120,7 +120,7 @@ void HPropertyDlg::initTab()
        ui->verticalLayout_18->setStretch(2,3);
        ui->verticalLayout_18->setStretch(4,7);
     }
-    else if(drawShape == enumGroup)
+    else if(drawShape == Group)
     {
         ui->propertyTab->removeTab(3);
         ui->propertyTab->removeTab(2);
@@ -160,12 +160,12 @@ void HPropertyDlg::initBaseTab()
         ui->horizontalFlip->setChecked(pCurObj->bHorizonTurn);
         ui->verticalFlip->setChecked(pCurObj->bVerticalTurn);
 
-        if(pCurObj->getShapeType() == DRAWSHAPE::enumLine)
+        if(pCurObj->getShapeType() == Line)
         {
             ui->objType->setText(QStringLiteral("直线"));
             HLine* pObj = (HLine*)pCurObj;
         }
-        else if(pCurObj->getShapeType() == DRAWSHAPE::enumRectangle)
+        else if(pCurObj->getShapeType() == Rectangle)
         {
             ui->objType->setText(QStringLiteral("矩形"));
             HRectangle* pObj = (HRectangle*)pCurObj;
@@ -173,7 +173,7 @@ void HPropertyDlg::initBaseTab()
             ui->xCoord_width->setValue(pObj->getRectWidth());
             ui->yCoord_height->setValue(pObj->getRectHeight());
         }
-        else if(pCurObj->getShapeType() == DRAWSHAPE::enumEllipse)
+        else if(pCurObj->getShapeType() == Ellipse)
         {
             ui->objType->setText(QStringLiteral("椭圆"));
             HEllipse* pObj = (HEllipse*)pCurObj;
@@ -181,7 +181,7 @@ void HPropertyDlg::initBaseTab()
             ui->xCoord_width->setValue(pObj->getRectWidth());
             ui->yCoord_height->setValue(pObj->getRectHeight());
         }
-        else if(pCurObj->getShapeType() == DRAWSHAPE::enumCircle)
+        else if(pCurObj->getShapeType() == Circle)
         {
             ui->objType->setText(QStringLiteral("圆"));
             HCircle* pObj = (HCircle*)pCurObj;
@@ -189,7 +189,7 @@ void HPropertyDlg::initBaseTab()
             ui->xCoord_width->setValue(pObj->getRectWidth());
             ui->yCoord_height->setValue(pObj->getRectHeight());
         }
-        else if(pCurObj->getShapeType() == DRAWSHAPE::enumPolygon)
+        else if(pCurObj->getShapeType() == Polygon)
         {
             ui->objType->setText(QStringLiteral("多边形"));
             HPolygon* pObj = (HPolygon*)pCurObj;
@@ -197,7 +197,7 @@ void HPropertyDlg::initBaseTab()
             ui->xCoord_width->setValue(pObj->width);
             ui->yCoord_height->setValue(pObj->height);
         }
-        else if(pCurObj->getShapeType() == DRAWSHAPE::enumPolyline)
+        else if(pCurObj->getShapeType() == Polyline)
         {
             ui->objType->setText(QStringLiteral("折线"));
             HPolyline* pObj = (HPolyline*)pCurObj;
@@ -205,7 +205,7 @@ void HPropertyDlg::initBaseTab()
             ui->xCoord_width->setValue(pObj->width);
             ui->yCoord_height->setValue(pObj->height);
         }
-        else if(pCurObj->getShapeType() == DRAWSHAPE::enumArc)
+        else if(pCurObj->getShapeType() == Arc)
         {
             ui->objType->setText(QStringLiteral("弧线"));
             HArc* pObj = (HArc*)pCurObj;
@@ -213,15 +213,7 @@ void HPropertyDlg::initBaseTab()
             ui->xCoord_width->setValue(pObj->getRectWidth());
             ui->yCoord_height->setValue(pObj->getRectHeight());
         }
-        else if(pCurObj->getShapeType() == DRAWSHAPE::enumPie)
-        {
-            ui->objType->setText(QStringLiteral("饼型"));
-            HPie* pObj = (HPie*)pCurObj;
-
-            ui->xCoord_width->setValue(pObj->getRectWidth());
-            ui->yCoord_height->setValue(pObj->getRectHeight());
-        }
-        else if(pCurObj->getShapeType() == DRAWSHAPE::enumText)
+        else if(pCurObj->getShapeType() == Text)
         {
             ui->objType->setText(QStringLiteral("文字"));
             HText* pObj = (HText*)pCurObj;
@@ -229,7 +221,7 @@ void HPropertyDlg::initBaseTab()
             ui->xCoord_width->setValue(pObj->getRectWidth());
             ui->yCoord_height->setValue(pObj->getRectHeight());
         }
-        else if(pCurObj->getShapeType() == DRAWSHAPE::enumGroup)
+        else if(pCurObj->getShapeType() == Group)
         {
             ui->objType->setText(QStringLiteral("组合"));
             HGroupObj* pObj = (HGroupObj*)pCurObj;
@@ -272,8 +264,8 @@ void HPropertyDlg::initTextTab()
 
     if(pCurObj)
     {
-        DRAWSHAPE drawShape = pCurObj->getShapeType();
-        if(drawShape == enumText)
+        DrawShape drawShape = pCurObj->getShapeType();
+        if(drawShape == Text)
         {
             HText* pTextObj = (HText*)pCurObj;
             ui->horizAlignComboBox->setCurrentIndex(ui->horizAlignComboBox->findData(pTextObj->getHorizontalAlign()));

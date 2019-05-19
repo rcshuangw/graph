@@ -4,7 +4,7 @@
 #include <QAbstractItemDelegate>
 #include <QGraphicsItem>
 #include <QButtonGroup>
-#include "h5iconhelpexport.h"
+#include "h5basehelpexport.h"
 #include "hiconsymbol.h"
 namespace Ui {
 class IconProperty;
@@ -20,7 +20,7 @@ public:
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };*/
 
-class H5ICONHELP_EXPORT HPropertyDlg : public QDialog
+class H5BASEHELP_EXPORT HPropertyDlg : public QDialog
 {
     Q_OBJECT
 

@@ -442,3 +442,8 @@ void HIconEditorOp::switchSelectTool()
 {
   emit setSelectTool();
 }
+
+void HIconEditorOp::setObjAttribute()
+{
+
+}

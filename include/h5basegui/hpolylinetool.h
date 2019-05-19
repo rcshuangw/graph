@@ -15,9 +15,9 @@ public:
 	virtual void onMouseReleaseEvent(QMouseEvent* event, QVariant &data);
 
 private:
+    bool m_bStart;
     QPointF m_ptStPoint;
     QPointF m_ptCurPoint;
-
     QPolygonF m_ptPolygons;
 };
 #endif // HPOLYLINETOOL_H

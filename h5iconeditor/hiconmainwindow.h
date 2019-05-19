@@ -198,6 +198,8 @@ public slots:
     //其他槽函数
     void viewMousePosChanged(const QPoint&,const QPointF &);
     void onSelectTool();
+
+    void onSetAttribute();
 //函数
 private:
 

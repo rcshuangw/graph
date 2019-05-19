@@ -141,8 +141,6 @@ void HIconMainWindow::zoomOut()
     m_pIconEditorMgr->iconEditorOp()->zoomOut();
 }
 
-
-
 void HIconMainWindow::groupObj()
 {
     if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
@@ -182,6 +180,11 @@ void HIconMainWindow::bringToUp()
 
 //下移一层
 void HIconMainWindow::bringToDown()
+{
+
+}
+
+void HIconMainWindow::onSetAttribute()
 {
 
 }

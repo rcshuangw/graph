@@ -3,6 +3,7 @@
 #include <QMouseEvent>
 #include "hiconeditormgr.h"
 #include "hiconeditorframe.h"
+#include "hiconeditorop.h"
 #include "h5event.h"
 #include "htempcontainer.h"
 #include "hselectedmgr.h"
@@ -338,7 +339,9 @@ void HIconEditorSelectTool::onMouseReleaseEvent(QMouseEvent* event, QVariant &da
 
 void HIconEditorSelectTool::onMouseDoubleClickEvent(QMouseEvent* event, QVariant &data)
 {
-
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->iconEditorOp())
+        return;
+    m_pIconEditorMgr->iconEditorOp()->setObjAttribute();
 }
 
 void HIconEditorSelectTool::onContextMenuEvent(QContextMenuEvent *event, QVariant &data)

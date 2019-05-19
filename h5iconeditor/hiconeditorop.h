@@ -132,9 +132,12 @@ public:
 
     void switchSelectTool();
 
+    void setObjAttribute();
+
 signals:
     void selectChanged();
     void setSelectTool();
+    void attributeChanged();
 public slots:
 
     //图符创建、删除
