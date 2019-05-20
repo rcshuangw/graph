@@ -369,7 +369,7 @@ bool HBaseObj::transform(QTransform& transform1,quint8 flag)
 {
     bool bok = false;
     quint8 nFlag = flag;
-    if(flag ==1)
+    if(flag&TRANS_ABSOLUTE)
     {
         QPointF pt = QPointF(getOX(), getOY());
         transform1 = transform1.translate(pt.x(), pt.y());
@@ -483,16 +483,13 @@ bool HBaseObj::isZero(double value)
 
 bool HBaseObj::isRotated(qint8 flag)
 {
-    if(flag == 0 || flag == 2)
-        return false;
-    return !isZero(m_fRotateAngle);
+    return !( (flag&TRANS_NO_ROTATE)||isZero(m_fRotateAngle));
 }
 
 //翻转
 bool HBaseObj::isTurned(qint8 flag)
 {
-    if(flag == 0 || flag == 2) return false;
-	return (m_bHorizonTurn || m_bVerticalTurn);
+    return(!(flag&TRANS_NO_TURN))&&(m_bHorizonTurn || m_bVerticalTurn);
 }
 
 float HBaseObj::rotateAngle()

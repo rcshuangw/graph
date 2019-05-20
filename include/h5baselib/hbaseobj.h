@@ -12,6 +12,11 @@
 #include "hiconapi.h"
 #include "h5baselibexport.h"
 #include "h5graphicsitem.h"
+
+#define TRANS_NO_TURN		4   ///非拉升
+#define TRANS_NO_ROTATE 	2   ///非旋转
+#define TRANS_ABSOLUTE		1   ///绝对坐标
+
 typedef QPolygonF HPointFList;
 class H5BASELIB_EXPORT HBaseObj: public QObject
 {

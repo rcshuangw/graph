@@ -272,9 +272,9 @@ void HShapeObj::setPainter(QPainter* painter)
 	painter->setRenderHint(QPainter::TextAntialiasing);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
-    QRectF rect = getPointList().boundingRect();
+    QRectF rect = getPointList(TRANS_NO_ROTATE|TRANS_NO_TURN).boundingRect();
     QTransform trans;
-    if(transform(trans,2))
+    if(transform(trans,0))
     {
         painter->setTransform(trans,true);
     }

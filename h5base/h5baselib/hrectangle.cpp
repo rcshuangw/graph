@@ -98,7 +98,6 @@ QPainterPath HRectangle::shape(qint8 flag)
 	QPainterPath path;
 	if (m_bFill && m_nFillWay > 0)
 	{
-
         QPolygonF points = getPointList(flag);
         path.addPolygon(points);
         QRectF rect = points.boundingRect().adjusted(5, 5, -5, -5);
