@@ -4,6 +4,9 @@
 #include "hiconeditordrawtoolmgr.h"
 #include "hiconeditorframe.h"
 #include "hiconeditorop.h"
+#include "hselectedmgr.h"
+#include "htempcontainer.h"
+#include "hiconproperty.h"
 //显示网格
 void HIconMainWindow::showGrid()
 {
@@ -184,8 +187,22 @@ void HIconMainWindow::bringToDown()
 
 }
 
+#include <QDebug>
 void HIconMainWindow::onSetAttribute()
 {
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorOp())
+        return;
+    if(m_pIconEditorMgr->iconEditorOp()->toolType() != ICON_SELECT_TOOL)
+        return;
+    //qDebug()<<"before selectMgr"<<;
+    if(m_pIconEditorMgr->selectedMgr())
+    {
+        QVector<HBaseObj*> objs = m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList();
+        if(objs.size() > 1 && objs.size() == 0) return;
 
+       // qDebug()<<"HPropertyDlg"<<;
+        HPropertyDlg dlg(objs.at(0));
+        dlg.exec();
+    }
 }
 

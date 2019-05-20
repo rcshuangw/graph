@@ -1,10 +1,11 @@
 ﻿#ifndef HICONHELPER_H
 #define HICONHELPER_H
-
+#include "h5basehelpexport.h"
 #include <QPixmap>
 #include <QString>
-#include "h5basehelpexport.h"
 #include <QList>
+#include "hiconapi.h"
+class HBaseObj;
 class HIconTemplate;
 
 class H5BASEHELP_EXPORT HIconHelper
@@ -17,6 +18,7 @@ public:
     static HIconHelper* Instance();
 
 public:
+    HBaseObj* newObj(DrawShape nObjType,const QString& arg = QString::null, HBaseObj* parent=0);
     //获取某个图符的pixmap  模板类型，模板uuid,图符大小，当前curpattern
     QPixmap iconPixmap(const QString& strType,const QString& uuid,const QSizeF &size = QSizeF(0,0),int nCurPattern = 0);
 

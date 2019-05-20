@@ -29,7 +29,7 @@ SOURCES += \
     #hgraph.cpp \
     #hgraphhelper.cpp \
     #hgraphpage.cpp \
-    #hiconhelper.cpp \
+    hiconhelper.cpp \
     hiconproperty.cpp \
     #hrelaypage.cpp \
     #hstation.cpp
@@ -44,7 +44,7 @@ HEADERS +=\
     #../../include/h5basehelp/hfonthelper.h \
     #../../include/h5basehelp/hgraphhelper.h \
     #../../include/h5basehelp/hgraphpage.h \
-    #../../include/h5basehelp/hiconhelper.h \
+    ../../include/h5basehelp/hiconhelper.h \
     ../../include/h5basehelp/hiconproperty.h \
     #../../include/h5basehelp/hrelaypage.h \
     #../../include/h5basehelp/hstation.h

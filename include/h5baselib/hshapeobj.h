@@ -92,7 +92,7 @@ public:
 	QRectF		m_rect;
     double m_width;
     double m_height;
-
+protected:
     //填充方面
 	bool m_bFill;
     quint8 m_nFillWay;//填充方式

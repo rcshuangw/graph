@@ -26,7 +26,7 @@ public:
     virtual void onEvent(HEvent& e);
     virtual void selectTool(DrawShape shape,const QString& catalogName=QString(),const QString& uuid = QString());
     virtual void appendObj(HBaseObj* obj) = 0;
-
+    virtual QCursor cursor() const;
 public:
     bool findTool(DrawShape shape,const QString& catalogName = QString(),const QString& uuid = QString());
     void onDrawPath(const QList<Path> &pathList);

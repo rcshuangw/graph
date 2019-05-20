@@ -1,4 +1,5 @@
 #include "hpolylinetool.h"
+#include "hiconhelper.h"
 #include "hpolygon.h"
 #include "hpolyline.h"
 HPolylineTool::HPolylineTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
@@ -59,7 +60,6 @@ void HPolylineTool::onMousePressEvent(QMouseEvent* event,QVariant &data)
         painterPath.addPolygon(m_ptPolygons);
         Path path;
         path.coordType = false;
-        path.pen.setStyle(Qt::DashLine);
         path.painterPath = painterPath;
         //由绘制管理发送给editor
         QList<Path> pathList;
@@ -75,11 +75,32 @@ void HPolylineTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
     if(!m_bStart)
         return;
     QPointF point = data.toPointF();
-    if(event->buttons()&Qt::LeftButton)
+    //if(event->buttons()&Qt::LeftButton)
     {
-        m_ptPolygons.append(point);
-        m_ptCurPoint = point;
+
+       // m_ptCurPoint = point;
     }
+    //之前的的
+    QPainterPath painterPath;
+    painterPath.addPolygon(m_ptPolygons);
+    Path path;
+    path.coordType = false;
+    path.pen.setStyle(Qt::SolidLine);
+    path.painterPath = painterPath;
+    //当前的
+    QPainterPath painterPath1;
+    painterPath1.moveTo(m_ptCurPoint);
+    painterPath1.lineTo(point);
+    Path path1;
+    path1.coordType = false;
+    path1.pen.setStyle(Qt::DashLine);
+    path1.painterPath = painterPath1;
+
+    //由绘制管理发送给editor
+    QList<Path> pathList;
+    pathList.append(path);
+    pathList.append(path1);
+    m_pToolManager->onDrawPath(pathList);
 
 }
 
@@ -93,15 +114,7 @@ void HPolylineTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
         HBaseObj* pObj = NULL;
         if(m_edrawShape == Polyline && m_ptPolygons.size()<2 || m_edrawShape == Polygon && m_ptPolygons.size()<3)
             return;
-        switch(m_edrawShape)
-        {
-        case Polyline:
-            pObj = new HPolyline();
-            break;
-        case Polygon:
-            pObj = new HPolygon();
-            break;
-        }
+        pObj = HIconHelper::Instance()->newObj(m_edrawShape);
         if(NULL == pObj) return;
         pObj->setPointList(m_ptPolygons);
         m_pToolManager->appendObj(pObj);

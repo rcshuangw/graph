@@ -1,4 +1,5 @@
 #include "hdrawmanager.h"
+#include <QCursor>
 #include "h5drawtool.h"
 #include "hlinetool.h"
 #include "hpolylinetool.h"
@@ -65,6 +66,12 @@ bool HDrawManager::findTool(DrawShape shape,const QString& catalogName,const QSt
     }
     return false;
 }
+
+QCursor HDrawManager::cursor() const
+{
+    return QCursor(Qt::CrossCursor);
+}
+
 
 void HDrawManager::onDrawPath(const QList<Path> &pathList)
 {

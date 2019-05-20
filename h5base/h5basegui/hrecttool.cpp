@@ -1,5 +1,5 @@
 #include "hrecttool.h"
-//#include "htoolmanager.h"
+#include "hiconhelper.h"
 #include "hellipse.h"
 #include "hcircle.h"
 #include "hrectangle.h"
@@ -113,25 +113,7 @@ void HRectTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
         return;
 
     HBaseObj* pObj = NULL;
-    switch(m_edrawShape)
-    {
-    case Rectangle:
-        pObj = new HRectangle();
-        break;
-    case Text:
-        pObj = new HText();
-        break;
-    case Ellipse:
-        pObj = new HEllipse();
-        break;
-    case Circle:
-        pObj = new HCircle();
-        break;
-
-    default:
-        break;
-    }
-
+    pObj = HIconHelper::Instance()->newObj(m_edrawShape);
     if(pObj)
     {
         QPolygonF points;

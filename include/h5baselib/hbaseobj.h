@@ -116,7 +116,7 @@ public:
     
 	virtual bool isZero(double value);
 	virtual bool isTurned(qint8 nFlag);
-    virtual bool isRotated();
+    virtual bool isRotated(qint8 flag = 0);
 
     virtual float rotateAngle();
     virtual void rotateBy(float fAngle);//add rotate

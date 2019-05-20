@@ -353,7 +353,7 @@ bool HBaseObj::setPointList(QPolygonF& list, qint8 flag)
     if(!isTurned(flag) && !isRotated())
         return true;
 	QTransform mx;
-	bool bok = transform(mx, 1);
+    bool bok = transform(mx, 0);
 	if (!bok)
 		return true;
 	mx = mx.inverted(&bok);
@@ -369,33 +369,33 @@ bool HBaseObj::transform(QTransform& transform1,quint8 flag)
 {
     bool bok = false;
     quint8 nFlag = flag;
-    if(flag)
+    if(flag ==1)
     {
         QPointF pt = QPointF(getOX(), getOY());
         transform1 = transform1.translate(pt.x(), pt.y());
         bok = true;
     }
-
-    if(isTurned(nFlag))
+//
+    if(isTurned(flag))
     {
 		//transform1.translate(getOX(),getOY());
         if(m_bHorizonTurn)
         {
-			transform1.scale(-1,1);
+            transform1 = transform1.scale(-1,1);
             bok = true;
         }
         if(m_bVerticalTurn)
         {
-			transform1.scale(1,-1);
+            transform1 = transform1.scale(1,-1);
             bok = true;
         }
 		//transform1.translate(-getOX(),-getOY());
     }
 
-    if(isRotated())
+    if(isRotated(flag))
     {
 		//transform1.translate(getOX(),getOY());
-		transform1.rotate(m_fRotateAngle);
+        transform1 = transform1.rotate(m_fRotateAngle);
         bok = true;
 		//transform1.translate(-getOX(),-getOY());
     }
@@ -481,14 +481,17 @@ bool HBaseObj::isZero(double value)
     return false;
 }
 
-bool HBaseObj::isRotated()
+bool HBaseObj::isRotated(qint8 flag)
 {
+    if(flag == 0 || flag == 2)
+        return false;
     return !isZero(m_fRotateAngle);
 }
 
 //翻转
-bool HBaseObj::isTurned(qint8 nFlag)
+bool HBaseObj::isTurned(qint8 flag)
 {
+    if(flag == 0 || flag == 2) return false;
 	return (m_bHorizonTurn || m_bVerticalTurn);
 }
 

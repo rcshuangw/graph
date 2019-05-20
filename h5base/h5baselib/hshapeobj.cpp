@@ -273,6 +273,11 @@ void HShapeObj::setPainter(QPainter* painter)
 	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
     QRectF rect = getPointList().boundingRect();
+    QTransform trans;
+    if(transform(trans,2))
+    {
+        painter->setTransform(trans,true);
+    }
 	//设置属性
 	QColor penClr = QColor(getLineColorName()); //线条颜色
 	int penWidth = getLineWidth();//线条宽度

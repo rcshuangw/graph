@@ -1,5 +1,6 @@
 ﻿#include "hlinetool.h"
 #include "hdrawmanager.h"
+#include "hiconhelper.h"
 #include "hline.h"
 #include <QDebug>
 HLineTool::HLineTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
@@ -85,15 +86,7 @@ void HLineTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
 		return;
 
 	HBaseObj* pObj = NULL;
-	if (0 == m_edrawShape)
-	{
-	}
-	else
-	{
-		//创建lineobj对象
-        pObj = new HLine();
-	}
-
+    pObj = HIconHelper::Instance()->newObj(m_edrawShape);
 	if (pObj)
 	{
 		QPolygonF points;

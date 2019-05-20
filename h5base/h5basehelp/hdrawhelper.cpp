@@ -218,8 +218,18 @@ HPointFList HDrawHelper::selectedPointList(DrawShape drawshape)
         break;
     }
     case Polyline:
+    {
+        HPointFList points = m_pBaseObj->getPointList(1);
+        //再获取每个点的中间点
+        list = getMidPoints(points,false);
+    }
         break;
     case Polygon:
+    {
+        HPointFList points = m_pBaseObj->getPointList(1);
+        //再获取每个点的中间点
+        list = getMidPoints(points);
+    }
         break;
     case Rectangle:
     case Ellipse:
@@ -301,6 +311,19 @@ void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
         else
         {
             points[1] = curPoint;
+        }
+        m_pBaseObj->setPointList(points,1);
+        ((H5GraphicsItem*)m_pBaseObj->iconGraphicsItem())->setPos(m_pBaseObj->pos());
+    }
+        break;
+    case Polygon:
+    case Polyline:
+    {
+        HPointFList points = m_pBaseObj->getPointList(1);
+        if(index%2 == 0)
+        {
+            QPointF pt2 = curPoint;
+            points[index/2] = pt2;
         }
         m_pBaseObj->setPointList(points,1);
         ((H5GraphicsItem*)m_pBaseObj->iconGraphicsItem())->setPos(m_pBaseObj->pos());

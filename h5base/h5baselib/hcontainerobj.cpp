@@ -5,6 +5,8 @@
 #include "hellipse.h"
 #include "htext.h"
 #include "hcircle.h"
+#include "hpolygon.h"
+#include "hpolyline.h"
 HContainerObj::HContainerObj()
 {
 
@@ -172,11 +174,11 @@ HBaseObj* HContainerObj::newObj(DrawShape nObjType)
 	}
 	else if (nObjType == Polygon)
 	{
-        //pObj = new HPolygon();
+        pObj = new HPolygon();
 	}
 	else if (nObjType == Polyline)
 	{
-        //pObj = new HPolyline();
+        pObj = new HPolyline();
 	}
     else if (nObjType == Arc)
 	{
@@ -195,6 +197,8 @@ HBaseObj* HContainerObj::newObj(DrawShape nObjType)
 	{
 		int objID = getObjID();
 		pObj->setObjID(objID);
+        QString strObjName = QString("%1_%2_%3").arg(pObj->tagName()).arg(pObj->getShapeType()).arg(pObj->getObjID());
+        pObj->setObjName(strObjName);
 	}
 	return pObj;
 }

@@ -1,12 +1,18 @@
 ﻿#include "hiconhelper.h"
-#include "hicontemplate.h"
-#include "hbaseobj.h"
-#include "hiconobj.h"
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QFileInfo>
 #include <QMessageBox>
-#include "publicdata.h"
+#include "hbaseobj.h"
+#include "hicontemplate.h"
+#include "hiconobj.h"
+#include "hline.h"
+#include "hrectangle.h"
+#include "hellipse.h"
+#include "hcircle.h"
+#include "htext.h"
+#include "hpolygon.h"
+#include "hpolyline.h"
 HIconHelper::HIconHelper()
 {
 
@@ -23,11 +29,61 @@ HIconHelper* HIconHelper::Instance()
     return m_pInstance;
 }
 
+HBaseObj* HIconHelper::newObj(DrawShape nObjType,const QString& arg, HBaseObj* parent)
+{
+    HBaseObj* pObj = NULL;
+    if (nObjType == Line)
+    {
+        pObj = new HLine();
+    }
+    else if (nObjType == Rectangle)
+    {
+        pObj = new HRectangle();
+    }
+    else if (nObjType == Ellipse)
+    {
+        pObj = new HEllipse();
+    }
+    else if (nObjType == Circle)
+    {
+        pObj = new HCircle();
+    }
+    else if (nObjType == Polygon)
+    {
+        pObj = new HPolygon();
+    }
+    else if (nObjType == Polyline)
+    {
+        pObj = new HPolyline();
+    }
+    else if (nObjType == Arc)
+    {
+        //pObj = new HArc();
+    }
+    else if (nObjType == Text)
+    {
+        pObj = new HText();
+    }
+    else if (nObjType == Group)
+    {
+        //pObj = new HGroup();
+    }
+    pObj->setShapeType((DrawShape)nObjType);
+    if (pObj)
+    {
+        int objID = pObj->getObjID();
+        pObj->setObjID(objID);
+        QString strObjName = QString("%1_%2_%3").arg(pObj->tagName()).arg(pObj->getShapeType()).arg(pObj->getObjID());
+        pObj->setObjName(strObjName);
+    }
+    return pObj;
+}
+
 QPixmap HIconHelper::iconPixmap(const QString& strType,const QString& uuid,const QSizeF &size,int nCurPattern)
 {
     HIconTemplate* pIconTemplate = new HIconTemplate(QString());
     Q_ASSERT( pIconTemplate );
-
+/*
     char szIconPath[128];
     getDataFilePath(DFPATH_ICON,szIconPath);
     QString iconsPath = QString(szIconPath);
@@ -65,8 +121,8 @@ QPixmap HIconHelper::iconPixmap(const QString& strType,const QString& uuid,const
         delete pIconTemplate;
         pIconTemplate = NULL;
     }
-
-    return QPixmap().fromImage(image);
+*/
+    return QPixmap();//.fromImage(image);
 }
 
 
@@ -76,7 +132,7 @@ void HIconHelper::loadIconDoucument(QList<HIconTemplate*> *pIconTemplateList)
     if(NULL == pIconTemplateList)
         return;
     char szIconPath[128];
-    getDataFilePath(DFPATH_ICON,szIconPath);
+    //getDataFilePath(DFPATH_ICON,szIconPath);
     QString iconsPath = QString(szIconPath);
 
     QDir dirIconsPath(iconsPath);
@@ -118,6 +174,7 @@ void HIconHelper::saveIconDoucument(QList<HIconTemplate*> *pIconTemplateList)
 {
     if(NULL == pIconTemplateList)
         return;
+    /*
     char szIconPath[128];
     getDataFilePath(DFPATH_ICON,szIconPath);
     QString iconsPath = QString(szIconPath);
@@ -130,7 +187,7 @@ void HIconHelper::saveIconDoucument(QList<HIconTemplate*> *pIconTemplateList)
     {
         if(info.isFile())continue;
         saveIconTemplateFile(pIconTemplateList,iconsPath,info.fileName());
-    }
+    }*/
 }
 
 void HIconHelper::saveIconTemplateFile(QList<HIconTemplate*> *pIconTemplateList,const QString& strIconsPath,const QString& strFolderName)//保存所有的模板文件
@@ -138,6 +195,7 @@ void HIconHelper::saveIconTemplateFile(QList<HIconTemplate*> *pIconTemplateList,
     QDir dirIconsFilePath(strIconsPath);
     if(!dirIconsFilePath.exists())
         return;
+    /*
     QString strIconsFolderPath = strIconsPath + "/" + strFolderName;
     for(int i = 0; i < pIconTemplateList->count();i++)
     {
@@ -159,7 +217,7 @@ void HIconHelper::saveIconTemplateFile(QList<HIconTemplate*> *pIconTemplateList,
            // QString strWarning = QStringLiteral("没有找到")+iconTemplate->getCatalogName()+QStringLiteral("文件夹!");
            // QMessageBox::warning(NULL,"warning",strWarning);
         }
-    }
+    }*/
 }
 
 

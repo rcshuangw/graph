@@ -106,6 +106,9 @@ void HIconEditorOp::drawTool(DrawShape drawShape)
     m_nToolType = ICON_DRAW_TOOL;
     m_pIconEditorMgr->iconEditorDrawToolMgr()->selectTool(drawShape);
     onEndDraw();
+    QCursor cursor = m_pIconEditorMgr->iconEditorDrawToolMgr()->cursor();
+    if(m_pIconEditorMgr->iconEditorFrame())
+        m_pIconEditorMgr->iconEditorFrame()->cursorChanged(cursor);
 }
 
 void HIconEditorOp::selectTool(SelectMode selMode)
@@ -445,5 +448,5 @@ void HIconEditorOp::switchSelectTool()
 
 void HIconEditorOp::setObjAttribute()
 {
-
+    emit attributeChanged();
 }

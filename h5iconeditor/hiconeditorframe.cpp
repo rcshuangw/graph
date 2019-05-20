@@ -156,10 +156,14 @@ bool HIconEditorFrame::eventFilter(QObject* obj,QEvent* event)
 
             if(event->type() == QEvent::MouseButtonRelease)
             {
-                if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_DRAW_TOOL)
+                QMouseEvent* me = (QMouseEvent*)event;
+                if(me->button() == Qt::RightButton)
                 {
-                    m_pIconEditorMgr->iconEditorOp()->switchSelectTool();
-                    return true;
+                    if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_DRAW_TOOL)
+                    {
+                        m_pIconEditorMgr->iconEditorOp()->switchSelectTool();
+                        return true;
+                    }
                 }
             }
 

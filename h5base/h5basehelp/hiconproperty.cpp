@@ -1,6 +1,6 @@
-﻿#if defined(_MSC_VER) &&(_MSC_VER >= 1600)
-#pragma execution_character_set("utf-8")
-#endif
+﻿//#if defined(_MSC_VER) &&(_MSC_VER >= 1600)
+//#pragma execution_character_set("utf-8")
+//#endif
 
 #include "hiconproperty.h"
 #include "ui_iconproperty.h"
@@ -11,7 +11,13 @@
 #include <QFile>
 #include <QFileDialog>
 #include <math.h>
-
+#include "hline.h"
+#include "hrectangle.h"
+#include "hellipse.h"
+#include "hcircle.h"
+#include "htext.h"
+#include "hpolygon.h"
+#include "hpolyline.h"
 HPropertyDlg::HPropertyDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::IconProperty)
@@ -40,7 +46,7 @@ HPropertyDlg::HPropertyDlg(HBaseObj* pObj,QWidget *parent):
     connect(ui->okBtn,SIGNAL(clicked(bool)),this,SLOT(ok_clicked()));
     connect(ui->noBtn,SIGNAL(clicked(bool)),this,SLOT(no_clicked()));
     initTab();
-
+//
 }
 
 
@@ -154,80 +160,80 @@ void HPropertyDlg::initBaseTab()
     {
         QString strObjName = pCurObj->getObjName();
         ui->objName->setText(strObjName);
-        ui->x_rotate->setValue(pCurObj->getRotateAngle());
+        ui->x_rotate->setValue(pCurObj->rotateAngle());
         ui->xCoord->setValue(pCurObj->getOX());
         ui->yCoord->setValue(pCurObj->getOY());
-        ui->horizontalFlip->setChecked(pCurObj->bHorizonTurn);
-        ui->verticalFlip->setChecked(pCurObj->bVerticalTurn);
+        ui->horizontalFlip->setChecked(pCurObj->isHorizonTurn());
+        ui->verticalFlip->setChecked(pCurObj->isVerticalTurn());
 
         if(pCurObj->getShapeType() == Line)
         {
             ui->objType->setText(QStringLiteral("直线"));
-            HLine* pObj = (HLine*)pCurObj;
+            //HLine* pObj = (HLine*)pCurObj;
         }
         else if(pCurObj->getShapeType() == Rectangle)
         {
             ui->objType->setText(QStringLiteral("矩形"));
             HRectangle* pObj = (HRectangle*)pCurObj;
 
-            ui->xCoord_width->setValue(pObj->getRectWidth());
-            ui->yCoord_height->setValue(pObj->getRectHeight());
+            ui->xCoord_width->setValue(pObj->m_width);
+            ui->yCoord_height->setValue(pObj->m_height);
         }
         else if(pCurObj->getShapeType() == Ellipse)
         {
             ui->objType->setText(QStringLiteral("椭圆"));
             HEllipse* pObj = (HEllipse*)pCurObj;
 
-            ui->xCoord_width->setValue(pObj->getRectWidth());
-            ui->yCoord_height->setValue(pObj->getRectHeight());
+            ui->xCoord_width->setValue(pObj->m_width);
+            ui->yCoord_height->setValue(pObj->m_height);
         }
         else if(pCurObj->getShapeType() == Circle)
         {
             ui->objType->setText(QStringLiteral("圆"));
             HCircle* pObj = (HCircle*)pCurObj;
 
-            ui->xCoord_width->setValue(pObj->getRectWidth());
-            ui->yCoord_height->setValue(pObj->getRectHeight());
+            ui->xCoord_width->setValue(pObj->m_width);
+            ui->yCoord_height->setValue(pObj->m_height);
         }
         else if(pCurObj->getShapeType() == Polygon)
         {
             ui->objType->setText(QStringLiteral("多边形"));
-            HPolygon* pObj = (HPolygon*)pCurObj;
+            //HPolygon* pObj = (HPolygon*)pCurObj;
 
-            ui->xCoord_width->setValue(pObj->width);
-            ui->yCoord_height->setValue(pObj->height);
+            //ui->xCoord_width->setValue(pObj->width);
+            //ui->yCoord_height->setValue(pObj->height);
         }
         else if(pCurObj->getShapeType() == Polyline)
         {
             ui->objType->setText(QStringLiteral("折线"));
-            HPolyline* pObj = (HPolyline*)pCurObj;
+            //HPolyline* pObj = (HPolyline*)pCurObj;
 
-            ui->xCoord_width->setValue(pObj->width);
-            ui->yCoord_height->setValue(pObj->height);
+            //ui->xCoord_width->setValue(pObj->width);
+            //ui->yCoord_height->setValue(pObj->height);
         }
         else if(pCurObj->getShapeType() == Arc)
         {
             ui->objType->setText(QStringLiteral("弧线"));
-            HArc* pObj = (HArc*)pCurObj;
+            //HArc* pObj = (HArc*)pCurObj;
 
-            ui->xCoord_width->setValue(pObj->getRectWidth());
-            ui->yCoord_height->setValue(pObj->getRectHeight());
+            //ui->xCoord_width->setValue(pObj->getRectWidth());
+            //ui->yCoord_height->setValue(pObj->getRectHeight());
         }
         else if(pCurObj->getShapeType() == Text)
         {
             ui->objType->setText(QStringLiteral("文字"));
             HText* pObj = (HText*)pCurObj;
 
-            ui->xCoord_width->setValue(pObj->getRectWidth());
-            ui->yCoord_height->setValue(pObj->getRectHeight());
+            ui->xCoord_width->setValue(pObj->m_width);
+            ui->yCoord_height->setValue(pObj->m_height);
         }
         else if(pCurObj->getShapeType() == Group)
         {
             ui->objType->setText(QStringLiteral("组合"));
-            HGroupObj* pObj = (HGroupObj*)pCurObj;
+            //HGroupObj* pObj = (HGroupObj*)pCurObj;
 
-            ui->xCoord_width->setValue(pObj->getGroupWidth());
-            ui->yCoord_height->setValue(pObj->getGroupHeight());
+            //ui->xCoord_width->setValue(pObj->getGroupWidth());
+            //ui->yCoord_height->setValue(pObj->getGroupHeight());
         }
     }
 }
@@ -268,13 +274,13 @@ void HPropertyDlg::initTextTab()
         if(drawShape == Text)
         {
             HText* pTextObj = (HText*)pCurObj;
-            ui->horizAlignComboBox->setCurrentIndex(ui->horizAlignComboBox->findData(pTextObj->getHorizontalAlign()));
-            ui->vertiAlignComboBox->setCurrentIndex(ui->vertiAlignComboBox->findData(pTextObj->getVerticalAlign()));
-            ui->layoutComboBox->setCurrentIndex(ui->layoutComboBox->findData(pTextObj->getLayout()));
-            QString strFontName = pTextObj->getTextFontName();
-            int pointSize = pTextObj->getPointSize();
-            int weight = pTextObj->getWeigth();
-            bool italic = pTextObj->getItalic();
+            ui->horizAlignComboBox->setCurrentIndex(ui->horizAlignComboBox->findData(pTextObj->horizontalAlign()));
+            ui->vertiAlignComboBox->setCurrentIndex(ui->vertiAlignComboBox->findData(pTextObj->verticalAlign()));
+            ui->layoutComboBox->setCurrentIndex(ui->layoutComboBox->findData(pTextObj->layout()));
+            QString strFontName = pTextObj->fontFamily();
+            int pointSize = pTextObj->fontSize();
+            int weight = pTextObj->fontWeight();
+            bool italic = pTextObj->fontItalic();
             QFont font1(strFontName,pointSize,weight,italic);
             font.setFamily(strFontName);
             font.setPointSize(pointSize);
@@ -282,11 +288,11 @@ void HPropertyDlg::initTextTab()
             font.setItalic(italic);
             ui->textFontBtn->setFont(font);
             ui->textFontBtn->setText(QStringLiteral("示范"));
-            strTextColor = pTextObj->getTextColorName();
+            strTextColor = pTextObj->textClrName();
             QString textClr = QString("background-color:")+ strTextColor;
             ui->textColorBtn->setStyleSheet(textClr);
 
-            ui->textEdit->setText(pTextObj->getTextContent());
+            ui->textEdit->setText(pTextObj->text());
         }
     }
 }
@@ -390,42 +396,36 @@ void HPropertyDlg::initLineTab()
     ui->yAxis->setEnabled(false);
     if(pCurObj)
     {
-        DRAWSHAPE drawShape = pCurObj->getShapeType();
-        bool bRound = pCurObj->getRound();
-        ui->rectRound->setChecked(bRound);
+        DrawShape drawShape = pCurObj->getShapeType();
+        bool bRound = false;//pCurObj->getRound();
+        //ui->rectRound->setChecked(bRound);
         if(bRound)
         {
             ui->xAxis->setEnabled(true);
             ui->yAxis->setEnabled(true);
-            ui->xAxis->setValue(pCurObj->getXAxis());
-            ui->yAxis->setValue(pCurObj->getYAxis());
+            //ui->xAxis->setValue(pCurObj->xAxi());
+            //ui->yAxis->setValue(pCurObj->getYAxis());
         }
 
-        if(drawShape == enumLine)
+        if(drawShape == Line)
         {
             HLine* pLineObj = (HLine*)pCurObj;
-            int curIndex = ui->lineStartArrow->findData(pLineObj->getArrowStart());
+            int curIndex = ui->lineStartArrow->findData(pLineObj->getStartArrowType());
             ui->lineStartArrow->setCurrentIndex(curIndex);
-            curIndex = ui->lineTailArrow->findData(pLineObj->getArrowEnd());
+            curIndex = ui->lineTailArrow->findData(pLineObj->getEndArrowType());
             ui->lineTailArrow->setCurrentIndex(curIndex);
             int w = pLineObj->getArrowWidth();
             int h = pLineObj->getArrowHeight();
             ui->arrowWidth->setValue(w);
             ui->arrowHeight->setValue(h);
         }
-        else if(pCurObj->getShapeType() == enumArc)
+        else if(pCurObj->getShapeType() == Arc)
         {
             ui->bCloseCheck->setVisible(true);
-            HArc* pArcObj = (HArc*)pCurObj;
-            ui->startAngle->setValue(pArcObj->getStartAngle());
-            ui->spanAngle->setValue(pArcObj->getSpanAngle());
-            ui->bCloseCheck->setChecked(pArcObj->getCloseStatus());
-        }
-        else if(pCurObj->getShapeType() == enumPie)
-        {
-            HPie* pPieObj = (HPie*)pCurObj;
-            ui->startAngle->setValue(pPieObj->getStartAngle());
-            ui->spanAngle->setValue(pPieObj->getSpanAngle());
+            //HArc* pArcObj = (HArc*)pCurObj;
+            //ui->startAngle->setValue(pArcObj->getStartAngle());
+            //ui->spanAngle->setValue(pArcObj->getSpanAngle());
+            //ui->bCloseCheck->setChecked(pArcObj->getCloseStatus());
         }
     }
 }
@@ -466,6 +466,7 @@ void HPropertyDlg::initShapeTab()
                  <<QStringLiteral("密度7")<<QStringLiteral("水平线")<<QStringLiteral("垂直线")<<QStringLiteral("横平竖直线")
                  <<QStringLiteral("斜线")<<QStringLiteral("反斜线")<<QStringLiteral("交叉斜线")<<QStringLiteral("线性渐变")
                  <<QStringLiteral("径向渐变")<<QStringLiteral("锥形渐变");
+
     for(int i = 0; i < fillStyleList.count();i++)
     {
         int brushStyle = Qt::BrushStyle(i);
@@ -502,38 +503,43 @@ void HPropertyDlg::initShapeTab()
     //实际显示
     if(pCurObj)
     {
-        ui->frameSee->setChecked(pCurObj->getFrameSee());
-        quint8 id = pCurObj->getFillWay();
-        if(id == 0)
-            ui->noFill->setChecked(true);
-        else if(id == 1)
-            ui->colorFill->setChecked(true);
-        else if(id == 2)
-            ui->imageFill->setChecked(true);
-        emit btnGroup->buttonClicked(id);
-
-        ui->transSlider->setValue(pCurObj->getTransparency());
-        int nFillStyle = ui->fillStyle->findData(int(pCurObj->getFillStyle()));
-        ui->fillStyle->setCurrentIndex(nFillStyle);
-
-        strFillColor = pCurObj->getFillColorName();
-        QString strbgColor = QString("background-color:")+ strFillColor;
-        ui->fillColor->setStyleSheet(strbgColor);
-        ui->fillPercentage->setValue(pCurObj->getFillPercentage());
-        if(nFillStyle == Qt::LinearGradientPattern)
+        DrawShape drawShape = pCurObj->getShapeType();
+        if(Rectangle == drawShape || Ellipse == drawShape || Circle == drawShape || Polygon == drawShape)
         {
-            ui->fillDirection->setEnabled(true);
-            int nFillDirect = ui->fillDirection->findData(pCurObj->getFillDirection());
-            ui->fillDirection->setCurrentIndex(nFillDirect);
-        }
+            HShapeObj* pObj = (HShapeObj*)pCurObj;
+            ui->frameSee->setChecked(pObj->getFrameSee());
+            quint8 id = pObj->getFillWay();
+            if(id == 0)
+                ui->noFill->setChecked(true);
+            else if(id == 1)
+                ui->colorFill->setChecked(true);
+            else if(id == 2)
+                ui->imageFill->setChecked(true);
+            emit btnGroup->buttonClicked(id);
 
-        //图片部分
-        ui->picLineEdit->setText(pCurObj->getImagePath());
-        ui->keepPicCheck->setChecked(pCurObj->getKeepImageRatio());
-        if(pCurObj->getKeepImageRatio())
-        {
-            ui->alignPicCombo->setEnabled(true);
-            ui->alignPicCombo->setCurrentIndex(ui->alignPicCombo->findData(pCurObj->getImageDirect()));
+            ui->transSlider->setValue(pObj->getTransparency());
+            int nFillStyle = ui->fillStyle->findData(int(pObj->getFillStyle()));
+            ui->fillStyle->setCurrentIndex(nFillStyle);
+
+            strFillColor = pObj->getFillColorName();
+            QString strbgColor = QString("background-color:")+ strFillColor;
+            ui->fillColor->setStyleSheet(strbgColor);
+            ui->fillPercentage->setValue(pObj->getFillPercentage());
+            if(nFillStyle == Qt::LinearGradientPattern)
+            {
+                ui->fillDirection->setEnabled(true);
+                int nFillDirect = ui->fillDirection->findData(pObj->getFillDirection());
+                ui->fillDirection->setCurrentIndex(nFillDirect);
+            }
+
+            //图片部分
+            ui->picLineEdit->setText(pObj->getBkImagePath());
+            ui->keepPicCheck->setChecked(pObj->getKeepImageRatio());
+            if(pObj->getKeepImageRatio())
+            {
+                ui->alignPicCombo->setEnabled(true);
+                ui->alignPicCombo->setCurrentIndex(ui->alignPicCombo->findData(pObj->getImageDirect()));
+            }
         }
     }
 }
@@ -686,85 +692,86 @@ QIcon HPropertyDlg::createArrowIcon(quint8 style,bool head)
 
 void HPropertyDlg::ok_clicked()
 {
-    DRAWSHAPE drawShape = pCurObj->getShapeType();
+    DrawShape drawShape = pCurObj->getShapeType();
     pCurObj->setLineColorName(strLineColor);
     pCurObj->setLineWidth(ui->lineWidth->currentData().toUInt());
     pCurObj->setLineStyle(Qt::PenStyle(ui->lineStyle->currentData().toInt()));
     pCurObj->setLineCapStyle(Qt::PenCapStyle(ui->lineCapStyle->currentData().toInt()));
-    bool bTurn = false;
+    bool bHTurn = false;
+    bool bVTurn = false;
     if(ui->verticalFlip->checkState() == Qt::Checked)
     {
-        bTurn = true;
-        pCurObj->setTurn(false,bTurn);
+        bVTurn = true;
     }
-    bTurn = false;
     if(ui->horizontalFlip->checkState() == Qt::Checked)
     {
-        bTurn = true;
-        pCurObj->setTurn(bTurn,false);
+        bHTurn = true;
     }
+    pCurObj->turn(bHTurn,bVTurn);
     bool bFrameSee = false;
     if(ui->frameSee->checkState() == Qt::Checked)
         bFrameSee = true;
-    pCurObj->setFrameSee(bFrameSee);
-    pCurObj->setFillWay(btnGroup->checkedId());
-    pCurObj->setTransparency(ui->transSlider->value());
-    pCurObj->setFillPercentage(ui->fillPercentage->value());
-    pCurObj->setFillStyle((Qt::BrushStyle)ui->fillStyle->currentData().toUInt());
-    pCurObj->setFillColorName(strFillColor);
-    //quint8 tt = ui->fillDirection->currentData().toUInt();
-    pCurObj->setFillDirection(ui->fillDirection->currentData().toUInt());
-    pCurObj->setRotateAngle(ui->x_rotate->value());
-    bool bRound = false;
-    if(ui->rectRound->checkState() == Qt::Checked)
-        bRound = true;
-    pCurObj->setRound(bRound);
-    pCurObj->setXAxis(ui->xAxis->value());
-    pCurObj->setYAxis(ui->yAxis->value());
-    if(btnGroup->checkedId() == 1)//当前是颜色填充就不能用画面填充，当前是图片填充且如果两种填充都有画面填充优于颜色填充
-        pCurObj->setImagePath("");
-    else
-        pCurObj->setImagePath(ui->picLineEdit->text());
-    bool bKeep = false;
-    if(ui->keepPicCheck->checkState() == Qt::Checked)
-        bKeep = true;
-    pCurObj->setKeepImageRatio(bKeep);
-    pCurObj->setImageDirect(ui->alignPicCombo->currentData().toUInt());
-    if(drawShape == enumLine)
+
+    if(drawShape == Line)
     {
         HLine* pLineObj = (HLine*)pCurObj;
-        pLineObj->setArrowStart(ui->lineStartArrow->currentData().toUInt());
-        pLineObj->setArrowEnd(ui->lineTailArrow->currentData().toUInt());
+        pLineObj->setStartArrowType(ui->lineStartArrow->currentData().toUInt());
+        pLineObj->setEndArrowType(ui->lineTailArrow->currentData().toUInt());
         pLineObj->setArrowWidth(ui->arrowWidth->value());
         pLineObj->setArrowHeight(ui->arrowHeight->value());
     }
-    else if(drawShape == enumArc)
+    else if(drawShape == Arc)
     {
-        HArc* pArcObj = (HArc*)pCurObj;
-        pArcObj->setStartAngle(ui->startAngle->value());
-        pArcObj->setSpanAngle(ui->spanAngle->value());
-        pArcObj->setCloseStatus(false);
-        if(ui->bCloseCheck->checkState() == Qt::Checked)
-            pArcObj->setCloseStatus(true);
+        //HArc* pArcObj = (HArc*)pCurObj;
+        //pArcObj->setStartAngle(ui->startAngle->value());
+        //pArcObj->setSpanAngle(ui->spanAngle->value());
+        //pArcObj->setCloseStatus(false);
+        //if(ui->bCloseCheck->checkState() == Qt::Checked)
+            //pArcObj->setCloseStatus(true);
     }
-    else if(drawShape == enumPie)
-    {
-        HPie* pPieObj = (HPie*)pCurObj;
-        pPieObj->setStartAngle(ui->startAngle->value());
-        pPieObj->setSpanAngle(ui->spanAngle->value());
-    }
-    else if(drawShape == enumText)
+    else if(drawShape == Text)
     {
         HText *pTextObj = (HText*)pCurObj;
         pTextObj->setHorizontalAlign(ui->horizAlignComboBox->currentData().toInt());
         pTextObj->setVerticalAlign(ui->vertiAlignComboBox->currentData().toInt());
         pTextObj->setLayout(ui->layoutComboBox->currentData().toUInt());
-        pTextObj->setTextFontName(font.family());
-        pTextObj->setPointSize(font.pointSize());
-        pTextObj->setWeight(font.weight());
-        pTextObj->setItalic(font.italic());
-        pTextObj->setTextColorName(strTextColor);
-        pTextObj->setTextContent(ui->textEdit->text());
+        pTextObj->setFontFamily(font.family());
+        pTextObj->setFontSize(font.pointSize());
+        pTextObj->setFontWeight(font.weight());
+        pTextObj->setFontItalic(font.italic());
+        pTextObj->setTextClr(strTextColor);
+        pTextObj->setText(ui->textEdit->text());
+    }
+    else
+    {
+        HShapeObj* pShapeObj = (HShapeObj*)pCurObj;
+        pShapeObj->setFrameSee(bFrameSee);
+        pShapeObj->setFillWay(btnGroup->checkedId());
+        pShapeObj->setTransparency(ui->transSlider->value());
+        pShapeObj->setFillPercentage(ui->fillPercentage->value());
+        pShapeObj->setFillStyle((Qt::BrushStyle)ui->fillStyle->currentData().toUInt());
+        pShapeObj->setFillColorName(strFillColor);
+        pShapeObj->setFillDirection(ui->fillDirection->currentData().toUInt());
+        pShapeObj->rotate(ui->x_rotate->value());
+        bool bRound = false;
+        if(ui->rectRound->checkState() == Qt::Checked)
+            bRound = true;
+        if(btnGroup->checkedId() == 1)//当前是颜色填充就不能用画面填充，当前是图片填充且如果两种填充都有画面填充优于颜色填充
+            pShapeObj->setBkImagePath("");
+        else
+            pShapeObj->setBkImagePath(ui->picLineEdit->text());
+        bool bKeep = false;
+        if(ui->keepPicCheck->checkState() == Qt::Checked)
+            bKeep = true;
+        pShapeObj->setKeepImageRatio(bKeep);
+        pShapeObj->setImageDirect(ui->alignPicCombo->currentData().toUInt());
+        if(drawShape == Rectangle || drawShape == Circle || drawShape == Ellipse || drawShape == Polygon)
+        {
+            HRectangle* pObj = (HRectangle*)pCurObj;
+            pObj->setRound(bRound);
+            pObj->setXAxis(ui->xAxis->value());
+            pObj->setYAxis(ui->yAxis->value());
+        }
     }
     pCurObj->setModify(true);
 
@@ -849,8 +856,9 @@ void HPropertyDlg::fillStyle_clicked()
     int nFillStyle = ui->fillStyle->itemData(nCurrentIndex).toInt();
     if(nFillStyle == Qt::LinearGradientPattern)
     {
+        HShapeObj* pObj = (HShapeObj*)pCurObj;
         ui->fillDirection->setEnabled(true);
-        int nFillDirect = ui->fillDirection->findData(pCurObj->getFillDirection());
+        int nFillDirect = ui->fillDirection->findData(pObj->getFillDirection());
         ui->fillDirection->setCurrentIndex(nFillDirect);
     }
     else
@@ -865,7 +873,8 @@ void HPropertyDlg::fillColor_clicked()
     QColor curColor = QColor(Qt::white);
     if(pCurObj)
     {
-        strFillColor = pCurObj->getFillColorName();
+        HShapeObj* pObj = (HShapeObj*)pCurObj;
+        strFillColor = pObj->getFillColorName();
         curColor = QColor(strFillColor);
     }
     const QColor color = QColorDialog::getColor(curColor, this, QStringLiteral("选择颜色"));
