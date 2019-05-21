@@ -2,6 +2,7 @@
 #include <QScrollBar>
 #include <QGraphicsView>
 #include <QDir>
+#include "hiconhelper.h"
 #include "hgroup.h"
 #include "hiconeditormgr.h"
 #include "hicontemplate.h"
@@ -381,16 +382,17 @@ void HIconEditorOp::groupObj()
     if(tempContainer->getObjList().count() < 2) return;
 
     HTempContainer* tempSelect = (HTempContainer*)tempContainer;
-    HGroup* pGroup =  (HGroup*)m_pIconEditorMgr->iconTemplate()->getSymbol()->newObj(Group);
     for(int i = 0; i < tempSelect->getObjList().count();i++)
     {
         HBaseObj* pObj = (HBaseObj*)tempSelect->getObjList().at(i);
         if(!pObj) continue;
         onRemoveObj(pObj);//画面删除
         m_pIconEditorMgr->iconTemplate()->getSymbol()->removeBaseObj(pObj);//pattern删除
-        //pObj->setDeleted(true);
-        pGroup->addObj(pObj);//增加到pGroup
+        pObj->setDeleted(false);
+        //pGroup->addObj(pObj);//增加到pGroup
     }
+    HGroup* pGroup =  (HGroup*)HIconHelper::Instance()->newObj(Group);
+    tempSelect->makeGroup(pGroup);
     m_pIconEditorMgr->selectedMgr()->clear();
     m_pIconEditorMgr->iconTemplate()->getSymbol()->addBaseObj(pGroup);//增加到pattern
     onCreateObj(pGroup,false);//画面增加
@@ -405,7 +407,7 @@ void HIconEditorOp::ungroupObj()
         return;
     HGroup* pGroup = (HGroup*)tempContainer->getObjList().at(0);
     if(!pGroup) return;
-    while(pGroup->getObjList().isEmpty())
+    while(!pGroup->getObjList().isEmpty())
     {
         HBaseObj* pObj = pGroup->getObjList().takeFirst();
         if(!pObj) continue;

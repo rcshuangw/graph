@@ -13,6 +13,7 @@
 #include "htext.h"
 #include "hpolygon.h"
 #include "hpolyline.h"
+#include "hgroup.h"
 HIconHelper::HIconHelper()
 {
 
@@ -66,7 +67,7 @@ HBaseObj* HIconHelper::newObj(DrawShape nObjType,const QString& arg, HBaseObj* p
     }
     else if (nObjType == Group)
     {
-        //pObj = new HGroup();
+        pObj = new HGroup();
     }
     pObj->setShapeType((DrawShape)nObjType);
     if (pObj)

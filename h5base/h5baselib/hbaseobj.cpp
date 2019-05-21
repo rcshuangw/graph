@@ -350,13 +350,14 @@ bool HBaseObj::setPointList(QPolygonF& list, qint8 flag)
 		for (i = 0; i < sz; i++)
 			list[i] -= pt;
 	}
-    if(!isTurned(flag) && !isRotated())
+    if(!isTurned(flag) && !isRotated(flag))
         return true;
 	QTransform mx;
     bool bok = transform(mx, 0);
 	if (!bok)
 		return true;
 	mx = mx.inverted(&bok);
+    //QPointF pt1 = mx.map(pos());
 	if (!bok)
 		return false;
 	for (int i = 0; i < sz; i++)

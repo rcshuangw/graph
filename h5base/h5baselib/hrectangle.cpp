@@ -96,15 +96,15 @@ QRectF HRectangle::boundingRect(qint8 flag)
 QPainterPath HRectangle::shape(qint8 flag)
 {
 	QPainterPath path;
-	if (m_bFill && m_nFillWay > 0)
+    if (m_nFillWay > 0)
 	{
-        QPolygonF points = getPointList(flag);
-        path.addPolygon(points);
-        QRectF rect = points.boundingRect().adjusted(5, 5, -5, -5);
-        path.addRect(rect);
-        return path;
+       return HShapeObj::shape(flag);
 	}
-    return HShapeObj::shape(flag);
+    QPolygonF points = getPointList(flag);
+    path.addPolygon(points);
+    QRectF rect = points.boundingRect().adjusted(5, 5, -5, -5);
+    path.addRect(rect);
+    return path;
 
 }
 
@@ -113,8 +113,7 @@ void HRectangle::paint(QPainter* painter)
 	if (!painter)
 		return;
 	painter->save();
-    //QRectF rect =  getPointList().boundingRect();
-    setPainter(painter);//设置Painter
+    HShapeObj::paint(painter);
 	QPainterPath path;
 	if(getPath(path))
 		painter->drawPath(path);

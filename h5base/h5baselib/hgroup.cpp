@@ -33,23 +33,13 @@ HPointFList HGroup::getPointList(qint8 flag /* = 0 */)
 
 QRectF HGroup::boundingRect(qint8 flag)
 {
-	QPointF po(-m_width / 2, -m_height / 2);
-	QRectF rectF(po, QSize(m_width, m_height));
-	rectF.adjust(-5, -5, 5, 5);
-	return rectF;
+    return getPointList(flag).boundingRect();
 }
 
 QPainterPath HGroup::shape(qint8 flag)
 {
 	QPainterPath path;
-	int count = m_pObjList.size();
-	for (int i = 0; i < count; i++)
-	{
-		HBaseObj* pObj = m_pObjList.at(i);
-		if (!pObj || pObj->isDeleted())
-			continue;
-		path.addPath(pObj->shape());
-	}
+    path.addPolygon(getPointList(0));
 	return path;
 }
 
@@ -67,5 +57,18 @@ void HGroup::RePos()
 
 void HGroup::paint(QPainter* painter)
 {
-
+    if (!painter)
+        return;
+    painter->save();
+    HShapeObj::paint(painter);
+    //先要根据zvalue
+    for (int i = 0; i < getObjList().count(); i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)(getObjList().at(i));
+        if (pObj)
+        {
+            pObj->paint(painter);
+        }
+    }
+    painter->restore();
 }

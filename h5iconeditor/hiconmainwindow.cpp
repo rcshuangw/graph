@@ -57,6 +57,7 @@ void HIconMainWindow::init()
 
     connect(m_pIconEditorMgr->iconEditorOp(),SIGNAL(setSelectTool()),this,SLOT(onSelectTool()));
     connect(m_pIconEditorMgr->iconEditorOp(),SIGNAL(attributeChanged()),this,SLOT(onSetAttribute()));
+    connect(m_pIconEditorMgr->iconEditorOp(),SIGNAL(selectChanged()),this,SLOT(onSelectChanged()));
     connect(m_pIconEditorMgr->iconEditorUndoStack(),SIGNAL(canUndoChanged(bool)),undoAct, SLOT(setEnabled(bool)));
     connect(m_pIconEditorMgr->iconEditorUndoStack(),SIGNAL(canRedoChanged(bool)),redoAct, SLOT(setEnabled(bool)));
 }
@@ -670,4 +671,9 @@ void HIconMainWindow::updateZoomMenus()
 void HIconMainWindow::onSelectTool()
 {
     selectAct->trigger();
+}
+
+void HIconMainWindow::onSelectChanged()
+{
+    updateMenu();
 }

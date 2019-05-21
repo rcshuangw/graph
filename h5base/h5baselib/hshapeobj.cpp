@@ -272,7 +272,6 @@ void HShapeObj::setPainter(QPainter* painter)
 	painter->setRenderHint(QPainter::TextAntialiasing);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
-    QRectF rect = getPointList(TRANS_NO_ROTATE|TRANS_NO_TURN).boundingRect();
     QTransform trans;
     if(transform(trans,0))
     {
@@ -314,50 +313,50 @@ void HShapeObj::setPainter(QPainter* painter)
 				{
 				case DIRECT_BOTTOM_TO_TOP:
 				{
-					ps2 = rect.topLeft();
-					ps1 = rect.bottomLeft();
+                    ps2 = m_rect.topLeft();
+                    ps1 = m_rect.bottomLeft();
 					break;
 				}
 				case DIRECT_TOP_TO_BOTTOM: //有顶到底
 				{
-					ps1 = rect.topLeft();
-					ps2 = rect.bottomLeft();
+                    ps1 = m_rect.topLeft();
+                    ps2 = m_rect.bottomLeft();
 					break;
 				}
 				case DIRECT_LEFT_TO_RIGHT: //由左到右
 				{
-					ps1 = rect.topLeft();
-					ps2 = rect.topRight();
+                    ps1 = m_rect.topLeft();
+                    ps2 = m_rect.topRight();
 					break;
 				}
 				case DIRECT_RIGHT_TO_LEFT: //由右到左
 				{
-					ps1 = rect.topRight();
-					ps2 = rect.topLeft();
+                    ps1 = m_rect.topRight();
+                    ps2 = m_rect.topLeft();
 					break;
 				}
 				case DIRECT_VER_TO_OUT: //垂直到外
 				{
-					ps1 = QPointF(rect.center().x(), rect.top());
-					ps2 = rect.topLeft();
+                    ps1 = QPointF(m_rect.center().x(), m_rect.top());
+                    ps2 = m_rect.topLeft();
 					break;
 				}
 				case DIRECT_HORi_TO_OUT: //水平向外
 				{
-					ps1 = QPointF(rect.left(), rect.center().y());
-					ps2 = rect.topLeft();
+                    ps1 = QPointF(m_rect.left(), m_rect.center().y());
+                    ps2 = m_rect.topLeft();
 					break;
 				}
 				case DIRECT_VER_TO_IN: //垂直向里
 				{
-					ps2 = QPointF(rect.center().x(), rect.top());
-					ps1 = rect.topLeft();
+                    ps2 = QPointF(m_rect.center().x(), m_rect.top());
+                    ps1 = m_rect.topLeft();
 					break;
 				}
 				case DIRECT_HORI_TO_IN: //垂直向里
 				{
-					ps2 = QPointF(rect.left(), rect.center().y());
-					ps1 = rect.topLeft();
+                    ps2 = QPointF(m_rect.left(), m_rect.center().y());
+                    ps1 = m_rect.topLeft();
 					break;
 				}
 				}
@@ -371,7 +370,7 @@ void HShapeObj::setPainter(QPainter* painter)
 			}
 			else if (nFillStyle == Qt::RadialGradientPattern)
 			{
-				QRadialGradient lgrd(rect.center(), qMin(rect.width(), rect.height()) / 2);
+                QRadialGradient lgrd(m_rect.center(), qMin(m_rect.width(), m_rect.height()) / 2);
 				lgrd.setColorAt(0.0, fillClr);
 				lgrd.setColorAt(0.5, fillClr.dark(150));
 				lgrd.setColorAt(1.0, fillClr.dark(250));
@@ -381,7 +380,7 @@ void HShapeObj::setPainter(QPainter* painter)
 			}
 			else if (nFillStyle == Qt::ConicalGradientPattern)
 			{
-				QConicalGradient lgrd(rect.center(), 270);
+                QConicalGradient lgrd(m_rect.center(), 270);
 				lgrd.setColorAt(0.0, fillClr);
 				lgrd.setColorAt(0.5, fillClr.lighter(150));
 				lgrd.setColorAt(1.0, fillClr.lighter(250));
@@ -408,24 +407,24 @@ void HShapeObj::setPainter(QPainter* painter)
 					//painter->setClipPath(getPath());
 					if (!m_bKeepImageRatio)
 					{
-						pix1 = pix.scaled(rect.size().toSize());
-						painter->drawPixmap(rect.x(), rect.y(), pix1);
+                        pix1 = pix.scaled(m_rect.size().toSize());
+                        painter->drawPixmap(m_rect.x(), m_rect.y(), pix1);
 					}
 					else
 					{
-						pix1 = pix.scaledToHeight(rect.height());
-						QRectF rectF = rect;
+                        pix1 = pix.scaledToHeight(m_rect.height());
+                        QRectF rectF = m_rect;
 						if (1 == m_nImageDirect)
 						{
-							double deltaX = (rect.width() - pix1.width()) / 2;
-							rectF.setX(rect.x() + deltaX);
+                            double deltaX = (m_rect.width() - pix1.width()) / 2;
+                            rectF.setX(m_rect.x() + deltaX);
 						}
 						else if (2 == m_nImageDirect)
 						{
-							double deltaX = (rect.width() - pix1.width());
-							rectF.setX(rect.x() + deltaX);
+                            double deltaX = (m_rect.width() - pix1.width());
+                            rectF.setX(m_rect.x() + deltaX);
 						}
-						painter->drawPixmap(rectF.x(), rectF.y(), pix1);
+                        painter->drawPixmap(rectF.x(), rectF.y(), pix1);
 					}
 				}
 			}
@@ -436,27 +435,34 @@ void HShapeObj::setPainter(QPainter* painter)
 bool HShapeObj::getPath(QPainterPath& path)
 {
     DrawShape drawShape = getShapeType();
-    HPointFList points = getPointList();
     if(drawShape == Rectangle || drawShape == Text)
     {
         HRectangle* obj = (HRectangle*)this;
         if(obj && obj->getRound())
         {
-            path.addRoundedRect(points.boundingRect(),obj->getXAxis(),obj->getYAxis());
+            path.addRoundedRect(m_rect,obj->getXAxis(),obj->getYAxis());
         }
         else
         {
-            path.addRect(points.boundingRect());
+            path.addRect(m_rect);
         }
     }
     else
     {
-        path.addPolygon(points);
+        path.addPolygon(m_list);
         path.closeSubpath();
     }
     return true;
 }
 
+void HShapeObj::paint(QPainter* painter)
+{
+   if(!painter)
+       return;
+    m_list = getPointList(TRANS_NO_ROTATE|TRANS_NO_TURN);
+    m_rect = m_list.boundingRect();
+    setPainter(painter);
+}
 ///获得包裹区域位置大小
 QRectF HShapeObj::boundingRect(qint8 flag)
 {

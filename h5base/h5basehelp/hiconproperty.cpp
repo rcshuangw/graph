@@ -504,7 +504,7 @@ void HPropertyDlg::initShapeTab()
     if(pCurObj)
     {
         DrawShape drawShape = pCurObj->getShapeType();
-        if(Rectangle == drawShape || Ellipse == drawShape || Circle == drawShape || Polygon == drawShape)
+        if(Rectangle == drawShape || Ellipse == drawShape || Circle == drawShape || Polygon == drawShape || Text == drawShape)
         {
             HShapeObj* pObj = (HShapeObj*)pCurObj;
             ui->frameSee->setChecked(pObj->getFrameSee());
@@ -729,18 +729,9 @@ void HPropertyDlg::ok_clicked()
         //if(ui->bCloseCheck->checkState() == Qt::Checked)
             //pArcObj->setCloseStatus(true);
     }
-    else if(drawShape == Text)
+    else if(drawShape == Polyline)
     {
-        HText *pTextObj = (HText*)pCurObj;
-        pTextObj->setHorizontalAlign(ui->horizAlignComboBox->currentData().toInt());
-        pTextObj->setVerticalAlign(ui->vertiAlignComboBox->currentData().toInt());
-        pTextObj->setLayout(ui->layoutComboBox->currentData().toUInt());
-        pTextObj->setFontFamily(font.family());
-        pTextObj->setFontSize(font.pointSize());
-        pTextObj->setFontWeight(font.weight());
-        pTextObj->setFontItalic(font.italic());
-        pTextObj->setTextClr(strTextColor);
-        pTextObj->setText(ui->textEdit->text());
+
     }
     else
     {
@@ -771,6 +762,22 @@ void HPropertyDlg::ok_clicked()
             pObj->setRound(bRound);
             pObj->setXAxis(ui->xAxis->value());
             pObj->setYAxis(ui->yAxis->value());
+        }
+        else if(drawShape == Text)
+        {
+            HText *pTextObj = (HText*)pCurObj;
+            pTextObj->setRound(bRound);
+            pTextObj->setXAxis(ui->xAxis->value());
+            pTextObj->setYAxis(ui->yAxis->value());
+            pTextObj->setHorizontalAlign(ui->horizAlignComboBox->currentData().toInt());
+            pTextObj->setVerticalAlign(ui->vertiAlignComboBox->currentData().toInt());
+            pTextObj->setLayout(ui->layoutComboBox->currentData().toUInt());
+            pTextObj->setFontFamily(font.family());
+            pTextObj->setFontSize(font.pointSize());
+            pTextObj->setFontWeight(font.weight());
+            pTextObj->setFontItalic(font.italic());
+            pTextObj->setTextClr(strTextColor);
+            pTextObj->setText(ui->textEdit->text());
         }
     }
     pCurObj->setModify(true);

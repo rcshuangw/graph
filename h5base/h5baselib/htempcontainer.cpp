@@ -1,4 +1,5 @@
 ﻿#include "htempcontainer.h"
+#include "hgroup.h"
 HTempContainer::HTempContainer()
 {
     setShapeType(TempContainer);
@@ -71,4 +72,29 @@ void HTempContainer::rePos()
 
 void HTempContainer::paint(QPainter* painter)
 {
+}
+
+void HTempContainer::makeGroup(HGroup *group)
+{
+    if(!group)
+        return;
+    group->m_width = m_width;
+    group->m_height = m_height;
+    group->setOX(getOX());
+    group->setOY(getOY());
+    int sz = getObjList().size();
+    for(int i = 0; i < sz;i++)
+    {
+        HBaseObj* pObj = getObjList().at(i);
+        if(!pObj) continue;
+        QPointF po = pObj->pos();
+        QPointF ce = pos();
+        //po -=ce;
+        //po.rx()*=dx;
+        //po.ry()*=dy;
+        po +=ce;
+        pObj->move(po.x(),po.y(),false);
+        group->addObj(pObj);
+    }
+    getObjList().clear();
 }

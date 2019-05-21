@@ -70,6 +70,8 @@ public:
     virtual void setPainter(QPainter* painter);
 
 	virtual bool getPath(QPainterPath& path);
+
+    virtual void paint(QPainter* painter);
     //透明度
     virtual void setTransparency(quint8 transparency);
     virtual quint8 getTransparency();

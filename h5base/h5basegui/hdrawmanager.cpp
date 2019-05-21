@@ -34,7 +34,6 @@ void HDrawManager::selectTool(DrawShape shape,const QString& catalogName,const Q
     case Ellipse:
     case Circle:
     case Text:
-    case Group:
     case Icon:
         m_pDrawTool = new HRectTool(this,shape,catalogName,uuid);
         break;

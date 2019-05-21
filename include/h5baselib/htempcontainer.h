@@ -1,9 +1,7 @@
 ﻿#ifndef HTEMPCONTAINER_H
 #define HTEMPCONTAINER_H
 #include "hcontainerobj.h"
-/*
-
-*/
+class HGroup;
 class H5BASELIB_EXPORT HTempContainer : public HContainerObj
 {
 	Q_OBJECT
@@ -11,6 +9,7 @@ public:
 	HTempContainer();
 	virtual ~HTempContainer();
 public:
+    void makeGroup(HGroup* group);
 	void move(double dx, double dy, bool bscale = false);
 	void moveBy(double dx, double dy, bool bscale = false);
 public:

@@ -198,11 +198,19 @@ void HIconMainWindow::onSetAttribute()
     if(m_pIconEditorMgr->selectedMgr())
     {
         QVector<HBaseObj*> objs = m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList();
-        if(objs.size() > 1 && objs.size() == 0) return;
+        if(objs.size() > 1 || objs.size() == 0) return;
 
        // qDebug()<<"HPropertyDlg"<<;
         HPropertyDlg dlg(objs.at(0));
-        dlg.exec();
+        if(dlg.exec() == QDialog::Accepted)
+        {
+            QRectF rectF = objs.at(0)->boundingRect(1);
+            m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(rectF);
+            m_pIconEditorMgr->selectedMgr()->clear();
+            objs.at(0)->iconGraphicsItem()->setSelected(true);
+            objs.at(0)->iconGraphicsItem()->setPos(objs.at(0)->pos());
+            m_pIconEditorMgr->selectedMgr()->recalcSelect();
+        }
     }
 }
 

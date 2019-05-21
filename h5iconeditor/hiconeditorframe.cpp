@@ -169,8 +169,6 @@ bool HIconEditorFrame::eventFilter(QObject* obj,QEvent* event)
 
             return false;
         }
-        case QEvent::Resize:
-            return false;
         }
     }
     return false;

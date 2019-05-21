@@ -200,6 +200,8 @@ public slots:
     void onSelectTool();
 
     void onSetAttribute();
+
+    void onSelectChanged();
 //函数
 private:
 

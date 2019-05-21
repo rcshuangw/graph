@@ -152,8 +152,7 @@ void HPolygon::paint(QPainter* painter)
 {
     if(!painter) return;
     painter->save();
-    //QRectF rect =  getPointList().boundingRect();
-    setPainter(painter);//设置Painter
+    HShapeObj::paint(painter);
     QPainterPath path;
     if(getPath(path))
         painter->drawPath(path);

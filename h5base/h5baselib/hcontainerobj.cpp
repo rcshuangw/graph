@@ -190,7 +190,7 @@ HBaseObj* HContainerObj::newObj(DrawShape nObjType)
 	}
     else if (nObjType == Group)
 	{
-        //pObj = new HGroup();
+        pObj = new HGroup();
     }
 	pObj->setShapeType((DrawShape)nObjType);
 	if (pObj)
@@ -203,7 +203,6 @@ HBaseObj* HContainerObj::newObj(DrawShape nObjType)
 	return pObj;
 }
 
-#include <QDebug>
 void HContainerObj::resize(double w, double h, bool scale)
 {
 	double dw, dh;
