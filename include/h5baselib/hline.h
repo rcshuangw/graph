@@ -30,10 +30,8 @@ public:
 	virtual void resize(double w, double h, bool scale);
 
 public:
-	///绝对坐标
 	virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
 	virtual QPolygonF getPointList(qint8 flag = 0);
-
 public:
 	virtual QRectF boundingRect(qint8 flag = 0);
 	virtual QPainterPath shape(qint8 flag = 0);

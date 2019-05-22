@@ -162,17 +162,8 @@ QPainterPath HLine::shape(qint8 flag)
 void HLine::paint(QPainter* painter)
 {
 	if (!painter) return;
-	QColor penClr = QColor(getLineColorName());
-	int penWidth = getLineWidth();
-	Qt::PenStyle penStyle = getLineStyle();
-	Qt::PenCapStyle capStyle = getLineCapStyle();
-
-	painter->save();
-	QPen pen = QPen(penClr);
-	pen.setStyle(penStyle);
-	pen.setWidth(penWidth);
-	pen.setCapStyle(capStyle);
-	painter->setPen(pen);
+    painter->save();
+    HBaseObj::setPainter(painter);
     HPointFList list = getPointList(0);
 	//画箭头
 	if (getArrowWidth() > 0 && getArrowHeight() > 0)
@@ -185,7 +176,7 @@ void HLine::paint(QPainter* painter)
 			painter->setBrush(Qt::NoBrush);
 			if (getStartArrowType() == 3)
 			{
-				painter->setBrush(QColor(penClr));
+                painter->setBrush(QColor(getLineColorName()));
 			}
 			painter->drawPath(path);
 			painter->restore();
@@ -197,7 +188,7 @@ void HLine::paint(QPainter* painter)
 			painter->setBrush(Qt::NoBrush);
 			if (getEndArrowType() == 3)
 			{
-				painter->setBrush(QColor(penClr));
+                painter->setBrush(QColor(getLineColorName()));
 			}
 			painter->drawPath(path);
 			painter->restore();

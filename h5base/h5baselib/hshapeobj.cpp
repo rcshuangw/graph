@@ -268,28 +268,9 @@ bool HShapeObj::getFrameSee()
 
 void HShapeObj::setPainter(QPainter* painter)
 {
-	painter->setRenderHint(QPainter::Antialiasing);
-	painter->setRenderHint(QPainter::TextAntialiasing);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform);
-
-    QTransform trans;
-    if(transform(trans,0))
-    {
-        painter->setTransform(trans,true);
-    }
-	//设置属性
-	QColor penClr = QColor(getLineColorName()); //线条颜色
-	int penWidth = getLineWidth();//线条宽度
-	Qt::PenStyle penStyle = getLineStyle(); //线条形状
-	Qt::PenCapStyle capStyle = getLineCapStyle(); //线条角度
+    HBaseObj::setPainter(painter);
 	bool bFrameSee = getFrameSee();//边框可见
-	QPen pen = QPen(penClr);
-	pen.setStyle(penStyle);
-	pen.setWidth(penWidth);
-	pen.setCapStyle(capStyle);
-	if (bFrameSee)
-		painter->setPen(pen);
-	else
+    if (!bFrameSee)
 		painter->setPen(Qt::NoPen);
 
 	//设置填充
@@ -299,7 +280,8 @@ void HShapeObj::setPainter(QPainter* painter)
 	quint8 nFillDir = getFillDirection();//填充方向
 	QColor fillClr = QColor(getFillColorName());//填充颜色
 	//quint8 nFillPercentage = getFillPercentage(); //填充比例
-
+    m_list = getPointList(TRANS_NO_ROTATE|TRANS_NO_TURN);
+    m_rect = m_list.boundingRect();
 	QBrush brush;
 	if (nFillWay > 0)
 	{
@@ -458,9 +440,6 @@ bool HShapeObj::getPath(QPainterPath& path)
 void HShapeObj::paint(QPainter* painter)
 {
    if(!painter)
-       return;
-    m_list = getPointList(TRANS_NO_ROTATE|TRANS_NO_TURN);
-    m_rect = m_list.boundingRect();
     setPainter(painter);
 }
 ///获得包裹区域位置大小

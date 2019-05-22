@@ -48,31 +48,7 @@ public:
     virtual void setFrameSee(bool frameSee);
     virtual bool getFrameSee();
 
-	///改变大小
-	virtual void resize(double w, double h, bool scale = false);
-
-	virtual void expand(double dx1, double dx2, double dy1, double dy2, qint8 flag = 0);
-	//int	GetExpandDirection();
-
-
-	///绝对坐标
-	virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
-
-	///获取点列表
-	virtual QPolygonF getPointList(qint8 flag = 0);
-
-	///获得包裹区域位置大小
-	virtual QRectF boundingRect(qint8 flag = 0);
-
-	///获得绘图路径
-	virtual QPainterPath shape(qint8 flag = 0);
-
-    virtual void setPainter(QPainter* painter);
-
-	virtual bool getPath(QPainterPath& path);
-
-    virtual void paint(QPainter* painter);
-    //透明度
+    //设置贴片
     virtual void setTransparency(quint8 transparency);
     virtual quint8 getTransparency();
 
@@ -86,8 +62,17 @@ public:
     virtual void setImageDirect(quint8 direct);
     virtual quint8 getImageDirect();
 
-	///设置贴片
-
+public:
+    virtual void resize(double w, double h, bool scale = false);
+    virtual void expand(double dx1, double dx2, double dy1, double dy2, qint8 flag = 0);
+public:
+    virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
+    virtual QPolygonF getPointList(qint8 flag = 0);
+    virtual void setPainter(QPainter* painter);
+    virtual bool getPath(QPainterPath& path);
+    virtual void paint(QPainter* painter);
+    virtual QRectF boundingRect(qint8 flag = 0);
+    virtual QPainterPath shape(qint8 flag = 0);
     //////////////////////////////////////////设置属性//////////////////////////////////////
 public:
 	QPolygonF	m_list;

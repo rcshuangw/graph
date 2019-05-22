@@ -90,8 +90,8 @@ void HIconEditorFrame::objRemoved(HBaseObj* obj)
         H5GraphicsItem* item = (H5GraphicsItem*)obj->iconGraphicsItem();
         scene->removeItem(item);
         item->setBaseObj(NULL);
-        disconnect(item,SIGNAL(objSelectChanged(HBaseObj*,bool)),this,SLOT(objSelectChanged(HBaseObj*,bool)));
-        disconnect(item,SIGNAL(recalcSelect()),this,SLOT(recalcSelect()));
+        disconnect(item,SIGNAL(objSelectChanged(HBaseObj*,bool)),this,SLOT(onObjSelectChanged(HBaseObj*,bool)));
+        disconnect(item,SIGNAL(recalcSelect()),this,SLOT(onRecalcSelect()));
     }
 }
 

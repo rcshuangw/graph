@@ -42,7 +42,7 @@ void HEllipse::paint(QPainter *painter)
     if (!painter)
         return;
     painter->save();
-    HShapeObj::paint(painter);
+    HShapeObj::setPainter(painter);
     QPainterPath path;
     path.addEllipse(m_rect);
     painter->drawPath(path);

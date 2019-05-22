@@ -1,8 +1,9 @@
 ﻿#include "hbaseobj.h"
 #include <QVariant>
-
-HBaseObj::HBaseObj(QObject *parent) : QObject(parent)
+#include "htempcontainer.h"
+HBaseObj::HBaseObj(HBaseObj *parent)
 {
+    m_pParent = parent;
     init();
     m_pIconGraphicsItem = NULL;
 }
@@ -234,10 +235,21 @@ double HBaseObj::getOY()
     return m_dOriginY;
 }
 
-QPointF HBaseObj::pos()
+//m_dOrigiX,m_dOrigiY总是映射于包容它的对象的原点后的值
+//如果该对象存在于scene就是映射于scene原点后的位置,如果对象存在于另一个对象(父对象，如Group)中，则是映射于父对象原点后的值
+//所以绝对坐标必须是二者相加
+QPointF HBaseObj::pos(qint8 flag)
 {
+    HBaseObj* parObj = parent();
+    if(!parObj)
+        return QPointF(m_dOriginX,m_dOriginY);
+    else if(flag & TRANS_ABSOLUTE)
+    {
+        return parObj->pos(flag) + QPointF(m_dOriginX,m_dOriginY);
+    }
 	return QPointF(m_dOriginX, m_dOriginY);
 }
+
 //形状类型
 DrawShape HBaseObj::getShapeType()
 {
@@ -336,6 +348,64 @@ quint8 HBaseObj::getPattern()
     return m_nPattern;
 }
 
+//
+void HBaseObj::resetParent(HBaseObj* obj)
+{
+    if(m_pParent == obj)
+        return;
+    HBaseObj* oldParent = m_pParent;
+    //获取绝对坐标
+    QPointF pt = pos(1);
+    if(obj)
+    {
+        //相对于父对象原点的位置，后面还要进行坐标变换
+        pt -= obj->pos(1);
+        if(1)
+        {
+            HTempContainer* tc = (HTempContainer*)obj;
+            tc->getObjList().append(this);
+        }
+    }
+    m_pParent = obj;
+    if(obj)
+    {
+        bool bok = false;
+        QTransform trans;
+        HBaseObj* o = obj;
+        while(o && (o!=oldParent))
+        {
+            if(o->transform(trans,1,true))
+                bok = true;
+            o = o->parent();
+        }
+        if(bok)
+            pt = trans.inverted().map(pt);
+    }
+    m_dOriginX = pt.x();
+    m_dOriginY = pt.y();
+
+    if(oldParent)
+    {
+        if(1)
+        {
+            HTempContainer* tc = (HTempContainer*)oldParent;
+            int index = tc->getObjList().indexOf(this);
+            if(index > 0 && index < tc->getObjList().size())
+                tc->getObjList().remove(index);
+        }
+    }
+
+}
+
+void HBaseObj::setParent(HBaseObj* obj)
+{
+    m_pParent = obj;
+}
+
+HBaseObj* HBaseObj::parent()
+{
+    return m_pParent;
+}
 
 //list中的点都是绝对坐标，变换操作后都是相对坐标
 bool HBaseObj::setPointList(QPolygonF& list, qint8 flag)
@@ -366,14 +436,18 @@ bool HBaseObj::setPointList(QPolygonF& list, qint8 flag)
 }
 
 //设置转换
-bool HBaseObj::transform(QTransform& transform1,quint8 flag)
+bool HBaseObj::transform(QTransform& transform1,quint8 flag,bool bNoTrans)
 {
     bool bok = false;
-    quint8 nFlag = flag;
-    if(flag&TRANS_ABSOLUTE)
+    if(flag&TRANS_ABSOLUTE && !bNoTrans)
     {
         QPointF pt = QPointF(getOX(), getOY());
         transform1 = transform1.translate(pt.x(), pt.y());
+        bok = true;
+    }
+    else if(flag&TRANS_PARENT && !bNoTrans)
+    {
+        transform1 = transform1.translate(m_dOriginX,m_dOriginY);
         bok = true;
     }
 //
@@ -406,11 +480,6 @@ bool HBaseObj::transform(QTransform& transform1,quint8 flag)
 
 //改变大小
 void HBaseObj::resize(double w, double h, bool scale)
-{
-
-}
-
-void HBaseObj::resetRectPoint(const QPointF& pt1, const QPointF& pt2)
 {
 
 }
@@ -556,9 +625,38 @@ bool HBaseObj::contains(const QPointF &point)
     return shape(1).contains(point);
 }
 
+void HBaseObj::setPainter(QPainter* painter)
+{
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setRenderHint(QPainter::TextAntialiasing);
+    painter->setRenderHint(QPainter::SmoothPixmapTransform);
+    qint8 flag = 0;
+    HBaseObj* parObj = parent();
+    if(parObj && parObj->getShapeType() == Group)
+    {
+        flag|=TRANS_PARENT;
+    }
+    QTransform trans;
+    if(transform(trans,flag))
+    {
+        painter->setTransform(trans,true);
+    }
+    //设置属性
+    QColor penClr = QColor(getLineColorName()); //线条颜色
+    int penWidth = getLineWidth();//线条宽度
+    Qt::PenStyle penStyle = getLineStyle(); //线条形状
+    Qt::PenCapStyle capStyle = getLineCapStyle(); //线条角度
+    QPen pen = QPen(penClr);
+    pen.setStyle(penStyle);
+    pen.setWidth(penWidth);
+    pen.setCapStyle(capStyle);
+    painter->setPen(pen);
+}
+
 void HBaseObj::paint(QPainter* painter)
 {
-	return;
+
+
 }
 
 void HBaseObj::setIconGraphicsItem(H5GraphicsItem* item)
@@ -569,21 +667,6 @@ void HBaseObj::setIconGraphicsItem(H5GraphicsItem* item)
 H5GraphicsItem* HBaseObj::iconGraphicsItem()
 {
     return m_pIconGraphicsItem;
-}
-
-void HBaseObj::addPointList(QPolygonF& list, qint8 flag)
-{
-
-}
-
-void HBaseObj::pointList(QPolygonF&list, qint8 flag)
-{
-
-}
-
-void HBaseObj::clearPointList()
-{
-	m_points.clear();
 }
 
 bool HBaseObj::isHorizonTurn()

@@ -87,14 +87,7 @@ void HTempContainer::makeGroup(HGroup *group)
     {
         HBaseObj* pObj = getObjList().at(i);
         if(!pObj) continue;
-        QPointF po = pObj->pos();
-        QPointF ce = pos();
-        //po -=ce;
-        //po.rx()*=dx;
-        //po.ry()*=dy;
-        po +=ce;
-        pObj->move(po.x(),po.y(),false);
-        group->addObj(pObj);
+        pObj->resetParent(group);
     }
     getObjList().clear();
 }

@@ -1,6 +1,7 @@
 #include "hdrawhelper.h"
 #include "htempcontainer.h"
 #include "hbaseobj.h"
+#include "hgroup.h"
 #include "hiconobj.h"
 #include <QCursor>
 #include <QDebug>
@@ -464,6 +465,56 @@ void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
     }
         break;
     case Group:
+    {
+        QTransform trans;
+        m_pBaseObj->transform(trans,1);
+        QPointF point = trans.inverted().map(curPoint);
+        HPointFList ptList = m_pBaseObj->getPointList(1);
+        HPointFList points = trans.inverted().map(ptList);
+        QPointF topLeft = points.at(0);
+        QPointF bottomRight = points.at(2);
+        switch(index)
+        {
+        case 0:
+            topLeft = point;
+            break;
+        case 1:
+            topLeft.setY(point.y());
+            break;
+        case 2:
+            topLeft.setY(point.y());
+            bottomRight.setX(point.x());
+            break;
+        case 3:
+            bottomRight.setX(point.x());
+            break;
+        case 4:
+            bottomRight = point;
+            break;
+        case 5:
+            bottomRight.setY(point.y());
+            break;
+        case 6:
+            topLeft.setX(point.x());
+            bottomRight.setY(point.y());
+            break;
+        case 7:
+            topLeft.setX(point.x());
+            break;
+        default:
+            break;
+        }
+        //huangw 这样写不行不知道为什么
+        double width = qAbs(topLeft.x() - bottomRight.x());
+        double height = qAbs(topLeft.y() - bottomRight.y());
+
+        HGroup* pObj = (HGroup*)m_pBaseObj;
+        //这样写没问题
+        //width = pObj->m_width + dx;
+        //height = pObj->m_height + dy;
+        pObj->resize(width,height);
+        pObj->iconGraphicsItem()->setPos(pObj->pos(1));
+    }
         break;
     case TempContainer:
     {

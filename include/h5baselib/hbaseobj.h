@@ -13,6 +13,7 @@
 #include "h5baselibexport.h"
 #include "h5graphicsitem.h"
 
+#define TRANS_PARENT        8
 #define TRANS_NO_TURN		4   ///非拉升
 #define TRANS_NO_ROTATE 	2   ///非旋转
 #define TRANS_ABSOLUTE		1   ///绝对坐标
@@ -21,7 +22,7 @@ typedef QPolygonF HPointFList;
 class H5BASELIB_EXPORT HBaseObj: public QObject
 {
 public:
-    HBaseObj(QObject *parent = 0);
+    HBaseObj(HBaseObj *parent = 0);
     virtual ~HBaseObj();
 
 public:
@@ -92,6 +93,11 @@ public:
 
     void setPattern(quint8 pattern);
     quint8 getPattern();
+
+    //设置父对象
+    virtual void resetParent(HBaseObj* obj);
+    void setParent(HBaseObj* obj);
+    HBaseObj* parent();
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 	///绝对坐标
 	virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
@@ -101,17 +107,18 @@ public:
 	virtual double getOX();
 	virtual void setOY(double y);
 	virtual double getOY();
-    QPointF pos();
+    QPointF pos(qint8 flag = 0);
 
 	virtual void setModify(bool modify);
 	virtual bool isModify();
 
-
+    //设置item对象
+    virtual void setIconGraphicsItem(H5GraphicsItem* item);
+    virtual H5GraphicsItem* iconGraphicsItem();
     ///////////////////////////////////////////////////////操作属性/////////////////////////////
 	//改变大小
 	virtual void resize(double w, double h, bool scale);
-	virtual void resetRectPoint(const QPointF& pt1, const QPointF& pt2);
-    virtual bool transform(QTransform& transform1,quint8 flag);
+    virtual bool transform(QTransform& transform1,quint8 flag,bool bNoTrans=false);
     virtual void maps(QPolygonF& pylist,quint8 flag);
 	virtual void rotate(float fAngle);
 	virtual void turn(bool bHorizon, bool bVertical);
@@ -126,34 +133,20 @@ public:
     virtual float rotateAngle();
     virtual void rotateBy(float fAngle);//add rotate
 
-   
-    
-    //当前画面的比例缩放
-    double curZoomScale();
-
-    bool containsPattern(int nPatternId);
-
-   
-
-    //设置item对象
-    virtual void setIconGraphicsItem(H5GraphicsItem* item);
-    virtual H5GraphicsItem* iconGraphicsItem();
-
     virtual bool isHorizonTurn();//水平翻转
     virtual bool isVerticalTurn();//垂直翻转
 
     //void setSubObjRect(double dx,double dy);
 public:
-	void addPointList(QPolygonF& list, qint8 flag);
-	void pointList(QPolygonF&list,qint8 flag);
-	void clearPointList();
+    //当前画面的比例缩放
+    double curZoomScale();
+    bool containsPattern(int nPatternId);
 public:
+    virtual void setPainter(QPainter* painter);
 	virtual QRectF boundingRect(qint8 flag = 0);
 	virtual QPainterPath shape(qint8 flag = 0) = 0;
     virtual void paint(QPainter* painter) = 0;
-  //  virtual QRectF boundingRect() const;
     virtual bool contains(const QPointF &point);
-   // virtual QPainterPath shape() const;
 
 //绘制对象的属性
 protected:
@@ -181,15 +174,14 @@ protected:
     quint8 m_nPattern;
 
     H5GraphicsItem* m_pIconGraphicsItem;
-
     //对象标识ID
     quint32 m_nObjectId;
+
 
 private:
 	QHash<qint8, QPolygonF> m_points;
 protected:
-
-    //父图符
+    //父图符 主要用于集合图形(合并后的、选择多个图形、复杂图形等)
     HBaseObj* m_pParent;
 
 

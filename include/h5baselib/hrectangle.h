@@ -22,22 +22,15 @@ public:
     virtual void copyTo(HBaseObj* obj);
     virtual void clone(HBaseObj* obj);
 
-    //virtual bool getPath(QPainterPath& path);
 	///设置贴片
 	virtual void setBkImagePath(const QString& s);
 
-	//矩形框的x,y轴弯曲度  放到rect里面
 	virtual void setRound(bool bcheck);
 	virtual bool getRound();
-
-	//圆角x轴
 	virtual void setXAxis(int xAxis);
 	virtual quint8 getXAxis();
-
-	//圆角y轴
 	virtual void setYAxis(int yAxis);
 	virtual quint8 getYAxis();
-
 
 public:
 	virtual QRectF boundingRect(qint8 flag = 0);

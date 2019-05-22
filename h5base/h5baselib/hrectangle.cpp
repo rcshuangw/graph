@@ -113,7 +113,7 @@ void HRectangle::paint(QPainter* painter)
 	if (!painter)
 		return;
 	painter->save();
-    HShapeObj::paint(painter);
+    HShapeObj::setPainter(painter);
 	QPainterPath path;
 	if(getPath(path))
 		painter->drawPath(path);

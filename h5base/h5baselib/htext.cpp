@@ -274,7 +274,7 @@ void HText::paint(QPainter* painter)
 {
     ushort nLayout = layout();
     painter->save();
-    HShapeObj::paint(painter);
+    HShapeObj::setPainter(painter);
     QRectF mainRectF = m_rect;
     QPainterPath path;
     if(getPath(path))

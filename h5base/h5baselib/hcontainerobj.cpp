@@ -241,11 +241,11 @@ bool HContainerObj::objsTransform(double dx,double dy)
         po.rx()*=dx;
         po.ry()*=dy;
         po +=ce;
-        /*
-        if(obj->Parent()){
-            QPointF p = obj->Parent()->GetPosition(1);
+
+        if(pObj->parent()){
+            QPointF p = pObj->parent()->pos(1);
             po-=p;
-        }*/
+        }
         pObj->move(po.x(),po.y(),false);
     }
     return true;

@@ -1,7 +1,7 @@
 ﻿#include "hgroup.h"
 HGroup::HGroup()
 {
-
+    m_eDrawShape = Group;
 }
 HGroup::~HGroup()
 {
@@ -60,7 +60,8 @@ void HGroup::paint(QPainter* painter)
     if (!painter)
         return;
     painter->save();
-    HShapeObj::paint(painter);
+    HShapeObj::setPainter(painter);
+
     //先要根据zvalue
     for (int i = 0; i < getObjList().count(); i++)
     {
