@@ -70,7 +70,8 @@ void HIconEditorFrame::objCreated(HBaseObj* obj,bool isPaste)
 
     if(isPaste)
     {
-
+        obj->setZValue(obj->zValue()+1);
+        item->setZValue(obj->zValue());
     }
 
     HIconEditorScene* scene = (HIconEditorScene*)m_pView->scene();

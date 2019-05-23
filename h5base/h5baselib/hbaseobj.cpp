@@ -77,7 +77,7 @@ void HBaseObj::readData(QDataStream *data)
     *data>>b;
     m_bVerticalTurn = b;
     *data>>b;
-    m_bVisible = n8;
+    m_bVisible = b;
     *data>>b;
     m_bDeleted = b;
     quint64 n64;
@@ -88,7 +88,6 @@ void HBaseObj::readData(QDataStream *data)
     m_nPattern = n8;
     *data>>b;
     m_bModify = b;
-    *data>>b;
 }
 
 void HBaseObj::writeData(QDataStream *data)

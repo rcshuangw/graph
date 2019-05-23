@@ -26,7 +26,7 @@ public:
 	virtual void setBkImagePath(const QString& s);
 
 	virtual void setRound(bool bcheck);
-	virtual bool getRound();
+	virtual bool isRound();
 	virtual void setXAxis(int xAxis);
 	virtual quint8 getXAxis();
 	virtual void setYAxis(int yAxis);

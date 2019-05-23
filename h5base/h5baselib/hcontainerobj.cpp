@@ -235,8 +235,8 @@ bool HContainerObj::objsTransform(double dx,double dy)
         HBaseObj* pObj = m_pObjList.at(i);
         pObj->resize(dx, dy, true);
 
-        QPointF po = pObj->pos();
-        QPointF ce = pos();
+        QPointF po = pObj->pos(1);
+        QPointF ce = pos(1);
         po -=ce;
         po.rx()*=dx;
         po.ry()*=dy;
@@ -268,7 +268,7 @@ bool HContainerObj::transform(double dx, double dy)
         //pObj->move(dx, dy, true);
 	}
 	return true;
-}*/
+}
 
 void HContainerObj::move(double dx, double dy, bool scale)
 {
@@ -278,7 +278,7 @@ void HContainerObj::move(double dx, double dy, bool scale)
 		if (!pObj) continue;
 		pObj->move(dx, dy, scale);
 	}
-}
+}*/
 
 /*
 void HContainerObj::moveBy(double dx, double dy, bool scale)
@@ -290,6 +290,7 @@ void HContainerObj::moveBy(double dx, double dy, bool scale)
 		pObj->moveBy(dx, dy, scale);
 	}
 }*/
+
 QRectF HContainerObj::objsRect(qint8 flag)
 {
     QRectF rectF;
@@ -322,7 +323,6 @@ QRectF HContainerObj::objsRect(qint8 flag)
     return rectF;
 }
 
-
 QRectF HContainerObj::boundingRect(qint8 flag)
 {
     QRectF rectF = objsRect(flag);
@@ -353,9 +353,9 @@ void HContainerObj::rePos()
 //针对objList的操作 参考QVector类的函数
 void HContainerObj::clear()
 {
-	while (!m_pObjList.empty())
+    //while (!m_pObjList.empty())
 	{
-		delete (HBaseObj*)m_pObjList.takeFirst();
+        //delete (HBaseObj*)m_pObjList.takeFirst();
 	}
 	m_pObjList.clear();
 }

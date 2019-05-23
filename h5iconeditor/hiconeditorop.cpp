@@ -12,6 +12,7 @@
 #include "hiconcommand.h"
 #include "hiconeditordrawtoolmgr.h"
 #include "hiconeditorselecttool.h"
+#include "hrectangle.h"
 HIconEditorOp::HIconEditorOp(HIconEditorMgr* mgr)
     :m_pIconEditorMgr(mgr)
 {
@@ -224,7 +225,7 @@ void HIconEditorOp::paste()
     for(int i = 0; i < num;i++)
     {
         stream>>nType;
-        HBaseObj* pObj = m_pIconEditorMgr->iconTemplate()->getSymbol()->newObj((DrawShape)nType);
+        HBaseObj* pObj = HIconHelper::Instance()->newObj((DrawShape)nType);
         if(!pObj) continue;
         pObj->readData(&stream);
         objList.append(pObj);
@@ -240,7 +241,7 @@ void HIconEditorOp::paste()
         HBaseObj* pObj = (HBaseObj*)tempContainer->getObjList().at(i);
         if(!pObj || pObj->isDeleted() || !pObj->iconGraphicsItem())
             continue;
-        pObj->iconGraphicsItem()->setVisible(false);
+        pObj->iconGraphicsItem()->setSelected(false);
     }
 
     //选择拷贝后的图元
@@ -248,7 +249,7 @@ void HIconEditorOp::paste()
     {
         H5GraphicsItem* pItem = (H5GraphicsItem*)(objList.at(i)->iconGraphicsItem());
         if(!pItem) continue;
-       pItem->setVisible(true);
+       pItem->setSelected(true);
     }
 
     //拷贝后的图元移动 防止覆盖
@@ -263,8 +264,8 @@ void HIconEditorOp::paste()
         }
     }
 
-    //还有一个--huangw
-    m_pIconEditorMgr->selectedMgr()->recalcSelect();
+  //  m_pIconEditorMgr->selectedMgr()->refreshObjs();
+ //   m_pIconEditorMgr->selectedMgr()->recalcSelect();
 
     HPasteIconCommand* pasteIconCommand = new HPasteIconCommand(m_pIconEditorMgr,objList);
     m_pIconEditorMgr->iconEditorUndoStack()->push(pasteIconCommand);
@@ -295,7 +296,7 @@ QString HIconEditorOp::getClipboardFile()
 {
     char szDataPath[128];
     //getDataFilePath(DFPATH_DATA,szDataPath);
-    QString clipboardPath = QString(szDataPath);
+    QString clipboardPath(getenv("wfsystem_dir"));//QString(szDataPath);
     clipboardPath.append("/icon");
     QDir dirClipboard(clipboardPath);
     if(!dirClipboard.exists())
@@ -389,7 +390,6 @@ void HIconEditorOp::groupObj()
         onRemoveObj(pObj);//画面删除
         m_pIconEditorMgr->iconTemplate()->getSymbol()->removeBaseObj(pObj);//pattern删除
         pObj->setDeleted(false);
-        //pGroup->addObj(pObj);//增加到pGroup
     }
     HGroup* pGroup =  (HGroup*)HIconHelper::Instance()->newObj(Group);
     tempSelect->makeGroup(pGroup);
@@ -407,18 +407,20 @@ void HIconEditorOp::ungroupObj()
         return;
     HGroup* pGroup = (HGroup*)tempContainer->getObjList().at(0);
     if(!pGroup) return;
-    while(!pGroup->getObjList().isEmpty())
+    HTempContainer* tc = (HTempContainer*)HIconHelper::Instance()->newObj(TempContainer);
+    pGroup->makeTempContainer(tc);
+    for(int i = 0; i < tc->getObjList().count();i++)
     {
-        HBaseObj* pObj = pGroup->getObjList().takeFirst();
+        HBaseObj* pObj = (HBaseObj*)tc->getObjList().at(i);
         if(!pObj) continue;
         onCreateObj(pObj,false);
         m_pIconEditorMgr->iconTemplate()->getSymbol()->addBaseObj(pObj);
     }
-
     onRemoveObj(pGroup);
     m_pIconEditorMgr->iconTemplate()->getSymbol()->removeBaseObj(pGroup);
-
     m_pIconEditorMgr->selectedMgr()->clear();
+    if(tc)
+        delete tc;
 
 }
 

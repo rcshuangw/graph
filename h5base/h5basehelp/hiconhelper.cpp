@@ -14,6 +14,7 @@
 #include "hpolygon.h"
 #include "hpolyline.h"
 #include "hgroup.h"
+#include "htempcontainer.h"
 HIconHelper::HIconHelper()
 {
 
@@ -68,6 +69,10 @@ HBaseObj* HIconHelper::newObj(DrawShape nObjType,const QString& arg, HBaseObj* p
     else if (nObjType == Group)
     {
         pObj = new HGroup();
+    }
+    else if(nObjType == TempContainer)
+    {
+        pObj = new HTempContainer();
     }
     pObj->setShapeType((DrawShape)nObjType);
     if (pObj)

@@ -1,6 +1,7 @@
 ﻿#ifndef HGROUP_H
 #define HGROUP_H
 #include "hcontainerobj.h"
+class HTempContainer;
 /*
 
 */
@@ -11,6 +12,7 @@ public:
     HGroup();
     virtual ~HGroup();
 public:
+    void makeTempContainer(HTempContainer* tc);
 	void move(double dx, double dy, bool bscale = false);
 	void moveBy(double dx, double dy, bool bscale = false);
 public:

@@ -16,7 +16,7 @@ HRectangle::~HRectangle()
 void HRectangle::readData(QDataStream* data)
 {
     if(!data) return;
-    HBaseObj::readData(data);
+    HShapeObj::readData(data);
     quint8 n8;
     *data>>n8;
 	setXAxis(n8);
@@ -27,7 +27,7 @@ void HRectangle::readData(QDataStream* data)
 void HRectangle::writeData(QDataStream* data)
 {
     if(!data) return;
-    HBaseObj::writeData(data);
+    HShapeObj::writeData(data);
     *data<<(quint8)getXAxis();
     *data<<(quint8)getYAxis();
 }
@@ -35,7 +35,7 @@ void HRectangle::writeData(QDataStream* data)
 void HRectangle::readXml(QDomElement* dom)
 {
     if(!dom) return;
-    HBaseObj::readXml(dom);
+    HShapeObj::readXml(dom);
     m_nXAxis = dom->attribute("XAxis").toDouble();
     m_nYAxis = dom->attribute("YAxis").toDouble();
 }
@@ -43,7 +43,7 @@ void HRectangle::readXml(QDomElement* dom)
 void HRectangle::writeXml(QDomElement* dom)
 {
     if(!dom)return;
-    HBaseObj::writeXml(dom);
+    HShapeObj::writeXml(dom);
     dom->setAttribute("XAxis",m_nXAxis);
     dom->setAttribute("YAxis",m_nYAxis);
 }
@@ -72,7 +72,7 @@ void HRectangle::clone(HBaseObj *obj)
 /*
 bool HRectangle::getPath(QPainterPath& path)
 {
-	bool bRound = getRound();
+    bool bRound = isRound();
 	int nXAxis = getXAxis();
 	int nYAxis = getYAxis();
 	QRectF rect = getPointList(0).boundingRect();
@@ -133,7 +133,7 @@ void HRectangle::setRound(bool bcheck)
 	m_bRound = bcheck;
 }
 
-bool HRectangle::getRound()
+bool HRectangle::isRound()
 {
 	return m_bRound;
 }

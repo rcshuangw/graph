@@ -1,8 +1,4 @@
-﻿//#if defined(_MSC_VER) &&(_MSC_VER >= 1600)
-//#pragma execution_character_set("utf-8")
-//#endif
-
-#include "hiconproperty.h"
+﻿#include "hiconproperty.h"
 #include "ui_iconproperty.h"
 #include "hiconapi.h"
 #include <QColorDialog>
@@ -18,6 +14,7 @@
 #include "htext.h"
 #include "hpolygon.h"
 #include "hpolyline.h"
+#include "hgroup.h"
 HPropertyDlg::HPropertyDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::IconProperty)
@@ -230,10 +227,10 @@ void HPropertyDlg::initBaseTab()
         else if(pCurObj->getShapeType() == Group)
         {
             ui->objType->setText(QStringLiteral("组合"));
-            //HGroupObj* pObj = (HGroupObj*)pCurObj;
+            HGroup* pObj = (HGroup*)pCurObj;
 
-            //ui->xCoord_width->setValue(pObj->getGroupWidth());
-            //ui->yCoord_height->setValue(pObj->getGroupHeight());
+            ui->xCoord_width->setValue(pObj->m_width);
+            ui->yCoord_height->setValue(pObj->m_height);
         }
     }
 }
@@ -397,16 +394,6 @@ void HPropertyDlg::initLineTab()
     if(pCurObj)
     {
         DrawShape drawShape = pCurObj->getShapeType();
-        bool bRound = false;//pCurObj->getRound();
-        //ui->rectRound->setChecked(bRound);
-        if(bRound)
-        {
-            ui->xAxis->setEnabled(true);
-            ui->yAxis->setEnabled(true);
-            //ui->xAxis->setValue(pCurObj->xAxi());
-            //ui->yAxis->setValue(pCurObj->getYAxis());
-        }
-
         if(drawShape == Line)
         {
             HLine* pLineObj = (HLine*)pCurObj;
@@ -419,13 +406,26 @@ void HPropertyDlg::initLineTab()
             ui->arrowWidth->setValue(w);
             ui->arrowHeight->setValue(h);
         }
-        else if(pCurObj->getShapeType() == Arc)
+        else if(drawShape == Arc)
         {
             ui->bCloseCheck->setVisible(true);
             //HArc* pArcObj = (HArc*)pCurObj;
             //ui->startAngle->setValue(pArcObj->getStartAngle());
             //ui->spanAngle->setValue(pArcObj->getSpanAngle());
             //ui->bCloseCheck->setChecked(pArcObj->getCloseStatus());
+        }
+        else if(Rectangle == drawShape || Ellipse == drawShape || Circle == drawShape || Text == drawShape )
+        {
+            HRectangle* pRectObj = (HRectangle*)pCurObj;
+            bool bRound = pRectObj->isRound();
+            ui->rectRound->setChecked(bRound);
+            if(bRound)
+            {
+                ui->xAxis->setEnabled(true);
+                ui->yAxis->setEnabled(true);
+                ui->xAxis->setValue(pRectObj->getXAxis());
+                ui->yAxis->setValue(pRectObj->getYAxis());
+            }
         }
     }
 }

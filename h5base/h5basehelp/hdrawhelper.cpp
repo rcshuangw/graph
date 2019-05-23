@@ -504,16 +504,12 @@ void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
         default:
             break;
         }
-        //huangw 这样写不行不知道为什么
         double width = qAbs(topLeft.x() - bottomRight.x());
         double height = qAbs(topLeft.y() - bottomRight.y());
 
         HGroup* pObj = (HGroup*)m_pBaseObj;
-        //这样写没问题
-        //width = pObj->m_width + dx;
-        //height = pObj->m_height + dy;
         pObj->resize(width,height);
-        pObj->iconGraphicsItem()->setPos(pObj->pos(1));
+        pObj->iconGraphicsItem()->setPos(pObj->pos(0));
     }
         break;
     case TempContainer:

@@ -1,4 +1,5 @@
 ﻿#include "hgroup.h"
+#include "htempcontainer.h"
 HGroup::HGroup()
 {
     m_eDrawShape = Group;
@@ -72,4 +73,40 @@ void HGroup::paint(QPainter* painter)
         }
     }
     painter->restore();
+}
+
+void HGroup::makeTempContainer(HTempContainer* tc)
+{
+    QTransform trans;
+    QPointF pt = pos(1);
+    trans.translate(pt.x(),pt.y());
+    if(isHorizonTurn())
+        trans.scale(-1,1);
+    if(isVerticalTurn())
+        trans.scale(1,-1);
+    trans.rotate(rotateAngle());
+    trans.translate(-pt.x(),-pt.y());
+
+    if(!tc) return;
+    tc->m_width = m_width;
+    tc->m_height = m_height;
+    tc->setOX(getOX());
+    tc->setOY(getOY());
+    int sz = getObjList().size();
+    for(int i = 0; i < sz;i++)
+    {
+        HBaseObj* pObj = getObjList().at(i);
+        if(!pObj) continue;
+        if(isHorizonTurn())
+            pObj->turn(!pObj->isHorizonTurn(),pObj->isVerticalTurn());
+        if(isVerticalTurn())
+            pObj->turn(pObj->isHorizonTurn(),!pObj->isVerticalTurn());
+        pObj->rotate(rotateAngle()*((isHorizonTurn()+isValidBkImagePath())==1?-1:1));
+        QPointF objPt = pObj->pos(1);
+        objPt = trans.map(objPt);
+        pObj->move(objPt.x(),objPt.y());
+        pObj->setParent(0);
+        tc->getObjList().append(pObj);
+    }
+    getObjList().clear();
 }

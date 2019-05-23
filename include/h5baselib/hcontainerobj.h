@@ -38,7 +38,7 @@ public:
 	void resize(double w, double h, bool scale = false);
 	void expand(double dx1, double dx2, double dy1, double dy2, qint8 flag = 0);
 
-	void move(double dx, double dy, bool bscale = false);
+    //void move(double dx, double dy, bool bscale = false);
     //void moveBy(double dx, double dy, bool bscale = false);
 public:
     virtual QRectF objsRect(qint8 flag);

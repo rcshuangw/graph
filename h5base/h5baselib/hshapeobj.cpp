@@ -36,7 +36,7 @@ void HShapeObj::readData(QDataStream* data)
 	m_width = r;
 	*data >> r;
 	m_height = r;
-	resize(m_width, m_height);
+    //resize(m_width, m_height);
 	quint8 n8;
 	*data >> n8;
 	m_nFillWay = n8;
@@ -420,7 +420,7 @@ bool HShapeObj::getPath(QPainterPath& path)
     if(drawShape == Rectangle || drawShape == Text)
     {
         HRectangle* obj = (HRectangle*)this;
-        if(obj && obj->getRound())
+        if(obj && obj->isRound())
         {
             path.addRoundedRect(m_rect,obj->getXAxis(),obj->getYAxis());
         }
