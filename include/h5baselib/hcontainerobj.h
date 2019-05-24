@@ -29,10 +29,6 @@ public:
 	QVector<HBaseObj*>& getObjList();
 
 public:
-	//新建一个图元元素(按类型)
-	HBaseObj* newObj(DrawShape nObjType);
-    //HBaseObj* newObj(QString tagName);
-public:
     bool objsTransform(double dx,double dy);
 	///改变大小
 	void resize(double w, double h, bool scale = false);
@@ -47,7 +43,7 @@ public:
 	virtual QPainterPath shape(qint8 flag = 0);
 public:
 	//针对objList的操作 参考QVector类的函数
-	void clear();
+    void clear();
 	void addObj(HBaseObj* obj);
 	void removeObj(HBaseObj* obj);
 	bool contains(HBaseObj* obj);

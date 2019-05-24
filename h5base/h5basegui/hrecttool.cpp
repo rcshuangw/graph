@@ -1,5 +1,5 @@
 #include "hrecttool.h"
-#include "hiconhelper.h"
+#include "hmakeicon.h"
 #include "hellipse.h"
 #include "hcircle.h"
 #include "hrectangle.h"
@@ -113,7 +113,7 @@ void HRectTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
         return;
 
     HBaseObj* pObj = NULL;
-    pObj = HIconHelper::Instance()->newObj(m_edrawShape);
+    pObj = HMakeIcon::Instance()->newObj(m_edrawShape);
     if(pObj)
     {
         QPolygonF points;

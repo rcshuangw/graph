@@ -11,6 +11,7 @@ class H5BASELIB_EXPORT HGroup : public HContainerObj
 public:
     HGroup();
     virtual ~HGroup();
+    virtual QString tagName();
 public:
     void makeTempContainer(HTempContainer* tc);
 	void move(double dx, double dy, bool bscale = false);

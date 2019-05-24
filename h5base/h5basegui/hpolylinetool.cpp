@@ -1,5 +1,5 @@
 #include "hpolylinetool.h"
-#include "hiconhelper.h"
+#include "hmakeicon.h"
 #include "hpolygon.h"
 #include "hpolyline.h"
 HPolylineTool::HPolylineTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
@@ -114,7 +114,7 @@ void HPolylineTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
         HBaseObj* pObj = NULL;
         if(m_edrawShape == Polyline && m_ptPolygons.size()<2 || m_edrawShape == Polygon && m_ptPolygons.size()<3)
             return;
-        pObj = HIconHelper::Instance()->newObj(m_edrawShape);
+        pObj = HMakeIcon::Instance()->newObj(m_edrawShape);
         if(NULL == pObj) return;
         pObj->setPointList(m_ptPolygons);
         m_pToolManager->appendObj(pObj);

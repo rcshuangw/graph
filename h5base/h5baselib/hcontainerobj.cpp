@@ -7,6 +7,7 @@
 #include "hcircle.h"
 #include "hpolygon.h"
 #include "hpolyline.h"
+#include "hmakeicon.h"
 HContainerObj::HContainerObj()
 {
 
@@ -14,7 +15,7 @@ HContainerObj::HContainerObj()
 
 HContainerObj::~HContainerObj()
 {
-	clear();
+    //clear();
 }
 
 //二进制读写
@@ -28,9 +29,10 @@ void HContainerObj::readData(int v,QDataStream* data)
 	for (int i = 0; i < sz; i++)
 	{
 		*data >> type;
-		HBaseObj* pObj = newObj(DrawShape(type));
+        HBaseObj* pObj = HMakeIcon::Instance()->newObj(DrawShape(type));
 		if (!pObj) continue;
 		pObj->readData(data);
+        pObj->setParent(this);
 		addObj(pObj);
 	}
 }
@@ -72,9 +74,10 @@ void HContainerObj::readXml(int v, QDomElement* dom)
 	{
 		QDomElement e = n.toElement();
 		DrawShape objType = (DrawShape)e.attribute("ObjType").toInt();
-		HBaseObj* pObj = newObj(objType);
+        HBaseObj* pObj = HMakeIcon::Instance()->newObj(objType);
 		if (!pObj) continue;
 		pObj->readXml(&e);
+        pObj->setParent(this);
 		addObj(pObj);
 	}
 }
@@ -109,7 +112,7 @@ void HContainerObj::copyTo(HBaseObj* obj)
 {
 	HContainerObj* pComplexObj = (HContainerObj*)obj;
 	HShapeObj::copyTo(pComplexObj);
-	pComplexObj->clear();
+//	pComplexObj->clear();
 	for (int i = 0; i < m_pObjList.count(); i++)
 	{
 		HBaseObj* pObj = (HBaseObj*)m_pObjList[i];
@@ -117,90 +120,15 @@ void HContainerObj::copyTo(HBaseObj* obj)
 		{
 			continue;
 		}
-		HBaseObj* pnewObj = newObj(pObj->getShapeType());
+        HBaseObj* pnewObj = HMakeIcon::Instance()->newObj(pObj->getShapeType());
 		pnewObj->copyTo(pObj);
 		pComplexObj->addObj(pnewObj);
-	}
+    }
 }
 
 void HContainerObj::clone(HBaseObj* obj)
 {
 
-}
-
-/*
-HBaseObj* HContainerObj::newObj(QString tagName)
-{
-	DrawShape drawShape = No;
-	if (tagName == "Line")
-		drawShape = Line;
-	else if (tagName == "Rectangle")
-		drawShape = Rectangle;
-	else if (tagName == "Ellipse")
-		drawShape = Ellipse;
-	else if (tagName == "Circle")
-		drawShape = Circle;
-	else if (tagName == "Polyline")
-		drawShape = Polyline;
-	else if (tagName == "Arc")
-		drawShape = Arc;
-	else if (tagName == "Text")
-		drawShape = Text;
-	else if (tagName == "Polygon")
-		drawShape = Polygon;
-	else if (tagName == "Group")
-		drawShape = Group;
-	return newObj(drawShape);
-}*/
-
-HBaseObj* HContainerObj::newObj(DrawShape nObjType)
-{
-	HBaseObj* pObj = NULL;
-	if (nObjType == Line)
-	{
-		pObj = new HLine();
-	}
-	else if (nObjType == Rectangle)
-	{
-		pObj = new HRectangle();
-	}
-    else if (nObjType == Ellipse)
-	{
-        pObj = new HEllipse();
-	}
-	else if (nObjType == Circle)
-	{
-        pObj = new HCircle();
-	}
-	else if (nObjType == Polygon)
-	{
-        pObj = new HPolygon();
-	}
-	else if (nObjType == Polyline)
-	{
-        pObj = new HPolyline();
-	}
-    else if (nObjType == Arc)
-	{
-        //pObj = new HArc();
-	}
-    else if (nObjType == Text)
-	{
-        pObj = new HText();
-	}
-    else if (nObjType == Group)
-	{
-        pObj = new HGroup();
-    }
-	pObj->setShapeType((DrawShape)nObjType);
-	if (pObj)
-	{
-		int objID = getObjID();
-		pObj->setObjID(objID);
-        QString strObjName = QString("%1_%2_%3").arg(pObj->tagName()).arg(pObj->getShapeType()).arg(pObj->getObjID());
-        pObj->setObjName(strObjName);
-	}
-	return pObj;
 }
 
 void HContainerObj::resize(double w, double h, bool scale)
@@ -350,6 +278,7 @@ void HContainerObj::rePos()
 {
 
 }
+
 //针对objList的操作 参考QVector类的函数
 void HContainerObj::clear()
 {
@@ -364,6 +293,7 @@ void HContainerObj::addObj(HBaseObj* obj)
 {
 	if (!obj) return;
 	m_pObjList.append(obj);
+    //--huangw--
     rePos();
 }
 
@@ -394,7 +324,7 @@ HBaseObj* HContainerObj::at(int index)
 
 void HContainerObj::addObjList(QList<HBaseObj*> objs)
 {
-	clear();
+//	clear();
 	int count = objs.size();
 	for (int i = 0; i < count; i++)
 	{

@@ -6,7 +6,7 @@ HTempContainer::HTempContainer()
 }
 HTempContainer::~HTempContainer()
 {
-	clear();
+//	clear();
 }
 
 void HTempContainer::move(double dx, double dy, bool scale)

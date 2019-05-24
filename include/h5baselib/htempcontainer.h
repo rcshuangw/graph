@@ -13,6 +13,7 @@ public:
 	void move(double dx, double dy, bool bscale = false);
 	void moveBy(double dx, double dy, bool bscale = false);
 public:
+    virtual void clear();
     virtual void rePos();
 	virtual HPointFList getPointList(qint8 flag /* = 0 */);
     virtual void paint(QPainter* painter);

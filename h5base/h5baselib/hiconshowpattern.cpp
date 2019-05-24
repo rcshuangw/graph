@@ -13,6 +13,10 @@ void HIconShowPattern::addObj(HBaseObj* pObj)
 {
     if(!pObj)
         return;
+    if(-1 != m_pObjList.indexOf(pObj))
+        return;
+    pObj->setPattern(nPattern);
+    pObj->setParent(m_pSymbol);
     m_pObjList.append(pObj);
 }
 

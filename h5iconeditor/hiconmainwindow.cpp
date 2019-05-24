@@ -147,10 +147,10 @@ void HIconMainWindow::createActions()
     connect(scaleComboBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(scaleChanged(QString)));
     connect(scaleComboBox->lineEdit(),SIGNAL(editingFinished()),this,SLOT(scaleChanged()));
 
-    toTopAct = new QAction(QIcon(":/images/move_forward.png"),QStringLiteral("置顶"),this);
+    toTopAct = new QAction(QIcon(":/images/shape_move_front.png"),QStringLiteral("置顶"),this);
     connect(toTopAct,SIGNAL(triggered(bool)),this,SLOT(bringToTop()));
 
-    toBottomAct = new QAction(QIcon(":/images/move_backward.png"),QStringLiteral("置底"),this);
+    toBottomAct = new QAction(QIcon(":/images/shape_move_back.png"),QStringLiteral("置底"),this);
     connect(toBottomAct,SIGNAL(triggered(bool)),this,SLOT(bringToBottom()));
 
 /*
@@ -242,33 +242,24 @@ void HIconMainWindow::createActions()
     actionGroup->addAction(circleAct);
     actionGroup->addAction(hexagonAct);
     actionGroup->addAction(arcAct);
-    //actionGroup->addAction(fanAct);
     actionGroup->addAction(textAct);
     actionGroup->addAction(selectAct);
 
 
     tileAct = new QAction(tr("&Tile"), this);
     tileAct->setStatusTip(tr("Tile the windows"));
-
-
     cascadeAct = new QAction(tr("&Cascade"), this);
     cascadeAct->setStatusTip(tr("Cascade the windows"));
-
-
     nextAct = new QAction(tr("Ne&xt"), this);
     nextAct->setShortcuts(QKeySequence::NextChild);
     nextAct->setStatusTip(tr("Move the focus to the next window"));
-
-
     previousAct = new QAction(tr("Pre&vious"), this);
     previousAct->setShortcuts(QKeySequence::PreviousChild);
-    previousAct->setStatusTip(tr("Move the focus to the previous "
-                                 "window"));
+    previousAct->setStatusTip(tr("Move the focus to the previous window"));
 
 
     //windowMenuSeparatorAct = new QAction(this);
     //windowMenuSeparatorAct->setSeparator(true);
-
 
    // menuBar()->addSeparator();
 
@@ -307,6 +298,8 @@ void HIconMainWindow::createToolBars()
     shapeToolBar = addToolBar(tr("shapeToolBar"));
     shapeToolBar->addAction(toTopAct);
     shapeToolBar->addAction(toBottomAct);
+    shapeToolBar->addAction(groupObjAct);
+    shapeToolBar->addAction(ungroupObjAct);
 
     zoomToolBar = addToolBar(tr("zoomBar"));
     zoomToolBar->setIconSize(QSize(32,32));
@@ -344,12 +337,8 @@ void HIconMainWindow::createToolBars()
     addToolBar(Qt::BottomToolBarArea,shapeToolBar);
 */
 
-
-
     otherBar = addToolBar(tr("other"));
     otherBar->addAction(selectAct);
-    otherBar->addAction(groupObjAct);
-    otherBar->addAction(ungroupObjAct);
     //otherBar->addAction(rotateAct);
 }
 

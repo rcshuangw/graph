@@ -41,10 +41,8 @@ public:
 
     HIconSymbol* getSymbol();
 
+public:
     void clear();
-
-    //QIcon getIcon();
-
     void setModify(bool modify);
     bool isModify();
 

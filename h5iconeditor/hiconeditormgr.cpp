@@ -6,7 +6,7 @@
 #include "hselectedmgr.h"
 #include "hiconeditordrawtoolmgr.h"
 #include "hiconeditorselecttool.h"
-
+#include "hmakeicon.h"
 HIconEditorMgr::HIconEditorMgr()
     :m_bShowGrid(true),m_bShowCenterLine(true),m_fRadio(20),m_pIconEditorDrawToolMgr(NULL),m_pIconEditorSelectTool(NULL)
 {
@@ -27,7 +27,7 @@ HIconEditorMgr::HIconEditorMgr()
 
 HIconEditorMgr::~HIconEditorMgr()
 {
-
+    HMakeIcon::Instance()->Exstance();
 }
 
 HIconEditorDoc* HIconEditorMgr::iconEditorDocument()

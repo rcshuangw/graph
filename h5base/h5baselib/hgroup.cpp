@@ -6,7 +6,12 @@ HGroup::HGroup()
 }
 HGroup::~HGroup()
 {
-	clear();
+//	clear();
+}
+
+QString HGroup::tagName()
+{
+    return "Group";
 }
 
 void HGroup::move(double dx, double dy, bool scale)

@@ -23,12 +23,14 @@ HIconEditorDoc::~HIconEditorDoc()
 void HIconEditorDoc::loadIconDoucument()
 {
     //HIconHelper::Instance()->loadIconDoucument(&m_pIconTemplateList);
+
+    //刷新一下id
 }
 
 void HIconEditorDoc::saveIconDoucument()
 {
-   // if(!m_pIconTemplateList.isEmpty())
-    //    HIconHelper::Instance()->saveIconDoucument(&m_pIconTemplateList);
+    if(!m_pIconTemplateList.isEmpty())
+        HIconHelper::Instance()->saveIconDoucument(&m_pIconTemplateList);
 }
 
 HIconTemplate* HIconEditorDoc::getCurrentTemplate()
@@ -127,7 +129,6 @@ bool HIconEditorDoc::Save(bool savefile)
 
 HIconTemplate* HIconEditorDoc::findIconTemplateByTemplateName(const QString& strTemplateName)
 {
-
     for(int i = 0; i < m_pIconTemplateList.size();i++)
     {
         HIconTemplate* pIconTemplate = (HIconTemplate*)m_pIconTemplateList.at(i);
@@ -135,7 +136,7 @@ HIconTemplate* HIconEditorDoc::findIconTemplateByTemplateName(const QString& str
 
             return pIconTemplate;
     }
-    //return NULL;
+    return NULL;
 }
 
 HIconTemplate* HIconEditorDoc::findIconTemplateByTypeAndUuid(int nTemplateType, const QString &strUuid)

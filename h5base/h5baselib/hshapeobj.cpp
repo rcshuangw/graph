@@ -104,6 +104,7 @@ void HShapeObj::writeXml(QDomElement* dom)
 {
 	if (!dom)
 		return;
+    HBaseObj::writeXml(dom);
 	dom->setAttribute("Width", m_width);
 	dom->setAttribute("Height", m_height);
 	dom->setAttribute("FillWay", m_nFillWay);

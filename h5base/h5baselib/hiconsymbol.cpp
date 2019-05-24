@@ -6,11 +6,12 @@
 #include <QVariant>
 HIconSymbol::HIconSymbol(HIconTemplate* t):m_pIconTemplate(t)
 {
-    usSymbolType = DEVICE_TYPE_ICONSYMBOL;
+    setShapeType(Icon);
     m_nMaxPattern = 0;
     m_nCurPattern = 0;
     m_pCurPattern = NULL;
     m_bModify = false;
+    move(0,0);
 }
 
 HIconSymbol::~HIconSymbol()
@@ -140,8 +141,14 @@ void HIconSymbol::addBaseObj(HBaseObj* pObj)
     if(!pObj)
         return;
 
+    int objID = getObjID();
+    pObj->setObjID(objID);
+    QString strObjName = QString("%1_%2_%3").arg(pObj->tagName()).arg(pObj->getShapeType()).arg(pObj->getObjID());
+    pObj->setObjName(strObjName);
+
+
 	//先放到总列表中，这个list维护所有创建的图符
-	addObj(pObj);
+    addObj(pObj);
 
 	//再放到对应的pattern列表中
     HIconShowPattern* pSP = getCurrentPatternPtr();
@@ -189,16 +196,11 @@ int HIconSymbol::getObjID()
 
 bool HIconSymbol::findObjID(int nObjID)
 {
-    if(m_pShowPatternVector.count() == 0) return false;
-    for(int i = 0;i < m_pShowPatternVector.count();i++)
+    for(int i = 0;i < getObjList().count();i++)
     {
-        HIconShowPattern* pattern = (HIconShowPattern*)m_pShowPatternVector[i];
-        for(int j = 0; j < pattern->getObjList().count();j++)
-        {
-			HBaseObj* pObj = (HBaseObj*)pattern->getObjList().at(j);
-            if(pObj && pObj->getObjID() == nObjID)
-                return true;
-        }
+        HBaseObj* pObj = (HBaseObj*)getObjList().at(i);
+       if(pObj && pObj->getObjID() == nObjID)
+           return true;
     }
     return false;
 }
