@@ -62,13 +62,6 @@ void HRectangle::copyTo(HBaseObj* obj)
 	ob->setYAxis(getYAxis());
 }
 
-void HRectangle::clone(HBaseObj *obj)
-{
-    if(!obj) return;
-    HShapeObj::clone(obj);
-    copyTo(obj);
-}
-
 /*
 bool HRectangle::getPath(QPainterPath& path)
 {

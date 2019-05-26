@@ -188,7 +188,7 @@ void HIconEditorOp::copy()
         stream<<(quint8)pObj->getShapeType();
         HBaseObj* pNewObj = HMakeIcon::Instance()->newObj(pObj->getShapeType());
         if(!pNewObj) continue;
-        pObj->clone(pNewObj);//需要clone吗？
+        pObj->copyTo(pNewObj);//需要clone吗？
         pNewObj->writeData(&stream);
         if(pNewObj)
         {

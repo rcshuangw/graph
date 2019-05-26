@@ -6,7 +6,7 @@ HTempContainer::HTempContainer()
 }
 HTempContainer::~HTempContainer()
 {
-//	clear();
+    clear();
 }
 
 void HTempContainer::move(double dx, double dy, bool scale)
@@ -90,4 +90,9 @@ void HTempContainer::makeGroup(HGroup *group)
         pObj->resetParent(group);
     }
     getObjList().clear();
+}
+
+void HTempContainer::clear()
+{
+    m_pObjList.clear();
 }

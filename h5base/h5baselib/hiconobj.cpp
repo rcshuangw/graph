@@ -254,13 +254,6 @@ void HIconObj::copyTo(HBaseObj* obj)
     }
 }
 
-void HIconObj::clone(HBaseObj* obj)
-{
-    if(!obj) return;
-    HBaseObj::clone(obj);
-    copyTo(obj);
-}
-
 bool HIconObj::setPointList(QPolygonF& list, qint8 flag)
 {
 	HBaseObj::setPointList(list, flag);

@@ -38,7 +38,6 @@ HIconTemplate* HIconEditorDoc::getCurrentTemplate()
     return m_pCurIconTemplate;
 }
 
-
 void HIconEditorDoc::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
 {
     if(m_pCurIconTemplate)

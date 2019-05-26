@@ -78,16 +78,6 @@ void HLineObj::copyTo(HBaseObj* obj)
 	ob->setArrowHeight(m_nArrowHeight);
 }
 
-void HLineObj::clone(HBaseObj* obj)
-{
-	HLineObj* ob = (HLineObj*)obj;
-	if (!obj) return;
-	ob->setStartArrowType(m_nArrowStart);
-	ob->setEndArrowType(m_nArrowEnd);
-	ob->setArrowWidth(m_nArrowWidth);
-	ob->setArrowHeight(m_nArrowHeight);
-}
-
 void HLineObj::setStartArrowType(quint8 start)
 {
 	m_nArrowStart = start;

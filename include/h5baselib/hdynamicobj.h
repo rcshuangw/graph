@@ -23,8 +23,6 @@ public:
 
     //拷贝克隆
     virtual void copyTo(HDynamicObj* obj);
-    virtual void clone(HDynamicObj* obj);
-
 public:
     void setDBStation(ushort wStation);
     ushort getDBStation();

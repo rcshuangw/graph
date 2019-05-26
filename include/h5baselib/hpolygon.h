@@ -19,7 +19,6 @@ public:
     virtual QString tagName();
     //拷贝克隆
     virtual void copyTo(HBaseObj* obj);
-    virtual void clone(HBaseObj* obj);
 
 public:
     virtual bool setPointList(QPolygonF& list, qint8 flag = 1);

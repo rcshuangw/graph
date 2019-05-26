@@ -140,11 +140,6 @@ void HText::copyTo(HBaseObj* obj)
     ob->m_btFormat = m_btFormat;
 }
 
-void HText::clone(HBaseObj *obj)
-{
-
-}
-
 void HText::setTextClr(QString strClrName)
 {
     m_strTextClr = strClrName;

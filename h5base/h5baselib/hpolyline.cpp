@@ -82,13 +82,6 @@ void HPolyline::copyTo(HBaseObj* obj)
     }
 }
 
-void HPolyline::clone(HBaseObj *obj)
-{
-    if(!obj) return;
-    HBaseObj::clone(obj);
-    copyTo(obj);
-}
-
 bool HPolyline::setPointList(QPolygonF& list, qint8 flag)
 {
     HLineObj::setPointList(list,flag);

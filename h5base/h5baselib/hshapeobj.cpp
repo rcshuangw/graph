@@ -144,14 +144,6 @@ void HShapeObj::copyTo(HBaseObj* ob)
 	obj->m_nImageDirect = m_nImageDirect;
 }
 
-void HShapeObj::clone(HBaseObj* ob)
-{
-	if (!ob)
-		return;
-	HBaseObj::clone(ob);
-	copyTo(ob);
-}
-
 //变化可能是按比例也可能是直接更改w,h
 void HShapeObj::resize(double w, double h, bool scale)
 {

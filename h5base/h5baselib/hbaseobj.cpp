@@ -187,12 +187,6 @@ void HBaseObj::copyTo(HBaseObj* obj)
     obj->m_bModify = m_bModify;
 }
 
-void HBaseObj::clone(HBaseObj* ob)
-{
-    if(!ob) return;
-    HBaseObj::copyTo(ob);
-}
-
 //设置属性值 By Name
 void HBaseObj::setObjName(const QString strName)
 {

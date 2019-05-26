@@ -20,8 +20,6 @@ public:
 
     //拷贝克隆
     virtual void copyTo(HBaseObj* obj);
-    virtual void clone(HBaseObj* obj);
-    //virtual bool getPath(QPainterPath& path);
 
 public:
    // virtual QRectF boundingRect(qint8 flag = 0);

@@ -81,14 +81,6 @@ void HDynamicObj::copyTo(HDynamicObj* obj)
     obj->wAttrib = wAttrib;
 }
 
-void HDynamicObj::clone(HDynamicObj* obj)
-{
-    if(!obj)
-        return;
-    copyTo(obj);
-}
-
-
 void HDynamicObj::setDBStation(ushort wStation)
 {
     this->wStation = wStation;

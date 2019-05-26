@@ -6,7 +6,7 @@ HGroup::HGroup()
 }
 HGroup::~HGroup()
 {
-//	clear();
+    clear();
 }
 
 QString HGroup::tagName()

@@ -20,7 +20,6 @@ public:
 
     //拷贝克隆
     virtual void copyTo(HBaseObj* obj);
-    virtual void clone(HBaseObj* obj);
 
 	///设置贴片
 	virtual void setBkImagePath(const QString& s);

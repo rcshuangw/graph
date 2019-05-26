@@ -24,7 +24,6 @@ public:
 
 	//拷贝克隆
 	virtual void copyTo(HBaseObj* obj);
-	virtual void clone(HBaseObj* obj);
 
 	QVector<HBaseObj*>& getObjList();
 
@@ -43,7 +42,7 @@ public:
 	virtual QPainterPath shape(qint8 flag = 0);
 public:
 	//针对objList的操作 参考QVector类的函数
-    void clear();
+    virtual void clear();
 	void addObj(HBaseObj* obj);
 	void removeObj(HBaseObj* obj);
 	bool contains(HBaseObj* obj);

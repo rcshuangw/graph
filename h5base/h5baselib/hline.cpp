@@ -72,15 +72,6 @@ void HLine::copyTo(HBaseObj* obj)
 	ob->ptTailPoint = ptTailPoint;
 }
 
-void HLine::clone(HBaseObj* obj)
-{
-	HLine* ob = (HLine*)obj;
-	if (!ob) return;
-	HLineObj::copyTo(ob);
-	ob->ptHeadPoint = ptHeadPoint;
-	ob->ptTailPoint = ptTailPoint;
-}
-
 ///////////////////////////////////////////////////////操作属性/////////////////////////////
 //改变大小 w,h传递的是相对原来的点的值
 void HLine::resize(double w, double h, bool scale)

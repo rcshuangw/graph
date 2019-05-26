@@ -83,13 +83,6 @@ void HPolygon::copyTo(HBaseObj* obj)
     }
 }
 
-void HPolygon::clone(HBaseObj *obj)
-{
-    if(!obj) return;
-    HBaseObj::clone(obj);
-    copyTo(obj);
-}
-
 bool HPolygon::setPointList(QPolygonF& list, qint8 flag)
 {
     if(list.size() < 3) return false;

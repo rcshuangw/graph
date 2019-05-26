@@ -15,7 +15,7 @@ HContainerObj::HContainerObj()
 
 HContainerObj::~HContainerObj()
 {
-    //clear();
+    clear();
 }
 
 //二进制读写
@@ -112,7 +112,7 @@ void HContainerObj::copyTo(HBaseObj* obj)
 {
 	HContainerObj* pComplexObj = (HContainerObj*)obj;
 	HShapeObj::copyTo(pComplexObj);
-//	pComplexObj->clear();
+    pComplexObj->clear();
 	for (int i = 0; i < m_pObjList.count(); i++)
 	{
 		HBaseObj* pObj = (HBaseObj*)m_pObjList[i];
@@ -124,11 +124,6 @@ void HContainerObj::copyTo(HBaseObj* obj)
 		pnewObj->copyTo(pObj);
 		pComplexObj->addObj(pnewObj);
     }
-}
-
-void HContainerObj::clone(HBaseObj* obj)
-{
-
 }
 
 void HContainerObj::resize(double w, double h, bool scale)
@@ -282,9 +277,9 @@ void HContainerObj::rePos()
 //针对objList的操作 参考QVector类的函数
 void HContainerObj::clear()
 {
-    //while (!m_pObjList.empty())
+    while (!m_pObjList.empty())
 	{
-        //delete (HBaseObj*)m_pObjList.takeFirst();
+        delete (HBaseObj*)m_pObjList.takeFirst();
 	}
 	m_pObjList.clear();
 }
@@ -324,7 +319,7 @@ HBaseObj* HContainerObj::at(int index)
 
 void HContainerObj::addObjList(QList<HBaseObj*> objs)
 {
-//	clear();
+    clear();
 	int count = objs.size();
 	for (int i = 0; i < count; i++)
 	{
