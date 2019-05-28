@@ -249,7 +249,18 @@ void HIconTreeWidget::deleteIcon()
 
 void HIconTreeWidget::renameIcon()
 {
-
+    if(!m_pIconEditorMgr)
+        return;
+    HIconTreeWidgetItem* pCurItem = dynamic_cast<HIconTreeWidgetItem*> (currentItem());
+    if(!pCurItem) return;
+    bool ok;
+    QString strTemplateName = QInputDialog::getText(this,QStringLiteral("输入图元的名称"),QStringLiteral("图元名称:"),QLineEdit::Normal,pCurItem->text(0),&ok);
+    if(!ok) return;
+    HIconTreeWidgetItem* item = (HIconTreeWidgetItem*)pCurItem->parent();
+    if(!item) return;
+    QString strTemplateUuid = pCurItem->getUuid();
+    int nTemplateType = item->type();
+    emit IconRename(strTemplateName,nTemplateType,strTemplateUuid);//新名称，类型
 }
 
 void HIconTreeWidget::importIcon()
@@ -294,6 +305,16 @@ void HIconTreeWidget::delIconTreeWidgetItem()
     parentItem->removeChild(curItem);
     setCurrentItem(parentItem);
 }
+
+void HIconTreeWidget::renameIconTreeWidgetItem()
+{
+    if(!m_pIconEditorMgr)
+        return;
+    HIconTreeWidgetItem *curItem = (HIconTreeWidgetItem*)currentItem();
+    if(!curItem || curItem->type() != TEMPLATE_TYPE_CHILD) return;
+    curItem->setText(0,m_pIconEditorMgr->iconEditorDocument()->getCurrentTemplate()->getSymbol()->getObjName());
+}
+
 
 void HIconTreeWidget::initTemplateFile()
 {

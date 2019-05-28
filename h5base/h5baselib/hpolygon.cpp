@@ -12,11 +12,11 @@ HPolygon::~HPolygon()
 
 }
 
-void HPolygon::readData(QDataStream* data)
+void HPolygon::readData(int v,QDataStream* data)
 {
     if(!data) return;
     pylist.clear();
-    HShapeObj::readData(data);
+    HShapeObj::readData(v,data);
     quint16 n = pylist.count();
     *data>>n;
     for(int i = 0; i < n;i++)
@@ -27,10 +27,10 @@ void HPolygon::readData(QDataStream* data)
     }
 }
 
-void HPolygon::writeData(QDataStream* data)
+void HPolygon::writeData(int v,QDataStream* data)
 {
     if(!data) return;
-    HShapeObj::writeData(data);
+    HShapeObj::writeData(v,data);
     *data<<(quint16)pylist.count();
     for(int i = 0; i < pylist.count();i++)
     {
@@ -38,11 +38,11 @@ void HPolygon::writeData(QDataStream* data)
     }
 }
 
-void HPolygon::readXml(QDomElement* dom)
+void HPolygon::readXml(int v,QDomElement* dom)
 {
     if(!dom) return;
     pylist.clear();
-    HShapeObj::readXml(dom);
+    HShapeObj::readXml(v,dom);
     for(QDomNode n = dom->firstChild(); !n.isNull(); n = n.nextSibling())
     {
         QDomElement pointDom = n.toElement();
@@ -53,10 +53,10 @@ void HPolygon::readXml(QDomElement* dom)
     }
 }
 
-void HPolygon::writeXml(QDomElement* dom)
+void HPolygon::writeXml(int v,QDomElement* dom)
 {
     if(!dom || pylist.count() <= 0)return;
-    HShapeObj::writeXml(dom);
+    HShapeObj::writeXml(v,dom);
     for(int i = 0; i < pylist.count();i++)
     {
         QDomElement Pointdom = dom->ownerDocument().createElement("Point");

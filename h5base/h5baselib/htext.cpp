@@ -28,10 +28,10 @@ HText::~HText()
 }
 
 //二进制读写
-void HText::readData(QDataStream* data)
+void HText::readData(int v,QDataStream* data)
 {
     if(!data) return;
-    HRectangle::readData(data);
+    HRectangle::readData(v,data);
     QString s;
     *data>>s;
     m_strText = s;
@@ -62,10 +62,10 @@ void HText::readData(QDataStream* data)
     m_btFormat = bt;
 }
 
-void HText::writeData(QDataStream* data)
+void HText::writeData(int v,QDataStream* data)
 {
     if(!data) return;
-    HRectangle::writeData(data);
+    HRectangle::writeData(v,data);
     *data<<(QString)m_strText;
     *data<<(QString)m_strTextClr;
     *data<<(quint8)m_nLayout;
@@ -81,10 +81,10 @@ void HText::writeData(QDataStream* data)
 }
 
 //xml文件读写
-void HText::readXml(QDomElement* dom)
+void HText::readXml(int v,QDomElement* dom)
 {
     if(!dom) return;
-    HRectangle::readXml(dom);
+    HRectangle::readXml(v,dom);
     m_strText = dom->attribute("Text");
     m_strTextClr = dom->attribute("TextColor");
     m_nLayout = dom->attribute("Layout").toInt();
@@ -99,10 +99,10 @@ void HText::readXml(QDomElement* dom)
     m_btFormat = dom->attribute("Format").toUInt();
 }
 
-void HText::writeXml(QDomElement* dom)
+void HText::writeXml(int v,QDomElement* dom)
 {
     if(!dom)return;
-    HRectangle::writeXml(dom);
+    HRectangle::writeXml(v,dom);
     dom->setAttribute("Text",m_strText);
     dom->setAttribute("TextColor",m_strTextClr);
     dom->setAttribute("Layout",m_nLayout);

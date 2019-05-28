@@ -51,6 +51,7 @@
 #include <QApplication>
 #include "hiconmainwindow.h"
 #include "hiconeditormgr.h"
+#include "hiconeditordoc.h"
 #include <QTranslator>
 #include <QDir>
 int main(int argc, char *argv[])
@@ -63,7 +64,7 @@ int main(int argc, char *argv[])
     //bool ok = trans.load("qt_zh_CN.qm",":/translations/");
     //app.installTranslator(&trans);
     HIconEditorMgr* pIconEditorMgr = new HIconEditorMgr();
-    //pIconMgr->getIconDocument()->loadIconDoucument();
+    pIconEditorMgr->iconEditorDocument()->loadIconDoucument();
     HIconMainWindow *mainWin = new HIconMainWindow(pIconEditorMgr);
     mainWin->show();
     return app.exec();

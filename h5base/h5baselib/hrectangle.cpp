@@ -13,10 +13,10 @@ HRectangle::~HRectangle()
 }
 
 //二进制读写
-void HRectangle::readData(QDataStream* data)
+void HRectangle::readData(int v,QDataStream* data)
 {
     if(!data) return;
-    HShapeObj::readData(data);
+    HShapeObj::readData(v,data);
     quint8 n8;
     *data>>n8;
 	setXAxis(n8);
@@ -24,26 +24,26 @@ void HRectangle::readData(QDataStream* data)
     setYAxis(n8);
 }
 
-void HRectangle::writeData(QDataStream* data)
+void HRectangle::writeData(int v,QDataStream* data)
 {
     if(!data) return;
-    HShapeObj::writeData(data);
+    HShapeObj::writeData(v,data);
     *data<<(quint8)getXAxis();
     *data<<(quint8)getYAxis();
 }
 
-void HRectangle::readXml(QDomElement* dom)
+void HRectangle::readXml(int v,QDomElement* dom)
 {
     if(!dom) return;
-    HShapeObj::readXml(dom);
+    HShapeObj::readXml(v,dom);
     m_nXAxis = dom->attribute("XAxis").toDouble();
     m_nYAxis = dom->attribute("YAxis").toDouble();
 }
 
-void HRectangle::writeXml(QDomElement* dom)
+void HRectangle::writeXml(int v,QDomElement* dom)
 {
     if(!dom)return;
-    HShapeObj::writeXml(dom);
+    HShapeObj::writeXml(v,dom);
     dom->setAttribute("XAxis",m_nXAxis);
     dom->setAttribute("YAxis",m_nYAxis);
 }

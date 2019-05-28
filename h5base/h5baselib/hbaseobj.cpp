@@ -43,9 +43,10 @@ void HBaseObj::init()
     //bModify = false;
     //父图符
     m_pParent = NULL;
+    m_bTempObj = false;
 }
 
-void HBaseObj::readData(QDataStream *data)
+void HBaseObj::readData(int v,QDataStream *data)
 {
     if(!data) return;
     QString s;
@@ -90,7 +91,7 @@ void HBaseObj::readData(QDataStream *data)
     m_bModify = b;
 }
 
-void HBaseObj::writeData(QDataStream *data)
+void HBaseObj::writeData(int v,QDataStream *data)
 {
     if(!data) return;
     //*data<<strObjName;
@@ -114,7 +115,7 @@ void HBaseObj::writeData(QDataStream *data)
     *data<<(bool)m_bModify;
 }
 
-void HBaseObj::readXml(QDomElement* dom)
+void HBaseObj::readXml(int v,QDomElement* dom)
 {
     if(!dom)
         return;
@@ -138,7 +139,7 @@ void HBaseObj::readXml(QDomElement* dom)
     m_nPattern = dom->attribute("nPattern").toUInt();
 }
 
-void HBaseObj::writeXml(QDomElement* dom)
+void HBaseObj::writeXml(int v,QDomElement* dom)
 {
     if(!dom)
         return;
@@ -383,7 +384,7 @@ void HBaseObj::resetParent(HBaseObj* obj)
         {
             HTempContainer* tc = (HTempContainer*)oldParent;
             int index = tc->getObjList().indexOf(this);
-            if(index > 0 && index < tc->getObjList().size())
+            if(index >= 0 && index < tc->getObjList().size())
                 tc->getObjList().remove(index);
         }
     }

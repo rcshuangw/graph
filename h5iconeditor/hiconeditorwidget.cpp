@@ -86,7 +86,8 @@ void HIconEditorWidget::refresh()
 
    if(m_pTabBar->count() > 0)
    {
-       int index = pSymbol->getCurrentPatternIndex() - 1;
+       int index = pSymbol->getCurrentPatternIndex();
+       if(index < 0) return;
        m_pTabBar->blockSignals(true);
        m_pTabBar->setCurrentIndex(index);
        m_pTabBar->blockSignals(false);

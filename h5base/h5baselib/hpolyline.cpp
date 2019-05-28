@@ -11,11 +11,11 @@ HPolyline::~HPolyline()
 
 }
 
-void HPolyline::readData(QDataStream* data)
+void HPolyline::readData(int v,QDataStream* data)
 {
     if(!data) return;
     pylist.clear();
-    HLineObj::readData(data);
+    HLineObj::readData(v,data);
     quint16 n = pylist.count();
     *data>>n;
     for(int i = 0; i < n;i++)
@@ -26,10 +26,10 @@ void HPolyline::readData(QDataStream* data)
     }
 }
 
-void HPolyline::writeData(QDataStream* data)
+void HPolyline::writeData(int v,QDataStream* data)
 {
     if(!data) return;
-    HLineObj::writeData(data);
+    HLineObj::writeData(v,data);
     *data<<(quint16)pylist.count();
     for(int i = 0; i < pylist.count();i++)
     {
@@ -37,11 +37,11 @@ void HPolyline::writeData(QDataStream* data)
     }
 }
 
-void HPolyline::readXml(QDomElement* dom)
+void HPolyline::readXml(int v,QDomElement* dom)
 {
     if(!dom) return;
     pylist.clear();
-    HLineObj::readXml(dom);
+    HLineObj::readXml(v,dom);
     for(QDomNode n = dom->firstChild(); !n.isNull(); n = n.nextSibling())
     {
         QDomElement pointDom = n.toElement();
@@ -52,10 +52,10 @@ void HPolyline::readXml(QDomElement* dom)
     }
 }
 
-void HPolyline::writeXml(QDomElement* dom)
+void HPolyline::writeXml(int v,QDomElement* dom)
 {
     if(!dom || pylist.count() <= 0)return;
-    HLineObj::writeXml(dom);
+    HLineObj::writeXml(v,dom);
     for(int i = 0; i < pylist.count();i++)
     {
         QDomElement Pointdom = dom->ownerDocument().createElement("Point");

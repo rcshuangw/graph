@@ -11,10 +11,10 @@ HLine::~HLine()
 }
 
 //二进制读写
-void HLine::readData(QDataStream* data)
+void HLine::readData(int v,QDataStream* data)
 {
 	if (!data)return;
-	HLineObj::readData(data);
+    HLineObj::readData(v,data);
     double qr;
 	*data >> qr;
 	ptHeadPoint.setX(qr);
@@ -26,10 +26,10 @@ void HLine::readData(QDataStream* data)
 	ptTailPoint.setY(qr);
 }
 
-void HLine::writeData(QDataStream* data)
+void HLine::writeData(int v,QDataStream* data)
 {
 	if (!data) return;
-	HLineObj::writeData(data);
+    HLineObj::writeData(v,data);
     *data << (double)ptHeadPoint.x();
     *data << (double)ptHeadPoint.y();
     *data << (double)ptTailPoint.x();
@@ -37,20 +37,20 @@ void HLine::writeData(QDataStream* data)
 }
 
 //xml文件读写
-void HLine::readXml(QDomElement* dom)
+void HLine::readXml(int v,QDomElement* dom)
 {
 	if (!dom) return;
-	HLineObj::readXml(dom);
+    HLineObj::readXml(v,dom);
 	ptHeadPoint.setX(dom->attribute("HeadPointx").toDouble());
 	ptHeadPoint.setY(dom->attribute("HeadPointy").toDouble());
 	ptTailPoint.setX(dom->attribute("TailPointx").toDouble());
 	ptTailPoint.setY(dom->attribute("TailPointy").toDouble());
 }
 
-void HLine::writeXml(QDomElement* dom)
+void HLine::writeXml(int v,QDomElement* dom)
 {
 	if (!dom)return;
-	HLineObj::writeXml(dom);
+    HLineObj::writeXml(v,dom);
 	dom->setAttribute("HeadPointx", ptHeadPoint.x());
 	dom->setAttribute("HeadPointy", ptHeadPoint.y());
 	dom->setAttribute("TailPointx", ptTailPoint.x());

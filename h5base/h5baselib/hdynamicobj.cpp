@@ -15,7 +15,7 @@ HDynamicObj::~HDynamicObj()
 }
 
 //二进制读写
-void HDynamicObj::readData(QDataStream* data)
+void HDynamicObj::readData(int v,QDataStream* data)
 {
     if(!data) return;
     ushort temp;
@@ -32,7 +32,7 @@ void HDynamicObj::readData(QDataStream* data)
     wFormula = temp;
 }
 
-void HDynamicObj::writeData(QDataStream* data)
+void HDynamicObj::writeData(int v,QDataStream* data)
 {
     if(!data) return;
     *data<<(ushort)wStation;
@@ -43,7 +43,7 @@ void HDynamicObj::writeData(QDataStream* data)
 }
 
 //xml文件读写
-void HDynamicObj::readXml(QDomElement* dom)
+void HDynamicObj::readXml(int v,QDomElement* dom)
 {
     if(!dom)
         return;
@@ -54,7 +54,7 @@ void HDynamicObj::readXml(QDomElement* dom)
     wFormula = dom->attribute("Formula").toUShort();
 }
 
-void HDynamicObj::writeXml(QDomElement* dom)
+void HDynamicObj::writeXml(int v,QDomElement* dom)
 {
     if(!dom)
         return;

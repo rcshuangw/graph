@@ -27,10 +27,10 @@ HShapeObj::~HShapeObj()
 }
 
 //二进制读写
-void HShapeObj::readData(QDataStream* data)
+void HShapeObj::readData(int v,QDataStream* data)
 {
 	if (!data) return;
-	HBaseObj::readData(data);
+    HBaseObj::readData(v,data);
     double r;
 	*data >> r;
 	m_width = r;
@@ -62,10 +62,10 @@ void HShapeObj::readData(QDataStream* data)
 	m_nImageDirect = n8;
 }
 
-void HShapeObj::writeData(QDataStream* data)
+void HShapeObj::writeData(int v,QDataStream* data)
 {
 	if (!data) return;
-	HBaseObj::writeData(data);
+    HBaseObj::writeData(v,data);
     *data << (double)m_width;
     *data << (double)m_height;
 	*data << (quint8)m_nFillWay;
@@ -81,11 +81,11 @@ void HShapeObj::writeData(QDataStream* data)
 }
 
 //xml文件读写
-void HShapeObj::readXml(QDomElement* dom)
+void HShapeObj::readXml(int v,QDomElement* dom)
 {
 	if (!dom)
 		return;
-	HBaseObj::readXml(dom);
+    HBaseObj::readXml(v,dom);
 	m_width = dom->attribute("Width").toDouble();
 	m_height = dom->attribute("Height").toDouble();
 	m_nFillWay = dom->attribute("FillWay").toUInt();
@@ -100,11 +100,11 @@ void HShapeObj::readXml(QDomElement* dom)
 	m_nImageDirect = dom->attribute("ImageDirect").toUInt();
 }
 
-void HShapeObj::writeXml(QDomElement* dom)
+void HShapeObj::writeXml(int v,QDomElement* dom)
 {
 	if (!dom)
 		return;
-    HBaseObj::writeXml(dom);
+    HBaseObj::writeXml(v,dom);
 	dom->setAttribute("Width", m_width);
 	dom->setAttribute("Height", m_height);
 	dom->setAttribute("FillWay", m_nFillWay);

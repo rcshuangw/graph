@@ -56,19 +56,19 @@ void HIconEditorOp::Open(const QString &strTemplateName, int nTemplateType, cons
     }
 
     //所有false
-    /*
     HIconTemplate* pTemplate = m_pIconEditorMgr->iconTemplate();
     if(!pTemplate) return;
     for(int i = 0; i < pTemplate->getSymbol()->getObjList().count();i++)
     {
         HBaseObj* pObj = pTemplate->getSymbol()->getObjList().at(i);
-        if(pObj && pObj->getPattern() != newPatternId)
+        if(pObj )
         {
+            onCreateObj(pObj,false);
             H5GraphicsItem* item = (H5GraphicsItem*)pObj->iconGraphicsItem();
             if(item)
                 item->setVisible(false);
         }
-    }*/ //huangw
+    }
 }
 
 void HIconEditorOp::onCreateObj(HBaseObj* pObj,bool isPaste )
@@ -189,7 +189,7 @@ void HIconEditorOp::copy()
         HBaseObj* pNewObj = HMakeIcon::Instance()->newObj(pObj->getShapeType());
         if(!pNewObj) continue;
         pObj->copyTo(pNewObj);//需要clone吗？
-        pNewObj->writeData(&stream);
+        pNewObj->writeData(0,&stream);
         if(pNewObj)
         {
             delete pNewObj;
@@ -227,7 +227,7 @@ void HIconEditorOp::paste()
         stream>>nType;
         HBaseObj* pObj = HMakeIcon::Instance()->newObj((DrawShape)nType);
         if(!pObj) continue;
-        pObj->readData(&stream);
+        pObj->readData(0,&stream);
         objList.append(pObj);
 
         m_pIconEditorMgr->iconEditorFrame()->objCreated(pObj,true);
@@ -388,6 +388,7 @@ void HIconEditorOp::groupObj()
     if(!tempContainer) return;
     if(tempContainer->getObjList().count() < 2) return;
 
+    HIconTemplate* pItemp = m_pIconEditorMgr->iconTemplate();
     HTempContainer* tempSelect = (HTempContainer*)tempContainer;
     for(int i = 0; i < tempSelect->getObjList().count();i++)
     {
@@ -397,6 +398,7 @@ void HIconEditorOp::groupObj()
         m_pIconEditorMgr->iconTemplate()->getSymbol()->removeBaseObj(pObj);//pattern删除
         pObj->setDeleted(false);
     }
+
     HGroup* pGroup =  (HGroup*)HMakeIcon::Instance()->newObj(Group);
     tempSelect->makeGroup(pGroup);
     m_pIconEditorMgr->selectedMgr()->clear();

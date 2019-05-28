@@ -6,6 +6,7 @@
 #include "hicontemplate.h"
 #include "hiconeditormgr.h"
 #include "hiconhelper.h"
+#include "hselectedmgr.h"
 HIconEditorDoc::HIconEditorDoc(HIconEditorMgr* iconMgr):m_pIconEditorMgr(iconMgr)
 {
     m_pCurIconTemplate = new HIconTemplate("0000");
@@ -22,7 +23,7 @@ HIconEditorDoc::~HIconEditorDoc()
 
 void HIconEditorDoc::loadIconDoucument()
 {
-    //HIconHelper::Instance()->loadIconDoucument(&m_pIconTemplateList);
+    HIconHelper::Instance()->loadIconDoucument(&m_pIconTemplateList);
 
     //刷新一下id
 }
@@ -123,6 +124,9 @@ bool HIconEditorDoc::Save(bool savefile)
         pTemplate->setModify(false);
 		m_pCurIconTemplate->setModify(false);
     }
+    m_pIconEditorMgr->selectedMgr()->clear();
+    m_pIconEditorMgr->iconEditorUndoStack()->clear();
+    m_pIconEditorMgr->iconEditorUndoStack()->setClean();
     return true;
 }
 

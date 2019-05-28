@@ -13,10 +13,10 @@ HLineObj::~HLineObj()
 }
 
 //二进制读写
-void HLineObj::readData(QDataStream* data)
+void HLineObj::readData(int v,QDataStream* data)
 {
 	if (!data)return;
-	HBaseObj::readData(data);
+    HBaseObj::readData(v,data);
 
 	quint8 n8;
 	*data >> n8;
@@ -30,10 +30,10 @@ void HLineObj::readData(QDataStream* data)
 	m_nArrowHeight = n8;
 }
 
-void HLineObj::writeData(QDataStream* data)
+void HLineObj::writeData(int v,QDataStream* data)
 {
 	if (!data) return;
-	HBaseObj::writeData(data);
+    HBaseObj::writeData(v,data);
 
 	*data << (quint8)m_nArrowStart;
 	*data << (quint8)m_nArrowEnd;
@@ -42,20 +42,20 @@ void HLineObj::writeData(QDataStream* data)
 }
 
 //xml文件读写
-void HLineObj::readXml(QDomElement* dom)
+void HLineObj::readXml(int v,QDomElement* dom)
 {
 	if (!dom) return;
-	HBaseObj::readXml(dom);
+    HBaseObj::readXml(v,dom);
 	m_nArrowStart = dom->attribute("ArrowStart").toUInt();
 	m_nArrowEnd = dom->attribute("ArrowEnd").toUInt();
 	m_nArrowWidth = dom->attribute("ArrowWidth").toDouble();
 	m_nArrowHeight = dom->attribute("ArrowHeight").toDouble();
 }
 
-void HLineObj::writeXml(QDomElement* dom)
+void HLineObj::writeXml(int v,QDomElement* dom)
 {
 	if (!dom)return;
-	HBaseObj::writeXml(dom);
+    HBaseObj::writeXml(v,dom);
 	dom->setAttribute("arrowStart", m_nArrowStart);
 	dom->setAttribute("arrowEnd", m_nArrowEnd);
 	dom->setAttribute("arrowWidth", m_nArrowWidth);

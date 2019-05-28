@@ -70,7 +70,7 @@ void HIconObj::initIconTemplate()
 void HIconObj::readData(int v, QDataStream* data)
 {
     if(!data) return;
-    HBaseObj::readData(data);
+    HBaseObj::readData(v,data);
     QString s;
     *data>>s;
     strCatalogName = s;
@@ -100,14 +100,14 @@ void HIconObj::readData(int v, QDataStream* data)
     //动态数据
 	if (dynamicObj())
 	{
-		dynamicObj()->readData(data);
+        dynamicObj()->readData(v,data);
 	}
 }
 
 void HIconObj::writeData(int v, QDataStream* data)
 {
     if(!data) return;
-    HBaseObj::writeData(data);
+    HBaseObj::writeData(v,data);
     *data<<strCatalogName;
     *data<<nCatalogType;
     *data<<strUuid;
@@ -129,7 +129,7 @@ void HIconObj::writeData(int v, QDataStream* data)
     //动态数据
 	if (dynamicObj())
 	{
-		dynamicObj()->writeData(data);
+        dynamicObj()->writeData(v,data);
 	}
 }
 
@@ -137,7 +137,7 @@ void HIconObj::writeData(int v, QDataStream* data)
 void HIconObj::readXml(int v, QDomElement* dom)
 {
     if(!dom) return;
-    HBaseObj::readXml(dom);
+    HBaseObj::readXml(v,dom);
     strCatalogName = dom->attribute("CatalogName");
     nCatalogType = dom->attribute("CatalogType").toInt();
     strUuid = dom->attribute("Uuid");
@@ -177,14 +177,14 @@ void HIconObj::readXml(int v, QDomElement* dom)
     QDomElement RelationDom = dom->namedItem("Relation").toElement();
 	if (dynamicObj())
 	{
-		dynamicObj()->readXml(&RelationDom);
+        dynamicObj()->readXml(v,&RelationDom);
 	}
 }
 
 void HIconObj::writeXml(int v, QDomElement* dom)
 {
     if(!dom)return;
-    HBaseObj::writeXml(dom);
+    HBaseObj::writeXml(v,dom);
     dom->setAttribute("CatalogName",strCatalogName);
     dom->setAttribute("CatalogType",nCatalogType);
     dom->setAttribute("Uuid",strUuid);
@@ -215,7 +215,7 @@ void HIconObj::writeXml(int v, QDomElement* dom)
     dom->appendChild(RelationDom);
 	if (dynamicObj())
 	{
-		dynamicObj()->writeXml(&RelationDom);
+        dynamicObj()->writeXml(v,&RelationDom);
 	}
 }
 

@@ -12,12 +12,12 @@ public:
 	virtual ~HLine();
 
 	//二进制读写
-	virtual void readData(QDataStream* data);
-	virtual void writeData(QDataStream* data);
+    virtual void readData(int v,QDataStream* data);
+    virtual void writeData(int v,QDataStream* data);
 
 	//xml文件读写
-	virtual void readXml(QDomElement* data);
-	virtual void writeXml(QDomElement* data);
+    virtual void readXml(int v,QDomElement* data);
+    virtual void writeXml(int v,QDomElement* data);
 
 	virtual QString tagName();
 

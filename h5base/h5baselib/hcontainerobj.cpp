@@ -22,7 +22,7 @@ HContainerObj::~HContainerObj()
 void HContainerObj::readData(int v,QDataStream* data)
 {
 	if (!data) return;
-	HShapeObj::readData(data);
+    HShapeObj::readData(v,data);
 	int sz;
 	*data >> sz;
 	quint8 type = 0;
@@ -31,7 +31,7 @@ void HContainerObj::readData(int v,QDataStream* data)
 		*data >> type;
         HBaseObj* pObj = HMakeIcon::Instance()->newObj(DrawShape(type));
 		if (!pObj) continue;
-		pObj->readData(data);
+        pObj->readData(v,data);
         pObj->setParent(this);
 		addObj(pObj);
 	}
@@ -40,7 +40,7 @@ void HContainerObj::readData(int v,QDataStream* data)
 void HContainerObj::writeData(int v, QDataStream* data)
 {
 	if (!data) return;
-	HShapeObj::writeData(data);
+    HShapeObj::writeData(v,data);
 
 	int sz = (int)m_pObjList.size();
 	int count = 0;
@@ -58,7 +58,7 @@ void HContainerObj::writeData(int v, QDataStream* data)
 		HBaseObj* pObj = (HBaseObj*)m_pObjList.at(i);
 		if (pObj && pObj->isDeleted()) continue;
 		*data << (quint8)pObj->getShapeType();
-		pObj->writeData(data);
+        pObj->writeData(v,data);
 	}
 }
 
@@ -66,7 +66,7 @@ void HContainerObj::writeData(int v, QDataStream* data)
 void HContainerObj::readXml(int v, QDomElement* dom)
 {
 	if (!dom) return;
-	HShapeObj::readXml(dom);
+    HShapeObj::readXml(v,dom);
 
 	QDomElement objEle = dom->namedItem("Children").toElement();
 	QDomNode n = objEle.firstChild();
@@ -76,16 +76,16 @@ void HContainerObj::readXml(int v, QDomElement* dom)
 		DrawShape objType = (DrawShape)e.attribute("ObjType").toInt();
         HBaseObj* pObj = HMakeIcon::Instance()->newObj(objType);
 		if (!pObj) continue;
-		pObj->readXml(&e);
+        pObj->readXml(v,&e);
         pObj->setParent(this);
-		addObj(pObj);
+        getObjList().append(pObj);
 	}
 }
 
 void HContainerObj::writeXml(int v, QDomElement* dom)
 {
 	if (!dom) return;
-	HShapeObj::writeXml(dom);
+    HShapeObj::writeXml(v,dom);
 	dom->setTagName(tagName());
 	QDomElement childDom = dom->ownerDocument().createElement("Children");
 	dom->appendChild(childDom);
@@ -98,7 +98,7 @@ void HContainerObj::writeXml(int v, QDomElement* dom)
 		}
 		QDomElement childEle = dom->ownerDocument().createElement(pObj->tagName());
 		childDom.appendChild(childEle);
-		pObj->writeXml(&childEle);
+        pObj->writeXml(v,&childEle);
 	}
 }
 
@@ -112,7 +112,6 @@ void HContainerObj::copyTo(HBaseObj* obj)
 {
 	HContainerObj* pComplexObj = (HContainerObj*)obj;
 	HShapeObj::copyTo(pComplexObj);
-    pComplexObj->clear();
 	for (int i = 0; i < m_pObjList.count(); i++)
 	{
 		HBaseObj* pObj = (HBaseObj*)m_pObjList[i];
@@ -121,7 +120,7 @@ void HContainerObj::copyTo(HBaseObj* obj)
 			continue;
 		}
         HBaseObj* pnewObj = HMakeIcon::Instance()->newObj(pObj->getShapeType());
-		pnewObj->copyTo(pObj);
+        pObj->copyTo(pnewObj);
 		pComplexObj->addObj(pnewObj);
     }
 }
@@ -287,7 +286,10 @@ void HContainerObj::clear()
 void HContainerObj::addObj(HBaseObj* obj)
 {
 	if (!obj) return;
-	m_pObjList.append(obj);
+    if(m_bTempObj)
+        m_pObjList.append(obj);
+    else
+        obj->resetParent(this);
     //--huangw--
     rePos();
 }

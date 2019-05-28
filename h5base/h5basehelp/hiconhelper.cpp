@@ -86,7 +86,7 @@ void HIconHelper::loadIconDoucument(QList<HIconTemplate*> *pIconTemplateList)
     char szIconPath[128];
     //getDataFilePath(DFPATH_ICON,szIconPath);
     QString iconsPath = getenv("wfsystem_dir");
-     iconsPath += "mytest\icon";//QString(szIconPath);
+     iconsPath = iconsPath + "/" + "icon";//QString(szIconPath);
 
     QDir dirIconsPath(iconsPath);
     if(!dirIconsPath.exists())

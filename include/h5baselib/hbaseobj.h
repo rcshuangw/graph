@@ -29,12 +29,12 @@ public:
     void init();
 
     //二进制读写
-    virtual void readData(QDataStream* data);
-    virtual void writeData(QDataStream* data);
+    virtual void readData(int n,QDataStream* data);
+    virtual void writeData(int n,QDataStream* data);
 
     //xml文件读写
-    virtual void readXml(QDomElement* data);
-    virtual void writeXml(QDomElement* data);
+    virtual void readXml(int n,QDomElement* data);
+    virtual void writeXml(int n,QDomElement* data);
 
     virtual QString tagName();
 
@@ -152,6 +152,7 @@ protected:
 
     //基本信息
     QString m_strObjName; //对象名称
+    quint32 m_nObjectId;
 	DrawShape m_eDrawShape;
     double m_dOriginX;//原点位置（x,y)
     double m_dOriginY;
@@ -173,8 +174,8 @@ protected:
     quint8 m_nPattern;
 
     H5GraphicsItem* m_pIconGraphicsItem;
-    //对象标识ID
-    quint32 m_nObjectId;
+    //
+    bool m_bTempObj;
 
 
 private:

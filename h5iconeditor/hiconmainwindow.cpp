@@ -394,7 +394,7 @@ void HIconMainWindow::createDockWindows()
     connect(m_pIconTreeWidget,SIGNAL(IconNew(const QString&,const QString&,const int&)),this,SLOT(New(const QString&,const QString&,const int&)));
     connect(m_pIconTreeWidget,SIGNAL(IconDel(const QString&,const int&,const QString&)),this,SLOT(Del(const QString&,const int&,const QString&)));
     connect(m_pIconTreeWidget,SIGNAL(IconOpen(const QString&,const int&,const QString&)),this,SLOT(Open(const QString&,const int&,const QString&)));
-
+    connect(m_pIconTreeWidget,SIGNAL(IconRename(const QString& ,const int& ,const QString& )),this,SLOT(Rename(const QString& ,const int& ,const QString&)));
     /*
     QDockWidget* iconPreviewDock = new QDockWidget(QStringLiteral("图元预览框"),this);
     iconPreviewDock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -504,6 +504,9 @@ void HIconMainWindow::Open(const QString &strTemplateName, int nTemplateType, co
     QString strTitle = pIconTemplate->getCatalogName() + "/" + pIconTemplate->getSymbol()->getObjName() + pIconTemplate->getUuid().toString();
     strTitle = QString("%1[*] - %2").arg(strTitle).arg(QStringLiteral("图元编辑器"));
     setWindowTitle(strTitle);
+
+    selectAct->trigger();
+    updateMenu();
 }
 
 void HIconMainWindow::Save()
@@ -522,6 +525,20 @@ void HIconMainWindow::Del(const QString &strTemplateName, int nTemplateType, con
     //pIconPreview->init();
 }
 
+void HIconMainWindow::Rename(const QString &strTemplateName, const int& nTemplateType, const QString &strUuid)
+{
+    if(!m_pIconEditorWidget || !m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorDocument())
+        return;
+    if( !m_pIconEditorMgr->iconEditorDocument()->getCurrentTemplate()|| !m_pIconEditorMgr->iconEditorDocument()->getCurrentTemplate()->getSymbol())
+        return;
+    m_pIconEditorMgr->iconEditorDocument()->getCurrentTemplate()->getSymbol()->setObjName(strTemplateName);
+    QString strTitle = m_pIconEditorMgr->iconEditorDocument()->getCurrentTemplate()->getCatalogName() + "/" + m_pIconEditorMgr->iconEditorDocument()->getCurrentTemplate()->getSymbol()->getObjName() + m_pIconEditorMgr->iconEditorDocument()->getCurrentTemplate()->getUuid().toString();
+    strTitle = QString("%1[*] - %2").arg(strTitle).arg(QStringLiteral("图元编辑器"));
+    setWindowTitle(strTitle);
+    m_pIconTreeWidget->renameIconTreeWidgetItem();
+    m_pIconEditorMgr->iconEditorDocument()->getCurrentTemplate()->setModify(true);
+}
+
 
 void HIconMainWindow::about()
 {
@@ -536,7 +553,7 @@ void HIconMainWindow::resizeEvent(QResizeEvent *event)
 void HIconMainWindow::closeEvent(QCloseEvent *event)
 {
     if (close()) {
-            Save();
+            //Save();
             event->accept();
         } else {
             event->ignore();

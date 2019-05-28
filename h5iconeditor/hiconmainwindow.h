@@ -96,6 +96,7 @@ public slots:
     //
     void Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
 
+    void Rename(const QString& strTemplateName,const int& nTemplateType, const QString &strUuid);
 
     void Save();
 

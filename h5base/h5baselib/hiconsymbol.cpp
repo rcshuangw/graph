@@ -16,12 +16,14 @@ HIconSymbol::HIconSymbol(HIconTemplate* t):m_pIconTemplate(t)
 
 HIconSymbol::~HIconSymbol()
 {
-   clear();
    HContainerObj::clear();
+   clear();
 }
 
 void HIconSymbol::clear()
 {
+    HContainerObj::clear();
+
     while(!m_pShowPatternVector.isEmpty())
     {
         HIconShowPattern* pattern = (HIconShowPattern*)m_pShowPatternVector.takeFirst();
@@ -66,7 +68,7 @@ void HIconSymbol::readXml(int v,QDomElement* dom)
         pattern->strAlias = e.attribute("Alias");
     }
     updateShowPattern();
-    setCurrentPattern(0);
+    setCurrentPattern(nCur);
     //还要刷新一下 把对应的Obj 放到showPattern下面
 }
 
@@ -172,6 +174,7 @@ void HIconSymbol::copyTo(HBaseObj *obj)
 {
     if(!obj) return;
 	HIconSymbol* pSymbol = (HIconSymbol*)obj;
+    pSymbol->clear();
     HContainerObj::copyTo(pSymbol);
 
     for(int i = 0; i < m_pShowPatternVector.size();i++)

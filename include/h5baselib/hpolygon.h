@@ -9,12 +9,12 @@ public:
     virtual ~HPolygon();
 
     //二进制读写
-    virtual void readData(QDataStream* data);
-    virtual void writeData(QDataStream* data);
+    virtual void readData(int v,QDataStream* data);
+    virtual void writeData(int v,QDataStream* data);
 
     //xml文件读写
-    virtual void readXml(QDomElement* dom);
-    virtual void writeXml(QDomElement* dom);
+    virtual void readXml(int v,QDomElement* dom);
+    virtual void writeXml(int v,QDomElement* dom);
 
     virtual QString tagName();
     //拷贝克隆

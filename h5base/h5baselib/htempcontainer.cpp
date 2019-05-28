@@ -3,6 +3,7 @@
 HTempContainer::HTempContainer()
 {
     setShapeType(TempContainer);
+    m_bTempObj = true;
 }
 HTempContainer::~HTempContainer()
 {
