@@ -45,6 +45,7 @@ void HIconMainWindow::drawTool()
     m_pIconEditorMgr->iconEditorOp()->drawTool(shape);
     if(m_pIconEditorMgr->iconEditorFrame()->view())
         m_pIconEditorMgr->iconEditorFrame()->view()->setInteractive(false);
+    m_pIconEditorMgr->iconEditorOp()->onEndDraw();
 }
 
 void HIconMainWindow::selectTool()
@@ -56,6 +57,7 @@ void HIconMainWindow::selectTool()
     QVariant var = action->data();
     SelectMode mode = static_cast<SelectMode>(var.toInt());
     m_pIconEditorMgr->iconEditorOp()->selectTool(mode);
+    m_pIconEditorMgr->iconEditorOp()->onEndDraw();
 }
 
 //撤销

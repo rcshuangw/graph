@@ -24,6 +24,7 @@ public:
 
 public:
 
+    void clear();
     //创建Item和绘制相关信息
     void drawPath(const QList<Path>& pathList);
     void endDraw();

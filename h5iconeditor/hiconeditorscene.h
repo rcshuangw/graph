@@ -12,6 +12,7 @@ public:
     HIconEditorScene(HIconEditorMgr* iconMgr);
 
 public:
+    void clear();
 	//绘制
     void drawPath(const QList<Path>& pathList);
     void endDraw();

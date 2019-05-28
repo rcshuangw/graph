@@ -15,6 +15,18 @@ HIconEditorScene::HIconEditorScene(HIconEditorMgr* iconMgr)
 
 }
 
+void HIconEditorScene::clear()
+{
+    for(int i = 0; i < m_pGraphicsPathItems.count();i++)
+    {
+        QGraphicsPathItem* item = m_pGraphicsPathItems.at(i);
+        if(item)
+        {
+            removeItem(item);
+        }
+    }
+}
+
 void HIconEditorScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
     if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconEditorFrame())
@@ -124,6 +136,7 @@ void HIconEditorScene::endDraw()
         if(item)
         {
             item->setVisible(false);
+            //removeItem(item);
         }
     }
 }

@@ -49,18 +49,6 @@ void HIconEditorWidget::clear()
 {
     if(layout())
         delete layout();
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorFrame())
-        return;
-    foreach (QGraphicsItem *item, m_pIconEditorMgr->iconEditorFrame()->view()->scene()->items())
-    {
-        H5GraphicsItem* pItem = qgraphicsitem_cast<H5GraphicsItem*>(item);
-        if(!pItem) continue;
-        if(pItem->baseObj())
-            pItem->baseObj()->setIconGraphicsItem(NULL);
-        pItem->setBaseObj(0);
-        m_pIconEditorMgr->iconEditorFrame()->view()->scene()->removeItem(item);
-        delete item;
-     }
     while(m_pTabBar->count() > 0)
     {
         m_pTabBar->blockSignals(true);

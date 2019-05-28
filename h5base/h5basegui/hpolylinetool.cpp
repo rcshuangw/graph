@@ -121,4 +121,5 @@ void HPolylineTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
         m_pToolManager->endDraw();
         m_bStart = false;
     }
+    m_pToolManager->onEndDraw();
 }

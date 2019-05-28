@@ -466,7 +466,6 @@ void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatal
         QMessageBox::information(this,QStringLiteral("提醒"),QStringLiteral("已经存在相同名字的模板文件，请修改名称"),QMessageBox::Ok);
         return;
     }
-    bool bok = m_pIconEditorMgr->iconTemplate()->isModify();
     if(m_pIconEditorMgr->iconTemplate()->isModify())
     {
         if(QMessageBox::Yes == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的模板文件吗？"),QMessageBox::Yes|QMessageBox::No))
@@ -474,7 +473,7 @@ void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatal
              Save();
         }
     }
-    m_pIconEditorMgr->selectedMgr()->clear();
+    m_pIconEditorMgr->iconEditorFrame()->clear();
     m_pIconEditorMgr->New(strTemplateName,strCatalogName,nCatalogType);
     m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
     m_pIconTreeWidget->addIconTreeWigetItem();
@@ -496,7 +495,7 @@ void HIconMainWindow::Open(const QString &strTemplateName, int nTemplateType, co
             Save();
         }
     }
-    m_pIconEditorMgr->selectedMgr()->clear();
+    m_pIconEditorMgr->iconEditorFrame()->clear();
     m_pIconEditorMgr->Open(strTemplateName,nTemplateType,strUuid);
     m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
     //pIconPreview->init();

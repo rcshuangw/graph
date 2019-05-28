@@ -33,6 +33,25 @@ HIconEditorFrame::~HIconEditorFrame()
 
 }
 
+void HIconEditorFrame::clear()
+{
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->iconEditorFrame())
+        return;
+
+    m_pView->scene()->clear();
+    foreach (QGraphicsItem *item, m_pView->scene()->items())
+    {
+        H5GraphicsItem* pItem = qgraphicsitem_cast<H5GraphicsItem*>(item);
+        if(!pItem) continue;
+        if(pItem->baseObj())
+            pItem->baseObj()->setIconGraphicsItem(NULL);
+        //pItem->setBaseObj(0);
+        m_pIconEditorMgr->iconEditorFrame()->view()->scene()->removeItem(pItem);
+        delete pItem;
+        pItem = NULL;
+     }
+}
+
 void HIconEditorFrame::drawPath(const QList<Path>& pathList)
 {
     if(!m_pView || !m_pView->scene())
@@ -78,7 +97,6 @@ void HIconEditorFrame::objCreated(HBaseObj* obj,bool isPaste)
     scene->addItem(item);
     connect(item,SIGNAL(objSelectChanged(HBaseObj*,bool)),this,SLOT(onObjSelectChanged(HBaseObj*,bool)));
     connect(item,SIGNAL(recalcSelect()),this,SLOT(onRecalcSelect()));
-
 }
 
 void HIconEditorFrame::objRemoved(HBaseObj* obj)
