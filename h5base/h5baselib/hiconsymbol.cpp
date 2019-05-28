@@ -10,7 +10,7 @@ HIconSymbol::HIconSymbol(HIconTemplate* t):m_pIconTemplate(t)
     m_nMaxPattern = 0;
     m_nCurPattern = 0;
     m_pCurPattern = NULL;
-    m_bModify = false;
+    //m_bModify = false;
     move(0,0);
 }
 
@@ -199,6 +199,7 @@ int HIconSymbol::getObjID()
 
 bool HIconSymbol::findObjID(int nObjID)
 {
+    //这里要修改，有obj存在group等组合图形里面，不在getObjList()里面--huangw
     for(int i = 0;i < getObjList().count();i++)
     {
         HBaseObj* pObj = (HBaseObj*)getObjList().at(i);

@@ -96,6 +96,8 @@ public:
     HIconTreeWidgetItem* paiItem;
     HIconTreeWidgetItem* otherItem;
 
+    HIconTreeWidgetItem* m_pCurItem;
+
 private:
     QAction* newAct;
     QAction* delAct;

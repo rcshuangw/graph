@@ -44,6 +44,7 @@ void HBaseObj::init()
     //父图符
     m_pParent = NULL;
     m_bTempObj = false;
+    m_bModify = false;
 }
 
 void HBaseObj::readData(int v,QDataStream *data)
@@ -186,6 +187,7 @@ void HBaseObj::copyTo(HBaseObj* obj)
     obj->m_nZValue = m_nZValue;
     obj->m_nPattern = m_nPattern;
     obj->m_bModify = m_bModify;
+    //obj->m_pParent = m_pParent;
 }
 
 //设置属性值 By Name

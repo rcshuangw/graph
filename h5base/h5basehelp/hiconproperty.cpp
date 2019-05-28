@@ -736,6 +736,9 @@ void HPropertyDlg::ok_clicked()
     else
     {
         HShapeObj* pShapeObj = (HShapeObj*)pCurObj;
+        pShapeObj->setOX(ui->xCoord->value());
+        pShapeObj->setOY(ui->yCoord->value());
+        pShapeObj->resize(ui->xCoord_width->value(),ui->yCoord_height->value());
         pShapeObj->setFrameSee(bFrameSee);
         pShapeObj->setFillWay(btnGroup->checkedId());
         pShapeObj->setTransparency(ui->transSlider->value());

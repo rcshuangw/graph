@@ -60,7 +60,7 @@ public:
     void New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType);
     void Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
     void Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
-    bool Save(bool savefile=false);
+    bool Save();
 private:
     DrawShape m_drawShape;
     bool m_bShowGrid;

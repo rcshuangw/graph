@@ -75,7 +75,7 @@ private:
     int m_nCurPattern;
     HIconShowPattern* m_pCurPattern;
     HIconTemplate* m_pIconTemplate;
-    bool m_bModify;
+    //bool m_bModify;
 
 };
 

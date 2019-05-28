@@ -76,7 +76,9 @@ QString HPolygon::tagName()
 void HPolygon::copyTo(HBaseObj* obj)
 {
     HPolygon* ob = (HPolygon*)obj;
+    if(!ob) return;
     ob->pylist.clear();
+    HShapeObj::copyTo(ob);
     for(int i = 0;i<pylist.count();i++)
     {
         ob->pylist.append(pylist.at(i));

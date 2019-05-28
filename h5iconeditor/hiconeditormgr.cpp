@@ -177,7 +177,6 @@ bool HIconEditorMgr::initIconEditorMgr()
         connect(m_pIconEditorSelectTool,SIGNAL(refreshSelect(QRectF)),m_pIconEditorOp,SLOT(onRefreshSelect(QRectF)));
         connect(m_pIconEditorSelectTool,SIGNAL(endDraw()),m_pIconEditorOp,SLOT(onEndDraw()));
         connect(m_pIconEditorOp,SIGNAL(selectChanged()),m_pIconEditorSelectTool,SLOT(onSelectChanged()));
-
     }
 
     return true;
@@ -185,6 +184,13 @@ bool HIconEditorMgr::initIconEditorMgr()
 
 void HIconEditorMgr::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
 {
+    if(m_pIconEditorFrame)
+    {
+       // delete m_pIconEditorFrame;
+       // m_pIconEditorFrame = NULL;
+    }
+   // m_pIconEditorFrame = new HIconEditorFrame(this);
+
     //1.创建模板
     m_pIconEditorDoc->New(strTemplateName,strCatalogName,nCatalogType);
 
@@ -199,6 +205,12 @@ void HIconEditorMgr::New(const QString& strTemplateName,const QString& strCatalo
 
 void HIconEditorMgr::Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid)
 {
+    if(m_pIconEditorFrame)
+    {
+      //  delete m_pIconEditorFrame;
+      //  m_pIconEditorFrame = NULL;
+    }
+  //  m_pIconEditorFrame = new HIconEditorFrame(this);
     m_pIconEditorDoc->Open(strTemplateName,nTemplateType,strUuid);
     m_pIconEditorOp->Open(strTemplateName,nTemplateType,strUuid);
     initIconEditorMgr();
@@ -209,9 +221,9 @@ void HIconEditorMgr::Del(const QString &strTemplateName, int nTemplateType, cons
 	m_pIconEditorDoc->Del(strTemplateName,nTemplateType,strUuid);
 }
 
-bool HIconEditorMgr::Save(bool savefile)
+bool HIconEditorMgr::Save()
 {
-    return m_pIconEditorDoc->Save(savefile);
+    return m_pIconEditorDoc->Save();
 }
 
 

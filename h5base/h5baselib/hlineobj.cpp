@@ -72,6 +72,7 @@ void HLineObj::copyTo(HBaseObj* obj)
 {
 	HLineObj* ob = (HLineObj*)obj;
 	if (!obj) return;
+    HBaseObj::copyTo(ob);
 	ob->setStartArrowType(m_nArrowStart);
 	ob->setEndArrowType(m_nArrowEnd);
 	ob->setArrowWidth(m_nArrowWidth);

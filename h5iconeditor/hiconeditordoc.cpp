@@ -47,6 +47,7 @@ void HIconEditorDoc::New(const QString& strTemplateName,const QString& strCatalo
     }
 
     HIconTemplate *pTemplate = new HIconTemplate("");
+    pTemplate->setModify(true);
     pTemplate->setCatalogName(strCatalogName);//普通开关
     pTemplate->setCatalogType(nCatalogType);//遥信类
     pTemplate->getSymbol()->setObjName(strTemplateName);
@@ -102,7 +103,7 @@ void HIconEditorDoc::Open(const QString &strTemplateName, int nTemplateType, con
     }
 }
 
-bool HIconEditorDoc::Save(bool savefile)
+bool HIconEditorDoc::Save()
 {
     if(!m_pCurIconTemplate)
     {
@@ -116,8 +117,8 @@ bool HIconEditorDoc::Save(bool savefile)
 		m_pCurIconTemplate->copyTo(pTemplate);
     }
 
-    if(savefile)
-        saveIconDoucument();
+    //if(savefile)
+    saveIconDoucument();
     //一定要保存之后再修改
     if(pTemplate)
     {

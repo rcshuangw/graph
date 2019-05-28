@@ -31,6 +31,7 @@ HIconTreeWidget::HIconTreeWidget(HIconEditorMgr* iconmgr,QWidget* parent,int typ
     QTreeWidget(parent)
 {
     setSortingEnabled(false);
+    m_pCurItem = NULL;
 }
 
 HIconTreeWidget::~HIconTreeWidget()
@@ -204,8 +205,11 @@ void HIconTreeWidget::openIcon(QTreeWidgetItem* item,int col)
     if(!m_pIconEditorMgr)
         return;
     HIconTreeWidgetItem* pCurItem = dynamic_cast<HIconTreeWidgetItem*> (item);
+    if(m_pCurItem == pCurItem)
+        return;
     if(!pCurItem) return;
     setCurrentItem(pCurItem);
+    m_pCurItem = pCurItem;
     int nTemplateType = pCurItem->type();
     if(nTemplateType > TEMPLATE_TYPE_NULL && nTemplateType < TEMPLATE_TYPE_MAX)//测点类型的种类(遥信、遥测、光字牌、两卷变、三卷变等)
     {

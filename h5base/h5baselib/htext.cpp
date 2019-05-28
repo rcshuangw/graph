@@ -126,6 +126,8 @@ QString HText::tagName()
 void HText::copyTo(HBaseObj* obj)
 {
     HText* ob = (HText*)obj;
+    if(!ob) return;
+    HRectangle::copyTo(ob);
     ob->m_strText = m_strText;
     ob->m_strTextClr = m_strTextClr;
     ob->m_nLayout = m_nLayout;

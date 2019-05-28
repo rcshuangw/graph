@@ -51,7 +51,7 @@ void HIconMainWindow::init()
     showGridAct->setChecked(m_pIconEditorMgr->getShowGrid());
     showCLineAct->setChecked(m_pIconEditorMgr->getShowCenterLine());
     //改用函数来实现
-    m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(0.6);
+    //m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(0.6);
     //QString strScale = QString("%1%").arg(pIconMgr->getIconFrame()->scale()*100);
     //scaleComboBox->setCurrentText(strScale);
 
@@ -416,7 +416,7 @@ void HIconMainWindow::open()
 
 void HIconMainWindow::save()
 {
-    m_pIconEditorMgr->Save(true);
+    //m_pIconEditorMgr->Save(true);
 }
 
 void HIconMainWindow::saveAs()
@@ -427,6 +427,8 @@ void HIconMainWindow::saveAs()
 //关闭
 bool HIconMainWindow::close()
 {
+    //if(!m_pIconEditorMgr->iconTemplate()->isModify())
+    //    return true;
     QMessageBox mb(QStringLiteral("警告"),QStringLiteral("退出前需要保存所有图符模板吗？"),
             QMessageBox::Information,QMessageBox::Yes | QMessageBox::Default,
             QMessageBox::No,QMessageBox::Cancel | QMessageBox::Escape );
@@ -464,16 +466,15 @@ void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatal
         QMessageBox::information(this,QStringLiteral("提醒"),QStringLiteral("已经存在相同名字的模板文件，请修改名称"),QMessageBox::Ok);
         return;
     }
-
+    bool bok = m_pIconEditorMgr->iconTemplate()->isModify();
     if(m_pIconEditorMgr->iconTemplate()->isModify())
     {
-        if(QMessageBox::Ok == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的模板文件吗？"),QMessageBox::Yes|QMessageBox::No))
+        if(QMessageBox::Yes == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的模板文件吗？"),QMessageBox::Yes|QMessageBox::No))
         {
              Save();
         }
     }
-
-
+    m_pIconEditorMgr->selectedMgr()->clear();
     m_pIconEditorMgr->New(strTemplateName,strCatalogName,nCatalogType);
     m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
     m_pIconTreeWidget->addIconTreeWigetItem();
@@ -495,7 +496,7 @@ void HIconMainWindow::Open(const QString &strTemplateName, int nTemplateType, co
             Save();
         }
     }
-
+    m_pIconEditorMgr->selectedMgr()->clear();
     m_pIconEditorMgr->Open(strTemplateName,nTemplateType,strUuid);
     m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
     //pIconPreview->init();
@@ -646,6 +647,7 @@ void HIconMainWindow::updateToolMenu()
     bool b = m_pIconEditorMgr&&m_pIconEditorMgr->selectedMgr()&&m_pIconEditorMgr->selectedMgr()->selectObj();
     int nSelectObjCount = m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList().size();
     groupObjAct->setEnabled(b&&nSelectObjCount>1);
+
     if(b&&nSelectObjCount==1&&
         m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList().at(0)->getShapeType()==Group){
             ungroupObjAct->setEnabled(true);

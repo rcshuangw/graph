@@ -75,7 +75,9 @@ QString HPolyline::tagName()
 void HPolyline::copyTo(HBaseObj* obj)
 {
     HPolyline* ob = (HPolyline*)obj;
+    if(!ob) return;
     ob->pylist.clear();
+    HLineObj::copyTo(ob);
     for(int i = 0;i<pylist.count();i++)
     {
         ob->pylist.append(pylist.at(i));

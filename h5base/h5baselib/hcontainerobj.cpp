@@ -33,7 +33,7 @@ void HContainerObj::readData(int v,QDataStream* data)
 		if (!pObj) continue;
         pObj->readData(v,data);
         pObj->setParent(this);
-		addObj(pObj);
+        getObjList().append(pObj);
 	}
 }
 
@@ -78,7 +78,7 @@ void HContainerObj::readXml(int v, QDomElement* dom)
 		if (!pObj) continue;
         pObj->readXml(v,&e);
         pObj->setParent(this);
-        getObjList().append(pObj);
+        getObjList().append(pObj);//不能调用addObj(pObj)如果这样会再次resetParent会造成错误
 	}
 }
 
@@ -121,7 +121,8 @@ void HContainerObj::copyTo(HBaseObj* obj)
 		}
         HBaseObj* pnewObj = HMakeIcon::Instance()->newObj(pObj->getShapeType());
         pObj->copyTo(pnewObj);
-		pComplexObj->addObj(pnewObj);
+        pnewObj->setParent(pComplexObj);
+        pComplexObj->getObjList().append(pnewObj);
     }
 }
 
@@ -278,7 +279,12 @@ void HContainerObj::clear()
 {
     while (!m_pObjList.empty())
 	{
-        delete (HBaseObj*)m_pObjList.takeFirst();
+        HBaseObj* pObj = (HBaseObj*)m_pObjList.takeFirst();
+        if(pObj)
+        {
+            delete pObj;
+            pObj = NULL;
+        }
 	}
 	m_pObjList.clear();
 }
