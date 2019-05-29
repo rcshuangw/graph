@@ -179,41 +179,6 @@ void HContainerObj::expand(double dx1, double dx2, double dy1, double dy2, qint8
 
 }
 
-//将列表的所有图符 由原始绘制的尺寸按照比例缩小同时改变其原点位置
-/*
-bool HContainerObj::transform(double dx, double dy)
-{
-	int count = m_pObjList.size();
-	for (int i = 0; i < count; i++)
-	{
-		HBaseObj* pObj = m_pObjList.at(i);
-		pObj->resize(dx, dy, true);
-        //pObj->move(dx, dy, true);
-	}
-	return true;
-}
-
-void HContainerObj::move(double dx, double dy, bool scale)
-{
-	for (int i = 0; i < m_pObjList.size(); i++)
-	{
-		HBaseObj* pObj = (HBaseObj*)m_pObjList.at(i);
-		if (!pObj) continue;
-		pObj->move(dx, dy, scale);
-	}
-}*/
-
-/*
-void HContainerObj::moveBy(double dx, double dy, bool scale)
-{
-	for (int i = 0; i < m_pObjList.size(); i++)
-	{
-		HBaseObj* pObj = (HBaseObj*)m_pObjList.at(i);
-		if (!pObj) continue;
-		pObj->moveBy(dx, dy, scale);
-	}
-}*/
-
 QRectF HContainerObj::objsRect(qint8 flag)
 {
     QRectF rectF;
@@ -273,6 +238,33 @@ void HContainerObj::rePos()
 {
 
 }
+
+void HContainerObj::setModify(bool modify)
+{
+    m_bModify = modify;
+    int sz = m_pObjList.size();
+    for (int i = 0; i < sz; i++)
+    {
+        HBaseObj* pObj = m_pObjList.at(i);
+        if (!pObj || pObj->isDeleted())
+            continue;
+        pObj->setModify(modify);
+    }
+}
+
+bool HContainerObj::isModify()
+{
+    int sz = m_pObjList.size();
+    for (int i = 0; i < sz; i++)
+    {
+        HBaseObj* pObj = m_pObjList.at(i);
+        if (!pObj || pObj->isDeleted())
+            continue;
+        m_bModify |= pObj->isModify();
+    }
+    return m_bModify;
+}
+
 
 //针对objList的操作 参考QVector类的函数
 void HContainerObj::clear()

@@ -6,6 +6,7 @@
 */
 HIconObj::HIconObj()
 {
+    setShapeType(Icon);
     //去掉本身所有的边框颜色设置，这些都是不需要的
     pText = NULL;
     m_pDynamicObj = new HDynamicObj;
@@ -18,6 +19,7 @@ HIconObj::HIconObj()
 HIconObj::HIconObj(HIconTemplate* it)
     :m_pIconTemplate(it)
 {
+    setShapeType(Icon);
     pText = NULL;
     m_pDynamicObj = new HDynamicObj;
     m_pIconSymbol = new HIconSymbol(it);
@@ -222,7 +224,7 @@ void HIconObj::writeXml(int v, QDomElement* dom)
 
 QString HIconObj::tagName()
 {
-    return "IconObj";
+    return "Icon";
 }
 
 //拷贝克隆
@@ -290,7 +292,7 @@ DrawShape HIconObj::getShapeType()
 
 void HIconObj::resize(double w, double h, bool bscale)
 {
-	iconSymbol()->resize(w, h);
+    iconSymbol()->resize(w, h, bscale);
 }
 
 void HIconObj::move(double dx, double dy, bool bscale)
@@ -303,7 +305,7 @@ void HIconObj::moveBy(double dx,double dy, bool bscale)
 	HBaseObj::moveBy(dx, dy,bscale);
 }
 
-QRectF HIconObj::boundingRect()
+QRectF HIconObj::boundingRect(qint8 flag )
 {
 	return HBaseObj::boundingRect();
 }
@@ -313,7 +315,7 @@ bool HIconObj::contains(const QPointF &point)
     return shape().contains(point);
 }
 
-QPainterPath HIconObj::shape()
+QPainterPath HIconObj::shape(qint8 flag)
 {
     QPainterPath path;
     QPolygonF polygon = getPointList();

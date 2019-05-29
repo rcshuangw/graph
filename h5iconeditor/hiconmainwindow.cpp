@@ -416,7 +416,7 @@ void HIconMainWindow::open()
 
 void HIconMainWindow::save()
 {
-    //m_pIconEditorMgr->Save(true);
+    m_pIconEditorMgr->Save();
 }
 
 void HIconMainWindow::saveAs()
@@ -427,8 +427,8 @@ void HIconMainWindow::saveAs()
 //关闭
 bool HIconMainWindow::close()
 {
-    //if(!m_pIconEditorMgr->iconTemplate()->isModify())
-    //    return true;
+    if(!m_pIconEditorMgr->iconTemplate()->isModify())
+        return true;
     QMessageBox mb(QStringLiteral("警告"),QStringLiteral("退出前需要保存所有图符模板吗？"),
             QMessageBox::Information,QMessageBox::Yes | QMessageBox::Default,
             QMessageBox::No,QMessageBox::Cancel | QMessageBox::Escape );
@@ -454,7 +454,6 @@ void HIconMainWindow::quit()
 
 }
 
-
 void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatalogName,const int& nCatalogType)
 {
     if(!m_pIconEditorMgr && !m_pIconEditorMgr->iconTemplate())
@@ -473,6 +472,7 @@ void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatal
              Save();
         }
     }
+    m_pIconEditorMgr->selectedMgr()->clear();
     m_pIconEditorMgr->iconEditorFrame()->clear();
     m_pIconEditorMgr->New(strTemplateName,strCatalogName,nCatalogType);
     m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
@@ -495,10 +495,10 @@ void HIconMainWindow::Open(const QString &strTemplateName, int nTemplateType, co
             Save();
         }
     }
+    m_pIconEditorMgr->selectedMgr()->clear();
     m_pIconEditorMgr->iconEditorFrame()->clear();
     m_pIconEditorMgr->Open(strTemplateName,nTemplateType,strUuid);
     m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
-    //pIconPreview->init();
 
     HIconTemplate *pIconTemplate = m_pIconEditorMgr->iconTemplate();
     QString strTitle = pIconTemplate->getCatalogName() + "/" + pIconTemplate->getSymbol()->getObjName() + pIconTemplate->getUuid().toString();
@@ -519,6 +519,8 @@ void HIconMainWindow::Del(const QString &strTemplateName, int nTemplateType, con
 {
     if(!m_pIconEditorWidget || !m_pIconEditorMgr)
         return;
+    m_pIconEditorMgr->selectedMgr()->clear();
+    m_pIconEditorMgr->iconEditorFrame()->clear();
     m_pIconTreeWidget->delIconTreeWidgetItem();
     m_pIconEditorMgr->Del(strTemplateName,nTemplateType,strUuid);
     m_pIconEditorWidget->setIconEditorMgr(0);

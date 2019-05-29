@@ -17,6 +17,7 @@ HIconEditorScene::HIconEditorScene(HIconEditorMgr* iconMgr)
 
 void HIconEditorScene::clear()
 {
+    //在新建或者打开的时候，不删除会有问题
     for(int i = 0; i < m_pGraphicsPathItems.count();i++)
     {
         QGraphicsPathItem* item = m_pGraphicsPathItems.at(i);
@@ -136,7 +137,6 @@ void HIconEditorScene::endDraw()
         if(item)
         {
             item->setVisible(false);
-            //removeItem(item);
         }
     }
 }

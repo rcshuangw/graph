@@ -23,6 +23,7 @@ public:
 
     void fitHeight();
 
+public slots:
     void cut();
 
     void copy();
@@ -117,12 +118,12 @@ public:
     void zoomOut();
 
     //自由缩放
-    void zoom();
+    //void zoom();
 
     //原始大小
-    void zoomSame();
+    //void zoomSame();
 
-    void setupMatrix();
+   // void setupMatrix();
 
     int toolType() {return m_nToolType;}
 

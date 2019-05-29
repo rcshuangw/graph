@@ -86,7 +86,8 @@ void HPropertyDlg::initTab()
     if(drawShape == Line)
     {
         ui->propertyTab->removeTab(1);//文字
-        ui->propertyTab->removeTab(3);//形状
+        //虽然形状在tab3,但removeTab1之后，tab3就变成tab2
+        ui->propertyTab->removeTab(2);//形状
         ui->xCoord_width->setEnabled(false);
         ui->yCoord_height->setEnabled(false);
         ui->groupBox_8->hide();
@@ -357,7 +358,7 @@ void HPropertyDlg::initLineTab()
     ui->lineStartArrow->addItem(createArrowIcon(0,false),QStringLiteral("无箭头"),0);
     ui->lineStartArrow->addItem(createArrowIcon(1,false),QStringLiteral("箭头"),1);
     ui->lineStartArrow->addItem(createArrowIcon(2,false),QStringLiteral("空心三角"),2);
-    ui->lineStartArrow->addItem(createArrowIcon(3,false),QStringLiteral("空心三角"),3);
+    ui->lineStartArrow->addItem(createArrowIcon(3,false),QStringLiteral("实心三角"),3);
     ui->lineStartArrow->setCurrentIndex(0);
 
     //尾部箭头部分
@@ -366,7 +367,7 @@ void HPropertyDlg::initLineTab()
     ui->lineTailArrow->addItem(createArrowIcon(0,true),QStringLiteral("无箭头"),0);
     ui->lineTailArrow->addItem(createArrowIcon(1,true),QStringLiteral("箭头"),1);
     ui->lineTailArrow->addItem(createArrowIcon(2,true),QStringLiteral("空心三角"),2);
-    ui->lineTailArrow->addItem(createArrowIcon(3,true),QStringLiteral("空心三角"),3);
+    ui->lineTailArrow->addItem(createArrowIcon(3,true),QStringLiteral("实心三角"),3);
     ui->lineTailArrow->setCurrentIndex(0);
 
     //角度部分
@@ -715,6 +716,8 @@ void HPropertyDlg::ok_clicked()
     if(drawShape == Line)
     {
         HLine* pLineObj = (HLine*)pCurObj;
+        pLineObj->setOX(ui->xCoord->value());
+        pLineObj->setOY(ui->yCoord->value());
         pLineObj->setStartArrowType(ui->lineStartArrow->currentData().toUInt());
         pLineObj->setEndArrowType(ui->lineTailArrow->currentData().toUInt());
         pLineObj->setArrowWidth(ui->arrowWidth->value());

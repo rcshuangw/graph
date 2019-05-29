@@ -46,20 +46,20 @@ void HLineObj::readXml(int v,QDomElement* dom)
 {
 	if (!dom) return;
     HBaseObj::readXml(v,dom);
-	m_nArrowStart = dom->attribute("ArrowStart").toUInt();
-	m_nArrowEnd = dom->attribute("ArrowEnd").toUInt();
-	m_nArrowWidth = dom->attribute("ArrowWidth").toDouble();
-	m_nArrowHeight = dom->attribute("ArrowHeight").toDouble();
+    m_nArrowStart = dom->attribute("ArrowStart").toUInt();
+    m_nArrowEnd = dom->attribute("ArrowEnd").toUInt();
+    m_nArrowWidth = dom->attribute("ArrowWidth").toDouble();
+    m_nArrowHeight = dom->attribute("ArrowHeight").toDouble();
 }
 
 void HLineObj::writeXml(int v,QDomElement* dom)
 {
 	if (!dom)return;
     HBaseObj::writeXml(v,dom);
-	dom->setAttribute("arrowStart", m_nArrowStart);
-	dom->setAttribute("arrowEnd", m_nArrowEnd);
-	dom->setAttribute("arrowWidth", m_nArrowWidth);
-	dom->setAttribute("arrowHeight", m_nArrowHeight);
+    dom->setAttribute("ArrowStart", m_nArrowStart);
+    dom->setAttribute("ArrowEnd", m_nArrowEnd);
+    dom->setAttribute("ArrowWidth", m_nArrowWidth);
+    dom->setAttribute("ArrowHeight", m_nArrowHeight);
 }
 
 QString HLineObj::tagName()
@@ -143,10 +143,9 @@ QPainterPath HLineObj::getArrowPath(HPointFList& points, bool head)
 		{
 			arrowP1 = ptS + QPointF(sin(angle + PI / 3)*arrowLength, cos(angle + PI / 3)*arrowLength);
 			arrowP2 = ptS + QPointF(sin(angle + PI - PI / 3)*arrowLength, cos(angle + PI - PI / 3)*arrowLength);
-			path.lineTo(arrowP1);
-			path.moveTo(ptS);
-			path.lineTo(arrowP2);
-			path.moveTo(ptS);
+            QPolygonF arrowHead;
+            arrowHead<<arrowP1<<ptS<<arrowP2;
+            path.addPolygon(arrowHead);
 		}
 		else if (arrowS == 2)//空心三角箭头
 		{
@@ -178,19 +177,18 @@ QPainterPath HLineObj::getArrowPath(HPointFList& points, bool head)
 		{
 			arrowP1 = ptE + QPointF(sin(angle - PI / 3)*arrowLength, cos(angle - PI / 3)*arrowLength);
 			arrowP2 = ptE + QPointF(sin(angle - PI + PI / 3)*arrowLength, cos(angle - PI + PI / 3)*arrowLength);
-			path.lineTo(arrowP1);
-			path.moveTo(ptE);
-			path.lineTo(arrowP2);
-			path.moveTo(ptE);
+            QPolygonF arrowTail;
+            arrowTail<<arrowP1<<ptE<<arrowP2;
+            path.addPolygon(arrowTail);
 		}
 		else if (arrowE == 2)
 		{
 			arrowP1 = ptE + QPointF(sin(angle - PI / 3)*arrowLength, cos(angle - PI / 3)*arrowLength);
 			arrowP2 = ptE + QPointF(sin(angle - PI + PI / 3)*arrowLength, cos(angle - PI + PI / 3)*arrowLength);
-			QPolygonF arrowHead;
-			arrowHead << arrowP1 << ptE << arrowP2;
+            QPolygonF arrowTail;
+            arrowTail << arrowP1 << ptE << arrowP2;
 			
-			path.addPolygon(arrowHead);
+            path.addPolygon(arrowTail);
 			path.closeSubpath();
 
 			double fh = sin(PI / 3)*arrowLength / line.length();
@@ -201,9 +199,9 @@ QPainterPath HLineObj::getArrowPath(HPointFList& points, bool head)
 		{
 			arrowP1 = ptE + QPointF(sin(angle - PI / 3)*arrowLength, cos(angle - PI / 3)*arrowLength);
 			arrowP2 = ptE + QPointF(sin(angle - PI + PI / 3)*arrowLength, cos(angle - PI + PI / 3)*arrowLength);
-			QPolygonF arrowHead;
-			arrowHead << ptE << arrowP1 << arrowP2;
-			path.addPolygon(arrowHead);
+            QPolygonF arrowTail;
+            arrowTail << ptE << arrowP1 << arrowP2;
+            path.addPolygon(arrowTail);
 			path.closeSubpath();
 		}
 	}

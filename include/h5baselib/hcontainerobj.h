@@ -21,20 +21,17 @@ public:
 	virtual void writeXml(int v,QDomElement* data);
 
 	virtual QString tagName();
-
-	//拷贝克隆
 	virtual void copyTo(HBaseObj* obj);
 
 	QVector<HBaseObj*>& getObjList();
 
+    virtual void setModify(bool modify);
+    virtual bool isModify();
+
 public:
     bool objsTransform(double dx,double dy);
-	///改变大小
 	void resize(double w, double h, bool scale = false);
 	void expand(double dx1, double dx2, double dy1, double dy2, qint8 flag = 0);
-
-    //void move(double dx, double dy, bool bscale = false);
-    //void moveBy(double dx, double dy, bool bscale = false);
 public:
     virtual QRectF objsRect(qint8 flag);
     virtual void rePos();

@@ -16,7 +16,6 @@ void HIconMainWindow::showGrid()
         m_pIconEditorMgr->setShowGrid(bcheck);
         if(m_pIconEditorMgr->iconEditorFrame()->view())
             m_pIconEditorMgr->iconEditorFrame()->view()->resetCachedContent();
-
     }
 }
 

@@ -153,6 +153,7 @@ void HIconEditorFrame::cursorChanged(const QCursor& cursor)
 
 bool HIconEditorFrame::eventFilter(QObject* obj,QEvent* event)
 {
+    static bool bRight = false;
     HFrame::eventFilter(obj,event);
     if(obj == m_pView->viewport())
     {
@@ -181,15 +182,45 @@ bool HIconEditorFrame::eventFilter(QObject* obj,QEvent* event)
                     if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_DRAW_TOOL)
                     {
                         m_pIconEditorMgr->iconEditorOp()->switchSelectTool();
+                        bRight = true;
                         return true;
                     }
                 }
             }
-
+            return false;
+        }
+        case QEvent::ContextMenu:
+        {
+            if(bRight)
+            {
+                bRight = false;
+                return true;
+            }
+            HEvent hevent(event,QVariant());
+            m_pIconEditorMgr->iconEditorSelectTool()->onEvent(hevent);
             return false;
         }
         }
     }
+    else if(obj==m_pView){
+            switch(event->type()){
+            case QEvent::KeyPress:
+            case QEvent::KeyRelease:
+                {
+                    if(!m_pIconEditorMgr)
+                    {
+                        return false;
+                    }
+                    HEvent hevent(event,QVariant());
+                     m_pIconEditorMgr->iconEditorSelectTool()->onEvent(hevent);
+                    return false;
+                }
+            default:
+                {
+                    return false;
+                }
+            }
+        }
     return false;
 }
 

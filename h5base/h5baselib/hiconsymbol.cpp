@@ -378,9 +378,25 @@ void HIconSymbol::paint(QPainter* painter)
 void HIconSymbol::setModify(bool b)
 {
     m_bModify = b;
+    int sz = m_pObjList.size();
+    for (int i = 0; i < sz; i++)
+    {
+        HBaseObj* pObj = m_pObjList.at(i);
+        if (!pObj || pObj->isDeleted())
+            continue;
+        pObj->setModify(b);
+    }
 }
 
 bool HIconSymbol::isModify()
 {
+    int sz = m_pObjList.size();
+    for (int i = 0; i < sz; i++)
+    {
+        HBaseObj* pObj = m_pObjList.at(i);
+        if (!pObj || pObj->isDeleted())
+            continue;
+        m_bModify |= pObj->isModify();
+    }
     return m_bModify;
 }

@@ -44,5 +44,6 @@
         <file>images/about.png</file>
         <file>images/move_backward.png</file>
         <file>images/move_forward.png</file>
+        <file>images/attribute.png</file>
     </qresource>
 </RCC>

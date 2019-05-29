@@ -19,7 +19,7 @@ public:
 
 public:
     //获取某个图符的pixmap  模板类型，模板uuid,图符大小，当前curpattern
-    QPixmap iconPixmap(const QString& strType,const QString& uuid,const QSizeF &size = QSizeF(0,0),int nCurPattern = 0);
+    QPixmap iconPixmap(const QString& strType,const QString& uuid,const QSizeF &pt = QSizeF(0,0),int nCurPattern = 0);
 
     //加载文件信息
     void loadIconDoucument(QList<HIconTemplate*> *pIconTemplateList);

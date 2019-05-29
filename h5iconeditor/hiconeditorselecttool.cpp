@@ -1,5 +1,6 @@
 ﻿#include "hiconeditorselecttool.h"
 #include <QWidget>
+#include <QMenu>
 #include <QMouseEvent>
 #include "hiconeditormgr.h"
 #include "hiconeditorframe.h"
@@ -346,7 +347,24 @@ void HIconEditorSelectTool::onMouseDoubleClickEvent(QMouseEvent* event, QVariant
 
 void HIconEditorSelectTool::onContextMenuEvent(QContextMenuEvent *event, QVariant &data)
 {
-
+    if(!event || !m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer || tempContainer->getObjList().size() == 0)
+        return;
+    QMenu menu;
+    if(tempContainer->getObjList().size()>=1)
+    {
+        menu.addAction(QIcon(":/images/cut.png"),QStringLiteral("剪切"),m_pIconEditorMgr->iconEditorOp(),SLOT(cut()));
+        menu.addAction(QIcon(":/images/copy.png"),QStringLiteral("复制"),m_pIconEditorMgr->iconEditorOp(),SLOT(copy()));
+        menu.addAction(QIcon(":/images/del.png"),QStringLiteral("删除"),m_pIconEditorMgr->iconEditorOp(),SLOT(del()));
+        menu.addAction(QIcon(":/images/attribute.png"),QStringLiteral("属性"),m_pIconEditorMgr->iconEditorOp(),SLOT(setObjAttribute()));
+    }
+    if(m_pIconEditorMgr->iconEditorOp()->isClipboardAvailable())
+    {
+        menu.addAction(QIcon(":/images/paste.png"),QStringLiteral("粘贴"),m_pIconEditorMgr->iconEditorOp(),SLOT(paste()));
+    }
+    menu.exec(event->globalPos());
 }
 
 void HIconEditorSelectTool::onKeyPressEvent(QKeyEvent *event, QVariant& data)
@@ -394,6 +412,31 @@ void HIconEditorSelectTool::onKeyPressEvent(QKeyEvent *event, QVariant& data)
     if(ndx == 0 && ndy == 0)
         return;
     QList<HBaseObj*> objs;
+    if(tempContainer->getObjList().size() == 1)
+    {
+        HBaseObj* pObj = tempContainer->getObjList().at(0);
+        if(pObj)
+        {
+            pObj->moveBy(ndx,ndy);
+            pObj->iconGraphicsItem()->setPos(pObj->pos(1));
+            objs.append(pObj);
+        }
+    }
+    else
+    {
+        tempContainer->moveBy(ndx,ndy);
+        for(int i = 0; i < tempContainer->getObjList().size();i++)
+        {
+            HBaseObj* pObj = tempContainer->getObjList().at(i);
+            if(pObj)
+            {
+                pObj->moveBy(ndx,ndy);
+                pObj->iconGraphicsItem()->setPos(pObj->pos(1));
+                objs.append(pObj);
+            }
+        }
+
+    }
     HMoveIconCommand* moveCommand = new HMoveIconCommand(m_pIconEditorMgr,objs,ndx,ndy);
     m_pIconEditorMgr->iconEditorUndoStack()->push(moveCommand);
 }

@@ -31,14 +31,16 @@ HIconHelper* HIconHelper::Instance()
     return m_pInstance;
 }
 
-QPixmap HIconHelper::iconPixmap(const QString& strType,const QString& uuid,const QSizeF &size,int nCurPattern)
+QPixmap HIconHelper::iconPixmap(const QString& strType,const QString& uuid,const QSizeF& ratioSizeF,int nCurPattern)
 {
     HIconTemplate* pIconTemplate = new HIconTemplate(QString());
     Q_ASSERT( pIconTemplate );
-/*
+
     char szIconPath[128];
-    getDataFilePath(DFPATH_ICON,szIconPath);
-    QString iconsPath = QString(szIconPath);
+    //getDataFilePath(DFPATH_ICON,szIconPath);
+    //QString iconsPath = QString(szIconPath);
+    QString iconsPath = getenv("wfsystem_dir");
+     iconsPath = iconsPath + "/" + "icon";//QString(szIconPath);
     QString path = iconsPath +"/" + strType + "/" + uuid + ".xic";
     if ( uuid.isEmpty() && strType.contains(".xic") )
     {
@@ -46,26 +48,27 @@ QPixmap HIconHelper::iconPixmap(const QString& strType,const QString& uuid,const
     }
     pIconTemplate->readXml(path);
 
-    QSizeF sizeF = size;
-    if(sizeF.width() == 0 || sizeF.height() == 0)
-        sizeF = pIconTemplate->getDefaultSize();
-    QImage image(sizeF.width()+1.00,sizeF.height(),QImage::Format_ARGB32);
+    QSizeF defalultSize = pIconTemplate->getDefaultSize();
+    QImage image(defalultSize.width(),defalultSize.height(),QImage::Format_ARGB32);
     image.fill(Qt::transparent);
-    QPainter painter(&image);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setRenderHint(QPainter::TextAntialiasing);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform);
-    HIconObj* pObj = new HIconObj(pIconTemplate);
-    QSizeF pt = pIconTemplate->getDefaultSize();
-    if(!pObj->getIconSymbol() || pObj->getIconSymbol()->getMaxPattern() <= nCurPattern)
-        return QPixmap();
 
-    pObj->getIconSymbol()->setCurrentPattern(nCurPattern);
-    double w1 = sizeF.width()/(pt.width()*20);
-    double h1 = sizeF.height()/(pt.height()*20);
-    pObj->resize(w1,h1);
-    //应该还有一个move
-    painter.translate(sizeF.width()/2.0,sizeF.height()/2.0);
+    //painter设置
+    QPainter painter(&image);
+    painter.setRenderHint(QPainter::Antialiasing,true);
+
+    //创建iconObj
+    HIconObj* pObj = new HIconObj(pIconTemplate);
+    if(!pObj->iconSymbol() || pObj->iconSymbol()->getMaxPattern() <= nCurPattern)
+        return QPixmap();
+    pObj->iconSymbol()->setCurrentPattern(nCurPattern);
+
+    //设置图符绘制区域
+    //QRectF boundingRect = QRectF(QPointF(0,0),QSizeF(defalultSize));
+    //boundingRect.moveCenter(QPointF(widgetPoint.x(),widgetPoint.y()));
+
+    //设置图符大小和绘制信息
+    pObj->resize(defalultSize.width()/ratioSizeF.width(),defalultSize.height()/ratioSizeF.height());
+    painter.translate(defalultSize.width()/2,defalultSize.height()/2);
     pObj->paint(&painter);
     delete pObj;
     if(!pIconTemplate)
@@ -73,8 +76,8 @@ QPixmap HIconHelper::iconPixmap(const QString& strType,const QString& uuid,const
         delete pIconTemplate;
         pIconTemplate = NULL;
     }
-*/
-    return QPixmap();//.fromImage(image);
+
+    return QPixmap().fromImage(image);
 }
 
 

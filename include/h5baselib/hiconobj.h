@@ -46,9 +46,9 @@ public:
 public:
 	//HGrphicsItem的虚函数
 	virtual void paint(QPainter* painter);
-	virtual QRectF boundingRect();
+    virtual QRectF boundingRect(qint8 flag = 0);
 	virtual bool contains(const QPointF &point);
-	virtual QPainterPath shape();
+    virtual QPainterPath shape(qint8 flag = 0);
 
 public:
 	//属性

@@ -38,7 +38,7 @@
    <item>
     <widget class="QTabWidget" name="propertyTab">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="baseTab">
       <attribute name="title">
@@ -609,7 +609,7 @@
               <item>
                <widget class="QLabel" name="label_21">
                 <property name="text">
-                 <string>头端样式：</string>
+                 <string>尾端样式：</string>
                 </property>
                </widget>
               </item>
