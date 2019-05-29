@@ -7,7 +7,7 @@
 #include "h5graphicsitem.h"
 #include "hiconeditorframe.h"
 #include "hiconeditorop.h"
-//#include "hiconlineitem.h"
+#include "hselectedmgr.h"
 HIconCommand::HIconCommand(HIconEditorMgr* iconMgr):m_pIconEditorMgr(iconMgr)
 {
 
@@ -35,7 +35,7 @@ void HIconCommand::undo()
 }
 
 
-////////////////////////////////////////新建///////////////////////////////////////////
+////////////////////////////////////////新建 ok///////////////////////////////////////////
 HNewIconCommand::HNewIconCommand(HIconEditorMgr* iconMgr,HBaseObj* obj):HIconCommand(iconMgr),pObj(obj)
 {
     setText("create object");
@@ -53,6 +53,11 @@ int HNewIconCommand::id() const
 
 void HNewIconCommand::redo()
 {
+    if(bFirstTime)
+    {
+        bFirstTime = false;
+        return;
+    }
     if(!m_pIconEditorMgr || !pObj || !m_pIconEditorMgr->iconEditorFrame())
         return;
     //删除新建的
@@ -77,7 +82,7 @@ void HNewIconCommand::undo()
     m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(pObj->boundingRect(1));
 }
 
-////////////////////////////////////////删除///////////////////////////////////////////
+////////////////////////////////////////删除 ok///////////////////////////////////////////
 HDelIconCommand::HDelIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> objs):HIconCommand(iconMgr),pObjList(objs)
 {
     setText("create object");
@@ -110,10 +115,10 @@ void HDelIconCommand::redo()
         H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         obj->setDeleted(true);
-        bounding = bounding.united(item->boundingRect());
+        bounding = bounding.united(obj->boundingRect(1));
         item->setVisible(false);
     }
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(bounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(bounding);
 }
 
 void HDelIconCommand::undo()
@@ -128,14 +133,14 @@ void HDelIconCommand::undo()
         H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         obj->setDeleted(false);
-        bounding = bounding.united(item->boundingRect());
+        bounding = bounding.united(obj->boundingRect(1));
         item->setVisible(true);
     }
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(bounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(bounding);
 }
 
 
-////////////////////////////////////////粘贴///////////////////////////////////////////
+////////////////////////////////////////粘贴 ok///////////////////////////////////////////
 HPasteIconCommand::HPasteIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> objs):HIconCommand(iconMgr),pObjList(objs)
 {
     setText("create object");
@@ -158,38 +163,39 @@ void HPasteIconCommand::redo()
         bFirstTime = false;
         return;
     }
-    if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->iconEditorFrame())
+    if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->selectedMgr())
         return;
     QRectF bounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
         obj->setDeleted(false);
-        bounding = bounding.united(item->boundingRect());
-        item->setVisible(true);
+        bounding = bounding.united(obj->boundingRect(1));
+        obj->iconGraphicsItem()->setVisible(true);
+        obj->iconGraphicsItem()->setSelected(true);
     }
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(bounding);
+    m_pIconEditorMgr->iconEditorFrame()->view()->ensureVisible(bounding);
+    m_pIconEditorMgr->selectedMgr()->recalcSelect();
 }
 
 void HPasteIconCommand::undo()
 {
-    if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->iconEditorFrame())
+    if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->selectedMgr())
         return;
     QRectF bounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
         obj->setDeleted(true);
-        bounding = bounding.united(item->boundingRect());
-        item->setVisible(false);
+        bounding = bounding.united(obj->boundingRect(1));
+        obj->iconGraphicsItem()->setVisible(false);
     }
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(bounding);
+
+    m_pIconEditorMgr->iconEditorFrame()->view()->ensureVisible(bounding);
+    m_pIconEditorMgr->selectedMgr()->clear();
+    m_pIconEditorMgr->selectedMgr()->recalcSelect();
 }
 
 
@@ -208,6 +214,11 @@ HMoveIconCommand::HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObj
 HMoveIconCommand::HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObjs,QList<double> dxs,QList<double> dys)
     :HIconCommand(iconMgr),pObjList(pObjs),dxList(dxs),dyList(dys)
 {
+    for(int i = 0; i< pObjList.count();i++)
+    {
+        dxList.append(dxs);
+        dyList.append(dys);
+    }
     setText("Move Object(s)");
 }
 

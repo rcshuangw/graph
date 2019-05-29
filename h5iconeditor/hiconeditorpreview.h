@@ -12,7 +12,7 @@ class HIconEditorPreview : public QDialog
 
 public:
     explicit HIconEditorPreview(HIconEditorMgr* iconMgr,QWidget *parent = 0);
-    ~HIconPreview();
+    ~HIconEditorPreview();
 public:
     void init();
 protected:
