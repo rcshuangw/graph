@@ -54,19 +54,8 @@ FORMS += \
 RESOURCES += images.qrc \
              pixmaps.qrc
 
-unix{
+LIBS += -L ../lib/ -lh5basehelp -lh5basegui -lh5baselib
 
-    LIBS += -L ../lib/ -lH5IconGui -lH5IconHelp -ldatafile
-}
-
-win32{
-   LIBS += \
-        ../lib/H5IconGui.lib \
-        ../lib/H5IconHelp.lib \
-        ../lib/datafile.lib
-}
-
-LIBS += -L../lib -lH5IconGui -lH5IconHelp -ldatafile
 unix{
     UI_DIR = temp/ui
     MOC_DIR = temp/moc

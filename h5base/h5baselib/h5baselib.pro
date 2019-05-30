@@ -33,13 +33,14 @@ SOURCES += \
         hlineobj.cpp \
         htempcontainer.cpp  \
         hcontainerobj.cpp \
-    hgroup.cpp \
-    hcircle.cpp \
-    hellipse.cpp \
-    htext.cpp \
-    hpolygon.cpp \
-    hpolyline.cpp \
-    hmakeicon.cpp
+        hgroup.cpp \
+        hcircle.cpp \
+        hellipse.cpp \
+        htext.cpp \
+        hpolygon.cpp \
+        hpolyline.cpp \
+        hmakeicon.cpp \
+    hgraph.cpp
 
 HEADERS += \
     ../../include/hiconapi.h \
@@ -63,7 +64,8 @@ HEADERS += \
     ../../include/h5baselib/htext.h \
     ../../include/h5baselib/hpolygon.h \
     ../../include/h5baselib/hpolyline.h \
-    ../../include/h5baselib/hmakeicon.h
+    ../../include/h5baselib/hmakeicon.h \
+    ../../include/h5baselib/hgraph.h
 
 
 unix{

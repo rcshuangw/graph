@@ -74,13 +74,9 @@ public:
 
     QString getClipboardFile();
 
-    void setDrawShape(DRAWSHAPE ds);
+    void setDrawShape(DrawShape ds);
 
-    DRAWSHAPE getDrawShape();
-
-    void setSelectMode(SELECTMODE ds);
-
-    SELECTMODE getSelectMode();
+    DrawShape getDrawShape();
 
 
     virtual void ObjCreated(HBaseObj* pObj);
@@ -138,8 +134,7 @@ protected:
 
     HGraphEditorOp* m_pGraphEditorOp;
 private:
-    DRAWSHAPE drawShape;
-    SELECTMODE selectMode;
+    DrawShape drawShape;
     QRectF logicRectF;  //scene的大小
     HGraph* pTempGraph; //临时画面文件
     QString strGraphFile;

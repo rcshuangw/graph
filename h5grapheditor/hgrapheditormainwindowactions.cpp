@@ -241,14 +241,14 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  {
      if(!pGraphEditorMgr)
          return;
-     pGraphEditorMgr->setDrawShape(DRAWSHAPE::enumSelection);
+     pGraphEditorMgr->setDrawShape(DrawShape::enumSelection);
  }
 
  void HGraphEditorMainWindow::actionText_clicked()
  {
      if(!pGraphEditorMgr)
          return;
-     pGraphEditorMgr->setDrawShape(DRAWSHAPE::enumText);
+     pGraphEditorMgr->setDrawShape(DrawShape::enumText);
      pGraphEditorMgr->setSelectMode(enumDraw);
  }
 
@@ -256,7 +256,7 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  {
      if(!pGraphEditorMgr)
          return;
-     pGraphEditorMgr->setDrawShape(DRAWSHAPE::enumLine);
+     pGraphEditorMgr->setDrawShape(DrawShape::enumLine);
      pGraphEditorMgr->setSelectMode(enumDraw);
  }
 
@@ -264,7 +264,7 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  {
      if(!pGraphEditorMgr)
          return;
-     pGraphEditorMgr->setDrawShape(DRAWSHAPE::enumRectangle);
+     pGraphEditorMgr->setDrawShape(DrawShape::enumRectangle);
      pGraphEditorMgr->setSelectMode(enumDraw);
  }
 
@@ -272,7 +272,7 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  {
      if(!pGraphEditorMgr)
          return;
-     pGraphEditorMgr->setDrawShape(DRAWSHAPE::enumPolyline);
+     pGraphEditorMgr->setDrawShape(DrawShape::enumPolyline);
      pGraphEditorMgr->setSelectMode(enumDraw);
  }
 
@@ -280,7 +280,7 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  {
      if(!pGraphEditorMgr)
          return;
-     pGraphEditorMgr->setDrawShape(DRAWSHAPE::enumPolygon);
+     pGraphEditorMgr->setDrawShape(DrawShape::enumPolygon);
      pGraphEditorMgr->setSelectMode(enumDraw);
  }
 
@@ -288,7 +288,7 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  {
      if(!pGraphEditorMgr)
          return;
-     pGraphEditorMgr->setDrawShape(DRAWSHAPE::enumCircle);
+     pGraphEditorMgr->setDrawShape(DrawShape::enumCircle);
      pGraphEditorMgr->setSelectMode(enumDraw);
  }
 
@@ -296,7 +296,7 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  {
      if(!pGraphEditorMgr)
          return;
-     pGraphEditorMgr->setDrawShape(DRAWSHAPE::enumArc);
+     pGraphEditorMgr->setDrawShape(DrawShape::enumArc);
      pGraphEditorMgr->setSelectMode(enumDraw);
  }
 

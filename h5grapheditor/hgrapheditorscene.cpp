@@ -144,7 +144,7 @@ void HGraphEditorScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         return;
     if(nSelectMode == enumDraw)
     {
-        DRAWSHAPE drawShape = pGraphEditorMgr->getDrawShape();
+        DrawShape drawShape = pGraphEditorMgr->getDrawShape();
         if(drawShape == enumPolygon && polygon != 0)
         {
             return QGraphicsScene::mouseReleaseEvent(mouseEvent);
@@ -393,7 +393,7 @@ void HGraphEditorScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* mouseEve
 
 void HGraphEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    DRAWSHAPE drawShape = pGraphEditorMgr->getDrawShape();
+    DrawShape drawShape = pGraphEditorMgr->getDrawShape();
     if(drawShape == enumPolygon && polygon != 0)
     {
         if(polygon->polygon().size()<=2)
@@ -442,7 +442,7 @@ void HGraphEditorScene::setItemProperty(QGraphicsItem* item)
     if(!pItem) return;
     HBaseObj* pObj = pItem->getItemObj();
     if(!pObj) return;
-    DRAWSHAPE drawShape = pObj->getShapeType();
+    DrawShape drawShape = pObj->getShapeType();
     if(drawShape == enumComplex)
     {
         HIconObj* pComplexObj = (HIconObj*)pObj;
@@ -539,7 +539,7 @@ void HGraphEditorScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     if(event->mimeData()->hasFormat("DragIcon"))
     {
         HBaseObj * pObj = complex->getItemObj();
-        DRAWSHAPE drawShape = pObj->getShapeType();
+        DrawShape drawShape = pObj->getShapeType();
 
         if(drawShape == enumComplex && complex != 0)
         {
@@ -568,7 +568,7 @@ void HGraphEditorScene::newIconGraphicsObj()
 {
     if(!pGraphEditorMgr)
         return;
-    DRAWSHAPE drawShape = pGraphEditorMgr->getDrawShape();
+    DrawShape drawShape = pGraphEditorMgr->getDrawShape();
     switch (drawShape) {
     case enumLine:
     {
@@ -731,7 +731,7 @@ void HGraphEditorScene::onMouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     if(!pGraphEditorMgr)
         return;
-    DRAWSHAPE drawShape = pGraphEditorMgr->getDrawShape();
+    DrawShape drawShape = pGraphEditorMgr->getDrawShape();
     curPoint = mouseEvent->scenePos();
     if(drawShape == enumLine && line != 0)
     {
@@ -793,7 +793,7 @@ void HGraphEditorScene::onMouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent
 {
     if(!pGraphEditorMgr)
         return;
-    DRAWSHAPE drawShape = pGraphEditorMgr->getDrawShape();
+    DrawShape drawShape = pGraphEditorMgr->getDrawShape();
     if(drawShape == enumLine && line != 0)
     {
         line->setFlag(QGraphicsItem::ItemIsSelectable,true);
@@ -853,7 +853,7 @@ void HGraphEditorScene::onMouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent
 
 HIconGraphicsItem* HGraphEditorScene::addIconGraphicsItem(HBaseObj* pObj,bool bdel)
 {
-    DRAWSHAPE drawShape = pObj->getShapeType();
+    DrawShape drawShape = pObj->getShapeType();
     HIconGraphicsItem* item = NULL;
     int nZValue = pObj->getStackOrder();
     if(drawShape == enumLine)

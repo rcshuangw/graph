@@ -30,8 +30,7 @@ HGraphEditorMgr::HGraphEditorMgr()
     pGraphEditorScene = new HGraphEditorScene(this);
     pGraphEditorView = NULL;
     m_pGraphEditorOp = new HGraphEditorOp(this);
-    drawShape = enumNo;
-    selectMode = enumSelect;
+    drawShape = No;
 }
 
 //启动时加载数据库
@@ -137,24 +136,14 @@ bool HGraphEditorMgr::isGraphModify()
     return pGraphEditorDoc->isGraphModify();
 }
 
-void HGraphEditorMgr::setDrawShape(DRAWSHAPE ds)
+void HGraphEditorMgr::setDrawShape(DrawShape ds)
 {
     drawShape = ds;
 }
 
-DRAWSHAPE HGraphEditorMgr::getDrawShape()
+DrawShape HGraphEditorMgr::getDrawShape()
 {
     return drawShape;
-}
-
-void HGraphEditorMgr::setSelectMode(SELECTMODE mode)
-{
-    selectMode = mode;
-}
-
-SELECTMODE HGraphEditorMgr::getSelectMode()
-{
-    return selectMode;
 }
 
 //新建文件
