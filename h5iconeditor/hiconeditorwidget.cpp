@@ -32,11 +32,6 @@ void HIconEditorWidget::setIconEditorMgr(HIconEditorMgr *iconMgr)
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
-    //QHBoxLayout *hLayout = new QHBoxLayout;
-    //hLayout->addWidget(m_pTabBar);
-    //QSpacerItem *hSpacer = new QSpacerItem(40, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
-    //hLayout->addSpacerItem(hSpacer);
-    //layout->addLayout(hLayout);
     layout->addWidget(m_pTabBar);
     layout->addWidget(m_pIconEditorMgr->iconEditorFrame());
     setLayout(layout);

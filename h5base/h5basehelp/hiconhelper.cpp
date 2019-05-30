@@ -157,7 +157,7 @@ void HIconHelper::saveIconTemplateFile(QList<HIconTemplate*> *pIconTemplateList,
     for(int i = 0; i < pIconTemplateList->count();i++)
     {
         HIconTemplate* iconTemplate = pIconTemplateList->at(i);
-        if(!iconTemplate /*|| !iconTemplate->isModify()*/) continue;
+        if(!iconTemplate || !iconTemplate->isModify()) continue;
         if(IsIconInFolder(strFolderName,iconTemplate->getCatalogType()))
         {
             QString strFileName = strIconsFolderPath + "/" + iconTemplate->getUuid().toString() + ".xic";

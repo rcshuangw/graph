@@ -38,7 +38,6 @@ void HIconEditorScene::drawBackground(QPainter *painter, const QRectF &rect)
     QColor bgclr = QColor(m_pIconEditorMgr->getBackgroundColor());
     painter->fillRect(finalRect,bgclr);
 
-
     bool bShowGrid = m_pIconEditorMgr->getShowGrid();
     if(bShowGrid)
     {
@@ -72,7 +71,6 @@ void HIconEditorScene::drawForeground(QPainter *painter, const QRectF &rect)
     m_pIconEditorMgr->selectedMgr()->paint(painter,rect,selRect);
 }
 
-
 void HIconEditorScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     bool multiSelect = (mouseEvent->modifiers()&Qt::ControlModifier)!=0;
@@ -85,7 +83,6 @@ void HIconEditorScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
     QGraphicsScene::mousePressEvent(mouseEvent);
 }
-
 
 void HIconEditorScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {

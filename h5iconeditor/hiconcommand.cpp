@@ -8,6 +8,9 @@
 #include "hiconeditorframe.h"
 #include "hiconeditorop.h"
 #include "hselectedmgr.h"
+#include "htempcontainer.h"
+#include "hgroup.h"
+#include "hmakeicon.h"
 HIconCommand::HIconCommand(HIconEditorMgr* iconMgr):m_pIconEditorMgr(iconMgr)
 {
 
@@ -107,6 +110,7 @@ void HDelIconCommand::redo()
     }
     if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->iconEditorFrame())
         return;
+    m_pIconEditorMgr->iconEditorFrame()->view()->scene()->setSelectionArea(QPainterPath());
     QRectF bounding;
     for(int i = 0; i < pObjList.count();i++)
     {
@@ -125,6 +129,7 @@ void HDelIconCommand::undo()
 {
     if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->iconEditorFrame())
         return;
+    m_pIconEditorMgr->iconEditorFrame()->view()->scene()->setSelectionArea(QPainterPath());
     QRectF bounding;
     for(int i = 0; i < pObjList.count();i++)
     {
@@ -165,6 +170,7 @@ void HPasteIconCommand::redo()
     }
     if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->selectedMgr())
         return;
+    m_pIconEditorMgr->iconEditorFrame()->view()->scene()->setSelectionArea(QPainterPath());
     QRectF bounding;
     for(int i = 0; i < pObjList.count();i++)
     {
@@ -183,6 +189,7 @@ void HPasteIconCommand::undo()
 {
     if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->selectedMgr())
         return;
+    m_pIconEditorMgr->iconEditorFrame()->view()->scene()->setSelectionArea(QPainterPath());
     QRectF bounding;
     for(int i = 0; i < pObjList.count();i++)
     {
@@ -199,7 +206,7 @@ void HPasteIconCommand::undo()
 }
 
 
-////////////////////////////////////////移动///////////////////////////////////////////
+////////////////////////////////////////移动  ok///////////////////////////////////////////
 HMoveIconCommand::HMoveIconCommand(HIconEditorMgr* iconMgr,QList<HBaseObj*> pObjs,double dx,double dy)
     :HIconCommand(iconMgr),pObjList(pObjs)
 {
@@ -253,18 +260,20 @@ void HMoveIconCommand::redo()
     }
     if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->iconEditorFrame())
         return;
+    m_pIconEditorMgr->iconEditorFrame()->view()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
+        obj->setModify(true);
         oldBounding = oldBounding.united(obj->boundingRect(1));
         newBounding = newBounding.united(obj->boundingRect(1).translated(dxList[i],dyList[i]));
         obj->iconGraphicsItem()->moveBy(dxList[i],dyList[i]);
     }
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(oldBounding);
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(newBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(oldBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(newBounding);
     m_pIconEditorMgr->iconEditorFrame()->view()->ensureVisible(newBounding);
 }
 
@@ -272,19 +281,20 @@ void HMoveIconCommand::undo()
 {
     if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->iconEditorFrame())
         return;
+    m_pIconEditorMgr->iconEditorFrame()->view()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-
+        obj->setModify(false);
         oldBounding = oldBounding.united(obj->boundingRect(1));
         newBounding = newBounding.united(obj->boundingRect(1).translated(dxList[i],dyList[i]));
         obj->iconGraphicsItem()->moveBy(-dxList[i],-dyList[i]);
     }
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(oldBounding);
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(newBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(oldBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(newBounding);
     m_pIconEditorMgr->iconEditorFrame()->view()->ensureVisible(newBounding);
 }
 
@@ -325,20 +335,20 @@ void HRotateIconCommand::redo()
     }
     if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->iconEditorFrame())
         return;
+    m_pIconEditorMgr->iconEditorFrame()->view()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        oldBounding = oldBounding.united(item->boundingRect());
-        item->setRotation(obj->rotateAngle() - angleList[i]);
-        newBounding = newBounding.united(item->boundingRect());
+        obj->setModify(true);
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        obj->rotateBy(angleList[i]);
+        newBounding = newBounding.united(obj->boundingRect(1));
     }
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(oldBounding);
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(newBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(oldBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(newBounding);
     m_pIconEditorMgr->iconEditorFrame()->view()->ensureVisible(newBounding);
 }
 
@@ -346,20 +356,20 @@ void HRotateIconCommand::undo()
 {
     if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->iconEditorFrame())
         return;
+    m_pIconEditorMgr->iconEditorFrame()->view()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        oldBounding = oldBounding.united(item->boundingRect());
-        item->setRotation(obj->rotateAngle() + angleList[i]);
-        newBounding = newBounding.united(item->boundingRect());
+        obj->setModify(false);
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        obj->rotateBy(-angleList[i]);
+        newBounding = newBounding.united(obj->boundingRect(1));
     }
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(oldBounding);
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(newBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(oldBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(newBounding);
     m_pIconEditorMgr->iconEditorFrame()->view()->ensureVisible(newBounding);
 }
 
@@ -418,20 +428,22 @@ void HResizeIconCommand::redo()
     }
     if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->iconEditorFrame())
         return;
+    m_pIconEditorMgr->iconEditorFrame()->view()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        oldBounding = oldBounding.united(item->boundingRect());
-        //item->resi(newPtList[i]);
-        newBounding = newBounding.united(item->boundingRect());
+        obj->setModify(true);
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        HPointFList points = newPtList.at(i);
+        obj->setPointList(points);
+        newBounding = newBounding.united(obj->boundingRect(1));
+        obj->iconGraphicsItem()->setPos(obj->pos(1));
     }
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(oldBounding);
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(newBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(oldBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(newBounding);
     m_pIconEditorMgr->iconEditorFrame()->view()->ensureVisible(newBounding);
 }
 
@@ -439,19 +451,110 @@ void HResizeIconCommand::undo()
 {
     if(!m_pIconEditorMgr || pObjList.isEmpty() || !m_pIconEditorMgr->iconEditorFrame())
         return;
+    m_pIconEditorMgr->iconEditorFrame()->view()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        oldBounding = oldBounding.united(item->boundingRect());
-        //item->resizeItem(oldPtList[i]);
-        newBounding = newBounding.united(item->boundingRect());
+        obj->setModify(false);
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        HPointFList points = oldPtList.at(i);
+        obj->setPointList(points);
+        newBounding = newBounding.united(obj->boundingRect(1));
+        obj->iconGraphicsItem()->setPos(obj->pos(1));
     }
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(oldBounding);
-    m_pIconEditorMgr->iconEditorFrame()->refreshSelected(newBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(oldBounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(newBounding);
     m_pIconEditorMgr->iconEditorFrame()->view()->ensureVisible(newBounding);
+}
+
+////////////////////////////////////////组合功能///////////////////////////////////////////
+/// \brief HGroupIconCommand::HGroupIconCommand
+/// 注意组合undo之后修改其他图元，就无法redo了
+/////
+HGroupIconCommand::HGroupIconCommand(HIconEditorMgr* iconMgr,HTempContainer* temp,HGroup* group,bool changed)
+    :HIconCommand(iconMgr),m_pTempContainer(temp),m_pGroup(group),m_bChanged(changed)
+{
+    setText("group object");
+}
+
+HGroupIconCommand::~HGroupIconCommand()
+{
+
+}
+
+int HGroupIconCommand::id() const
+{
+    return Group;
+}
+
+void HGroupIconCommand::redo()
+{
+    if(bFirstTime)
+    {
+        bFirstTime = false;
+        return;
+    }
+    if(m_bChanged)
+        group();
+    else
+        unGroup();
+
+}
+
+void HGroupIconCommand::undo()
+{
+    if(m_bChanged)
+        unGroup();
+    else
+        group();
+}
+
+void HGroupIconCommand::group()
+{
+    if(!m_pIconEditorMgr ||  !m_pIconEditorMgr->iconEditorOp())
+        return;
+    if(!m_pTempContainer) return;
+    for(int i = 0; i < m_pTempContainer->getObjList().count();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)m_pTempContainer->getObjList().at(i);
+        if(!pObj) continue;
+        m_pIconEditorMgr->iconEditorOp()->onRemoveObj(pObj);//画面删除
+    }
+    m_pTempContainer->makeGroup(m_pGroup);
+    m_pIconEditorMgr->iconTemplate()->getSymbol()->addBaseObj(m_pGroup);
+    m_pGroup->setDeleted(false);
+    m_pIconEditorMgr->iconEditorOp()->onCreateObj(m_pGroup,false);
+
+    m_pIconEditorMgr->iconEditorFrame()->view()->scene()->setSelectionArea(QPainterPath());
+    m_pIconEditorMgr->iconEditorFrame()->view()->ensureVisible(m_pGroup->boundingRect(1));
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(m_pGroup->boundingRect(1));
+
+}
+
+void HGroupIconCommand::unGroup()
+{
+    if(!m_pIconEditorMgr ||  !m_pIconEditorMgr->iconEditorOp())
+        return;
+    if(!m_pGroup) return;
+    m_pGroup->makeTempContainer(m_pTempContainer);
+    QRectF bounding;
+    for(int i = 0; i < m_pTempContainer->getObjList().count();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)m_pTempContainer->getObjList().at(i);
+        if(!pObj) continue;
+        m_pIconEditorMgr->iconTemplate()->getSymbol()->addBaseObj(pObj);
+        m_pIconEditorMgr->iconEditorOp()->onCreateObj(pObj,false);
+        bounding = bounding.united(pObj->boundingRect(1));
+    }
+
+    m_pIconEditorMgr->iconEditorOp()->onRemoveObj(m_pGroup);
+    m_pIconEditorMgr->iconTemplate()->getSymbol()->removeBaseObj(m_pGroup);
+    m_pGroup->setDeleted(true);
+
+    m_pIconEditorMgr->selectedMgr()->clear();
+    m_pIconEditorMgr->iconEditorFrame()->view()->ensureVisible(bounding);
+    m_pIconEditorMgr->iconEditorOp()->onRefreshSelect(bounding);
 }

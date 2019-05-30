@@ -51,15 +51,16 @@ void HIconMainWindow::init()
     showGridAct->setChecked(m_pIconEditorMgr->getShowGrid());
     showCLineAct->setChecked(m_pIconEditorMgr->getShowCenterLine());
     //改用函数来实现
-    //m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(0.6);
-    //QString strScale = QString("%1%").arg(pIconMgr->getIconFrame()->scale()*100);
-    //scaleComboBox->setCurrentText(strScale);
+    m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(0.6);
+    QString strScale = QString("%1%").arg(m_pIconEditorMgr->iconEditorFrame()->scale()*100);
+    scaleComboBox->setCurrentText(strScale);
 
     connect(m_pIconEditorMgr->iconEditorOp(),SIGNAL(setSelectTool()),this,SLOT(onSelectTool()));
     connect(m_pIconEditorMgr->iconEditorOp(),SIGNAL(attributeChanged()),this,SLOT(onSetAttribute()));
     connect(m_pIconEditorMgr->iconEditorOp(),SIGNAL(selectChanged()),this,SLOT(onSelectChanged()));
     connect(m_pIconEditorMgr->iconEditorUndoStack(),SIGNAL(canUndoChanged(bool)),undoAct, SLOT(setEnabled(bool)));
     connect(m_pIconEditorMgr->iconEditorUndoStack(),SIGNAL(canRedoChanged(bool)),redoAct, SLOT(setEnabled(bool)));
+    updateMenu();
 }
 
 void HIconMainWindow::createActions()
@@ -579,11 +580,11 @@ void HIconMainWindow::scaleChanged(QString strScale)
     double newscale = strScale.toDouble(&bOk)/100;
     if(!bOk)
         return;
-    //m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(newscale);
-    //strScale = QString("%1%").arg(m_pIconEditorMgr->iconEditorFrame()->scale()*100);
-   // scaleComboBox->blockSignals(true);
-   // scaleComboBox->lineEdit()->setText(strScale);
-   // scaleComboBox->blockSignals(false);
+    m_pIconEditorMgr->iconEditorFrame()->scaleChangedTo(newscale);
+    strScale = QString("%1%").arg(m_pIconEditorMgr->iconEditorFrame()->scale()*100);
+    scaleComboBox->blockSignals(true);
+    scaleComboBox->lineEdit()->setText(strScale);
+    scaleComboBox->blockSignals(false);
 }
 
 void HIconMainWindow::scaleChanged()
@@ -632,6 +633,9 @@ void HIconMainWindow::updateEditMenu()
     copyAct->setEnabled(b&&m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList().size()>0);
     pasteAct->setEnabled(m_pIconEditorMgr&&m_pIconEditorMgr->iconEditorOp()->isClipboardAvailable());
     deleteAct->setEnabled(b&&m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList().size()>0);
+
+    toTopAct->setEnabled(b&&m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList().size()==1);
+    toBottomAct->setEnabled(b&&m_pIconEditorMgr->selectedMgr()->selectObj()->getObjList().size()==1);
 
     //editDeleteFromPattern->setEnabled(b&&m_pEditMgr->SelectionMgr()->SelectedObj()->pChild.Size()>0);
 

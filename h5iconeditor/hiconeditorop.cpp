@@ -247,6 +247,7 @@ void HIconEditorOp::paste()
     for(int i = 0; i < oldSelList.size();i++)
     {
         HBaseObj* pObj = (HBaseObj*)oldSelList.at(i);
+        pObj->setModify(true);
         pObj->iconGraphicsItem()->setSelected(false);
     }
 
@@ -291,7 +292,7 @@ void HIconEditorOp::del()
         pObj->setDeleted(true);
         objList.append(pObj);
     }
-
+    m_pIconEditorMgr->iconTemplate()->setModify(true);
     m_pIconEditorMgr->selectedMgr()->clear();
     HDelIconCommand *delIconCommand = new HDelIconCommand(m_pIconEditorMgr,objList);
     m_pIconEditorMgr->iconEditorUndoStack()->push(delIconCommand);
@@ -388,7 +389,6 @@ void HIconEditorOp::groupObj()
     if(!tempContainer) return;
     if(tempContainer->getObjList().count() < 2) return;
 
-    HIconTemplate* pItemp = m_pIconEditorMgr->iconTemplate();
     HTempContainer* tempSelect = (HTempContainer*)tempContainer;
     for(int i = 0; i < tempSelect->getObjList().count();i++)
     {
@@ -404,6 +404,10 @@ void HIconEditorOp::groupObj()
     m_pIconEditorMgr->selectedMgr()->clear();
     m_pIconEditorMgr->iconTemplate()->getSymbol()->addBaseObj(pGroup);//增加到pattern
     onCreateObj(pGroup,false);//画面增加
+
+    HGroupIconCommand* groupCommand = new HGroupIconCommand(m_pIconEditorMgr,tempContainer,pGroup,true);
+    if(groupCommand)
+        m_pIconEditorMgr->iconEditorUndoStack()->push(groupCommand);
 }
 
 void HIconEditorOp::ungroupObj()
@@ -427,8 +431,10 @@ void HIconEditorOp::ungroupObj()
     onRemoveObj(pGroup);
     m_pIconEditorMgr->iconTemplate()->getSymbol()->removeBaseObj(pGroup);
     m_pIconEditorMgr->selectedMgr()->clear();
-    if(tc)
-        delete tc;
+
+    HGroupIconCommand* unGroupCommand = new HGroupIconCommand(m_pIconEditorMgr,tc,pGroup,false);
+    if(unGroupCommand)
+        m_pIconEditorMgr->iconEditorUndoStack()->push(unGroupCommand);
 
 }
 

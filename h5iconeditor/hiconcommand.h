@@ -8,6 +8,8 @@
 
 class HIconEditorMgr;
 class HBaseObj;
+class HTempContainer;
+class HGroup;
 class HIconCommand : public QUndoCommand
 {
 public:
@@ -152,6 +154,25 @@ protected:
     QList<QPolygonF> oldPtList;
 
     QList<QPolygonF> newPtList;
+
+};
+
+//组合功能
+class HGroupIconCommand : public HIconCommand
+{
+public:
+    HGroupIconCommand(HIconEditorMgr* iconMgr,HTempContainer* temp,HGroup* group,bool changed);
+    ~HGroupIconCommand();
+public:
+    virtual int id() const;
+    virtual void redo();
+    virtual void undo();
+    void group();
+    void unGroup();
+protected:
+    HTempContainer* m_pTempContainer;
+    HGroup* m_pGroup;
+    bool m_bChanged;
 
 };
 #endif // HICONCOMMAND_H

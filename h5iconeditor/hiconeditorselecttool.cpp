@@ -211,7 +211,7 @@ void HIconEditorSelectTool::onMouseMoveEvent(QMouseEvent* event, QVariant &data)
                     HBaseObj* pObj = tempContainer->getObjList().at(i);
                     if(pObj)
                     {
-                        m_vlOldPoints.append(pObj->getPointList(0));
+                        m_vlOldPoints.append(pObj->getPointList(1));
                     }
                 }
             }
@@ -293,8 +293,9 @@ void HIconEditorSelectTool::onMouseReleaseEvent(QMouseEvent* event, QVariant &da
                 {
                     HBaseObj* pObj = tempContainer->getObjList().at(i);
                     if(pObj){
+                        pObj->setModify(true);
                         objs.append(pObj);
-                        points.append(pObj->getPointList());
+                        points.append(pObj->getPointList(1));
                     }
                 }
 
@@ -325,7 +326,10 @@ void HIconEditorSelectTool::onMouseReleaseEvent(QMouseEvent* event, QVariant &da
                 {
                     HBaseObj* pObj = tempContainer->getObjList().at(i);
                     if(pObj)
+                    {
+                        pObj->setModify(true);
                         objs.append(pObj);
+                    }
                 }
                 double dx = m_ptCurPoint.x() - m_ptOriPoint.x();
                 double dy = m_ptCurPoint.y() - m_ptOriPoint.y();
@@ -417,6 +421,7 @@ void HIconEditorSelectTool::onKeyPressEvent(QKeyEvent *event, QVariant& data)
         HBaseObj* pObj = tempContainer->getObjList().at(0);
         if(pObj)
         {
+            pObj->setModify(true);
             pObj->moveBy(ndx,ndy);
             pObj->iconGraphicsItem()->setPos(pObj->pos(1));
             objs.append(pObj);
@@ -430,6 +435,7 @@ void HIconEditorSelectTool::onKeyPressEvent(QKeyEvent *event, QVariant& data)
             HBaseObj* pObj = tempContainer->getObjList().at(i);
             if(pObj)
             {
+                pObj->setModify(true);
                 pObj->moveBy(ndx,ndy);
                 pObj->iconGraphicsItem()->setPos(pObj->pos(1));
                 objs.append(pObj);

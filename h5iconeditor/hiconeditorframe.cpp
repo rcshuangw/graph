@@ -83,6 +83,7 @@ void HIconEditorFrame::objCreated(HBaseObj* obj,bool isPaste)
 {
     if(!m_pView || !m_pView->scene())
         return;
+    obj->setModify(true);
     H5GraphicsItem *item = new H5GraphicsItem(obj);
     if(NULL == item) return;
     item->setZValue(obj->zValue());
