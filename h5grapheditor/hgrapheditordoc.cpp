@@ -143,7 +143,7 @@ void HGraphEditorDoc::updateGraphList()
                     if(!pObj1->iconTemplate()->getUuid().toString().compare(findTemp->getUuid().toString()))
                     {
                         findTemp->getSymbol()->copyTo(pObj1->getIconSymbol());
-                        pObj1->updateResize();
+                        pObj1->update();
                         int a = 0;
                     }
                 }

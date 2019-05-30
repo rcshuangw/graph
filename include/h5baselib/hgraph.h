@@ -9,11 +9,12 @@
 class QPainter;
 class QDataStream;
 class QDomElement;
+class HContainerObj;
 /*
  * 记录单个画面信息，包含画面所含的模板列表信息，各种图元信息，颜色，背景等等信息
  *
 */
-class H5BASELIB_EXPORT HGraph : public QObject
+class H5BASELIB_EXPORT HGraph : public HContainerObj
 {
 public:
     HGraph(const QString& name);
@@ -52,21 +53,20 @@ public:
     bool getModify();
 public:
     virtual void readDataFile(const QString&);
-
     virtual void writeDateFile(const QString&);
-
     virtual bool readXmlFile(const QString&);
-
     virtual bool writeXmlFile(const QString&);
-
     virtual void readData(int,QDataStream *d);
-
     virtual void writeData(int,QDataStream *d);
-
     virtual void readXml(QDomElement *d);
-    
     virtual void writeXml(QDomElement *d);
+public:
+    virtual QRectF objsRect(qint8 flag);
+    virtual void rePos();
+    virtual QRectF boundingRect(qint8 flag = 0);
+    virtual QPainterPath shape(qint8 flag = 0);
 
+public:
     void Draw(QPainter* p);
 
     void clear();

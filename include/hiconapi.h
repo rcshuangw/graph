@@ -93,7 +93,8 @@ enum DrawShape
     Group,
     Container,
     Icon,
-    TempContainer
+    TempContainer,
+    Graph
 };
 
 //选择状态

@@ -23,6 +23,7 @@ HIconObj::HIconObj(HIconTemplate* it)
     pText = NULL;
     m_pDynamicObj = new HDynamicObj;
     m_pIconSymbol = new HIconSymbol(it);
+    m_pIconSymbol->setParent(this);
     //initIconTemplate();
     //bFrameSee = false;
     nGraphID = (int)-1;
@@ -56,6 +57,9 @@ void HIconObj::initIconTemplate()
     nCatalogType = iconTemplate()->getCatalogType();
     strUuid = iconTemplate()->getUuid().toString();
     iconTemplate()->getSymbol()->copyTo(iconSymbol());
+    iconSymbol()->setParent(this);
+    iconSymbol()->m_width = 0.0;
+    iconSymbol()->m_height = 0.0;
     /*
 	if(TEMPLATE_TYPE_ANALOGUE == nCatalogType || TEMPLATE_TYPE_CONTROL == nCatalogType)
     {
@@ -73,6 +77,7 @@ void HIconObj::readData(int v, QDataStream* data)
 {
     if(!data) return;
     HBaseObj::readData(v,data);
+    /*
     QString s;
     *data>>s;
     strCatalogName = s;
@@ -87,11 +92,11 @@ void HIconObj::readData(int v, QDataStream* data)
     *data>>bt;
     btGraphOperator = bt;
     *data>>bt;
-    btGraphComfirm = bt;
+    btGraphComfirm = bt;*/
 
     if(iconSymbol())
     {
-		iconSymbol()->readData(v,data);
+        iconSymbol()->HShapeObj::readData(v,data);
         /*
 		if(TEMPLATE_TYPE_ANALOGUE == nCatalogType || TEMPLATE_TYPE_CONTROL == nCatalogType)
         {
@@ -100,10 +105,11 @@ void HIconObj::readData(int v, QDataStream* data)
         }*/
     }
     //动态数据
+    /*
 	if (dynamicObj())
 	{
         dynamicObj()->readData(v,data);
-	}
+    }*/
 }
 
 void HIconObj::writeData(int v, QDataStream* data)
@@ -119,7 +125,7 @@ void HIconObj::writeData(int v, QDataStream* data)
 
     if(iconSymbol())
     {
-		iconSymbol()->writeData(v,data);
+        iconSymbol()->HShapeObj::writeData(v,data);
         /*
 		if(TEMPLATE_TYPE_ANALOGUE == nCatalogType || TEMPLATE_TYPE_CONTROL == nCatalogType)
         {
@@ -129,10 +135,11 @@ void HIconObj::writeData(int v, QDataStream* data)
     }
 
     //动态数据
+    /*
 	if (dynamicObj())
 	{
         dynamicObj()->writeData(v,data);
-	}
+    }*/
 }
 
 //xml文件读写
@@ -140,19 +147,20 @@ void HIconObj::readXml(int v, QDomElement* dom)
 {
     if(!dom) return;
     HBaseObj::readXml(v,dom);
+    /*
     strCatalogName = dom->attribute("CatalogName");
     nCatalogType = dom->attribute("CatalogType").toInt();
     strUuid = dom->attribute("Uuid");
     nGraphID = dom->attribute("graphID").toInt();
     btGraphOperator = dom->attribute("graphOperator").toUInt();
     btGraphComfirm = dom->attribute("graphComfirm").toUInt();
-
+    */
     //先读，在从Template里面刷新
     QDomElement symbolDom = dom->namedItem("IconSymbol").toElement();
     if(!symbolDom.isNull())
     {
-        iconSymbol()->readXml(v,&symbolDom);
-		updateResize();
+        iconSymbol()->HShapeObj::readXml(v,&symbolDom);
+        update();
     }
     
 	/*
@@ -176,30 +184,33 @@ void HIconObj::readXml(int v, QDomElement* dom)
     }*/
 
     //动态数据
+    /*
     QDomElement RelationDom = dom->namedItem("Relation").toElement();
 	if (dynamicObj())
 	{
         dynamicObj()->readXml(v,&RelationDom);
-	}
+    }*/
 }
 
 void HIconObj::writeXml(int v, QDomElement* dom)
 {
     if(!dom)return;
     HBaseObj::writeXml(v,dom);
+    /*
     dom->setAttribute("CatalogName",strCatalogName);
     dom->setAttribute("CatalogType",nCatalogType);
     dom->setAttribute("Uuid",strUuid);
     dom->setAttribute("graphID",nGraphID);
     dom->setAttribute("graphOperator",btGraphOperator);
     dom->setAttribute("graphComfirm",btGraphComfirm);
+    */
 
    
     QDomElement symbolDom = dom->ownerDocument().createElement("IconSymbol");
     dom->appendChild(symbolDom);
     if(iconSymbol())
     {
-		iconSymbol()->writeXml(v,&symbolDom);
+        iconSymbol()->HShapeObj::writeXml(v,&symbolDom);
     } /*
     //如果是遥测类型或者控制点类型 还需要保存first text信息
     if(TEMPLATE_TYPE_ANALOGUE == nCatalogType || TEMPLATE_TYPE_CONTROL == nCatalogType)
@@ -212,13 +223,14 @@ void HIconObj::writeXml(int v, QDomElement* dom)
         }
     }*/
 
-    //动态数据
+    //动态数据 放到测点Icon里面
+    /*
     QDomElement RelationDom = dom->ownerDocument().createElement("Relation");
     dom->appendChild(RelationDom);
 	if (dynamicObj())
 	{
         dynamicObj()->writeXml(v,&RelationDom);
-	}
+    }*/
 }
 
 
@@ -231,29 +243,13 @@ QString HIconObj::tagName()
 void HIconObj::copyTo(HBaseObj* obj)
 {
     HIconObj* ob = (HIconObj*)obj;
-    ob->strCatalogName = strCatalogName;
-    ob->nCatalogType = nCatalogType;
-    ob->nGraphID = nGraphID;
-    ob->btGraphOperator = btGraphOperator;
-    ob->btGraphComfirm = btGraphComfirm;
-
-    if(iconSymbol() && ob->iconSymbol())
-    {
-        ob->iconSymbol()->clear();
-		iconSymbol()->copyTo(ob->iconSymbol());
-        /*HText *pText = iconSymbol()->getFirstTextObj();
-        HText *pObText = ob->iconSymbol()->getFirstTextObj();
-        if(pText && pObText)
-        {
-            pText->copyTo(pObText);
-        }*/
-    }
-
-    //动态数据
-    if(dynamicObj() && ob->dynamicObj())
-    {
-		dynamicObj()->copyTo(ob->dynamicObj());
-    }
+    QByteArray ba;
+    QDataStream dsm(&ba,QIODevice::ReadWrite);
+    int ver = 0;
+    writeData(ver,&dsm);
+    dsm.device()->seek(0);
+    ob->setParent(parent());
+    ob->readData(ver,&dsm);
 }
 
 bool HIconObj::setPointList(QPolygonF& list, qint8 flag)
@@ -269,7 +265,7 @@ QPolygonF HIconObj::getPointList(qint8 flag )
 {
 	double w = iconSymbol()->m_width;
 	double h = iconSymbol()->m_height;
-	QPointF po(-w / 2, -h / 2);
+    QPointF po(-w/2, -h/2);
 	QRectF rect(po, QSizeF(w, h));
 	QPolygonF list;
 	if (qFuzzyCompare(w, 0) || qFuzzyCompare(h, 0))
@@ -307,19 +303,14 @@ void HIconObj::moveBy(double dx,double dy, bool bscale)
 
 QRectF HIconObj::boundingRect(qint8 flag )
 {
-	return HBaseObj::boundingRect();
-}
-
-bool HIconObj::contains(const QPointF &point)
-{
-    return shape().contains(point);
+    return HBaseObj::boundingRect(flag);
 }
 
 QPainterPath HIconObj::shape(qint8 flag)
 {
     QPainterPath path;
-    QPolygonF polygon = getPointList();
-    path.addPolygon(polygon.boundingRect());
+    QPolygonF polygon = getPointList(flag);
+    path.addPolygon(polygon);
 	path.closeSubpath();
     return path;
 }
@@ -458,12 +449,13 @@ void HIconObj::clearDynamicData()
     }
 }
 
-void HIconObj::updateResize()
+void HIconObj::update()
 {
     if(!iconSymbol())
         return;
 	int w = iconSymbol()->m_width;
 	int h = iconSymbol()->m_height;
 	initIconTemplate();
-	resize(w, h);
+    iconSymbol()->resize(w, h);
+    iconSymbol()->setParent(this);
 }

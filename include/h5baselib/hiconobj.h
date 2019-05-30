@@ -47,7 +47,6 @@ public:
 	//HGrphicsItem的虚函数
 	virtual void paint(QPainter* painter);
     virtual QRectF boundingRect(qint8 flag = 0);
-	virtual bool contains(const QPointF &point);
     virtual QPainterPath shape(qint8 flag = 0);
 
 public:
@@ -68,7 +67,7 @@ public:
     uchar getGraphOpeartor();
     void setGraphComfirm(uchar graphComfirm);
     uchar getGraphComfirm();
-    void updateResize();
+    void update();
 
 public:
 	//模板等指针
@@ -82,6 +81,7 @@ public:
 protected:
     HIconTemplate* m_pIconTemplate;//模板信息
     HIconSymbol* m_pIconSymbol;//实际对象Icon信息
+    //如果一个对象可以关联厂站装置测点，也可以关联厂站间隔，那么这个地方就要是列表来存储
     HDynamicObj* m_pDynamicObj;//实际对象动态信息
 
     //icontemplate的信息
