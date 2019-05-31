@@ -1,14 +1,11 @@
 ﻿#ifndef HICONOBJ_H
 #define HICONOBJ_H
-#include "hicontemplate.h"
-#include "hiconsymbol.h"
-#include "hdynamicobj.h"
+#include "h5baselibexport.h"
 #include "hbaseobj.h"
 class HIconTemplate;
 class HIconSymbol;
-
-/*此图符类型是包含关联数据的，不仅可以作为4遥信基本图符使用，也可以作为一次设备图符使用，比如进线等基本图符关联数据使用
-*/
+class HDynamicObj;
+class HText;
 class H5BASELIB_EXPORT HIconObj : public HBaseObj //图符类
 {
 public:
@@ -16,9 +13,6 @@ public:
     HIconObj(HIconTemplate* it);
     virtual ~HIconObj();
 public:
-    /*
-     * 存储分为两个部分
-*/
 //二进制读写
     virtual void readData(int v,QDataStream* data);
     virtual void writeData(int v, QDataStream* data);
@@ -28,23 +22,17 @@ public:
     virtual void writeXml(int v, QDomElement* dom);
 
     virtual QString tagName();
-
-    //拷贝克隆
     virtual void copyTo(HBaseObj* obj);
 
-    virtual DrawShape getShapeType();
-
 public:
-	///绝对坐标
 	virtual bool setPointList(QPolygonF& list, qint8 flag = 1);
 	virtual QPolygonF getPointList(qint8 flag = 0);
-	//操作函数
+
 	virtual void move(double dx, double dy, bool bscale = false);
     virtual void moveBy(double dx,double dy,bool bscale = false);
     virtual void resize(double w,double h, bool bscale = false);
 
 public:
-	//HGrphicsItem的虚函数
 	virtual void paint(QPainter* painter);
     virtual QRectF boundingRect(qint8 flag = 0);
     virtual QPainterPath shape(qint8 flag = 0);
@@ -68,7 +56,8 @@ public:
     void setGraphComfirm(uchar graphComfirm);
     uchar getGraphComfirm();
     void update();
-
+public:
+    HText* firstText();
 public:
 	//模板等指针
 	void initIconTemplate();
@@ -101,8 +90,6 @@ protected:
 
     //画面确认方式
     uchar btGraphComfirm;
-
-    HText* pText;
 };
 
 #endif // HICONOBJ_H

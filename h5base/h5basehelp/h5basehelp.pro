@@ -26,7 +26,6 @@ SOURCES += \
     #hdatapropertydlg.cpp \
     #hdigitalpage.cpp \
     #hfonthelper.cpp \
-    hgraph.cpp \
     #hgraphhelper.cpp \
     #hgraphpage.cpp \
     hiconhelper.cpp \

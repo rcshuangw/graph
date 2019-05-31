@@ -1,9 +1,11 @@
 #include "hiconobj.h"
+#include "hicontemplate.h"
+#include "hiconsymbol.h"
+#include "hdynamicobj.h"
+#include "hbaseobj.h"
 #include "hiconshowpattern.h"
-/*************************************图符类**********************************/
-/*
- * 图符类只用于drawgrph和在线系统上面，所以保存的信息和基本图元是不一致的。
-*/
+#include "htext.h"
+#include "hmakeicon.h"
 HIconObj::HIconObj()
 {
     setShapeType(Icon);
@@ -20,8 +22,7 @@ HIconObj::HIconObj(HIconTemplate* it)
     :m_pIconTemplate(it)
 {
     setShapeType(Icon);
-    pText = NULL;
-    m_pDynamicObj = new HDynamicObj;
+    m_pDynamicObj = NULL;
     m_pIconSymbol = new HIconSymbol(it);
     m_pIconSymbol->setParent(this);
     //initIconTemplate();
@@ -41,13 +42,7 @@ HIconObj::~HIconObj()
         delete m_pIconSymbol;
         m_pIconSymbol = NULL;
     }
-    
-	/*
-    if(pText)
-    {
-        delete pText;
-        pText = NULL;
-    }*/
+
     m_pIconTemplate = NULL;
 }
 
@@ -56,106 +51,79 @@ void HIconObj::initIconTemplate()
     strCatalogName = iconTemplate()->getCatalogName();
     nCatalogType = iconTemplate()->getCatalogType();
     strUuid = iconTemplate()->getUuid().toString();
+
+    //本地从图符模板库中拷贝
     iconTemplate()->getSymbol()->copyTo(iconSymbol());
     iconSymbol()->setParent(this);
     iconSymbol()->m_width = 0.0;
     iconSymbol()->m_height = 0.0;
-    /*
-	if(TEMPLATE_TYPE_ANALOGUE == nCatalogType || TEMPLATE_TYPE_CONTROL == nCatalogType)
-    {
-        HText *pTemp = pIconSymbol->getFirstTextObj();
-        if(!pText)
-        {
-            pText = new HText();
-            pTemp->copyTo(pText);
-        }
-    }*/
 }
 
-//二进制读写
 void HIconObj::readData(int v, QDataStream* data)
 {
     if(!data) return;
     HBaseObj::readData(v,data);
-    /*
-    QString s;
-    *data>>s;
-    strCatalogName = s;
-    int n;
-    *data>>n;
-    nCatalogType = n;
-    *data>>s;
-    strUuid = s;
-    *data>>n;
-    nGraphID = n;
-    uchar bt;
-    *data>>bt;
-    btGraphOperator = bt;
-    *data>>bt;
-    btGraphComfirm = bt;*/
-
     if(iconSymbol())
     {
         iconSymbol()->HShapeObj::readData(v,data);
-        /*
-		if(TEMPLATE_TYPE_ANALOGUE == nCatalogType || TEMPLATE_TYPE_CONTROL == nCatalogType)
-        {
-            HText *pText = pIconSymbol->getFirstTextObj();
-            pText->readData(data);
-        }*/
     }
-    //动态数据
-    /*
-	if (dynamicObj())
-	{
+
+    qint8 n8;
+    *data>>n8;
+    if(n8)
+    {
+        HText* text = firstText();
+        if(text)
+        {
+            text->readData(v,data);
+        }
+        else
+        {
+            text = HMakeIcon::Instance()->newObj(Text);
+            text->readData(v,data);
+            delete text;
+            text = NULL;
+        }
+    }
+
+    if(dynamicObj())
+    {
+        clearDynamicData();
         dynamicObj()->readData(v,data);
-    }*/
+    }
 }
 
 void HIconObj::writeData(int v, QDataStream* data)
 {
     if(!data) return;
     HBaseObj::writeData(v,data);
-    *data<<strCatalogName;
-    *data<<nCatalogType;
-    *data<<strUuid;
-    *data<<nGraphID;
-    *data<<btGraphOperator;
-    *data<<btGraphComfirm;
-
     if(iconSymbol())
     {
         iconSymbol()->HShapeObj::writeData(v,data);
-        /*
-		if(TEMPLATE_TYPE_ANALOGUE == nCatalogType || TEMPLATE_TYPE_CONTROL == nCatalogType)
+        qint8 n8 = 0;
+        HText* text = firstText();
+        if(text)
         {
-            HText *pText = pIconSymbol->getFirstTextObj();
-            pText->writeData(data);
-        }*/
+            n8 = 1;
+            *data<<n8;
+            text->writeData(v,data);
+        }
+        else
+        {
+            *data<<n8;
+        }
     }
 
-    //动态数据
-    /*
-	if (dynamicObj())
-	{
+    if (dynamicObj())
+    {
         dynamicObj()->writeData(v,data);
-    }*/
+    }
 }
 
-//xml文件读写
 void HIconObj::readXml(int v, QDomElement* dom)
 {
     if(!dom) return;
     HBaseObj::readXml(v,dom);
-    /*
-    strCatalogName = dom->attribute("CatalogName");
-    nCatalogType = dom->attribute("CatalogType").toInt();
-    strUuid = dom->attribute("Uuid");
-    nGraphID = dom->attribute("graphID").toInt();
-    btGraphOperator = dom->attribute("graphOperator").toUInt();
-    btGraphComfirm = dom->attribute("graphComfirm").toUInt();
-    */
-    //先读，在从Template里面刷新
     QDomElement symbolDom = dom->namedItem("IconSymbol").toElement();
     if(!symbolDom.isNull())
     {
@@ -163,83 +131,55 @@ void HIconObj::readXml(int v, QDomElement* dom)
         update();
     }
     
-	/*
-    //如果是遥测类型或者控制点类型 还需要保存first text信息
-    if(TEMPLATE_TYPE_ANALOGUE == nCatalogType || TEMPLATE_TYPE_CONTROL == nCatalogType)
+    HText* pText = firstText();
+    if(!pText)
     {
-        pText = new HText();
-        if(pText)
+        QDomElement textDom = dom->namedItem(pText->tagName()).toElement();
+        if(!textDom.isNull())
         {
-            QDomElement textDom = dom->namedItem(pText->tagName()).toElement();
-            if(!textDom.isNull())
-            {
-                pText->readXml(&textDom);
-            }
-            else
-            {
-                delete pText;
-                pText = NULL;
-            }
+            pText->readXml(v,&textDom);
         }
-    }*/
+    }
 
-    //动态数据
-    /*
     QDomElement RelationDom = dom->namedItem("Relation").toElement();
-	if (dynamicObj())
-	{
+    if (dynamicObj())
+    {
+        clearDynamicData();
         dynamicObj()->readXml(v,&RelationDom);
-    }*/
+    }
 }
 
 void HIconObj::writeXml(int v, QDomElement* dom)
 {
     if(!dom)return;
-    HBaseObj::writeXml(v,dom);
-    /*
-    dom->setAttribute("CatalogName",strCatalogName);
-    dom->setAttribute("CatalogType",nCatalogType);
-    dom->setAttribute("Uuid",strUuid);
-    dom->setAttribute("graphID",nGraphID);
-    dom->setAttribute("graphOperator",btGraphOperator);
-    dom->setAttribute("graphComfirm",btGraphComfirm);
-    */
-
-   
+    HBaseObj::writeXml(v,dom);  
     QDomElement symbolDom = dom->ownerDocument().createElement("IconSymbol");
     dom->appendChild(symbolDom);
     if(iconSymbol())
     {
         iconSymbol()->HShapeObj::writeXml(v,&symbolDom);
-    } /*
-    //如果是遥测类型或者控制点类型 还需要保存first text信息
-    if(TEMPLATE_TYPE_ANALOGUE == nCatalogType || TEMPLATE_TYPE_CONTROL == nCatalogType)
+    }
+    HText* pText = firstText();
+    if(pText)
     {
-        if(pText)
-        {
-            QDomElement childEle = dom->ownerDocument().createElement(pText->tagName());
-            dom->appendChild(childEle);
-            pText->writeXml(&childEle);
-        }
-    }*/
+        QDomElement childEle = dom->ownerDocument().createElement(pText->tagName());
+        dom->appendChild(childEle);
+        pText->writeXml(v,&childEle);
+    }
 
-    //动态数据 放到测点Icon里面
-    /*
     QDomElement RelationDom = dom->ownerDocument().createElement("Relation");
     dom->appendChild(RelationDom);
-	if (dynamicObj())
-	{
+    if (dynamicObj())
+    {
         dynamicObj()->writeXml(v,&RelationDom);
-    }*/
+    }
 }
-
 
 QString HIconObj::tagName()
 {
     return "Icon";
 }
 
-//拷贝克隆
 void HIconObj::copyTo(HBaseObj* obj)
 {
     HIconObj* ob = (HIconObj*)obj;
@@ -321,7 +261,6 @@ void HIconObj::paint(QPainter* painter)
 	iconSymbol()->paint(painter);
 	painter->restore();
 }
-
 
 void HIconObj::setUuid(const QString& uuid)
 {
@@ -458,4 +397,11 @@ void HIconObj::update()
 	initIconTemplate();
     iconSymbol()->resize(w, h);
     iconSymbol()->setParent(this);
+}
+
+HText* HIconObj::firstText()
+{
+    if(iconSymbol())
+        return iconSymbol()->getFirstTextObj();
+    return "";
 }

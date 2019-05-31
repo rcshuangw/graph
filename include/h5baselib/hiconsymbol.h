@@ -33,6 +33,10 @@ public:
     int getObjID();
     bool findObjID(int nObjID);
 
+    //修改
+    void setModify(bool b);
+    bool isModify();
+
     void updateShowPattern();
     bool PatterIsValid(int nId);
 
@@ -59,11 +63,6 @@ public:
 
     //获取特定图元
     HText* getFirstTextObj();
-
-    //修改
-    void setModify(bool b);
-    bool isModify();
-
 public:
 	virtual void paint(QPainter* painter);
 public:
