@@ -4,19 +4,15 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QTextCodec>
+#include "hiconobj.h"
 
 HGraph::HGraph(const QString& name)
-    :sName(name)
+    :m_strGraphName(name)
 {
-    nGraphID = 0;
-    nGraphWidth = 1000;
-    nGraphHeight = 1000;
     nRefreshInterval = 3000;
-    strFillColor = "#000000";
-    bModify = false;
     bStart = false;
     btType = 0;
-    nGraphID = (int)-1;
+
 }
 
 HGraph::~HGraph()
@@ -24,66 +20,14 @@ HGraph::~HGraph()
 
 }
 
-
 void HGraph::setGraphName(const QString& name)
 {
-    sName = name;
+    m_strGraphName = name;
 }
 
 QString HGraph::getGraphName()
 {
-    return sName;
-}
-
-void HGraph::setGraphID(int id)
-{
-    nGraphID = id;
-}
-
-//获取ID
-int HGraph::getGraphID()
-{
-    return nGraphID;
-}
-
-void HGraph::setGraphWidth(int width)
-{
-    nGraphWidth = width;
-}
-
-int HGraph::getGraphWidth()
-{
-    return nGraphWidth;
-}
-
-void HGraph::setGraphHeight(int height)
-{
-    nGraphHeight = height;
-}
-
-int HGraph::getGraphHeight()
-{
-    return nGraphHeight;
-}
-
-void HGraph::setFillColor(const QString& clr)
-{
-    strFillColor = clr;
-}
-
-QString HGraph::getFillColor()
-{
-    return strFillColor;
-}
-
-void HGraph::setFillPicture(const QString& strPic)
-{
-    strFillPicture = strPic;
-}
-
-QString HGraph::getFillPicture()
-{
-    return strFillPicture;
+    return m_strGraphName;
 }
 
 void HGraph::setRefreshInterval(int val)
@@ -144,6 +88,8 @@ void HGraph::readData(int v,QDataStream *d)
     //模板
     *d>>n;
     int nCount = n;
+
+    QString s;
     clearIconTemplate();
     for(int i = 0; i < nCount;i++)
     {
@@ -226,7 +172,7 @@ void HGraph::readXml(int v,QDomElement *d)
         QUuid uuid = QUuid(e.attribute("Uuid"));
         HIconTemplate *pIconTemplate = new HIconTemplate(uuid);//需要定义一个不带uuid的参数
         if(!pIconTemplate) continue;
-        pIconTemplate->readXml(&e);
+        pIconTemplate->readXml(v,&e);
         addIconTemplate(pIconTemplate);
     }
 
@@ -271,7 +217,7 @@ void HGraph::writeXml(int v,QDomElement *d)
         if(!iconTemplate) continue;
         QDomElement tempDom = templateDom.ownerDocument().createElement("IconTemplate");
         templateDom.appendChild(tempDom);
-        iconTemplate->writeXml(&tempDom);
+        iconTemplate->writeXml(v,&tempDom);
     }
 
     HContainerObj::writeXml(v,d);
@@ -293,7 +239,6 @@ void HGraph::copyTo(HBaseObj* ob)
 void HGraph::clear()
 {
     setBkImagePath("");
-    setFillColor("");
     HContainerObj::clear();
     clearIconTemplate();
     m_width = 1000;
@@ -305,19 +250,64 @@ void HGraph::clear()
     m_fZoomScale = 1.0;
 
 }
-void HGraph::addObj(HBaseObj* pObj)
+void HGraph::addIconObj(HBaseObj* pObj)
 {
+    if(!pObj) return;
 
+    addObj(pObj);
+
+    //如果是iconsymbol就要修正对应模板
+    if(pObj->getShapeType() == Icon)
+    {
+        HIconObj* io = (HIconObj*)pObj;
+        HIconTemplate* it = io->iconTemplate();
+        if(it)
+        {
+            HIconTemplate*itt = addIconTemplate(it);
+            if(itt!=it)
+            {
+                io->setIconTemplate(itt);
+            }
+        }
+    }
+
+    //group里面有iconsymbol
+    if(pObj->getShapeType() == Group)
+    {
+        HContainerObj* co = (HContainerObj*)pObj;
+        int sz = co->getObjList().size();
+        for(int i = 0; i < sz;i++)
+        {
+            HBaseObj* bo = (HBaseObj*)co->getObjList().at(i);
+            if(bo && bo->getShapeType() == Icon)
+            {
+                HIconObj* io = (HIconObj*)bo;
+                HIconTemplate* it = io->iconTemplate();
+                if(it)
+                {
+                    HIconTemplate*itt = addIconTemplate(it);
+                    if(itt!=it)
+                    {
+                        io->setIconTemplate(itt);
+                    }
+                }
+            }
+        }
+    }
 }
 
-void HGraph::takeObj(HBaseObj* pObj)
+void HGraph::takeIconObj(HBaseObj* pObj)
 {
-
+    if(!pObj) return;
+    removeObj(pObj);
 }
 
-void HGraph::removeObj(HBaseObj *pObj)
+void HGraph::removeIconObj(HBaseObj *pObj)
 {
-
+    if(!pObj) return;
+    removeObj(pObj);
+    delete pObj;
+    pObj = NULL;
 }
 
 //模板部分
@@ -343,12 +333,22 @@ HIconTemplate* HGraph::findIconTemplate(const QUuid& uid)
     return NULL;
 }
 
-void HGraph::addIconTemplate(HIconTemplate* temp)
+HIconTemplate* HGraph::addIconTemplate(HIconTemplate* temp)
 {
     if(!temp)
-        return;
-    if(NULL == findIconTemplate(temp->getUuid()))
-        pIconTemplateList.append(temp);
+        return NULL;
+    HIconTemplate* it = findIconTemplate(temp->getUuid());
+    if(!it){
+        it = new HIconTemplate(temp->getUuid());
+        if(pIconTemplateList.indexOf(it) < 0){
+            temp->copyTo(it);
+            pIconTemplateList.append(it);
+        }
+    }
+    else
+    {
+        temp->copyTo(it);
+    }
 }
 
 void HGraph::removeIconTemplate(HIconTemplate* temp)
@@ -376,10 +376,10 @@ void HGraph::paint(QPainter* painter)
 
 QRectF HGraph::boundingRect(qint8 flag)
 {
-
+    return QRectF();
 }
 
 QPainterPath HGraph::shape(qint8 flag)
 {
-
+    return QPainterPath();
 }

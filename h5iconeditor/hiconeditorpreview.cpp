@@ -8,9 +8,8 @@
 #include "hiconobj.h"
 #include "hiconhelper.h"
 #include <QIntValidator>
-HIconEditorPreview::HIconEditorPreview(HIconEditorMgr* iconMgr,QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::IconPreview),pIconMgr(iconMgr)
+HIconEditorPreview::HIconEditorPreview(QWidget *parent) :
+    QDialog(parent),ui(new Ui::IconPreview)
 {
     ui->setupUi(this);
 
@@ -28,8 +27,16 @@ HIconEditorPreview::~HIconEditorPreview()
     delete ui;
 }
 
-void HIconEditorPreview::init()
+void HIconEditorPreview::clear()
 {
+    m_pixmap = QPixmap();
+    ui->widget->repaint();
+}
+
+void HIconEditorPreview::setIconEditorMgr(HIconEditorMgr* mgr)
+{
+    clear();
+    pIconMgr = mgr;
     if(pIconMgr && pIconMgr->iconTemplate())
     {
         QSizeF sizeF = pIconMgr->iconTemplate()->getDefaultSize();
@@ -41,57 +48,74 @@ void HIconEditorPreview::init()
         ui->widthSpinBox->setValue(0);
         ui->heightSpinBox->setValue(0);
     }
+    refresh();
 }
 
 void HIconEditorPreview::refresh()
 {
+    if(!pIconMgr || !pIconMgr->iconTemplate())
+        return;
 
-    //p.drawLine(QPointF(0,0),QPoint(5,5));
-    //drawIcon(&p);
-
+    QSizeF tempSize = pIconMgr->iconTemplate()->getDefaultSize();
+    m_boundingRect = QRectF(QPointF(0,0),tempSize);
+    m_boundingRect.moveCenter(QPointF(ui->widget->size().width()/2,ui->widget->size().height()/2));
+    m_pixmap = QPixmap(ui->widget->size());
+    QPainter painter(&m_pixmap);
+    painter.setRenderHint(QPainter::Antialiasing,true);
+    painter.fillRect(QRectF(QPointF(0,0),ui->widget->size()),Qt::white);
+    drawIcon(&painter);
+    ui->widget->update();
 }
 
 void HIconEditorPreview::onDefaultSizeChanged()
 {
     int width = ui->widthSpinBox->value();
     int height = ui->heightSpinBox->value();
-    if(pIconMgr && pIconMgr->iconTemplate())
+    if(!pIconMgr || !pIconMgr->iconTemplate())
+        return;
+    pIconMgr->iconTemplate()->setDefaultSize(QSizeF(width,height));
+    QSizeF sizeF = QSizeF(width,height);//获取默认大小
+    if(sizeF.width() > 0 && sizeF.height())
     {
-        pIconMgr->iconTemplate()->setDefaultSize(QSizeF(width,height));
-        QSizeF sizeF = QSizeF(width,height);//获取默认大小
-        if(sizeF.width() > 0 && sizeF.height())
-        {
-            QSizeF nSizeF = sizeF * pIconMgr->getRatio();
-            QRectF rectF = QRectF(QPointF(-nSizeF.width()/2,-nSizeF.height()/2),QSizeF(nSizeF.width(),nSizeF.height()));
-            pIconMgr->iconTemplate()->getSymbol()->m_width = nSizeF.width();
-            pIconMgr->iconTemplate()->getSymbol()->m_height = nSizeF.height();
-            pIconMgr->setLogicRect(rectF);
-        }
-        onRefreshChanged();
+        QSizeF nSizeF = sizeF * pIconMgr->getRatio();
+        QRectF rectF = QRectF(QPointF(-nSizeF.width()/2,-nSizeF.height()/2),QSizeF(nSizeF.width(),nSizeF.height()));
+        pIconMgr->iconTemplate()->getSymbol()->m_width = nSizeF.width();
+        pIconMgr->iconTemplate()->getSymbol()->m_height = nSizeF.height();
+        pIconMgr->setLogicRect(rectF);
+        pIconMgr->iconTemplate()->setModify(true);
     }
+    refresh();
 }
 
 void HIconEditorPreview::onRefreshChanged()
 {
-    if(!pIconMgr) return;
-    HIconTemplate* pTemplate = pIconMgr->iconTemplate();
-    if(!pTemplate) return;
-    //绘制区域
-    QSizeF tempSize = pTemplate->getDefaultSize();
-    pixRect = QRectF(QPointF(0,0),tempSize);
-
-    //获取绘制图形
-    QSizeF ratioSizeF= QSizeF(pIconMgr->iconTemplate()->getSymbol()->m_width,pIconMgr->iconTemplate()->getSymbol()->m_height);
-    int nCurPattern = pTemplate->getSymbol()->getCurrentPattern();
-    pixMap = HIconHelper::Instance()->iconPixmap(pTemplate->getCatalogName(),pTemplate->getUuid().toString(),ratioSizeF,nCurPattern);
-    ui->widget->update();//重绘操作
+    refresh();
 }
 
 void HIconEditorPreview::drawIcon(QPainter *p)
 {
+    if(!pIconMgr)
+        return;
     HIconTemplate* pTemplate = pIconMgr->iconTemplate();
     if(!pTemplate) return;
-    pixMap = HIconHelper::Instance()->iconPixmap(pTemplate->getCatalogName(),pTemplate->getUuid().toString());
+    HIconObj* obj = new HIconObj(pTemplate);
+    if(!obj)return;
+    obj->initIconTemplate();
+    obj->resize(m_boundingRect.width(),m_boundingRect.height());
+    p->save();
+    p->setPen(Qt::DotLine);
+    p->drawRect(m_boundingRect);
+    p->restore();
+    p->save();
+    p->translate(ui->widget->width()/2,ui->widget->height()/2);
+    obj->paint(p);
+    p->restore();
+    if(obj)
+    {
+        delete obj;
+        obj = NULL;
+    }
+
 }
 
 bool HIconEditorPreview::eventFilter(QObject *obj, QEvent *event)
@@ -101,21 +125,14 @@ bool HIconEditorPreview::eventFilter(QObject *obj, QEvent *event)
     {
         if(event->type() == QEvent::Paint)
         {
-            if(!pixMap.isNull())
+            if(!m_pixmap.isNull())
             {
                 QPainter p(ui->widget);
-                QPen pen(Qt::red);
-                pen.setStyle(Qt::DotLine);
-                p.setPen(pen);
-                pixRect.moveCenter(QPointF(ui->widget->size().width()/2,ui->widget->size().height()/2));
-                p.drawRect(pixRect);
-                p.drawPixmap(pixRect.topLeft(),pixMap);
-
+                p.drawPixmap(QPointF(0,0),m_pixmap);
             }
             return true;
         }
     }
-
     return false;
 }
 

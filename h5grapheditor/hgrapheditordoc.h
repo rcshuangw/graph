@@ -2,7 +2,6 @@
 #define HGRAPHEDITORDOC_H
 
 #include <QObject>
-class HStation;
 class HBaseObj;
 class HIconGraphicsItem;
 class HIconTemplate;
@@ -10,17 +9,7 @@ class QDomElement;
 class HStation;
 class HGraph;
 class HGraphEditorMgr;
-//主要是对所有文档的管理类，包含所有模板文件，图符文件，以及图形文件
-//具备一些相关的操作来支持对应的管理对象
-//图形管理文档对象 主要目标是图形文件的管理，对于厂站、模板信息都有对应的对象进行操作
 
-/*
- * 初始化 加载所有厂站的信息，所有画面的信息，所有模板的信息(考虑启动画面)
- * 初始化临时HGraph
- * 当新建一个新画面时，提供HGraph对象，初始化这个HGraph对象(包含背景等信息)，返回给HGraph
- *临时HGraph的内容提供给view/scene,供显示。
- * 打开画面，删除都是如此，代码此处实现，可以供其他对象调用对应接口
-*/
 class HGraphEditorDoc : QObject
 {
 public:

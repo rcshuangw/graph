@@ -11,6 +11,7 @@
 #include "htempcontainer.h"
 #include "hgroup.h"
 #include "hmakeicon.h"
+#include "hicontemplate.h"
 HIconCommand::HIconCommand(HIconEditorMgr* iconMgr):m_pIconEditorMgr(iconMgr)
 {
 

@@ -8,7 +8,7 @@
 
 class HGraphEditorMgr;
 class HBaseObj;
-class HGraphUndoCommand : public QUndoCommand
+class HGraphCommand : public QUndoCommand
 {
 public:
     enum Type{
@@ -23,8 +23,8 @@ public:
         Resize = 8,         //改变大小(包含手动改变大小，对齐，相等)
     };
 
-    HGraphUndoCommand(HGraphEditorMgr* graphEditorMgr);
-    ~HGraphUndoCommand();
+    HGraphCommand(HGraphEditorMgr* graphEditorMgr);
+    ~HGraphCommand();
 public:
     virtual int id() const;
     virtual void redo();
@@ -36,7 +36,7 @@ protected:
 
 
 //新建
-class HGraphNewCommand : public HGraphUndoCommand
+class HGraphNewCommand : public HGraphCommand
 {
 public:
     HGraphNewCommand(HGraphEditorMgr* graphEditorMgr,HBaseObj* pObj);
@@ -50,7 +50,7 @@ protected:
 };
 
 //删除
-class HGraphDelCommand : public HGraphUndoCommand
+class HGraphDelCommand : public HGraphCommand
 {
 public:
     HGraphDelCommand(HGraphEditorMgr* graphEditorMgr,QList<HBaseObj*> pObjs);
@@ -64,7 +64,7 @@ protected:
 };
 
 //粘贴
-class HGraphPasteCommand : public HGraphUndoCommand
+class HGraphPasteCommand : public HGraphCommand
 {
 public:
     HGraphPasteCommand(HGraphEditorMgr* graphEditorMgr,QList<HBaseObj*> pObjs);
@@ -78,7 +78,7 @@ protected:
 };
 
 //移动
-class HGraphMoveCommand : public HGraphUndoCommand
+class HGraphMoveCommand : public HGraphCommand
 {
 public:
     HGraphMoveCommand(HGraphEditorMgr* graphEditorMgr,QList<HBaseObj*> pObjs,qreal dx,qreal dy);
@@ -96,7 +96,7 @@ protected:
 };
 
 //旋转
-class HGraphRotateCommand : public HGraphUndoCommand
+class HGraphRotateCommand : public HGraphCommand
 {
 public:
     HGraphRotateCommand(HGraphEditorMgr* graphEditorMgr,QList<HBaseObj*> pObjs,float angle);
@@ -113,7 +113,7 @@ protected:
 };
 
 //翻转
-class HGraphTurnCommand : public HGraphUndoCommand
+class HGraphTurnCommand : public HGraphCommand
 {
 public:
     HGraphTurnCommand(HGraphEditorMgr* graphEditorMgr,QList<HBaseObj*> pObjs,bool direction);
@@ -129,7 +129,7 @@ protected:
 };
 
 //改变大小
-class HGraphResizeCommand : public HGraphUndoCommand
+class HGraphResizeCommand : public HGraphCommand
 {
 public:
     HGraphResizeCommand(HGraphEditorMgr* graphEditorMgr,QList<HBaseObj*> pObjs,QList<QPolygonF> oldPts,QList<QPolygonF> newPts);

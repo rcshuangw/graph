@@ -58,7 +58,7 @@ QPixmap HIconHelper::iconPixmap(const QString& strType,const QString& uuid,const
 
     //创建iconObj
     HIconObj* pObj = new HIconObj(pIconTemplate);
-    if(!pObj->iconSymbol() || pObj->iconSymbol()->getMaxPattern() <= nCurPattern)
+    if(!pObj->iconSymbol() || pObj->iconSymbol()->getMaxPattern() < nCurPattern)
         return QPixmap();
     pObj->iconSymbol()->setCurrentPattern(nCurPattern);
 

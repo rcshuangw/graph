@@ -1,8 +1,6 @@
 ﻿#ifndef HGRAPHEDITORMAINWINDOW_H
 #define HGRAPHEDITORMAINWINDOW_H
-
 #include <QMainWindow>
-
 namespace Ui {
 class GraphEditorMainWindow;
 }
@@ -35,7 +33,6 @@ public:
 
 
 public slots:
-
    void New(const QString&);
    void Open(const QString&,const int graphID);
    void Del(const QString&,const int graphID);

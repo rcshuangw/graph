@@ -4,7 +4,7 @@ HLineObj::HLineObj()
 	m_nArrowStart = 0;
 	m_nArrowEnd = 0;
 	m_nArrowWidth = 10;
-	m_nArrowHeight = 0;
+    m_nArrowHeight = 10;
 }
 
 HLineObj::~HLineObj()

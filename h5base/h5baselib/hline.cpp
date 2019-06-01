@@ -99,6 +99,9 @@ void HLine::resize(double w, double h, bool scale)
     ptHeadPoint.ry()*=dy;
     ptTailPoint.rx()*=dx;
     ptTailPoint.ry()*=dy;
+
+    //setArrowWidth(getArrowWidth()*dx);
+    //setArrowHeight(getArrowHeight()*dy);
 }
 
 bool HLine::setPointList(QPolygonF& list, qint8 flag)

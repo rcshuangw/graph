@@ -7,27 +7,27 @@
 #include "hiconlineitem.h"
 #include "hgrapheditorview.h"
 #include "hgrapheditorscene.h"
-HGraphUndoCommand::HGraphUndoCommand(HGraphEditorMgr* graphEditorMgr):m_pGraphEditorMgr(graphEditorMgr)
+HGraphCommand::HGraphCommand(HGraphEditorMgr* graphEditorMgr):m_pGraphEditorMgr(graphEditorMgr)
 {
     bFirstTime = true;
 }
 
-HGraphUndoCommand::~HGraphUndoCommand()
+HGraphCommand::~HGraphCommand()
 {
 
 }
 
 
-int HGraphUndoCommand::id() const
+int HGraphCommand::id() const
 {
     return -1;
 }
-void HGraphUndoCommand::redo()
+void HGraphCommand::redo()
 {
 
 }
 
-void HGraphUndoCommand::undo()
+void HGraphCommand::undo()
 {
 
 }
@@ -38,7 +38,7 @@ void HGraphUndoCommand::undo()
  * 备注:新建对象为单个对象，如果是多个对象，则换成list
  *
  * **************************/
-HGraphNewCommand::HGraphNewCommand(HGraphEditorMgr* graphEditorMgr,HBaseObj* obj):HGraphUndoCommand(graphEditorMgr),pObj(obj)
+HGraphNewCommand::HGraphNewCommand(HGraphEditorMgr* graphEditorMgr,HBaseObj* obj):HGraphCommand(graphEditorMgr),pObj(obj)
 {
     setText("create object");
 }
@@ -83,7 +83,7 @@ void HGraphNewCommand::undo()
 }
 
 ////////////////////////////////////////删除///////////////////////////////////////////
-HGraphDelCommand::HGraphDelCommand(HGraphEditorMgr* graphEditorMgr,QList<HBaseObj*> objs):HGraphUndoCommand(graphEditorMgr),pObjList(objs)
+HGraphDelCommand::HGraphDelCommand(HGraphEditorMgr* graphEditorMgr,QList<HBaseObj*> objs):HGraphCommand(graphEditorMgr),pObjList(objs)
 {
     setText("create object");
 }
@@ -141,7 +141,7 @@ void HGraphDelCommand::undo()
 
 
 ////////////////////////////////////////粘贴///////////////////////////////////////////
-HGraphPasteCommand::HGraphPasteCommand(HGraphEditorMgr* graphEditor,QList<HBaseObj*> objs):HGraphUndoCommand(graphEditor),pObjList(objs)
+HGraphPasteCommand::HGraphPasteCommand(HGraphEditorMgr* graphEditor,QList<HBaseObj*> objs):HGraphCommand(graphEditor),pObjList(objs)
 {
     setText("create object");
 }
@@ -200,7 +200,7 @@ void HGraphPasteCommand::undo()
 
 ////////////////////////////////////////移动///////////////////////////////////////////
 HGraphMoveCommand::HGraphMoveCommand(HGraphEditorMgr* graphEditor,QList<HBaseObj*> pObjs,qreal dx,qreal dy)
-    :HGraphUndoCommand(graphEditor),pObjList(pObjs)
+    :HGraphCommand(graphEditor),pObjList(pObjs)
 {
     for(int i = 0; i < pObjList.count();i++)
     {
@@ -211,13 +211,13 @@ HGraphMoveCommand::HGraphMoveCommand(HGraphEditorMgr* graphEditor,QList<HBaseObj
 }
 
 HGraphMoveCommand::HGraphMoveCommand(HGraphEditorMgr* graphEditor,QList<HBaseObj*> pObjs,QList<qreal> dxs,QList<qreal> dys)
-    :HGraphUndoCommand(graphEditor),pObjList(pObjs),dxList(dxs),dyList(dys)
+    :HGraphCommand(graphEditor),pObjList(pObjs),dxList(dxs),dyList(dys)
 {
     setText("Move Object(s)");
 }
 
 HGraphMoveCommand::HGraphMoveCommand(HGraphEditorMgr* graphEditor,QList<HBaseObj*> pObjs,QList<QPointF> oldPt,QList<QPointF> newPt)
-    :HGraphUndoCommand(graphEditor),pObjList(pObjs)
+    :HGraphCommand(graphEditor),pObjList(pObjs)
 {
     for(int i = 0; i< pObjList.count();i++)
     {
@@ -289,7 +289,7 @@ void HGraphMoveCommand::undo()
 
 ////////////////////////////////////////旋转///////////////////////////////////////////
 HGraphRotateCommand::HGraphRotateCommand(HGraphEditorMgr* graphEditor,QList<HBaseObj*> pObjs,float angle)
-    :HGraphUndoCommand(graphEditor),pObjList(pObjs)
+    :HGraphCommand(graphEditor),pObjList(pObjs)
 {
     for(int i = 0; i < pObjList.count();i++)
     {
@@ -299,7 +299,7 @@ HGraphRotateCommand::HGraphRotateCommand(HGraphEditorMgr* graphEditor,QList<HBas
 }
 
 HGraphRotateCommand::HGraphRotateCommand(HGraphEditorMgr* graphEditor,QList<HBaseObj*> pObjs,QList<float> angles)
-    :HGraphUndoCommand(graphEditor),pObjList(pObjs),angleList(angles)
+    :HGraphCommand(graphEditor),pObjList(pObjs),angleList(angles)
 {
     setText("rotate object");
 }
@@ -367,7 +367,7 @@ void HGraphRotateCommand::undo()
  * direction = true; 水平翻转，direction = false;垂直翻转
 */
 HGraphTurnCommand::HGraphTurnCommand(HGraphEditorMgr* graphEditorMgr,QList<HBaseObj*> objs,bool direction )
-    :HGraphUndoCommand(graphEditorMgr),pObjList(objs),bDirection(direction)
+    :HGraphCommand(graphEditorMgr),pObjList(objs),bDirection(direction)
 {
     setText("turn object");
 }
@@ -438,7 +438,7 @@ void HGraphTurnCommand::undo()
 
 ////////////////////////////////////////改变大小///////////////////////////////////////////
 HGraphResizeCommand::HGraphResizeCommand(HGraphEditorMgr* graphEditorMgr,QList<HBaseObj*> objs,QList<QPolygonF> oldPts,QList<QPolygonF> newPts)
-    :HGraphUndoCommand(graphEditorMgr),pObjList(objs),oldPtList(oldPts),newPtList(newPts)
+    :HGraphCommand(graphEditorMgr),pObjList(objs),oldPtList(oldPts),newPtList(newPts)
 {
     setText("resize object");
 }

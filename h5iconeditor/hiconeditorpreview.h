@@ -11,10 +11,11 @@ class HIconEditorPreview : public QDialog
     Q_OBJECT
 
 public:
-    explicit HIconEditorPreview(HIconEditorMgr* iconMgr,QWidget *parent = 0);
+    explicit HIconEditorPreview(QWidget *parent = 0);
     ~HIconEditorPreview();
 public:
-    void init();
+    void clear();
+    void setIconEditorMgr(HIconEditorMgr* iconMgr);
 protected:
     bool eventFilter(QObject *, QEvent *);
 public slots:
@@ -26,8 +27,8 @@ public slots:
 private:
     Ui::IconPreview *ui;
     HIconEditorMgr* pIconMgr;
-    QRectF  pixRect;
-    QPixmap pixMap;
+    QRectF m_boundingRect;
+    QPixmap m_pixmap;
 };
 
 #endif // HICONPREVIEW_H

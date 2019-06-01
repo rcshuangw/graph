@@ -1015,3 +1015,23 @@ void HGraphEditorOp::zoomSame()
     m_scale = (qreal)1.0;
     setupMatrix();
 }
+
+void HGraphEditorOp::createIconObj(const QString& TypeName,const QString& uuid,int shape,QPointF fpoint,QList<HIconGraphicsItem*> &items)
+{
+    //if(!pGraphEditorDoc || !pGraphEditorDoc->getCurGraph())
+    //    return;
+}
+
+//增加对象
+void HGraphEditorOp::addIconObj(HBaseObj* pObj,bool bPaste)
+{
+    if(!pObj)
+        return;
+    //pGraphEditorDoc->getCurGraph()->addObj(pObj);
+    //ObjCreated(pObj);
+}
+
+void HGraphEditorOp::ObjCreated(HBaseObj* pObj)
+{
+    //pGraphEditorScene->addIconGraphicsItem(pObj);
+}

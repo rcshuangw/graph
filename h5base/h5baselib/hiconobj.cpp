@@ -10,7 +10,6 @@ HIconObj::HIconObj()
 {
     setShapeType(Icon);
     //去掉本身所有的边框颜色设置，这些都是不需要的
-    pText = NULL;
     m_pDynamicObj = new HDynamicObj;
     //bFrameSee = false;
     nGraphID = (int)-1;
@@ -36,13 +35,11 @@ HIconObj::HIconObj(HIconTemplate* it)
 HIconObj::~HIconObj()
 {
     clearDynamicData();
-
     if(iconSymbol())
     {
         delete m_pIconSymbol;
         m_pIconSymbol = NULL;
     }
-
     m_pIconTemplate = NULL;
 }
 
@@ -55,8 +52,8 @@ void HIconObj::initIconTemplate()
     //本地从图符模板库中拷贝
     iconTemplate()->getSymbol()->copyTo(iconSymbol());
     iconSymbol()->setParent(this);
-    iconSymbol()->m_width = 0.0;
-    iconSymbol()->m_height = 0.0;
+    iconSymbol()->setOX(0.0);
+    iconSymbol()->setOY(0.0);
 }
 
 void HIconObj::readData(int v, QDataStream* data)
@@ -79,7 +76,7 @@ void HIconObj::readData(int v, QDataStream* data)
         }
         else
         {
-            text = HMakeIcon::Instance()->newObj(Text);
+            text = (HText*)HMakeIcon::Instance()->newObj(Text);
             text->readData(v,data);
             delete text;
             text = NULL;
@@ -219,12 +216,6 @@ QPolygonF HIconObj::getPointList(qint8 flag )
 	maps(list, flag);
 	return list;
 }
-
-DrawShape HIconObj::getShapeType()
-{
-    return DrawShape::Icon;
-}
-
 
 void HIconObj::resize(double w, double h, bool bscale)
 {
@@ -403,5 +394,5 @@ HText* HIconObj::firstText()
 {
     if(iconSymbol())
         return iconSymbol()->getFirstTextObj();
-    return "";
+    return NULL;
 }

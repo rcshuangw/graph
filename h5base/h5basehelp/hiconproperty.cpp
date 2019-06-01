@@ -681,7 +681,7 @@ QIcon HPropertyDlg::createArrowIcon(quint8 style,bool head)
         break;
      }
     }
-    if(!head)
+    if(head)
     {
         QTransform matrix;
         matrix.scale(-1,1);

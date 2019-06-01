@@ -33,24 +33,10 @@ public:
 
     virtual QString tagName();
     virtual void copyTo(HBaseObj* obj);
+
 public:
     void setGraphName(const QString& name);
     QString getGraphName();
-
-    void setFillColor(const QString& clr);
-    QString getFillColor();
-
-    void setGraphID(int id);
-    int getGraphID();
-
-    void setGraphWidth(int width);
-    int getGraphWidth();
-
-    void setGraphHeight(int height);
-    int getGraphHeight();
-
-    void setFillPicture(const QString& strPic);
-    QString getFillPicture();
 
     void setRefreshInterval(int val);
     int getRefreshInterval();
@@ -62,28 +48,23 @@ public:
     ushort getGraphType();
 
     QString getStationName();
-	
-    void setModify(bool modify);
-    bool getModify();
 
 public:
-    virtual QRectF objsRect(qint8 flag);
-    virtual void rePos();
     virtual void paint(QPainter* painter);
     virtual QRectF boundingRect(qint8 flag = 0);
     virtual QPainterPath shape(qint8 flag = 0);
 
 public:
     void clear();
-    void addObj(HBaseObj* pObj);
-    void removeObj(HBaseObj* pObj);
-    void takeObj(HBaseObj* pObj);
+    void addIconObj(HBaseObj* pObj);
+    void removeIconObj(HBaseObj* pObj);
+    void takeIconObj(HBaseObj* pObj);
 
     //模板部分
     int iconTemplateNum();
     HIconTemplate* IconTemplateAt(int index);
     virtual HIconTemplate* findIconTemplate(const QUuid& uid);
-    virtual void addIconTemplate(HIconTemplate* temp);
+    virtual HIconTemplate* addIconTemplate(HIconTemplate* temp);
     virtual void removeIconTemplate(HIconTemplate* temp);
     virtual void clearIconTemplate();
     virtual void resetIconTemplate();

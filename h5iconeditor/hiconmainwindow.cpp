@@ -17,6 +17,7 @@
 #include "hiconeditorwidget.h"
 #include "hselectedmgr.h"
 #include "hiconeditorframe.h"
+#include "hiconeditorpreview.h"
 HIconMainWindow::HIconMainWindow(HIconEditorMgr *parent) : m_pIconEditorMgr(parent)
 {
     createActions();
@@ -396,12 +397,12 @@ void HIconMainWindow::createDockWindows()
     connect(m_pIconTreeWidget,SIGNAL(IconDel(const QString&,const int&,const QString&)),this,SLOT(Del(const QString&,const int&,const QString&)));
     connect(m_pIconTreeWidget,SIGNAL(IconOpen(const QString&,const int&,const QString&)),this,SLOT(Open(const QString&,const int&,const QString&)));
     connect(m_pIconTreeWidget,SIGNAL(IconRename(const QString& ,const int& ,const QString& )),this,SLOT(Rename(const QString& ,const int& ,const QString&)));
-    /*
+
     QDockWidget* iconPreviewDock = new QDockWidget(QStringLiteral("图元预览框"),this);
     iconPreviewDock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
-    pIconPreview = new HIconPreview(pIconMgr);
-    iconPreviewDock->setWidget(pIconPreview);
-    addDockWidget(Qt::RightDockWidgetArea,iconPreviewDock);*/
+    m_pIconEditorPreview = new HIconEditorPreview();
+    iconPreviewDock->setWidget(m_pIconEditorPreview);
+    addDockWidget(Qt::RightDockWidgetArea,iconPreviewDock);
 }
 
 void HIconMainWindow::newFile()
@@ -478,7 +479,7 @@ void HIconMainWindow::New(const QString& strTemplateName,const QString& strCatal
     m_pIconEditorMgr->New(strTemplateName,strCatalogName,nCatalogType);
     m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
     m_pIconTreeWidget->addIconTreeWigetItem();
-    //pIconPreview->init();
+    m_pIconEditorPreview->setIconEditorMgr(m_pIconEditorMgr);
     selectAct->trigger();
 
     updateMenu();
@@ -500,6 +501,7 @@ void HIconMainWindow::Open(const QString &strTemplateName, int nTemplateType, co
     m_pIconEditorMgr->iconEditorFrame()->clear();
     m_pIconEditorMgr->Open(strTemplateName,nTemplateType,strUuid);
     m_pIconEditorWidget->setIconEditorMgr(m_pIconEditorMgr);
+    m_pIconEditorPreview->setIconEditorMgr(m_pIconEditorMgr);
 
     HIconTemplate *pIconTemplate = m_pIconEditorMgr->iconTemplate();
     QString strTitle = pIconTemplate->getCatalogName() + "/" + pIconTemplate->getSymbol()->getObjName() + pIconTemplate->getUuid().toString();

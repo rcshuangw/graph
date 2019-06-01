@@ -10,8 +10,9 @@ TEMPLATE = app
 
 INCLUDEPATH += \
     ../include \
-    ../include/H5IconGui \
-    ../include/H5IconHelp \
+    ../include/h5baselib \
+    ../include/h5basehelp \
+    ../include/h5basegui
 
 CONFIG += qt warn_off thread exceptions
 

@@ -14,6 +14,7 @@ class HIconEditorFrame;
 class HIconEditorMgr;
 class HIconTreeWidget;
 class HIconEditorWidget;
+class HIconEditorPreview;
 class HIconMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -31,7 +32,7 @@ private:
     HIconEditorFrame* m_pIconEditorFrame;
     HIconEditorWidget* m_pIconEditorWidget;
     HIconTreeWidget* m_pIconTreeWidget;
-    //HIconPreview* pIconPreview;
+    HIconEditorPreview* m_pIconEditorPreview;
 signals:
 
 

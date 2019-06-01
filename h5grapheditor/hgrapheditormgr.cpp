@@ -193,80 +193,12 @@ void HGraphEditorMgr::openGraphScene()
 {
     if(!pGraphEditorScene)
         return;
-    pGraphEditorScene->openGraphEditorSceneItems();
 }
 
 void HGraphEditorMgr::delGraphSceneItem()
 {
     if(!pGraphEditorScene)
         return;
-    pGraphEditorScene->delGraphEditorSceneItems();
-}
-
-//创建图符对象
-//类型(遥信,遥控...),uuid,shape,fpoint
-void HGraphEditorMgr::createIconObj(const QString& TypeName,const QString& uuid,int shape,QPointF fpoint,QList<HIconGraphicsItem*> &items)
-{
-    HIconTemplate* pIconTemplate;// = new HIconTemplate("");
-    //先到画面模板中去寻找
-    if(!pGraphEditorDoc || !pGraphEditorDoc->getCurGraph())
-        return;
-    pIconTemplate = pGraphEditorDoc->getCurGraph()->findIconTemplate(uuid);
-    if(!pIconTemplate)//没找到
-    {
-        pIconTemplate = new HIconTemplate("");
-        HIconTemplate* pTemplate = pGraphEditorDoc->findIconTemplate(uuid);
-        pTemplate->copyTo(pIconTemplate);
-        pGraphEditorDoc->getCurGraph()->addIconTemplate(pIconTemplate);
-    }
-
-    HBaseObj* pObj = pGraphEditorDoc->getCurGraph()->newObj(enumComplex,uuid);
-    HIconObj* pIconObj = (HIconObj*)pObj;
-    pIconObj->initIconTemplate();
-    //设置图元坐标位置
-    double width = 100;
-    double height = 100;
-    QSizeF sizeF = pIconTemplate->getDefaultSize();
-    double rectwidth = sizeF.width();
-    double rectheight = sizeF.height();
-    if(rectwidth > 0 || rectheight > 0)
-    {
-        width = rectwidth;
-        height = rectheight;
-    }
-    else
-    {
-        width = 30;
-        height = 30;
-    }
-
-    QPointF ptCenter = QPointF(fpoint.x() - width/2,fpoint.y() - height/2);
-    pIconObj->setTopLeft(ptCenter);
-    pIconObj->setRectWidth(width);
-    pIconObj->setRectHeight(height);
-    QSizeF pt = pIconTemplate->getDefaultSize();
-    double w1 = width/(pt.width()*20);
-    double h1 = height/(pt.height()*20);
-    pIconObj->resetRectPoint(ptCenter,QPointF(-pt.width()*10,-pt.height()*10));
-    pIconObj->resize(w1,h1);
-    addIconObj(pIconObj);
-    items.append(pIconObj->getIconGraphicsItem());
-}
-
-//增加对象
-void HGraphEditorMgr::addIconObj(HBaseObj* pObj,bool bPaste)
-{
-    if(!pObj)
-        return;
-    //图元对象添加到画面文件
-    pGraphEditorDoc->getCurGraph()->addObj(pObj);
-    ObjCreated(pObj);
-}
-
-void HGraphEditorMgr::ObjCreated(HBaseObj* pObj)
-{
-    //添加Item之后不能删除，后面还有拖拽移动等操作，等到拖拽释放之后才能删除
-    pGraphEditorScene->addIconGraphicsItem(pObj);
 }
 
 void HGraphEditorMgr::addNewCommand(HBaseObj *pObj)
@@ -324,11 +256,3 @@ void HGraphEditorMgr::addResizeCommand(QList<HBaseObj*> pObjs,QList<QPolygonF> o
     HGraphResizeCommand* resizeGraphCommand = new HGraphResizeCommand(this,pObjs,oldPts,newPts);
     m_pGraphEditorUndoStack->push(resizeGraphCommand);
 }
-
-
-
-
-
-
-
-

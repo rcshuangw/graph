@@ -3,6 +3,7 @@
 #include "hbaseobj.h"
 #include "hgroup.h"
 #include "hiconobj.h"
+#include "hiconsymbol.h"
 #include <QCursor>
 #include <QDebug>
 HDrawHelper* HDrawHelper::m_pInstance = NULL;
