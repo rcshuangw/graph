@@ -14,6 +14,7 @@
 #include "hpolygon.h"
 #include "hpolyline.h"
 #include "hgroup.h"
+#include "harc.h"
 #include "htempcontainer.h"
 HMakeIcon::HMakeIcon()
 {
@@ -79,7 +80,7 @@ HBaseObj* HMakeIcon::newObj(DrawShape nObjType,const QString& arg, HBaseObj* par
     }
     else if (nObjType == Arc)
     {
-        //pObj = new HArc();
+        pObj = new HArc();
     }
     else if (nObjType == Text)
     {

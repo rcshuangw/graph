@@ -12,6 +12,7 @@
 #include "hellipse.h"
 #include "hcircle.h"
 #include "htext.h"
+#include "harc.h"
 #include "hpolygon.h"
 #include "hpolyline.h"
 #include "hgroup.h"
@@ -381,9 +382,6 @@ void HPropertyDlg::initLineTab()
     ui->spanAngle->setSuffix(QStringLiteral("°"));
     ui->spanAngle->setValue(240);
 
-    ui->bCloseCheck->setVisible(false);
-    ui->bCloseCheck->setChecked(false);
-
     //弯曲度
     ui->rectRound->setChecked(false);
     ui->xAxis->setMinimum(0);
@@ -409,11 +407,9 @@ void HPropertyDlg::initLineTab()
         }
         else if(drawShape == Arc)
         {
-            ui->bCloseCheck->setVisible(true);
-            //HArc* pArcObj = (HArc*)pCurObj;
-            //ui->startAngle->setValue(pArcObj->getStartAngle());
-            //ui->spanAngle->setValue(pArcObj->getSpanAngle());
-            //ui->bCloseCheck->setChecked(pArcObj->getCloseStatus());
+            HArc* pArcObj = (HArc*)pCurObj;
+            ui->startAngle->setValue(pArcObj->startAngle());
+            ui->spanAngle->setValue(pArcObj->sweepLength());
         }
         else if(Rectangle == drawShape || Ellipse == drawShape || Circle == drawShape || Text == drawShape )
         {
@@ -725,12 +721,9 @@ void HPropertyDlg::ok_clicked()
     }
     else if(drawShape == Arc)
     {
-        //HArc* pArcObj = (HArc*)pCurObj;
-        //pArcObj->setStartAngle(ui->startAngle->value());
-        //pArcObj->setSpanAngle(ui->spanAngle->value());
-        //pArcObj->setCloseStatus(false);
-        //if(ui->bCloseCheck->checkState() == Qt::Checked)
-            //pArcObj->setCloseStatus(true);
+        HArc* pArcObj = (HArc*)pCurObj;
+        pArcObj->setStartAngle(ui->startAngle->value());
+        pArcObj->setSweepLength(ui->spanAngle->value());
     }
     else if(drawShape == Polyline)
     {

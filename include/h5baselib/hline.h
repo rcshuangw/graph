@@ -20,8 +20,6 @@ public:
     virtual void writeXml(int v,QDomElement* data);
 
 	virtual QString tagName();
-
-	//拷贝克隆
 	virtual void copyTo(HBaseObj* obj);
 
 ///////////////////////////////////////////////////////操作属性/////////////////////////////

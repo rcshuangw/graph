@@ -713,13 +713,6 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_15">
               <item>
-               <widget class="QCheckBox" name="bCloseCheck">
-                <property name="text">
-                 <string>曲线闭合</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <spacer name="horizontalSpacer_6">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>

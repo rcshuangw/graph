@@ -7,7 +7,7 @@
 #include "harctool.h"
 HDrawManager::HDrawManager()
 {
-
+    m_pDrawTool = NULL;
 }
 
 HDrawManager::~HDrawManager()
@@ -38,7 +38,7 @@ void HDrawManager::selectTool(DrawShape shape,const QString& catalogName,const Q
         m_pDrawTool = new HRectTool(this,shape,catalogName,uuid);
         break;
     case Arc:
-        //HArcTool
+        m_pDrawTool = new HArcTool(this,shape,catalogName,uuid);
         break;
     case Polygon:
     case Polyline:

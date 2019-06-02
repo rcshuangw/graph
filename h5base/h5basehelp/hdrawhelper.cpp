@@ -185,6 +185,7 @@ QCursor HDrawHelper::cursorOnPoint(DrawShape drawShape,int index)
     case Icon:
     case TempContainer:
     case Group:
+    case Arc:
     {
         switch(index)
         {
@@ -259,6 +260,23 @@ HPointFList HDrawHelper::selectedPointList(DrawShape drawshape)
         HPointFList points = m_pBaseObj->getPointList(1);
         //再获取每个点的中间点
         list = getMidPoints(points);
+    }
+        break;
+    case Arc:
+    {
+        QTransform trans;
+        m_pBaseObj->transform(trans,1);
+        HPointFList ptList = m_pBaseObj->getPointList(1);
+        QPointF topLeft = trans.inverted().map(ptList.at(0));
+        QPointF bottomRight = trans.inverted().map(ptList.at(1));
+        QRectF bounding = QRectF(topLeft,bottomRight);
+        HPointFList pointts;
+        pointts.append(bounding.topLeft());
+        pointts.append(bounding.topRight());
+        pointts.append(bounding.bottomRight());
+        pointts.append(bounding.bottomLeft());
+        list = getMidPoints(pointts,true);
+        list = trans.map(list);
     }
         break;
 
