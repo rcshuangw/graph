@@ -2,9 +2,11 @@
 #include "hmakeicon.h"
 #include "harc.h"
 HArcTool::HArcTool(HDrawManager* manager,DrawShape objShape,const QString& name,const QString& uuid)
-        :HDrawTool(manager, objShape, name, uuid)//m_pToolManager(manager),m_edrawShape(objShape),m_strObjName(name),m_strObjUuid(uuid)
+        :HDrawTool(manager, objShape, name, uuid),m_nArcState(Rect)
 {
 
+    m_nStartAngle = 0;
+    m_nSweepLength = 0;
 }
 
 HArcTool::~HArcTool()
@@ -41,7 +43,8 @@ void HArcTool::onMousePressEvent(QMouseEvent* event,QVariant &data)
     if(event->button() != Qt::LeftButton)
         return;
     QPointF pt = data.toPointF();
-    m_ptStPoint = m_ptCurPoint = pt;
+    if(m_nArcState == Rect)
+        m_ptStPoint = m_ptCurPoint = pt;
 }
 
 void HArcTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
@@ -67,6 +70,7 @@ void HArcTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
 
     //设置属性
     QPainterPath painterPath;
+    painterPath.moveTo(bounding.center());
     painterPath.arcTo(bounding,30,120);
     painterPath.closeSubpath();
     Path path;
