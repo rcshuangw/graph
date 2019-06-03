@@ -1,19 +1,19 @@
 ﻿#include "hgrapheditordoc.h"
-#include "publicdata.h"
 #include "hgrapheditormgr.h"
 #include "hgraph.h"
 #include "hicontemplate.h"
 #include "hstation.h"
 #include "hgraphhelper.h"
+#include "hiconobj.h"
 #include <QDir>
 #include <QFile>
 #include <QFileInfoList>
 #include <QProcessEnvironment>
 //图形文件存储类
 HGraphEditorDoc::HGraphEditorDoc(HGraphEditorMgr* mgr)
-    :pGraphEditorMgr(mgr)
+    :m_pGraphEditorMgr(mgr)
 {
-    pCurGraph = NULL;
+    m_pCurGraph = NULL;
 }
 
 HGraphEditorDoc::~HGraphEditorDoc()
@@ -61,9 +61,9 @@ void HGraphEditorDoc::loadStation()
 //厂站ID获取厂站
 HStation* HGraphEditorDoc::getStation(quint16 wStationID)
 {
-    for(int i = 0; i < pStationList.count();i++)
+    for(int i = 0; i < m_pStationList.count();i++)
     {
-        HStation* pStation = pStationList[i];
+        HStation* pStation = m_pStationList[i];
         if(wStationID == pStation->getNo())
             return pStation;
     }
@@ -73,9 +73,9 @@ HStation* HGraphEditorDoc::getStation(quint16 wStationID)
 //厂站地址获取厂站
 HStation* HGraphEditorDoc::getRtu(quint16 wStationAddress)
 {
-    for(int i = 0; i < pStationList.count();i++)
+    for(int i = 0; i < m_pStationList.count();i++)
     {
-        HStation* pStation = pStationList[i];
+        HStation* pStation = m_pStationList[i];
         if(wStationAddress == pStation->getAddress())
             return pStation;
     }
@@ -85,21 +85,21 @@ HStation* HGraphEditorDoc::getRtu(quint16 wStationAddress)
 //索引厂站
 HStation* HGraphEditorDoc::findStation(int nIndex)
 {
-    return pStationList.value(nIndex);
+    return m_pStationList.value(nIndex);
 }
 
 //加载模板信息
 void HGraphEditorDoc::loadIconTemplate()
 {
-    HGraphHelper::Instance()->loadIconTemplate(&pIconTemplateList);
+    HGraphHelper::Instance()->loadIconTemplate(&m_pIconTemplateList);
 }
 
 //寻找模板
 HIconTemplate* HGraphEditorDoc::findIconTemplate(const QString &uuid)
 {
-    for(int i = 0; i < pIconTemplateList.count();i++)
+    for(int i = 0; i < m_pIconTemplateList.count();i++)
     {
-        HIconTemplate* iconTemplate = (HIconTemplate*)pIconTemplateList[i];
+        HIconTemplate* iconTemplate = (HIconTemplate*)m_pIconTemplateList[i];
         if(iconTemplate->getUuid().toString() == uuid)
             return iconTemplate;
     }
@@ -109,7 +109,7 @@ HIconTemplate* HGraphEditorDoc::findIconTemplate(const QString &uuid)
 //加载画面信息
 void HGraphEditorDoc::loadAllGraph()
 {
-    HGraphHelper::Instance()->loadAllGraph(&pGraphList);
+    HGraphHelper::Instance()->loadAllGraph(&m_pGraphList);
 
     //加载完画面之后需要更新每一个画面里面的图元控件
     updateGraphList();
@@ -119,9 +119,9 @@ void HGraphEditorDoc::loadAllGraph()
 //更新所有画面里面的模板信息
 void HGraphEditorDoc::updateGraphList()
 {
-    for(int i = 0; i < pGraphList.count();i++)
+    for(int i = 0; i < m_pGraphList.count();i++)
     {
-        HGraph* pGraph = (HGraph*)pGraphList[i];
+        HGraph* pGraph = (HGraph*)m_pGraphList[i];
         if(!pGraph) continue;
         HIconTemplate* findTemp = NULL;
         for(int j = 0; j < pGraph->pIconTemplateList.count();j++)
@@ -137,14 +137,13 @@ void HGraphEditorDoc::updateGraphList()
             for(int k = 0; k < pGraph->getObjList().count();k++)
             {
                 HBaseObj* pObj = (HBaseObj*)pGraph->getObjList().at(k);
-                if(pObj->getShapeType() == enumComplex)
+                if(pObj->getShapeType() == Icon)
                 {
                     HIconObj* pObj1 = (HIconObj*)pObj;//
                     if(!pObj1->iconTemplate()->getUuid().toString().compare(findTemp->getUuid().toString()))
                     {
-                        findTemp->getSymbol()->copyTo(pObj1->getIconSymbol());
+                        findTemp->getSymbol()->copyTo(pObj1->iconSymbol());
                         pObj1->update();
-                        int a = 0;
                     }
                 }
             }
@@ -154,19 +153,19 @@ void HGraphEditorDoc::updateGraphList()
 
 void HGraphEditorDoc::saveAllGraph()
 {
-    HGraphHelper::Instance()->saveAllGraph(&pGraphList,getCurGraph());
+    HGraphHelper::Instance()->saveAllGraph(&m_pGraphList,getCurGraph());
 }
 
 void HGraphEditorDoc::saveCurGraph()
 {
-    if(!pCurGraph)
+    if(!m_pCurGraph)
     {
         return;
     }
-    HGraph* graph = findGraph(pCurGraph->getGraphID());
+    HGraph* graph = findGraph(m_pCurGraph->graphID());
     if(!graph)
         return;
-    pCurGraph->copyTo(graph);
+    m_pCurGraph->copyTo(graph);
     HGraphHelper::Instance()->saveGraph(graph);
 }
 
@@ -225,12 +224,12 @@ int HGraphEditorDoc::importGraph(const QString& name)
     if(pGraph->getGraphName().compare(strFolder) != 0)
         pGraph->setGraphName(strFolder);
     //在里面寻找graphID 如果找到了，graphID就要更改了
-    if(findGraph(pGraph->getGraphID()))
+    if(findGraph(pGraph->graphID()))
         pGraph->setGraphID(getGraphID());
     pGraph->writeXmlFile(strNewFile);//更新完要写进去
-    pGraphList.append(pGraph);
+    m_pGraphList.append(pGraph);
 
-    return pGraph->getGraphID();
+    return pGraph->graphID();
 }
 
 //获取一个新graph的ID
@@ -247,10 +246,10 @@ HGraph* HGraphEditorDoc::findGraph(int graphID)
 {
     HGraph *graph = NULL;
     QList<HGraph*>::Iterator graphIterator;
-    for(graphIterator = pGraphList.begin();graphIterator != pGraphList.end();graphIterator++)
+    for(graphIterator = m_pGraphList.begin();graphIterator != m_pGraphList.end();graphIterator++)
     {
         graph = *graphIterator;
-        if(graph->getGraphID() == graphID)
+        if(graph->graphID() == graphID)
             return graph;
     }
     return NULL;
@@ -260,7 +259,7 @@ HGraph* HGraphEditorDoc::findGraph(const QString& graphName)
 {
     HGraph *graph = NULL;
     QList<HGraph*>::Iterator graphIterator;
-    for(graphIterator = pGraphList.begin();graphIterator != pGraphList.end();graphIterator++)
+    for(graphIterator = m_pGraphList.begin();graphIterator != m_pGraphList.end();graphIterator++)
     {
         graph = *graphIterator;
         if(graph->getGraphName() == graphName)
@@ -272,21 +271,21 @@ HGraph* HGraphEditorDoc::findGraph(const QString& graphName)
 //新建画面
 HGraph* HGraphEditorDoc::addGraph(const QString& name)
 {
-    if(!pGraphEditorMgr) return NULL;
-    if(pCurGraph)
+    if(!m_pGraphEditorMgr) return NULL;
+    if(m_pCurGraph)
     {
-        pCurGraph->clear();
-        delete pCurGraph;
-        pCurGraph = NULL;
+        m_pCurGraph->clear();
+        delete m_pCurGraph;
+        m_pCurGraph = NULL;
     }
     HGraph* newGraph = new HGraph(name);
     newGraph->setGraphID(getGraphID());
-    newGraph->setGraphHeight(pGraphEditorMgr->getLogicRect().height());
-    newGraph->setGraphWidth(pGraphEditorMgr->getLogicRect().width());
-    pGraphList.append(newGraph);
+    newGraph->m_height = m_pGraphEditorMgr->getLogicRect().height();
+    newGraph->m_width = m_pGraphEditorMgr->getLogicRect().width();
+    m_pGraphList.append(newGraph);
 
-    pCurGraph = new HGraph("tempGraph");
-    newGraph->copyTo(pCurGraph);
+    m_pCurGraph = new HGraph("tempGraph");
+    newGraph->copyTo(m_pCurGraph);
     return newGraph;
 }
 
@@ -296,14 +295,14 @@ bool HGraphEditorDoc::delGraph(const QString& name,const int id)
     HGraph* graph = findGraph(id);
     if(!graph)
         return false;
-    pGraphList.removeOne(graph);
+    m_pGraphList.removeOne(graph);
     delete graph;
     graph = NULL;
 
-    if(pCurGraph)
+    if(m_pCurGraph)
     {
-        delete pCurGraph;
-        pCurGraph = NULL;
+        delete m_pCurGraph;
+        m_pCurGraph = NULL;
     }
     return true;
 }
@@ -315,18 +314,18 @@ bool HGraphEditorDoc::openGraph(const QString& name,const int id)
     if(!graph)
         return false;
 
-    if(pCurGraph)
+    if(m_pCurGraph)
     {
-        if(pCurGraph->getGraphID() == graph->getGraphID())
+        if(m_pCurGraph->graphID() == graph->graphID())
             return true;
-        pCurGraph->clear();
-        delete pCurGraph;
-        pCurGraph = NULL;
+        m_pCurGraph->clear();
+        delete m_pCurGraph;
+        m_pCurGraph = NULL;
     }
 
-    pCurGraph = new HGraph("tempGraph");
-    if(!pCurGraph) return false;
-    graph->copyTo(pCurGraph);
+    m_pCurGraph = new HGraph("tempGraph");
+    if(!m_pCurGraph) return false;
+    graph->copyTo(m_pCurGraph);
     return true;
 }
 
@@ -338,25 +337,26 @@ void HGraphEditorDoc::copyGraph(HGraph* graph)
 
 HGraph* HGraphEditorDoc::getCurGraph()
 {
-    return pCurGraph;
+    return m_pCurGraph;
 }
 
 
 QList<HIconTemplate*> HGraphEditorDoc::getIconTemplateList()
 {
-    return pIconTemplateList;
+    return m_pIconTemplateList;
 }
 
 QList<HGraph*> HGraphEditorDoc::getGraphList()
 {
-    return pGraphList;
+    return m_pGraphList;
 }
 
 //判断graph文件是否修改
 bool HGraphEditorDoc::isGraphModify()
 {
     //只需要判断当前画面是否存在修改
-    if(!pCurGraph)
+    if(!m_pCurGraph)
         return false;
-    return pCurGraph->getModify();
+    //return m_pCurGraph->odify();
+    return true;
 }

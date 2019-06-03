@@ -29,7 +29,7 @@ HEADERS += \
            hicontabwidget.h \
            hiconvieweditor.h \
            hgrapheditorop.h \
-           hgraphundocommand.h
+    hgraphcommand.h
 
 
 
@@ -46,7 +46,7 @@ SOURCES += \
            hiconvieweditor.cpp \
            main.cpp \
            hgrapheditorop.cpp \
-           hgraphundocommand.cpp
+    hgraphcommand.cpp
 
 
 FORMS += \

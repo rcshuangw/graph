@@ -116,7 +116,7 @@ public:
     virtual H5GraphicsItem* iconGraphicsItem();
     ///////////////////////////////////////////////////////操作属性/////////////////////////////
 	//改变大小
-	virtual void resize(double w, double h, bool scale);
+    virtual void resize(double w, double h, bool scale=false);
     virtual bool transform(QTransform& transform1,quint8 flag,bool bNoTrans=false);
     virtual void maps(QPolygonF& pylist,quint8 flag);
 	virtual void rotate(float fAngle);

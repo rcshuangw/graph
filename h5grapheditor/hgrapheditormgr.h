@@ -23,11 +23,11 @@ public:
     ~HGraphEditorMgr();
 public:
     HGraphEditorScene* graphEditorScene();
-    HGraphEditorView* graphEditorView();
-    HGraphEditorDoc* graphEditorDoc();
-    HGraphEditorOp* graphEditorOp();
-    QUndoStack* graphEditorStack();
-    HSelectedMgr* selectedMgr();
+    HGraphEditorView*  graphEditorView();
+    HGraphEditorDoc*   graphEditorDoc();
+    HGraphEditorOp*    graphEditorOp();
+    QUndoStack*        graphEditorStack();
+    HSelectedMgr*      selectedMgr();
 public:
     void setGraphEditorView(HGraphEditorView* view);
     //加载
@@ -63,16 +63,19 @@ public:
     //刷新view
     void refreshView();
 protected:
-    HGraphEditorDoc* pGraphEditorDoc;
-    HGraphEditorScene* pGraphEditorScene;
-    HGraphEditorView* pGraphEditorView;
+    HGraphEditorDoc* m_pGraphEditorDoc;
+    HGraphEditorScene* m_pGraphEditorScene;
+    HGraphEditorView* m_pGraphEditorView;
     QUndoStack* m_pGraphEditorUndoStack;
     HGraphEditorOp* m_pGraphEditorOp;
+    HSelectedMgr* m_pSelectedMgr;
+    //HIconEditorDrawToolMgr* m_pIconEditorDrawToolMgr;
+    //HIconEditorSelectTool* m_pIconEditorSelectTool;
 private:
-    DrawShape drawShape;
-    QRectF logicRectF;  //scene的大小
-    HGraph* pTempGraph; //临时画面文件
-    QString strGraphFile;
+    DrawShape m_eDrawShape;
+    QRectF m_logicRectF;  //scene的大小
+    HGraph* m_pTempGraph; //临时画面文件
+    QString m_strGraphFile;
 };
 
 #endif // HGRAPHEDITORMGR_H

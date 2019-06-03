@@ -14,6 +14,7 @@ class HIconViewEditor;
 class QLineEdit;
 class QComboBox;
 class QActionGroup;
+class HBaseObj;
 class HGraphEditorMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -94,14 +95,8 @@ public slots:
     void actionUnGroup_clicked();
     
     //选择,工具
-    void actionSelect_clicked();
-    void actionText_clicked();
-    void actionLine_clicked();
-    void actionRectagle_clicked();
-    void actionPolyline_clicked();
-    void actionPolygon_clicked();
-    void actionCircle_clicked();
-    void actionArc_clicked();
+    void drawTool();
+    void selectTool();
     
     //缩放
     void actionZoomin_clicked();
@@ -116,21 +111,23 @@ public slots:
     void actionHSameSpace_clicked();
     void actionVSameSpace_clicked();
 
+    //工具栏刷新、状态栏刷新
+    void onUpdateBaseAction(HBaseObj* obj);
+    void onUpdateStatus(const QString& showText);
     //关于
     void about();
-
 public slots:
     void itemInserted(int);
     void viewMousePosChanged(const QPointF &logPos);
     void selectItemChanged(int);
 
 private:
-    HGraphEditorMgr *pGraphEditorMgr;
+    HGraphEditorMgr *m_pGraphEditorMgr;
     //HGraphEditorScene *pGraphEditorScene;
-    HGraphEditorView* pGraphEditorView;
-    HGraphTreeWidget* pGraphTreeWidget;//左边树结构
-    HIconTabWidget* pIconTabWidget;//右边tab结构
-    HIconViewEditor* pIconViewEditor;//tab上面的view
+    HGraphEditorView* m_pGraphEditorView;
+    HGraphTreeWidget* m_pGraphTreeWidget;//左边树结构
+    HIconTabWidget* m_pIconTabWidget;//右边tab结构
+    HIconViewEditor* m_pIconViewEditor;//tab上面的view
     Ui::GraphEditorMainWindow *ui;
 
 
@@ -139,9 +136,9 @@ private:
     QActionGroup* m_pDivideGroup;
     QActionGroup* m_pFlipGroup;
     QActionGroup* m_pEditAndBringGroup;
-    QComboBox* pFontBox;
-    QComboBox* pFontSizeBox;
-    QLineEdit* pTextEdit;
+    QComboBox* m_pFontBox;
+    QComboBox* m_pFontSizeBox;
+    QLineEdit* m_pTextEdit;
 };
 
 #endif // HGRAPHEDITORMAINWINDOW_H

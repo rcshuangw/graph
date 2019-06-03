@@ -25,7 +25,6 @@ public:
 	virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-   
     HIconEditorMgr* m_pIconEditorMgr;
     QList<QGraphicsPathItem*> m_pGraphicsPathItems;
 };

@@ -10,10 +10,6 @@ class QPainter;
 class QDataStream;
 class QDomElement;
 class HContainerObj;
-/*
- * 记录单个画面信息，包含画面所含的模板列表信息，各种图元信息，颜色，背景等等信息
- *
-*/
 class H5BASELIB_EXPORT HGraph : public HContainerObj
 {
 public:
@@ -38,6 +34,9 @@ public:
     void setGraphName(const QString& name);
     QString getGraphName();
 
+    void setGraphID(int id);
+    int graphID();
+
     void setRefreshInterval(int val);
     int getRefreshInterval();
 
@@ -48,6 +47,9 @@ public:
     ushort getGraphType();
 
     QString getStationName();
+
+    qreal zoomScale();
+    void setZoomScale(qreal f);
 
 public:
     virtual void paint(QPainter* painter);
@@ -68,14 +70,10 @@ public:
     virtual void removeIconTemplate(HIconTemplate* temp);
     virtual void clearIconTemplate();
     virtual void resetIconTemplate();
-
-    //缩放
-    qreal zoomScale();
-    void setZoomScale(qreal f);
-
 public:
     QList<HIconTemplate*> pIconTemplateList;
 protected:
+    int m_nID;
     QString m_strGraphName; //名称
     double m_fZoomScale;
     int nRefreshInterval; //刷新间隔

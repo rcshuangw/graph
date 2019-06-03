@@ -92,7 +92,6 @@ void HIconEditorScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
 //绘制
 void HIconEditorScene::drawPath(const QList<Path>& pathList)
 {
-
     for(int i = 0;i < pathList.count();i++)
     {
         Path path = pathList.at(i);

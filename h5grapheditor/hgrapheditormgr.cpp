@@ -7,54 +7,77 @@
 #include "hgrapheditordoc.h"
 #include "hgrapheditorscene.h"
 #include "hgrapheditorop.h"
-#include "hgraphundocommand.h"
+#include "hgraphcommand.h"
 #include "hgraph.h"
+#include "hselectedmgr.h"
+#include "hmakeicon.h"
 //图形文件管理总类
 HGraphEditorMgr::HGraphEditorMgr()
-    :logicRectF(-500,-500,1000,1000)
+    :m_logicRectF(-500,-500,1000,1000)
 {
-    pGraphEditorDoc = new HGraphEditorDoc(this);
-    Q_ASSERT(pGraphEditorDoc);
+    m_pGraphEditorDoc = new HGraphEditorDoc(this);
+    Q_ASSERT(m_pGraphEditorDoc);
 
-    m_pGraphEditorUndoStack = new QUndoStack;
+    m_pGraphEditorUndoStack = new QUndoStack(this);
 
-    //pTempGraph = new HGraph("");
+    m_pGraphEditorOp = new HGraphEditorOp(this);
+    m_pSelectedMgr = new HSelectedMgr;
+
+    m_pGraphEditorScene = new HGraphEditorScene(this);
+    m_pGraphEditorView = NULL;
 
     int width = qApp->desktop()->screen()->width();
     int height = qApp->desktop()->screen()->height();
-    logicRectF.setX(0-(width-2)/2);
-    logicRectF.setY(0-(height-100)/2);
-    logicRectF.setWidth(width-2);
-    logicRectF.setHeight(height-100/2);
+    m_logicRectF.setX(0-(width-2)/2);
+    m_logicRectF.setY(0-(height-100)/2);
+    m_logicRectF.setWidth(width-2);
+    m_logicRectF.setHeight(height-100);
+    m_eDrawShape = No;
 
-    pGraphEditorScene = new HGraphEditorScene(this);
-    pGraphEditorView = NULL;
-    m_pGraphEditorOp = new HGraphEditorOp(this);
-    drawShape = No;
+    //选择状态下的刷新
+    connect(m_pSelectedMgr,SIGNAL(refreshSelect(QRectF)),m_pGraphEditorOp,SLOT(onRefreshSelect(QRectF)));
+}
+
+HGraphEditorMgr::~HGraphEditorMgr()
+{
+    if(m_pGraphEditorOp)
+    {
+        delete m_pGraphEditorOp;
+        m_pGraphEditorOp = NULL;
+    }
+
+    if(m_pGraphEditorDoc)
+    {
+        delete m_pGraphEditorDoc;
+        m_pGraphEditorDoc = NULL;
+    }
+
+    HMakeIcon::Instance()->Exstance();
+
 }
 
 //启动时加载数据库
 void HGraphEditorMgr::loadStation()
 {
-    if(!pGraphEditorDoc)
+    if(!m_pGraphEditorDoc)
         return;
-    pGraphEditorDoc->loadStation();
+    m_pGraphEditorDoc->loadStation();
 }
 
 //启动时加载模板信息
 void HGraphEditorMgr::loadTemplates()
 {
-    if(!pGraphEditorDoc)
+    if(!m_pGraphEditorDoc)
         return;
-    pGraphEditorDoc->loadIconTemplate();
+    m_pGraphEditorDoc->loadIconTemplate();
 }
 
 //启动时加载画面信息
 void HGraphEditorMgr::loadGraphs()
 {
-    if(!pGraphEditorDoc)
+    if(!m_pGraphEditorDoc)
         return;
-    pGraphEditorDoc->loadAllGraph();
+    m_pGraphEditorDoc->loadAllGraph();
 }
 
 HGraphEditorOp* HGraphEditorMgr::graphEditorOp()
@@ -64,41 +87,46 @@ HGraphEditorOp* HGraphEditorMgr::graphEditorOp()
 
 HGraphEditorScene* HGraphEditorMgr::graphEditorScene()
 {
-    return pGraphEditorScene;
+    return m_pGraphEditorScene;
 }
 
 void HGraphEditorMgr::setGraphEditorView(HGraphEditorView* view)
 {
-    pGraphEditorView = view;
-    pGraphEditorView->setScene(pGraphEditorScene);
-    QRectF rectF(logicRectF);
-    pGraphEditorScene->setSceneRect(rectF);
+    if(view)
+    {
+        m_pGraphEditorView = view;
+        m_pGraphEditorView->setScene(m_pGraphEditorScene);
+        m_pGraphEditorScene->setView(m_pGraphEditorView);
+        QRectF rectF(m_logicRectF);
+        m_pGraphEditorScene->setSceneRect(rectF);
 
-    if(pTempGraph)
-    {
-       // p
-    }
+        QScrollBar* pBar = m_pGraphEditorView->horizontalScrollBar();
+        if(pBar && pBar->isHidden() == false)
+        {
+            pBar->setSliderPosition(pBar->minimum());
+        }
+        pBar = m_pGraphEditorView->verticalScrollBar();
+        if(pBar && pBar->isHidden() == false)
+        {
+            pBar->setSliderPosition(pBar->minimum());
+        }
 
-    QScrollBar* pBar = pGraphEditorView->horizontalScrollBar();
-    if(pBar && pBar->isHidden() == false)
-    {
-        pBar->setSliderPosition(pBar->minimum());
-    }
-    pBar = pGraphEditorView->verticalScrollBar();
-    if(pBar && pBar->isHidden() == false)
-    {
-        pBar->setSliderPosition(pBar->minimum());
+        if(graphEditorDoc()->getCurGraph())
+        {
+           graphEditorDoc()->getCurGraph()->m_width = m_logicRectF.width();
+           graphEditorDoc()->getCurGraph()->m_height = m_logicRectF.height();
+        }
     }
 }
 
 HGraphEditorView* HGraphEditorMgr::graphEditorView()
 {
-    return pGraphEditorView;
+    return m_pGraphEditorView;
 }
 
 HGraphEditorDoc* HGraphEditorMgr::graphEditorDoc()
 {
-    return pGraphEditorDoc;
+    return m_pGraphEditorDoc;
 }
 
 QUndoStack* HGraphEditorMgr::graphEditorStack()
@@ -109,20 +137,20 @@ QUndoStack* HGraphEditorMgr::graphEditorStack()
 //设置逻辑界面大小
 void HGraphEditorMgr::setLogicRect(const QRectF& rect)
 {
-    logicRectF = rect;
+    m_logicRectF = rect;
 }
 
 QRectF HGraphEditorMgr::getLogicRect()
 {
-    return logicRectF;
+    return m_logicRectF;
 }
 
 //判断graph文件名是否存在
 bool HGraphEditorMgr::findGraphByName(const QString& graphName)
 {
-    if(!pGraphEditorDoc)
+    if(!m_pGraphEditorDoc)
         return false;
-    HGraph* graph = pGraphEditorDoc->findGraph(graphName);
+    HGraph* graph = m_pGraphEditorDoc->findGraph(graphName);
     if(!graph)
         return false;
     return true;
@@ -131,74 +159,62 @@ bool HGraphEditorMgr::findGraphByName(const QString& graphName)
 //判断graph文件是否修改
 bool HGraphEditorMgr::isGraphModify()
 {
-    if(!pGraphEditorDoc)
+    if(!m_pGraphEditorDoc)
         return false;
-    return pGraphEditorDoc->isGraphModify();
+    return m_pGraphEditorDoc->isGraphModify();
 }
 
 void HGraphEditorMgr::setDrawShape(DrawShape ds)
 {
-    drawShape = ds;
+    m_eDrawShape = ds;
 }
 
 DrawShape HGraphEditorMgr::getDrawShape()
 {
-    return drawShape;
+    return m_eDrawShape;
 }
 
 //新建文件
 void HGraphEditorMgr::New(const QString& graphName)
 {
-    if(!pGraphEditorDoc)
+    if(!m_pGraphEditorDoc)
         return;
-    pGraphEditorDoc->addGraph(graphName);
+    m_pGraphEditorDoc->addGraph(graphName);
 }
 
 bool HGraphEditorMgr::Open(const QString& graphName,int id)
 {
-    if(!pGraphEditorDoc)
+    if(!m_pGraphEditorDoc)
         return false;
-    return pGraphEditorDoc->openGraph(graphName,id);
+    return m_pGraphEditorDoc->openGraph(graphName,id);
 }
 
 void HGraphEditorMgr::Save()
 {
-    if(!pGraphEditorDoc)
+    if(!m_pGraphEditorDoc)
         return;
-    return pGraphEditorDoc->saveCurGraph();
+    return m_pGraphEditorDoc->saveCurGraph();
 }
 
 bool HGraphEditorMgr::Del(const QString& graphName,int id)
 {
-    if(!pGraphEditorDoc)
+    if(!m_pGraphEditorDoc)
         return false;
-    return pGraphEditorDoc->delGraph(graphName,id);
+    return m_pGraphEditorDoc->delGraph(graphName,id);
 }
 
 int HGraphEditorMgr::ImportFile(const QString& graphName)
 {
-    if(!pGraphEditorDoc)
+    if(!m_pGraphEditorDoc)
         return false;
-    return pGraphEditorDoc->importGraph(graphName);
+    return m_pGraphEditorDoc->importGraph(graphName);
 }
 
 void HGraphEditorMgr::refreshView()
 {
-    if(!pGraphEditorView)
+    if(!m_pGraphEditorView)
         return;
-    pGraphEditorView->refresh();
-}
-
-void HGraphEditorMgr::openGraphScene()
-{
-    if(!pGraphEditorScene)
-        return;
-}
-
-void HGraphEditorMgr::delGraphSceneItem()
-{
-    if(!pGraphEditorScene)
-        return;
+    m_pGraphEditorView->refresh();
 }
 
 void HGraphEditorMgr::addNewCommand(HBaseObj *pObj)

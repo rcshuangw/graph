@@ -18,9 +18,9 @@ void HGraphEditorMainWindow::actionOpen_clicked()
 
 void HGraphEditorMainWindow::actionSave_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorDoc())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorDoc())
         return;
-    pGraphEditorMgr->graphEditorDoc()->saveAllGraph();
+    m_pGraphEditorMgr->graphEditorDoc()->saveAllGraph();
 }
 
 void HGraphEditorMainWindow::actionSaveAs_clicked()
@@ -41,59 +41,59 @@ void HGraphEditorMainWindow::actionExit_clicked()
 //编辑部分
 void HGraphEditorMainWindow::acitonUndo_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorStack())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorStack())
         return;
-    pGraphEditorMgr->graphEditorStack()->undo();
+    m_pGraphEditorMgr->graphEditorStack()->undo();
 }
 
 void HGraphEditorMainWindow::actionRedo_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorStack())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorStack())
         return;
-    pGraphEditorMgr->graphEditorStack()->redo();
+    m_pGraphEditorMgr->graphEditorStack()->redo();
 }
 
 void HGraphEditorMainWindow::actionCut_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->cut();
+    m_pGraphEditorMgr->graphEditorOp()->cut();
 }
 
 void HGraphEditorMainWindow::actionCopy_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorView())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorView())
         return;
-    pGraphEditorMgr->graphEditorOp()->copy();
+    m_pGraphEditorMgr->graphEditorOp()->copy();
 }
 
 void HGraphEditorMainWindow::actionPaste_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorView())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorView())
         return;
-    pGraphEditorMgr->graphEditorOp()->paste();
+    m_pGraphEditorMgr->graphEditorOp()->paste();
 }
 
 void HGraphEditorMainWindow::actionDelete_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorView())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorView())
         return;
-    pGraphEditorMgr->graphEditorOp()->del();
+    m_pGraphEditorMgr->graphEditorOp()->del();
 }
 
 //置顶置底
 void HGraphEditorMainWindow::actionTop_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->bringToTop();
+    m_pGraphEditorMgr->graphEditorOp()->bringToTop();
 }
 
 void HGraphEditorMainWindow::actionBottom_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->bringToBottom();
+    m_pGraphEditorMgr->graphEditorOp()->bringToBottom();
 }
 
 //属性
@@ -105,44 +105,44 @@ void HGraphEditorMainWindow::actionAttribute_clicked()
 //排列
 void HGraphEditorMainWindow::actionAlignTop_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->alignTop();
+    m_pGraphEditorMgr->graphEditorOp()->alignTop();
 }
 
 void HGraphEditorMainWindow::actionAlignHCenter_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->alignHCenter();
+    m_pGraphEditorMgr->graphEditorOp()->alignHCenter();
 }
 
 void HGraphEditorMainWindow::actionAlignBottom_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->alignBottom();
+    m_pGraphEditorMgr->graphEditorOp()->alignBottom();
 }
 
 void HGraphEditorMainWindow::actionAlignLeft_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->alignLeft();
+    m_pGraphEditorMgr->graphEditorOp()->alignLeft();
 }
 
 void HGraphEditorMainWindow::actionAlignVCenter_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->alignVCenter();
+    m_pGraphEditorMgr->graphEditorOp()->alignVCenter();
 }
 
 void HGraphEditorMainWindow::actionAlignRight_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->alignRight();
+    m_pGraphEditorMgr->graphEditorOp()->alignRight();
 }
 
 //旋转
@@ -153,30 +153,30 @@ void HGraphEditorMainWindow::actionRotate_clicked()
 
 void HGraphEditorMainWindow::actionFlipLeft_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->flipLeft90();
+    m_pGraphEditorMgr->graphEditorOp()->flipLeft90();
 }
 
 void HGraphEditorMainWindow::actionFlipRight_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->flipRight90();
+    m_pGraphEditorMgr->graphEditorOp()->flipRight90();
 }
 
 void HGraphEditorMainWindow::actionFlipHorizon_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->flipHorizon();
+    m_pGraphEditorMgr->graphEditorOp()->flipHorizon();
 }
 
 void HGraphEditorMainWindow::actionFlipVertical_clicked()
 {
-    if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    pGraphEditorMgr->graphEditorOp()->flipVertical();
+    m_pGraphEditorMgr->graphEditorOp()->flipVertical();
 }
 
  //字体部分
@@ -224,145 +224,81 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  //组合
  void HGraphEditorMainWindow::actionGroup_clicked()
  {
-     if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
          return;
-     pGraphEditorMgr->graphEditorOp()->groupObj();
+     m_pGraphEditorMgr->graphEditorOp()->groupObj();
  }
 
  void HGraphEditorMainWindow::actionUnGroup_clicked()
  {
-     if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
          return;
-     pGraphEditorMgr->graphEditorOp()->ungroupObj();
- }
-
- //选择,工具
- void HGraphEditorMainWindow::actionSelect_clicked()
- {
-     if(!pGraphEditorMgr)
-         return;
-     pGraphEditorMgr->setDrawShape(DrawShape::enumSelection);
- }
-
- void HGraphEditorMainWindow::actionText_clicked()
- {
-     if(!pGraphEditorMgr)
-         return;
-     pGraphEditorMgr->setDrawShape(DrawShape::enumText);
-     pGraphEditorMgr->setSelectMode(enumDraw);
- }
-
- void HGraphEditorMainWindow::actionLine_clicked()
- {
-     if(!pGraphEditorMgr)
-         return;
-     pGraphEditorMgr->setDrawShape(DrawShape::enumLine);
-     pGraphEditorMgr->setSelectMode(enumDraw);
- }
-
- void HGraphEditorMainWindow::actionRectagle_clicked()
- {
-     if(!pGraphEditorMgr)
-         return;
-     pGraphEditorMgr->setDrawShape(DrawShape::enumRectangle);
-     pGraphEditorMgr->setSelectMode(enumDraw);
- }
-
- void HGraphEditorMainWindow::actionPolyline_clicked()
- {
-     if(!pGraphEditorMgr)
-         return;
-     pGraphEditorMgr->setDrawShape(DrawShape::enumPolyline);
-     pGraphEditorMgr->setSelectMode(enumDraw);
- }
-
- void HGraphEditorMainWindow::actionPolygon_clicked()
- {
-     if(!pGraphEditorMgr)
-         return;
-     pGraphEditorMgr->setDrawShape(DrawShape::enumPolygon);
-     pGraphEditorMgr->setSelectMode(enumDraw);
- }
-
- void HGraphEditorMainWindow::actionCircle_clicked()
- {
-     if(!pGraphEditorMgr)
-         return;
-     pGraphEditorMgr->setDrawShape(DrawShape::enumCircle);
-     pGraphEditorMgr->setSelectMode(enumDraw);
- }
-
- void HGraphEditorMainWindow::actionArc_clicked()
- {
-     if(!pGraphEditorMgr)
-         return;
-     pGraphEditorMgr->setDrawShape(DrawShape::enumArc);
-     pGraphEditorMgr->setSelectMode(enumDraw);
+     m_pGraphEditorMgr->graphEditorOp()->ungroupObj();
  }
 
  //缩放
  void HGraphEditorMainWindow::actionZoomin_clicked()
  {
-     if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
          return;
-     pGraphEditorMgr->graphEditorOp()->zoomIn();
+     m_pGraphEditorMgr->graphEditorOp()->zoomIn();
  }
 
  void HGraphEditorMainWindow::actionZoomout_clicked()
  {
-     if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
          return;
-     pGraphEditorMgr->graphEditorOp()->zoomOut();
+     m_pGraphEditorMgr->graphEditorOp()->zoomOut();
  }
 
  void HGraphEditorMainWindow::actionZoom_clicked()
  {
-     if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
          return;
-     pGraphEditorMgr->graphEditorOp()->zoom();
+     m_pGraphEditorMgr->graphEditorOp()->zoom();
  }
 
  void HGraphEditorMainWindow::actionZoomSame_clicked()
  {
-     if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
          return;
-     pGraphEditorMgr->graphEditorOp()->zoomSame();
+     m_pGraphEditorMgr->graphEditorOp()->zoomSame();
  }
 
  //等比
  void HGraphEditorMainWindow::actionSameWidth_clicked()
  {
-     if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
          return;
-     pGraphEditorMgr->graphEditorOp()->sizeEqualWidth();
+     m_pGraphEditorMgr->graphEditorOp()->sizeEqualWidth();
  }
 
  void HGraphEditorMainWindow::actionSameHeight_clicked()
  {
-     if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
          return;
-     pGraphEditorMgr->graphEditorOp()->sizeEqualHeight();
+     m_pGraphEditorMgr->graphEditorOp()->sizeEqualHeight();
  }
 
  void HGraphEditorMainWindow::actionSame_clicked()
  {
-     if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
          return;
-     pGraphEditorMgr->graphEditorOp()->sizeEqualComplete();
+     m_pGraphEditorMgr->graphEditorOp()->sizeEqualComplete();
  }
 
  void HGraphEditorMainWindow::actionHSameSpace_clicked()
  {
-     if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
          return;
-     pGraphEditorMgr->graphEditorOp()->sizeHEqualSpace();
+     m_pGraphEditorMgr->graphEditorOp()->sizeHEqualSpace();
  }
 
  void HGraphEditorMainWindow::actionVSameSpace_clicked()
  {
-     if(!pGraphEditorMgr || !pGraphEditorMgr->graphEditorOp())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
          return;
-     pGraphEditorMgr->graphEditorOp()->sizeVEqualSpace();
+     m_pGraphEditorMgr->graphEditorOp()->sizeVEqualSpace();
  }
 
  //关于
@@ -370,3 +306,31 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  {
 
  }
+
+ //draw tool
+ void HGraphEditorMainWindow::drawTool()
+ {
+     QAction* action = qobject_cast<QAction*>(sender());
+     if(!action) return;
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
+         return;
+     QVariant var = action->data();
+     DrawShape shape = static_cast<DrawShape>(var.toInt());
+     m_pGraphEditorMgr->graphEditorOp()->drawTool(shape);
+     if(m_pGraphEditorMgr->graphEditorView())
+         m_pGraphEditorMgr->graphEditorView()->setInteractive(false);
+     m_pGraphEditorMgr->graphEditorOp()->onEndDraw();
+ }
+
+ void HGraphEditorMainWindow::selectTool()
+ {
+     QAction* action = qobject_cast<QAction*>(sender());
+     if(!action) return;
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
+         return;
+     QVariant var = action->data();
+     SelectMode mode = static_cast<SelectMode>(var.toInt());
+     m_pGraphEditorMgr->graphEditorOp()->selectTool(mode);
+     m_pGraphEditorMgr->graphEditorOp()->onEndDraw();
+ }
+

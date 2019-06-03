@@ -1,10 +1,8 @@
-#include "hgraphundocommand.h"
+#include "hgraphcommand.h"
 #include "hiconapi.h"
 #include "hbaseobj.h"
 #include "hiconobj.h"
 #include "hgrapheditormgr.h"
-#include "hicongraphicsitem.h"
-#include "hiconlineitem.h"
 #include "hgrapheditorview.h"
 #include "hgrapheditorscene.h"
 HGraphCommand::HGraphCommand(HGraphEditorMgr* graphEditorMgr):m_pGraphEditorMgr(graphEditorMgr)

@@ -44,10 +44,10 @@ public:
     //或者画面ID
     int getGraphID();
 
-    //查找画面
+    //查找画面 ByID
     HGraph* findGraph(int graphID);
 
-    //
+    // By name
     HGraph* findGraph(const QString& graphName);
 
     //新建画面
@@ -84,21 +84,13 @@ public:
     bool isGraphModify();
 
 public:
-    //厂站列表
-    QList<HStation*> pStationList;
-
-    //模板列表 读取模板信息后保存的
-    QList<HIconTemplate*> pIconTemplateList;
-
-    //图形文件列表
-    QList<HGraph*> pGraphList;
+    QList<HStation*> m_pStationList;
+    QList<HIconTemplate*> m_pIconTemplateList;
+    QList<HGraph*> m_pGraphList;
 
 protected:
-
-    HGraphEditorMgr* pGraphEditorMgr;
-
-    //当前文件
-    HGraph* pCurGraph;
+    HGraphEditorMgr* m_pGraphEditorMgr;
+    HGraph* m_pCurGraph;
 
 };
 

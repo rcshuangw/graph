@@ -1,6 +1,7 @@
 ﻿#include "hgrapheditormainwindow.h"
 #include "ui_grapheditormainwindow.h"
 #include "hgrapheditormgr.h"
+#include "hgrapheditorop.h"
 #include "hgrapheditorview.h"
 #include "hgrapheditordoc.h"
 #include "hgrapheditorscene.h"
@@ -16,12 +17,11 @@
 #include <QDebug>
 HGraphEditorMainWindow::HGraphEditorMainWindow(HGraphEditorMgr *pMgr,QWidget *parent)
 :QMainWindow (parent),
-ui(new Ui::GraphEditorMainWindow)
+ui(new Ui::GraphEditorMainWindow),m_pGraphEditorMgr(pMgr)
 {
     ui->setupUi(this);
-    pGraphEditorMgr = pMgr,
-    initMainWindow();
 
+    initMainWindow();
     createToolBars();
     createStatusBar();
     createActions();
@@ -37,7 +37,6 @@ HGraphEditorMainWindow::~HGraphEditorMainWindow()
 
 void HGraphEditorMainWindow::createActions()
 {
-
     m_pAlignGroup = new QActionGroup(this);
     m_pEqualGroup = new QActionGroup(this);
     m_pDivideGroup = new QActionGroup(this);
@@ -109,8 +108,8 @@ void HGraphEditorMainWindow::createActions()
 
 
     //字体部分的actions()
-    connect(pFontBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontBox_clicked(int)));
-    connect(pFontSizeBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontSizeBox_clicked(int)));
+    connect(m_pFontBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontBox_clicked(int)));
+    connect(m_pFontSizeBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontSizeBox_clicked(int)));
     connect(ui->actionBold,SIGNAL(triggered(bool)),this,SLOT(actionBold_clicked(bool)));
     connect(ui->actionItalic,SIGNAL(triggered(bool)),this,SLOT(actionItalic_clicked(bool)));
     connect(ui->actionTextUnder,SIGNAL(triggered(bool)),this,SLOT(actionTextUnder_clicked(bool)));
@@ -126,14 +125,24 @@ void HGraphEditorMainWindow::createActions()
 
 
     //选择,工具
-    connect(ui->actionSelect,SIGNAL(triggered(bool)),this,SLOT(actionSelect_clicked()));
-    connect(ui->actionText,SIGNAL(triggered(bool)),this,SLOT(actionText_clicked()));
-    connect(ui->actionLine,SIGNAL(triggered(bool)),this,SLOT(actionLine_clicked()));
-    connect(ui->actionRectangle,SIGNAL(triggered(bool)),this,SLOT(actionRectagle_clicked()));
-    connect(ui->actionPolyline,SIGNAL(triggered(bool)),this,SLOT(actionPolyline_clicked()));
-    connect(ui->actionPolygon,SIGNAL(triggered(bool)),this,SLOT(actionPolygon_clicked()));
-    connect(ui->actionCircle,SIGNAL(triggered(bool)),this,SLOT(actionCircle_clicked()));
-    connect(ui->actionArc,SIGNAL(triggered(bool)),this,SLOT(actionArc_clicked()));
+    ui->actionSelect->setData(None);
+    connect(ui->actionSelect,SIGNAL(triggered(bool)),this,SLOT(selectTool()));
+
+    //工具
+    ui->actionText->setData(Text);
+    connect(ui->actionText,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionLine->setData(Line);
+    connect(ui->actionLine,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionRectangle->setData(Rectangle);
+    connect(ui->actionRectangle,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionPolyline->setData(Polyline);
+    connect(ui->actionPolyline,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionPolygon->setData(Polygon);
+    connect(ui->actionPolygon,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionCircle->setData(Circle);
+    connect(ui->actionCircle,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionArc->setData(Arc);
+    connect(ui->actionArc,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
     QActionGroup * actionGroup = new QActionGroup(this);
     actionGroup->addAction(ui->actionText);
     actionGroup->addAction(ui->actionLine);
@@ -143,6 +152,8 @@ void HGraphEditorMainWindow::createActions()
     actionGroup->addAction(ui->actionCircle);
     actionGroup->addAction(ui->actionArc);
     actionGroup->addAction(ui->actionSelect);
+
+    //平移
 
 
     //缩放
@@ -174,27 +185,27 @@ void HGraphEditorMainWindow::createToolBars()
 {
 
    //字体 默认的字体都是可以Bold italic
-   pFontBox = new QComboBox(ui->fontBar);
+   m_pFontBox = new QComboBox(ui->fontBar);
    QStringList fontList = HFontHelper::Instance()->fontFamilies();
-   pFontBox->insertItems(0,fontList);
-   pFontBox->setCurrentIndex(0);
-   ui->fontBar->insertWidget(ui->actionBold,pFontBox);
+   m_pFontBox->insertItems(0,fontList);
+   m_pFontBox->setCurrentIndex(0);
+   ui->fontBar->insertWidget(ui->actionBold,m_pFontBox);
 
    //大小
-   pFontSizeBox = new QComboBox(ui->fontBar);
-   pFontSizeBox->clear();
-   QString strFont = pFontBox->currentText();
+   m_pFontSizeBox = new QComboBox(ui->fontBar);
+   m_pFontSizeBox->clear();
+   QString strFont = m_pFontSizeBox->currentText();
    QList<int> fontSize = HFontHelper::Instance()->pointSizes(strFont);
    for(int i = 0;i < fontSize.count();i++)
    {
        QString str = QString("%1").arg(fontSize[i]);
-       pFontSizeBox->insertItem(i,str,QVariant(fontSize[i]));
+       m_pFontSizeBox->insertItem(i,str,QVariant(fontSize[i]));
    }
-   ui->fontBar->insertWidget(ui->actionBold,pFontSizeBox);
+   ui->fontBar->insertWidget(ui->actionBold,m_pFontSizeBox);
 
    //最后插入文本编辑框
-   pTextEdit = new QLineEdit(ui->fontBar);
-   ui->fontBar->addWidget(pTextEdit);
+   m_pTextEdit = new QLineEdit(ui->fontBar);
+   ui->fontBar->addWidget(m_pTextEdit);
 }
 
 void HGraphEditorMainWindow::createFontBar()
@@ -209,18 +220,18 @@ void HGraphEditorMainWindow::createStatusBar()
 
 void HGraphEditorMainWindow::createDockWidget()
 {
-    pIconTabWidget = new HIconTabWidget(pGraphEditorMgr);
+    m_pIconTabWidget = new HIconTabWidget(m_pGraphEditorMgr);
     //connect(pIconTabWidget,SIGNAL(iconSelected(const QString&,const QString&,const QString&,int)),SLOT(iconTemplateSelected(const QString&,const QString&,const QString&,int)));
-    ui->resDockWidget->setWidget(pIconTabWidget);
+    ui->resDockWidget->setWidget(m_pIconTabWidget);
     //ui->resDockWidget->setMaximumWidth(10);
 
-    pGraphTreeWidget = new HGraphTreeWidget(pGraphEditorMgr);
-    ui->fileDockWidget->setWidget(pGraphTreeWidget);
-    connect(pGraphTreeWidget,SIGNAL(graphNew(const QString&)),this,SLOT(New(const QString&)));//新建
-    connect(pGraphTreeWidget,SIGNAL(graphOpen(const QString&,const int)),this,SLOT(Open(const QString&,const int)));//打开
-    connect(pGraphTreeWidget,SIGNAL(graphDel(const QString&,const int )),this,SLOT(Del(const QString&,const int)));//删除
-    connect(pGraphTreeWidget,SIGNAL(graphImport(const QString&)),this,SLOT(ImportFile(const QString&)));
-    connect(pGraphTreeWidget,SIGNAL(graphImportPath(const QString&)),this,SLOT(ImportGraphFolder(const QString&)));
+    m_pGraphTreeWidget = new HGraphTreeWidget(m_pGraphEditorMgr);
+    ui->fileDockWidget->setWidget(m_pGraphTreeWidget);
+    connect(m_pGraphTreeWidget,SIGNAL(graphNew(const QString&)),this,SLOT(New(const QString&)));//新建
+    connect(m_pGraphTreeWidget,SIGNAL(graphOpen(const QString&,const int)),this,SLOT(Open(const QString&,const int)));//打开
+    connect(m_pGraphTreeWidget,SIGNAL(graphDel(const QString&,const int )),this,SLOT(Del(const QString&,const int)));//删除
+    connect(m_pGraphTreeWidget,SIGNAL(graphImport(const QString&)),this,SLOT(ImportFile(const QString&)));
+    connect(m_pGraphTreeWidget,SIGNAL(graphImportPath(const QString&)),this,SLOT(ImportGraphFolder(const QString&)));
 }
 
 void HGraphEditorMainWindow::initGraphEditorMgr()
@@ -231,26 +242,29 @@ void HGraphEditorMainWindow::initGraphEditorMgr()
 void HGraphEditorMainWindow::initMainWindow()
 {
     //pGraphEditorScene = new HGraphEditorScene(pGraphEditorMgr);
-    pGraphEditorView = new HGraphEditorView(ui->centralWidget);
-    pGraphEditorView->setObjectName(QStringLiteral("画图系统"));
-    pGraphEditorView->setFrameShape(QFrame::NoFrame);
-    pGraphEditorView->setFrameShadow(QFrame::Plain);
-    pGraphEditorView->setLineWidth(0);
+    m_pGraphEditorView = new HGraphEditorView(ui->centralWidget);
+    m_pGraphEditorView->setObjectName(QStringLiteral("画图系统"));
+    m_pGraphEditorView->setFrameShape(QFrame::NoFrame);
+    m_pGraphEditorView->setFrameShadow(QFrame::Plain);
+    m_pGraphEditorView->setLineWidth(0);
 
-    ui->gridLayout->addWidget(pGraphEditorView,0,1,1,1);
-    pGraphEditorMgr->setGraphEditorView(pGraphEditorView);
-    connect(pGraphEditorMgr->graphEditorScene(),SIGNAL(itemInserted(int)),this,SLOT(itemInserted(int)));
-    connect(pGraphEditorMgr->graphEditorScene(),SIGNAL(selectItemChanged(int)),this,SLOT(selectItemChanged(int)));
-    connect(pGraphEditorMgr->graphEditorScene(),SIGNAL(mousePosChanged(const QPointF&)),this,SLOT(viewMousePosChanged(const QPointF&)));
+    ui->gridLayout->addWidget(m_pGraphEditorView,0,1,1,1);
+    m_pGraphEditorMgr->setGraphEditorView(m_pGraphEditorView);
+    connect(m_pGraphEditorMgr->graphEditorScene(),SIGNAL(itemInserted(int)),this,SLOT(itemInserted(int)));
+    connect(m_pGraphEditorMgr->graphEditorScene(),SIGNAL(selectItemChanged(int)),this,SLOT(selectItemChanged(int)));
+    connect(m_pGraphEditorMgr->graphEditorScene(),SIGNAL(mousePosChanged(const QPointF&)),this,SLOT(viewMousePosChanged(const QPointF&)));
+
+    connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(updateBaseAction(HBaseObj*)),this,SLOT(onUpdateBaseAction(HBaseObj*)));
+    connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(updateStatus(const QString&)),this,SLOT(onUpdateStatus(const QString&)));
 
 }
 
 void HGraphEditorMainWindow::New(const QString& graphName)
 {
     //主要要先保存，然后删除当前的，然后新建graph对象(mgr->doc)，然后树新增
-    if(!pGraphEditorMgr)
+    if(!m_pGraphEditorMgr)
         return;
-    bool bfind = pGraphEditorMgr->findGraphByName(graphName);
+    bool bfind = m_pGraphEditorMgr->findGraphByName(graphName);
     if(bfind)
     {
         QMessageBox::information(this,QStringLiteral("提醒"),QStringLiteral("已经存在相同名字的图形文件，请修改名称"),QMessageBox::Ok);
@@ -258,7 +272,7 @@ void HGraphEditorMainWindow::New(const QString& graphName)
     }
 
     //如果有修改的
-    if(pGraphEditorMgr->isGraphModify())
+    if(m_pGraphEditorMgr->isGraphModify())
     {
         if(QMessageBox::Ok == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的画面文件吗？"),QMessageBox::Yes|QMessageBox::No))
         {
@@ -268,38 +282,38 @@ void HGraphEditorMainWindow::New(const QString& graphName)
     }
 
     //view 或者 scene里面要清除掉所有内容
-    pGraphEditorMgr->delGraphSceneItem();
-    pGraphEditorMgr->New(graphName);
-    pGraphTreeWidget->addGraphTreeWidgetItem();
-    pGraphEditorMgr->refreshView();
+    m_pGraphEditorMgr->delGraphSceneItem();
+    m_pGraphEditorMgr->New(graphName);
+    m_pGraphTreeWidget->addGraphTreeWidgetItem();
+    m_pGraphEditorMgr->refreshView();
 }
 
 void HGraphEditorMainWindow::Open(const QString& name,const int id)
 {
     //主要要先保存，然后删除当前的，然后新建graph对象(mgr->doc)，然后树新增
-    if(!pGraphEditorMgr)
+    if(!m_pGraphEditorMgr)
         return;
 
     //如果有修改的
-    if(pGraphEditorMgr->isGraphModify())
+    if(m_pGraphEditorMgr->isGraphModify())
     {
         if(QMessageBox::Yes == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的画面文件吗？"),QMessageBox::Yes|QMessageBox::No))
         {
 
-             pGraphEditorMgr->Save();
+             m_pGraphEditorMgr->Save();
         }
     }
 
     //先删除原来的，在打开文件，最后显示
-    pGraphEditorMgr->delGraphSceneItem();
-    pGraphEditorMgr->Open(name,id);
-    pGraphEditorMgr->openGraphScene();
-    pGraphEditorMgr->refreshView();
+    m_pGraphEditorMgr->delGraphSceneItem();
+    m_pGraphEditorMgr->Open(name,id);
+    m_pGraphEditorMgr->openGraphScene();
+    m_pGraphEditorMgr->refreshView();
 }
 
 void HGraphEditorMainWindow::ImportFile(const QString& name)
 {
-    if(!pGraphEditorMgr)
+    if(!m_pGraphEditorMgr)
         return;
     //对文件进行判断
     QFileInfo fileInfo(name);
@@ -311,13 +325,13 @@ void HGraphEditorMainWindow::ImportFile(const QString& name)
              return;
         }
     }
-    int graphID = pGraphEditorMgr->ImportFile(name);
+    int graphID = m_pGraphEditorMgr->ImportFile(name);
     if((int)-1 == graphID)
     {
         //提示导入失败
         return;
     }
-    if(pGraphEditorMgr->isGraphModify())
+    if(m_pGraphEditorMgr->isGraphModify())
     {
         if(QMessageBox::Ok == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的画面文件吗？"),QMessageBox::Yes|QMessageBox::No))
         {
@@ -325,9 +339,9 @@ void HGraphEditorMainWindow::ImportFile(const QString& name)
         }
     }
     //通知属性控件刷新
-    pGraphEditorMgr->Open("",graphID);
-    pGraphTreeWidget->addGraphTreeWidgetItem();
-    pGraphEditorMgr->refreshView();
+    m_pGraphEditorMgr->Open("",graphID);
+    m_pGraphTreeWidget->addGraphTreeWidgetItem();
+    m_pGraphEditorMgr->refreshView();
 }
 
 
@@ -350,16 +364,16 @@ void HGraphEditorMainWindow::ImportGraphFolder(const QString& path)
 
 void HGraphEditorMainWindow::Del(const QString& graphName,const int graphID)
 {
-    if(!pGraphEditorMgr)
+    if(!m_pGraphEditorMgr)
         return;
     if(QMessageBox::No == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("确定需要删除该画面吗？"),QMessageBox::Yes|QMessageBox::No))
     {
         return;
     }
-    pGraphEditorMgr->delGraphSceneItem();
-    pGraphEditorMgr->Del(graphName,graphID);
-    pGraphTreeWidget->delGraphTreeWidgetItem();
-    pGraphEditorMgr->refreshView();
+    m_pGraphEditorMgr->delGraphSceneItem();
+    m_pGraphEditorMgr->Del(graphName,graphID);
+    m_pGraphTreeWidget->delGraphTreeWidgetItem();
+    m_pGraphEditorMgr->refreshView();
 
 }
 
@@ -403,4 +417,14 @@ void HGraphEditorMainWindow::viewMousePosChanged(const QPointF &logPos)
     //QString strViewPos = QString("x=%1,y=%2").arg((int)pos.x()).arg((int)pos.y());
     QString strLogicPos =  QString("log:x=%1,y=%2").arg(logPos.x(),0,'f',1).arg(logPos.y(),0,'f',1);
     statusBar()->showMessage(strLogicPos );
+}
+
+void HGraphEditorMainWindow::onUpdateBaseAction(HBaseObj *obj)
+{
+    if(!obj) return;
+}
+
+void HGraphEditorMainWindow::onUpdateStatus(const QString &showText)
+{
+    statusBar()->showMessage(showText);
 }
