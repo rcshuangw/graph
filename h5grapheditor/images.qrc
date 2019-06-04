@@ -52,5 +52,6 @@
         <file>images/document-text.png</file>
         <file>images/Folder.png</file>
         <file>images/Folder_Documents.png</file>
+        <file>images/hand_select.png</file>
     </qresource>
 </RCC>

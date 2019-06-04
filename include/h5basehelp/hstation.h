@@ -2,8 +2,9 @@
 #define HSTATION_H
 #include <QObject>
 #include <QList>
-#include "publicdata.h"
-#include "h5iconhelpexport.h"
+#include "../../include/hkernelapi.h"
+//#include "../../include/hfileapi.h"
+#include "h5basehelpexport.h"
 typedef struct _tagATTRINFO
 {
     unsigned short wAttrib;
@@ -22,7 +23,7 @@ class HGroup;
 class HStation;
 
 ///////////////////////////测点基类///////////////////////////////
-class H5ICONHELP_EXPORT HWord: public QObject
+class H5BASEHELP_EXPORT HWord: public QObject
 {
 public:
     HWord(){}
@@ -42,7 +43,7 @@ public:
 };
 
 /////////////////////////////////////遥测//////////////////////////////////////
-class H5ICONHELP_EXPORT HAnalogue:public HWord
+class H5BASEHELP_EXPORT HAnalogue:public HWord
 {
 public:
     HAnalogue(){}
@@ -63,7 +64,7 @@ public:
 };
 
 ////////////////////////////////////遥调///////////////////////////////////////
-class H5ICONHELP_EXPORT HSetPoint : public HWord
+class H5BASEHELP_EXPORT HSetPoint : public HWord
 {
 public:
     HSetPoint(){}
@@ -74,7 +75,7 @@ public:
 };
 
 ///////////////////////////////////遥信//////////////////////////////////////////
-class H5ICONHELP_EXPORT HDigital : public HWord
+class H5BASEHELP_EXPORT HDigital : public HWord
 {
 public:
     HDigital(){wDoubleDNo = (ushort)-1;}
@@ -93,7 +94,7 @@ public:
 };
 
 /////////////////////////////////////遥控/////////////////////////////////////////
-class H5ICONHELP_EXPORT HRelay : public HWord
+class H5BASEHELP_EXPORT HRelay : public HWord
 {
 public:
     HRelay(){}
@@ -114,7 +115,7 @@ public:
 };
 
 /////////////////////////////////////遥脉///////////////////////////////////////////
-class H5ICONHELP_EXPORT HPulse : public HWord
+class H5BASEHELP_EXPORT HPulse : public HWord
 {
 public:
     HPulse(){}
@@ -135,7 +136,7 @@ public:
 };
 
 /////////////////////////////////////间隔///////////////////////////////////////////
-class H5ICONHELP_EXPORT HGroup : public HWord
+class H5BASEHELP_EXPORT HGroup : public HWord
 {
 public:
     HGroup(){}
@@ -155,7 +156,7 @@ public:
 };
 
 //////////////////////////////////////厂站////////////////////////////////////////////
-class H5ICONHELP_EXPORT HStation
+class H5BASEHELP_EXPORT HStation
 {
 public:
     HStation();
@@ -227,7 +228,7 @@ private:
     quint16 wTotalGroup;
 };
 
-class H5ICONHELP_EXPORT HStationList
+class H5BASEHELP_EXPORT HStationList
 {
 public:
     HStationList();
@@ -254,7 +255,7 @@ public:
     QList<HStation*> pStationList;
 };
 
-class H5ICONHELP_EXPORT HStationHelper
+class H5BASEHELP_EXPORT HStationHelper
 {
 public:
     HStationHelper();

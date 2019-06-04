@@ -52,6 +52,9 @@ public:
     void setZoomScale(qreal f);
 
 public:
+    HBaseObj* createBaseObj(DrawShape s,HIconTemplate* icontemplate);
+
+public:
     virtual void paint(QPainter* painter);
     virtual QRectF boundingRect(qint8 flag = 0);
     virtual QPainterPath shape(qint8 flag = 0);

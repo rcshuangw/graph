@@ -212,7 +212,7 @@ void HIconListWidget::RefreshIconType(int ntype)
         {
             HIconListWidgetItem* listItem = new HIconListWidgetItem(this,ntype);
             listItem->setData(Qt::UserRole,pTemp->getUuid());//uuid
-            listItem->setText(pTemp->getSymbol()->getSymolName());//名字
+            listItem->setText(pTemp->getSymbol()->getObjName());//名字
             QIcon icon(pIconHelper->iconPixmap(pTemp->getCatalogName(),pTemp->getUuid().toString()));
             listItem->setIcon(icon);
             listItem->setSizeHint(QSize(50,50));

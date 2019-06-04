@@ -1,9 +1,5 @@
-﻿#if defined(_MSC_VER) &&(_MSC_VER >= 1600)
-#pragma execution_character_set("utf-8")
-#endif
-#include "hstation.h"
-#include "publicdata.h"
-
+﻿#include "hstation.h"
+/*
 ATTRINFO DgtAttrInfo[] =
 {
     {ATTR_DGT_4_STATE_VALUE,   "工程值(双遥信)"},
@@ -17,7 +13,7 @@ ATTRINFO AnaAttrInfo[] =
     {ATTR_ANA_CC1,           "偏移"},
     {ATTR_ANA_CC2,           "系数"},
     {0,                      NULL}
-};
+};*/
 
 HStationHelper::HStationHelper()
 {

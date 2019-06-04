@@ -80,12 +80,12 @@ void HGraphTreeWidget::initGraphTreeWidget()
         if(!graph)
             continue;
         HGraphTreeWidgetItem* newItem = new HGraphTreeWidgetItem(rootItem,GRAPHTREE_TYPE_FILE);
-        newItem->setGraphTreeID(graph->getGraphID());
+        newItem->setGraphTreeID(graph->graphID());
         newItem->setText(0,graph->getGraphName());
         newItem->setIcon(0,QIcon(":/images/Folder_Documents.png"));
         rootItem->addChild(newItem);
         HGraphTreeWidgetItem* fileItem = new HGraphTreeWidgetItem(newItem,GRAPHTREE_TYPE_CFILE);
-        fileItem->setGraphTreeID(graph->getGraphID());
+        fileItem->setGraphTreeID(graph->graphID());
         fileItem->setIcon(0,QIcon(":/images/document-text.png"));
         fileItem->setText(0,QStringLiteral("最新版本"));
     }
@@ -267,13 +267,13 @@ void HGraphTreeWidget::addGraphTreeWidgetItem()
     HGraph* pGraph = pGraphEditorMgr->graphEditorDoc()->getCurGraph();
 
     HGraphTreeWidgetItem* newItem = new HGraphTreeWidgetItem(parentItem,GRAPHTREE_TYPE_FILE);
-    newItem->setGraphTreeID(pGraph->getGraphID());
+    newItem->setGraphTreeID(pGraph->graphID());
     newItem->setText(0,pGraph->getGraphName());
     newItem->setIcon(0,QIcon(":/images/Folder_Documents.png"));
     parentItem->addChild(newItem);
     expandItem(newItem);
     HGraphTreeWidgetItem* fileItem = new HGraphTreeWidgetItem(newItem,GRAPHTREE_TYPE_CFILE);
-    fileItem->setGraphTreeID(pGraph->getGraphID());
+    fileItem->setGraphTreeID(pGraph->graphID());
     fileItem->setIcon(0,QIcon(":/images/document-text.png"));
     fileItem->setText(0,QStringLiteral("最新版本"));
     //setCurrentItem(fileItem);

@@ -10,7 +10,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QMessageBox>
-#include "publicdata.h"
+#include "../../include/hfileapi.h"
 
 HGraphHelper::HGraphHelper()
 {
@@ -203,7 +203,7 @@ void HGraphHelper::saveGraph(HGraph* graph,QString& path,HGraph* pCurGraph)
 
     if(pCurGraph)
     {
-        if(pCurGraph->getGraphID() == graph->getGraphID())
+        if(pCurGraph->graphID() == graph->graphID())
             pCurGraph->copyTo(graph);
     }
 

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>HDrawGraphMainWindow</string>
+   <string>图形编辑器</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -257,6 +257,7 @@
    <addaction name="actionUngroup"/>
    <addaction name="separator"/>
    <addaction name="actionSelect"/>
+   <addaction name="actionHand_H"/>
   </widget>
   <widget class="QToolBar" name="zoomBar">
    <property name="windowTitle">
@@ -594,6 +595,12 @@
    </property>
   </action>
   <action name="actionSelect">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../images.qrc">
      <normaloff>:/images/select.png</normaloff>:/images/select.png</iconset>
@@ -749,6 +756,21 @@
    </property>
    <property name="text">
     <string>VSameSpace</string>
+   </property>
+  </action>
+  <action name="actionHand_H">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/hand_select.png</normaloff>:/images/hand_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hand(&amp;H)</string>
+   </property>
+   <property name="toolTip">
+    <string>拖动</string>
    </property>
   </action>
  </widget>

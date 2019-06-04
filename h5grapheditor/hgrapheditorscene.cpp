@@ -16,6 +16,11 @@ HGraphEditorScene::HGraphEditorScene(HGraphEditorMgr *mgr)
     setSceneRect(m_pGraphEditorMgr->getLogicRect());
 }
 
+HGraphEditorScene::~HGraphEditorScene()
+{
+
+}
+
 void HGraphEditorScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
     if(NULL == m_pGraphEditorMgr)
@@ -121,7 +126,7 @@ void HGraphEditorScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 bool HGraphEditorScene::event(QEvent *event)
 {
-
+    return false;
 }
 
 bool HGraphEditorScene::eventFilter(QObject *obj, QEvent *event)
@@ -263,21 +268,21 @@ void HGraphEditorScene::onRefreshSelect(const QRectF& rect)
 
 void HGraphEditorScene::onObjSelectChanged(HBaseObj *obj, bool isSelected)
 {
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
     m_pGraphEditorMgr->graphEditorOp()->objSelectChanged(obj,isSelected);
 }
 
 void HGraphEditorScene::onRecalcSelect()
 {
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->selectedMgr())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr())
         return;
     m_pGraphEditorMgr->selectedMgr()->recalcSelect();
 }
 
 void HGraphEditorScene::setView(QGraphicsView* v)
 {
-    m_pGraphEditorView = v;
+    m_pGraphEditorView = dynamic_cast<HGraphEditorView*>(v);
 }
 
 QGraphicsView* HGraphEditorScene::view()

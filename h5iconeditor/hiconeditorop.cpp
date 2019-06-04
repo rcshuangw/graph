@@ -320,10 +320,11 @@ bool HIconEditorOp::isClipboardAvailable()
 
 void HIconEditorOp::bringToTop()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->selectedMgr()->selectObj())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr())
         return;
 
     HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer) return;
     if(tempContainer->getObjList().count() != 1)
         return;
     int maxZValue = 0;
@@ -352,10 +353,11 @@ void HIconEditorOp::bringToTop()
 
 void HIconEditorOp::bringToBottom()
 {
-    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr() || !m_pIconEditorMgr->selectedMgr()->selectObj())
+    if(!m_pIconEditorMgr || !m_pIconEditorMgr->selectedMgr())
         return;
 
     HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer) return;
     if(tempContainer->getObjList().count() != 1)
         return;
     int minZValue = 0;

@@ -6,6 +6,8 @@
 TARGET = graphEditor
 TEMPLATE = app
 
+CONFIG += qt warn_off thread exceptions
+DESTDIR += ../../lib
 #QMAKE_LFLAGS += /MANIFESTUAC:"level='requireAdministrator'uiAccess='false'"
 
 INCLUDEPATH += \
@@ -13,8 +15,6 @@ INCLUDEPATH += \
     ../include/h5baselib \
     ../include/h5basehelp \
     ../include/h5basegui
-
-CONFIG += qt warn_off thread exceptions
 
 #LIBS datafile.lib
 # Input
@@ -55,7 +55,7 @@ FORMS += \
 RESOURCES += images.qrc \
              pixmaps.qrc
 
-LIBS += -L ../lib/ -lh5basehelp -lh5basegui -lh5baselib
+LIBS += -L../../lib -lh5basehelp -lh5basegui -lh5baselib -ldatafile
 
 unix{
     UI_DIR = temp/ui

@@ -3,12 +3,12 @@
 
 #include <QPixmap>
 #include <QString>
-#include "h5iconhelpexport.h"
+#include "h5basehelpexport.h"
 #include <QList>
 class HGraph;
 class HIconTemplate;
 
-class H5ICONHELP_EXPORT HGraphHelper
+class H5BASEHELP_EXPORT HGraphHelper
 {
 public:
     HGraphHelper();

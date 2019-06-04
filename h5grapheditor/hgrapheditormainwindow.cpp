@@ -27,7 +27,7 @@ ui(new Ui::GraphEditorMainWindow),m_pGraphEditorMgr(pMgr)
     createActions();
     createDockWidget();
     showMaximized();
-    setWindowTitle("测试界面");
+    setWindowTitle(QStringLiteral("测试界面"));
 }
 
 HGraphEditorMainWindow::~HGraphEditorMainWindow()
@@ -127,6 +127,7 @@ void HGraphEditorMainWindow::createActions()
     //选择,工具
     ui->actionSelect->setData(None);
     connect(ui->actionSelect,SIGNAL(triggered(bool)),this,SLOT(selectTool()));
+    connect(ui->actionHand_H,SIGNAL(triggered(bool)),this,SLOT(handTool()));
 
     //工具
     ui->actionText->setData(Text);
@@ -183,7 +184,6 @@ void HGraphEditorMainWindow::createActions()
 
 void HGraphEditorMainWindow::createToolBars()
 {
-
    //字体 默认的字体都是可以Bold italic
    m_pFontBox = new QComboBox(ui->fontBar);
    QStringList fontList = HFontHelper::Instance()->fontFamilies();
@@ -241,7 +241,6 @@ void HGraphEditorMainWindow::initGraphEditorMgr()
 
 void HGraphEditorMainWindow::initMainWindow()
 {
-    //pGraphEditorScene = new HGraphEditorScene(pGraphEditorMgr);
     m_pGraphEditorView = new HGraphEditorView(ui->centralWidget);
     m_pGraphEditorView->setObjectName(QStringLiteral("画图系统"));
     m_pGraphEditorView->setFrameShape(QFrame::NoFrame);
@@ -282,7 +281,7 @@ void HGraphEditorMainWindow::New(const QString& graphName)
     }
 
     //view 或者 scene里面要清除掉所有内容
-    m_pGraphEditorMgr->delGraphSceneItem();
+    //m_pGraphEditorMgr->delGraphSceneItem();
     m_pGraphEditorMgr->New(graphName);
     m_pGraphTreeWidget->addGraphTreeWidgetItem();
     m_pGraphEditorMgr->refreshView();
@@ -305,9 +304,9 @@ void HGraphEditorMainWindow::Open(const QString& name,const int id)
     }
 
     //先删除原来的，在打开文件，最后显示
-    m_pGraphEditorMgr->delGraphSceneItem();
+    //m_pGraphEditorMgr->delGraphSceneItem();
     m_pGraphEditorMgr->Open(name,id);
-    m_pGraphEditorMgr->openGraphScene();
+    ///m_pGraphEditorMgr->openGraphScene();
     m_pGraphEditorMgr->refreshView();
 }
 
@@ -370,7 +369,7 @@ void HGraphEditorMainWindow::Del(const QString& graphName,const int graphID)
     {
         return;
     }
-    m_pGraphEditorMgr->delGraphSceneItem();
+    //m_pGraphEditorMgr->delGraphSceneItem();
     m_pGraphEditorMgr->Del(graphName,graphID);
     m_pGraphTreeWidget->delGraphTreeWidgetItem();
     m_pGraphEditorMgr->refreshView();
@@ -379,8 +378,8 @@ void HGraphEditorMainWindow::Del(const QString& graphName,const int graphID)
 
 void HGraphEditorMainWindow::itemInserted(int type)
 {
-    ui->actionSelect->setChecked(true);
-    emit ui->actionSelect->triggered();
+    //ui->actionSelect->setChecked(true);
+    //emit ui->actionSelect->triggered();
 }
 
 void HGraphEditorMainWindow::selectItemChanged(int nSelectMode)

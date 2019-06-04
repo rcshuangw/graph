@@ -3,10 +3,12 @@
 
 #include <QObject>
 #include "hiconapi.h"
+#include "hdrawmanager.h"
 class HGraphEditorMgr;
 class HBaseObj;
-class HGraphEditorOp
+class HGraphEditorOp : public QObject
 {
+    Q_OBJECT
 public:
     HGraphEditorOp(HGraphEditorMgr* mgr);
     ~HGraphEditorOp();
@@ -58,7 +60,7 @@ public:
     void switchSelectTool();
 
 public:
-    void createIconObj(const QString&,const QString&,int shape,QPointF,QList<HIconGraphicsItem*> &items);
+    void createIconObj(const QString&,const QString&,int shape,QPointF,QList<H5GraphicsItem*> &items);
     void ObjCreated(HBaseObj* pObj,bool bPaste = false);
     void addIconObj(HBaseObj* pObj,bool bPaste = false);
 

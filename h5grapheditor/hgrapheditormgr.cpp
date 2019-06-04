@@ -90,6 +90,26 @@ HGraphEditorScene* HGraphEditorMgr::graphEditorScene()
     return m_pGraphEditorScene;
 }
 
+HGraphEditorView* HGraphEditorMgr::graphEditorView()
+{
+    return m_pGraphEditorView;
+}
+
+HGraphEditorDoc* HGraphEditorMgr::graphEditorDoc()
+{
+    return m_pGraphEditorDoc;
+}
+
+QUndoStack* HGraphEditorMgr::graphEditorStack()
+{
+    return m_pGraphEditorUndoStack;
+}
+
+HSelectedMgr* HGraphEditorMgr::selectedMgr()
+{
+    return m_pSelectedMgr;
+}
+
 void HGraphEditorMgr::setGraphEditorView(HGraphEditorView* view)
 {
     if(view)
@@ -117,21 +137,6 @@ void HGraphEditorMgr::setGraphEditorView(HGraphEditorView* view)
            graphEditorDoc()->getCurGraph()->m_height = m_logicRectF.height();
         }
     }
-}
-
-HGraphEditorView* HGraphEditorMgr::graphEditorView()
-{
-    return m_pGraphEditorView;
-}
-
-HGraphEditorDoc* HGraphEditorMgr::graphEditorDoc()
-{
-    return m_pGraphEditorDoc;
-}
-
-QUndoStack* HGraphEditorMgr::graphEditorStack()
-{
-    return m_pGraphEditorUndoStack;
 }
 
 //设置逻辑界面大小

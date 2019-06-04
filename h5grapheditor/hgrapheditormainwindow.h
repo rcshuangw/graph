@@ -97,6 +97,7 @@ public slots:
     //选择,工具
     void drawTool();
     void selectTool();
+    void handTool();
     
     //缩放
     void actionZoomin_clicked();

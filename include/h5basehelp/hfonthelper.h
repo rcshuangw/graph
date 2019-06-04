@@ -5,8 +5,8 @@
 #include <QFont>
 #include <QFontInfo>
 #include <QFontDatabase>
-#include "h5iconhelpexport.h"
-class H5ICONHELP_EXPORT HFontHelper
+#include "h5basehelpexport.h"
+class H5BASEHELP_EXPORT HFontHelper
 {
 public:
     HFontHelper();

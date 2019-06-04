@@ -61,7 +61,7 @@ void HGraphNewCommand::redo()
     if(!m_pGraphEditorMgr || !pObj)
         return;
     pObj->setDeleted(false);
-    HIconGraphicsItem* item = pObj->getIconGraphicsItem();
+    H5GraphicsItem* item = pObj->iconGraphicsItem();
     if(item && m_pGraphEditorMgr->graphEditorView())
     {
         m_pGraphEditorMgr->graphEditorView()->ensureVisible(item);
@@ -75,7 +75,7 @@ void HGraphNewCommand::undo()
         return;
     //删除新建的
     pObj->setDeleted(true);
-    HIconGraphicsItem* item = pObj->getIconGraphicsItem();
+    H5GraphicsItem* item = pObj->iconGraphicsItem();
     if(item)
         item->setVisible(false);
 }
@@ -110,7 +110,7 @@ void HGraphDelCommand::redo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         obj->setDeleted(true);
         bounding = bounding.united(item->boundingRect());
@@ -128,7 +128,7 @@ void HGraphDelCommand::undo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         obj->setDeleted(false);
         bounding = bounding.united(item->boundingRect());
@@ -168,7 +168,7 @@ void HGraphPasteCommand::redo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         obj->setDeleted(false);
         bounding = bounding.united(item->boundingRect());
@@ -186,7 +186,7 @@ void HGraphPasteCommand::undo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         obj->setDeleted(true);
         bounding = bounding.united(item->boundingRect());
@@ -251,14 +251,14 @@ void HGraphMoveCommand::redo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         oldBounding = oldBounding.united(item->boundingRect());
         newBounding = newBounding.united(item->boundingRect().translated(dxList[i],dyList[i]));
-        item->moveItemBy(dxList[i],dyList[i]);
+        //item->moveItemBy(dxList[i],dyList[i]);
     }
     //需要把select给删除掉
-    m_pGraphEditorMgr->graphEditorScene()->clearSelectItem();
+    //m_pGraphEditorMgr->graphEditorScene()->clearSelectItem();
     //pIconMgr->getIconFrame()->refreshSelected(oldBounding);
    // pIconMgr->getIconFrame()->refreshSelected(newBounding);
    // m_pGraphEditorMgr->graphEditorView()->ensureVisible(newBounding);
@@ -274,13 +274,13 @@ void HGraphMoveCommand::undo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         oldBounding = oldBounding.united(item->boundingRect());
         newBounding = newBounding.united(item->boundingRect().translated(-dxList[i],-dyList[i]));
-        item->moveItemBy(-dxList[i],-dyList[i]);
+        //item->moveItemBy(-dxList[i],-dyList[i]);
     }
-    m_pGraphEditorMgr->graphEditorScene()->clearSelectItem();
+    //m_pGraphEditorMgr->graphEditorScene()->clearSelectItem();
     //m_pGraphEditorMgr->graphEditorView()->ensureVisible(newBounding);
 }
 
@@ -327,10 +327,10 @@ void HGraphRotateCommand::redo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         //oldBounding = oldBounding.united(item->boundingRect());
-        obj->setRotateAdd(angleList[i]);
+        //obj->setRotateAdd(angleList[i]);
         newBounding = newBounding.united(item->boundingRect());
     }
     //pIconMgr->getIconFrame()->refreshSelected(oldBounding);
@@ -348,10 +348,10 @@ void HGraphRotateCommand::undo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         oldBounding = oldBounding.united(item->boundingRect());
-        obj->setRotateAdd(-angleList[i]);
+        //obj->setRotateAdd(-angleList[i]);
         newBounding = newBounding.united(item->boundingRect());
     }
     //pIconMgr->getIconFrame()->refreshSelected(oldBounding);
@@ -395,13 +395,13 @@ void HGraphTurnCommand::redo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         oldBounding = oldBounding.united(item->boundingRect());
-        if(bDirection)
-            obj->setTurn(obj->bHorizonTurn,!obj->bVerticalTurn);
-        else
-            obj->setTurn(!obj->bHorizonTurn,obj->bVerticalTurn);
+        //if(bDirection)
+        //    obj->setTurn(obj->bHorizonTurn,!obj->bVerticalTurn);
+        //else
+        //    obj->setTurn(!obj->bHorizonTurn,obj->bVerticalTurn);
         newBounding = newBounding.united(item->boundingRect());
     }
     //pIconMgr->getIconFrame()->refreshSelected(oldBounding);
@@ -419,13 +419,13 @@ void HGraphTurnCommand::undo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         oldBounding = oldBounding.united(item->boundingRect());
-        if(bDirection)
-            obj->setTurn(obj->bHorizonTurn,!obj->bVerticalTurn);
-        else
-            obj->setTurn(!obj->bHorizonTurn,obj->bVerticalTurn);
+        //if(bDirection)
+        //    obj->setTurn(obj->bHorizonTurn,!obj->bVerticalTurn);
+        //else
+        //    obj->setTurn(!obj->bHorizonTurn,obj->bVerticalTurn);
         newBounding = newBounding.united(item->boundingRect());
     }
     //pIconMgr->getIconFrame()->refreshSelected(oldBounding);
@@ -466,10 +466,10 @@ void HGraphResizeCommand::redo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         oldBounding = oldBounding.united(item->boundingRect());
-        item->resizeItem(newPtList[i]);
+        //item->resizeItem(newPtList[i]);
         newBounding = newBounding.united(item->boundingRect());
     }
     //pIconMgr->getIconFrame()->refreshSelected(oldBounding);
@@ -487,10 +487,10 @@ void HGraphResizeCommand::undo()
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        HIconGraphicsItem* item = obj->getIconGraphicsItem();
+        H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         oldBounding = oldBounding.united(item->boundingRect());
-        item->resizeItem(oldPtList[i]);
+        //item->resizeItem(oldPtList[i]);
         newBounding = newBounding.united(item->boundingRect());
     }
     //pIconMgr->getIconFrame()->refreshSelected(oldBounding);

@@ -36,6 +36,7 @@ protected:
     virtual void dropEvent(QGraphicsSceneDragDropEvent *event);
 
     //绘制
+public:
     void drawPath(const QList<Path>& pathList);
     void endDraw();
     virtual bool eventFilter( QObject *obj, QEvent *event);

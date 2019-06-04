@@ -5,19 +5,35 @@
 #include <QDomElement>
 #include <QTextCodec>
 #include "hiconobj.h"
-
+#include "hmakeicon.h"
 HGraph::HGraph(const QString& name)
     :m_strGraphName(name)
 {
     nRefreshInterval = 3000;
     bStart = false;
     btType = 0;
+    setFillColorName("#000000");
+    m_width = 1600;
+    m_height = 900;
+    setOX(0);
+    setOY(0);
+    setFrameSee(false);
 
 }
 
 HGraph::~HGraph()
 {
 
+}
+
+void HGraph::setGraphID(int id)
+{
+    m_nID = id;
+}
+
+int HGraph::graphID()
+{
+    return m_nID;
 }
 
 void HGraph::setGraphName(const QString& name)
@@ -250,6 +266,36 @@ void HGraph::clear()
     m_fZoomScale = 1.0;
 
 }
+
+HBaseObj* HGraph::createBaseObj(DrawShape s, HIconTemplate* icontemplate)
+{
+    HBaseObj* pObj = NULL;
+    if(s == Icon)
+    {
+        if(!icontemplate)
+            return NULL;
+        HIconTemplate* pTemplate = new HIconTemplate("");
+        icontemplate->copyTo(pTemplate);
+        addIconTemplate(pTemplate);
+
+        HIconObj* obj = new HIconObj(pTemplate);
+        HIconObj* pIconObj = (HIconObj*)obj;
+        pIconObj->initIconTemplate();
+        pObj = (HBaseObj*)obj;
+    }
+    else
+    {
+        pObj = HMakeIcon::Instance()->newObj(s);
+    }
+    pObj->setShapeType((DrawShape)s);
+    if(pObj)
+    {
+        int objID = getObjID();
+        pObj->setObjID(objID);
+    }
+    return pObj;
+}
+
 void HGraph::addIconObj(HBaseObj* pObj)
 {
     if(!pObj) return;

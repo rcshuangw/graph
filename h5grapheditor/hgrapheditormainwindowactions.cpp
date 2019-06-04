@@ -334,3 +334,8 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
      m_pGraphEditorMgr->graphEditorOp()->onEndDraw();
  }
 
+ void HGraphEditorMainWindow::handTool()
+ {
+
+ }
+

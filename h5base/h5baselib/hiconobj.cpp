@@ -94,6 +94,14 @@ void HIconObj::writeData(int v, QDataStream* data)
 {
     if(!data) return;
     HBaseObj::writeData(v,data);
+    /*
+    QString strCatalogName;//目录名字
+    int nCatalogType;//类型
+    QString strUuid;//uuid
+    int nGraphID;
+    uchar btGraphOperator;
+    uchar btGraphComfirm;
+    */
     if(iconSymbol())
     {
         iconSymbol()->HShapeObj::writeData(v,data);
