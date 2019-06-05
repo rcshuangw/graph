@@ -113,6 +113,7 @@ public slots:
     void actionVSameSpace_clicked();
 
     //工具栏刷新、状态栏刷新
+    void onSelectTool();
     void onUpdateBaseAction(HBaseObj* obj);
     void onUpdateStatus(const QString& showText);
     //关于

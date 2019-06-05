@@ -280,8 +280,8 @@ HGraph* HGraphEditorDoc::addGraph(const QString& name)
     }
     HGraph* newGraph = new HGraph(name);
     newGraph->setGraphID(getGraphID());
-    newGraph->m_height = m_pGraphEditorMgr->getLogicRect().height();
-    newGraph->m_width = m_pGraphEditorMgr->getLogicRect().width();
+    //newGraph->m_height = m_pGraphEditorMgr->getLogicRect().height();
+    //newGraph->m_width = m_pGraphEditorMgr->getLogicRect().width();
     m_pGraphList.append(newGraph);
 
     m_pCurGraph = new HGraph("tempGraph");
@@ -358,5 +358,5 @@ bool HGraphEditorDoc::isGraphModify()
     if(!m_pCurGraph)
         return false;
     //return m_pCurGraph->odify();
-    return true;
+    return false;
 }

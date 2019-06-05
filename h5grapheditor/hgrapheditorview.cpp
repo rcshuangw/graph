@@ -1,10 +1,12 @@
 ﻿#include "hgrapheditorview.h"
+#include "hgrapheditorscene.h"
 #include <QScrollBar>
 HGraphEditorView::HGraphEditorView(QWidget *parent)
     :QGraphicsView (parent)
 {
     setAcceptDrops(true);
-    //setDragMode(QGraphicsView::ScrollHandDrag);
+    setDragMode(QGraphicsView::NoDrag);
+    //setBackgroundRole(QPalette::Dark);
     setCacheMode(QGraphicsView::CacheBackground);//背景缓存渲染时间
     setRubberBandSelectionMode(Qt::ContainsItemShape);//选择拖拽部分
     setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
@@ -32,3 +34,19 @@ void HGraphEditorView::refresh()
     resize(width,height);
 }
 
+bool HGraphEditorView::graphicsEditorViewPortEvent(QEvent *event)
+{
+    return QGraphicsView::viewportEvent(event);
+}
+
+
+bool HGraphEditorView::viewportEvent(QEvent* event)
+{
+    bool b = isInteractive();
+    if(scene())
+    {
+         HGraphEditorScene *scene1 = dynamic_cast<HGraphEditorScene*>(scene());
+         scene1->eventFilter(viewport(),event);
+    }
+    return false;
+}

@@ -29,6 +29,7 @@ HIconObj::HIconObj(HIconTemplate* it)
     nGraphID = (int)-1;
     btGraphOperator = MODE_OPEN_GRAPH;
     btGraphComfirm = COMFIRM_MODE_GRAPH;
+    initIconTemplate();
 
 }
 

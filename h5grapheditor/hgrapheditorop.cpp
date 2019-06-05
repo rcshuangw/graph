@@ -2,6 +2,7 @@
 #include <QDir>
 #include <QGraphicsItem>
 #include <QProcessEnvironment>
+#include <QScrollBar>
 #include "hgrapheditormgr.h"
 #include "hgrapheditorscene.h"
 #include "hgrapheditordoc.h"
@@ -18,6 +19,8 @@
 #include "htempcontainer.h"
 #include "hdrawhelper.h"
 #include "hmakeicon.h"
+#include "hgrapheditordrawtoolmgr.h"
+#include "hgrapheditorselecttool.h"
 HGraphEditorOp::HGraphEditorOp(HGraphEditorMgr* mgr)
     :m_pGraphEditorMgr(mgr)
 {
@@ -27,6 +30,34 @@ HGraphEditorOp::HGraphEditorOp(HGraphEditorMgr* mgr)
 HGraphEditorOp::~HGraphEditorOp()
 {
 
+}
+
+void HGraphEditorOp::setGraphicsView()
+{
+    if(!m_pGraphEditorMgr->graphEditorDoc() || !m_pGraphEditorMgr->graphEditorDoc()->getCurGraph())
+        return;
+
+    int width = m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->m_width;
+    int height = m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->m_height;
+    QRectF newLogicRectF = QRectF(QPointF(0-width/2,0-height/2),QSizeF(width,height));
+    if(!m_pGraphEditorMgr->graphEditorScene() || !m_pGraphEditorMgr->graphEditorView())
+        return;
+    m_pGraphEditorMgr->graphEditorScene()->setSceneRect(newLogicRectF);
+    HGraphEditorView* pView = m_pGraphEditorMgr->graphEditorView();
+    if(pView)
+    {
+        QScrollBar* pBar = pView->horizontalScrollBar();
+        if(pBar && pBar->isHidden() == false)
+        {
+            pBar->setSliderPosition(pBar->minimum());
+        }
+        pBar = pView->verticalScrollBar();
+        if(pBar && pBar->isHidden() == false)
+        {
+            pBar->setSliderPosition(pBar->minimum());
+        }
+    }
+    m_pGraphEditorMgr->refreshView();
 }
 
 void HGraphEditorOp::createIconObj(const QString& TypeName,const QString& uuid,int shape,QPointF fpoint,QList<H5GraphicsItem*> &items)
@@ -41,7 +72,7 @@ void HGraphEditorOp::createIconObj(const QString& TypeName,const QString& uuid,i
         return;
     }
 
-    HBaseObj* pObj = pGraphEditorDoc->getCurGraph()->createBaseObj((DrawShape)shape,pIconTemplate);
+    HBaseObj* pObj = pGraphEditorDoc->getCurGraph()->createBaseObj(Icon,pIconTemplate);
     HIconObj* pIconObj = (HIconObj*)pObj;
     pIconObj->setOX(fpoint.x());
     pIconObj->setOY(fpoint.y());
@@ -110,30 +141,35 @@ void HGraphEditorOp::onEndDraw()
 
 void HGraphEditorOp::drawTool(DrawShape drawShape)
 {
-    if(!m_pGraphEditorMgr /*|| !m_pGraphEditorMgr->iconEditorDrawToolMgr()*/)
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorDrawToolMgr())
         return;
-    /*
+
     m_nToolType = ICON_DRAW_TOOL;
-    m_pIconEditorMgr->iconEditorDrawToolMgr()->selectTool(drawShape);
+    m_pGraphEditorMgr->graphEditorDrawToolMgr()->selectTool(drawShape);
     onEndDraw();
-    QCursor cursor = m_pIconEditorMgr->iconEditorDrawToolMgr()->cursor();
-    if(m_pIconEditorMgr->iconEditorFrame())
-        m_pIconEditorMgr->iconEditorFrame()->cursorChanged(cursor);
-        */
+    QCursor cursor = m_pGraphEditorMgr->graphEditorDrawToolMgr()->cursor();
+    if(m_pGraphEditorMgr->graphEditorView())
+        m_pGraphEditorMgr->graphEditorView()->setCursor(cursor);
+
 }
 
 void HGraphEditorOp::selectTool(SelectMode selMode)
 {
-    if(!m_pGraphEditorMgr /*|| !m_pIconEditorMgr->iconEditorSelectTool()*/)
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorSelectTool())
         return;
-    /*
+
     m_nToolType = ICON_SELECT_TOOL;
-    m_pIconEditorMgr->iconEditorSelectTool()->setSelectMode(selMode);
+    m_pGraphEditorMgr->graphEditorSelectTool()->setSelectMode(selMode);
     onEndDraw();
-    QCursor cursor = m_pIconEditorMgr->iconEditorSelectTool()->cursor();
-    if(m_pIconEditorMgr->iconEditorFrame())
-        m_pIconEditorMgr->iconEditorFrame()->cursorChanged(cursor);
-        */
+    QCursor cursor = m_pGraphEditorMgr->graphEditorSelectTool()->cursor();
+    if(m_pGraphEditorMgr->graphEditorView())
+        m_pGraphEditorMgr->graphEditorView()->setCursor(cursor);
+
+}
+
+void HGraphEditorOp::switchSelectTool()
+{
+  emit setSelectTool();
 }
 
 void HGraphEditorOp::onUpdateStatus(const QString &text)
@@ -314,6 +350,12 @@ QString HGraphEditorOp::getClipboardFile()
         dirClipboard.mkdir(clipboardPath);
     clipboardPath.append("/graphclipboard.data");
     return clipboardPath;
+}
+
+bool HGraphEditorOp::isClipboardAvailable()
+{
+   QFile file(getClipboardFile());
+   return file.exists()&&file.size()!=0;
 }
 
 //移动到顶层

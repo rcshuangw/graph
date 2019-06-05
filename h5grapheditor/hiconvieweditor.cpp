@@ -151,7 +151,7 @@ void HIconTreeWidget::treeItemClicked(QTreeWidgetItem* pItem,int column)
 HIconListWidgetItem::HIconListWidgetItem(QListWidget * parent , int type )
     :QListWidgetItem(parent,type)
 {
-
+    setIcon( QIcon(QPixmap(50,50)) );
 }
 
 HIconListWidget::HIconListWidget(HGraphEditorMgr* mgr)
@@ -172,7 +172,7 @@ void HIconListWidget::initIconListWidget()
     setDragEnabled(true);//拖
     setDropIndicatorShown(true);
     //setViewMode(QListView::IconMode);
-    //setSpacing(10);
+    setSpacing(5);
     setIconSize(QSize(50,50));
 
     clearIconListWidget();
@@ -214,6 +214,7 @@ void HIconListWidget::RefreshIconType(int ntype)
             listItem->setData(Qt::UserRole,pTemp->getUuid());//uuid
             listItem->setText(pTemp->getSymbol()->getObjName());//名字
             QIcon icon(pIconHelper->iconPixmap(pTemp->getCatalogName(),pTemp->getUuid().toString()));
+            listItem->setBackground(QBrush(QColor("#F0FFFF")));
             listItem->setIcon(icon);
             listItem->setSizeHint(QSize(50,50));
             addItem(listItem);

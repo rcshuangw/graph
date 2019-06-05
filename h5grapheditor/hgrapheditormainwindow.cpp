@@ -247,12 +247,14 @@ void HGraphEditorMainWindow::initMainWindow()
     m_pGraphEditorView->setFrameShadow(QFrame::Plain);
     m_pGraphEditorView->setLineWidth(0);
 
+
     ui->gridLayout->addWidget(m_pGraphEditorView,0,1,1,1);
     m_pGraphEditorMgr->setGraphEditorView(m_pGraphEditorView);
     connect(m_pGraphEditorMgr->graphEditorScene(),SIGNAL(itemInserted(int)),this,SLOT(itemInserted(int)));
     connect(m_pGraphEditorMgr->graphEditorScene(),SIGNAL(selectItemChanged(int)),this,SLOT(selectItemChanged(int)));
     connect(m_pGraphEditorMgr->graphEditorScene(),SIGNAL(mousePosChanged(const QPointF&)),this,SLOT(viewMousePosChanged(const QPointF&)));
 
+    connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(setSelectTool()),this,SLOT(onSelectTool()));
     connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(updateBaseAction(HBaseObj*)),this,SLOT(onUpdateBaseAction(HBaseObj*)));
     connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(updateStatus(const QString&)),this,SLOT(onUpdateStatus(const QString&)));
 
@@ -426,4 +428,9 @@ void HGraphEditorMainWindow::onUpdateBaseAction(HBaseObj *obj)
 void HGraphEditorMainWindow::onUpdateStatus(const QString &showText)
 {
     statusBar()->showMessage(showText);
+}
+
+void HGraphEditorMainWindow::onSelectTool()
+{
+    ui->actionSelect->trigger();
 }

@@ -15,6 +15,7 @@
 #include "hpolyline.h"
 #include "hgroup.h"
 #include "htempcontainer.h"
+#include "../../include/hfileapi.h"
 HIconHelper::HIconHelper()
 {
 
@@ -37,10 +38,10 @@ QPixmap HIconHelper::iconPixmap(const QString& strType,const QString& uuid,const
     Q_ASSERT( pIconTemplate );
 
     char szIconPath[128];
-    //getDataFilePath(DFPATH_ICON,szIconPath);
-    //QString iconsPath = QString(szIconPath);
-    QString iconsPath = getenv("wfsystem_dir");
-     iconsPath = iconsPath + "/" + "icon";//QString(szIconPath);
+    getDataFilePath(DFPATH_ICON,szIconPath);
+    QString iconsPath = QString(szIconPath);
+    //QString iconsPath = getenv("wfsystem_dir");
+    // iconsPath = iconsPath + "/" + "icon";//QString(szIconPath);
     QString path = iconsPath +"/" + strType + "/" + uuid + ".xic";
     if ( uuid.isEmpty() && strType.contains(".xic") )
     {
@@ -48,8 +49,8 @@ QPixmap HIconHelper::iconPixmap(const QString& strType,const QString& uuid,const
     }
     pIconTemplate->readXml(path);
 
-    QSizeF defalultSize = pIconTemplate->getDefaultSize();
-    QImage image(defalultSize.width(),defalultSize.height(),QImage::Format_ARGB32);
+    QSizeF defalultSize = QSizeF(50,50);//pIconTemplate->getDefaultSize();
+    QImage image(defalultSize.width()+1,defalultSize.height(),QImage::Format_ARGB32);
     image.fill(Qt::transparent);
 
     //painter设置
@@ -58,16 +59,16 @@ QPixmap HIconHelper::iconPixmap(const QString& strType,const QString& uuid,const
 
     //创建iconObj
     HIconObj* pObj = new HIconObj(pIconTemplate);
-    if(!pObj->iconSymbol() || pObj->iconSymbol()->getMaxPattern() < nCurPattern)
+    if(!pObj->iconSymbol() || pObj->iconSymbol()->getMaxPattern() <= nCurPattern)
         return QPixmap();
-    pObj->iconSymbol()->setCurrentPattern(nCurPattern);
-
-    //设置图符绘制区域
-    //QRectF boundingRect = QRectF(QPointF(0,0),QSizeF(defalultSize));
-    //boundingRect.moveCenter(QPointF(widgetPoint.x(),widgetPoint.y()));
+    pObj->iconSymbol()->setCurrentPattern(0);
 
     //设置图符大小和绘制信息
-    pObj->resize(defalultSize.width()/ratioSizeF.width(),defalultSize.height()/ratioSizeF.height());
+    QPolygonF points;
+    points<<QPointF(0,0)<<QPointF(defalultSize.width(),defalultSize.height());
+    //pObj->setPointList(points);
+    pObj->resize(defalultSize.width(),defalultSize.height());
+    pObj->move(points.boundingRect().width()/2,points.boundingRect().height()/2);
     painter.translate(defalultSize.width()/2,defalultSize.height()/2);
     pObj->paint(&painter);
     delete pObj;
@@ -87,9 +88,11 @@ void HIconHelper::loadIconDoucument(QList<HIconTemplate*> *pIconTemplateList)
     if(NULL == pIconTemplateList)
         return;
     char szIconPath[128];
-    //getDataFilePath(DFPATH_ICON,szIconPath);
-    QString iconsPath = getenv("wfsystem_dir");
-     iconsPath = iconsPath + "/" + "icon";//QString(szIconPath);
+    memset(szIconPath,0,128);
+    getDataFilePath(DFPATH_ICON,szIconPath);
+    QString iconsPath = QString(szIconPath);
+    //QString iconsPath = getenv("wfsystem_dir");
+    // iconsPath = iconsPath + "/" + "icon";//QString(szIconPath);
 
     QDir dirIconsPath(iconsPath);
     if(!dirIconsPath.exists())
@@ -132,9 +135,11 @@ void HIconHelper::saveIconDoucument(QList<HIconTemplate*> *pIconTemplateList)
         return;
 
     char szIconPath[128];
-    //getDataFilePath(DFPATH_ICON,szIconPath);
-    QString iconsPath = getenv("wfsystem_dir");
-     iconsPath = iconsPath + "/" + "icon";//QString(szIconPath);
+    memset(szIconPath,0,128);
+    getDataFilePath(DFPATH_ICON,szIconPath);
+    QString iconsPath = QString(szIconPath);
+    //QString iconsPath = getenv("wfsystem_dir");
+    // iconsPath = iconsPath + "/" + "icon";//QString(szIconPath);
     QDir dirIconsPath(iconsPath);
     if(!dirIconsPath.exists())
         dirIconsPath.mkdir(iconsPath);

@@ -11,8 +11,12 @@ public:
 public:
     //目前只刷新界面
     void refresh();
-
+    bool graphicsEditorViewPortEvent(QEvent* event);
 public:
+    virtual bool viewportEvent(QEvent* event);
+
+    //virtual void dragEnterEvent(QDragEnterEvent *event);
+
 
 };
 

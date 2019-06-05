@@ -7,6 +7,8 @@
 #include "hiconapi.h"
 #include "hgraph.h"
 #include "hselectedmgr.h"
+#include "hgrapheditordrawtoolmgr.h"
+#include "hgrapheditorselecttool.h"
 #include <QMimeData>
 #include <QDebug>
 
@@ -89,7 +91,6 @@ void HGraphEditorScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
     }
     else
         event->ignore();
-
 }
 
 void HGraphEditorScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
@@ -104,6 +105,15 @@ void HGraphEditorScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     QPointF pointF = event->scenePos();
     if(event->mimeData()->hasFormat("DragIcon"))
     {
+        for(int i = 0; i < m_dragMoveItems.count();i++)
+        {
+            H5GraphicsItem* item = (H5GraphicsItem*)m_dragMoveItems[i];
+            if(item)
+            {
+                item->moveBy(pointF.x() - item->scenePos().x(),pointF.y() - item->scenePos().y());
+            }
+        }
+
         event->setDropAction(Qt::MoveAction);
         event->accept();
     }
@@ -126,7 +136,7 @@ void HGraphEditorScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 bool HGraphEditorScene::event(QEvent *event)
 {
-    return false;
+    return QGraphicsScene::event(event);
 }
 
 bool HGraphEditorScene::eventFilter(QObject *obj, QEvent *event)
@@ -134,6 +144,7 @@ bool HGraphEditorScene::eventFilter(QObject *obj, QEvent *event)
     static bool bRight = false;
     if(obj == m_pGraphEditorView->viewport())
     {
+        m_pGraphEditorView->graphicsEditorViewPortEvent(event);
         switch(((QMouseEvent*)event)->type())
         {
         case QEvent::MouseButtonDblClick:
@@ -146,19 +157,19 @@ bool HGraphEditorScene::eventFilter(QObject *obj, QEvent *event)
 
             QPointF pos = m_pGraphEditorView->mapToScene(((QMouseEvent*)event)->pos());
             HEvent hevent(event,QVariant(pos));
-            //if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_DRAW_TOOL)
-            //    m_pIconEditorMgr->iconEditorDrawToolMgr()->onEvent(hevent);
-            //else if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_SELECT_TOOL)
-            //    m_pIconEditorMgr->iconEditorSelectTool()->onEvent(hevent);
+            if(m_pGraphEditorMgr->graphEditorOp()->toolType() == ICON_DRAW_TOOL)
+                m_pGraphEditorMgr->graphEditorDrawToolMgr()->onEvent(hevent);
+            else if(m_pGraphEditorMgr->graphEditorOp()->toolType() == ICON_SELECT_TOOL)
+                m_pGraphEditorMgr->graphEditorSelectTool()->onEvent(hevent);
 
             if(event->type() == QEvent::MouseButtonRelease)
             {
                 QMouseEvent* me = (QMouseEvent*)event;
                 if(me->button() == Qt::RightButton)
                 {
-                    //if(m_pIconEditorMgr->iconEditorOp()->toolType() == ICON_DRAW_TOOL)
+                    if(m_pGraphEditorMgr->graphEditorOp()->toolType() == ICON_DRAW_TOOL)
                     {
-                        //m_pIconEditorMgr->iconEditorOp()->switchSelectTool();
+                        m_pGraphEditorMgr->graphEditorOp()->switchSelectTool();
                         bRight = true;
                         return true;
                     }
@@ -178,7 +189,7 @@ bool HGraphEditorScene::eventFilter(QObject *obj, QEvent *event)
                 return true;
             }
             HEvent hevent(event,QVariant());
-            //m_pIconEditorMgr->iconEditorSelectTool()->onEvent(hevent);
+            m_pGraphEditorMgr->graphEditorSelectTool()->onEvent(hevent);
             return false;
         }
         }
@@ -193,7 +204,7 @@ bool HGraphEditorScene::eventFilter(QObject *obj, QEvent *event)
                         return false;
                     }
                     HEvent hevent(event,QVariant());
-                    //m_pIconEditorMgr->iconEditorSelectTool()->onEvent(hevent);
+                    m_pGraphEditorMgr->graphEditorSelectTool()->onEvent(hevent);
                     return false;
                 }
             default:
@@ -210,12 +221,12 @@ void HGraphEditorScene::showStatusText(QEvent* event)
     if(!event) return;
     QMouseEvent* e = dynamic_cast<QMouseEvent*>(event);
     QPointF pt = m_pGraphEditorView->mapToScene(e->pos());
-    QString strText = QStringLiteral("坐标:(") + QString::number(pt.x(),'f',0) + QString::number(pt.y(),'f',0) +  ")";
+    QString strText = QStringLiteral("坐标:(") + QString::number(pt.x(),'f',0) +","+ QString::number(pt.y(),'f',0) +  ")";
     if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorOp())
         return;
     m_pGraphEditorMgr->graphEditorOp()->updateStatus(strText);
 }
-
+/*
 void HGraphEditorScene::onDrawPath(const QList<Path>& pathList)
 {
     if(!m_pGraphEditorView )
@@ -239,7 +250,7 @@ void HGraphEditorScene::onEndDraw()
     if(!m_pGraphEditorView)
         return;
     endDraw();
-}
+}*/
 
 void HGraphEditorScene::onCreateObj(HBaseObj* obj,bool isPaste )
 {

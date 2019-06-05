@@ -4,6 +4,8 @@
 #include <QObject>
 #include "hiconapi.h"
 #include "hdrawmanager.h"
+#define ICON_DRAW_TOOL   0x01
+#define ICON_SELECT_TOOL 0x02
 class HGraphEditorMgr;
 class HBaseObj;
 class HGraphEditorOp : public QObject
@@ -13,11 +15,14 @@ public:
     HGraphEditorOp(HGraphEditorMgr* mgr);
     ~HGraphEditorOp();
 public:
+    void setGraphicsView();
+
     void cut();
     void copy();
     void paste();
     void del();
     QString getClipboardFile();
+    bool isClipboardAvailable();
 
     void bringToTop();
     void bringToBottom();
@@ -53,8 +58,7 @@ public:
     void zoomSame();
     void setupMatrix();
 public:
-    void onDrawPath(const QList<Path>& path);
-    void onEndDraw();
+    int toolType() {return m_nToolType;}
     void drawTool(DrawShape drawShape);
     void selectTool(SelectMode select);
     void switchSelectTool();
@@ -67,8 +71,10 @@ public:
     void objSelectChanged(HBaseObj *obj, bool isSelected);
     void onUpdateStatus(const QString& text);
 public slots:
-
+    void onDrawPath(const QList<Path>& path);
+    void onEndDraw();
 signals:
+    void setSelectTool();
     void updateStatus(const QString& text);
     void updateBaseAction(HBaseObj* obj);
 private:
@@ -77,6 +83,7 @@ private:
     IconSize m_Equalway;
     IconFlip m_Flipway;
     qreal m_scale;
+    int m_nToolType;
 
 };
 

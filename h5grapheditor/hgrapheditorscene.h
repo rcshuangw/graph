@@ -44,8 +44,8 @@ public:
     virtual void showStatusText(QEvent* event);
 
 public slots:
-    virtual void onDrawPath(const QList<Path>& path);
-    virtual void onEndDraw();
+    //virtual void onDrawPath(const QList<Path>& path);
+    //virtual void onEndDraw();
     virtual void onCreateObj(HBaseObj* pObj,bool isPaste );
     virtual void onRefreshSelect(const QRectF& rect);
     virtual void onObjSelectChanged(HBaseObj *obj, bool isSelected);

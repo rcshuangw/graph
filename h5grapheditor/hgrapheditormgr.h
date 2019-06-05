@@ -14,7 +14,8 @@ class HIconGraphicsItem;
 class HBaseObj;
 class HGraph;
 class HSelectedMgr;
-
+class HGraphEditorDrawToolMgr;
+class HGraphEditorSelectTool;
 class HGraphEditorMgr : public QObject
 {
     Q_OBJECT
@@ -28,6 +29,8 @@ public:
     HGraphEditorOp*    graphEditorOp();
     QUndoStack*        graphEditorStack();
     HSelectedMgr*      selectedMgr();
+    HGraphEditorDrawToolMgr* graphEditorDrawToolMgr();
+    HGraphEditorSelectTool* graphEditorSelectTool();
 public:
     void setGraphEditorView(HGraphEditorView* view);
     //加载
@@ -69,8 +72,8 @@ protected:
     QUndoStack* m_pGraphEditorUndoStack;
     HGraphEditorOp* m_pGraphEditorOp;
     HSelectedMgr* m_pSelectedMgr;
-    //HIconEditorDrawToolMgr* m_pIconEditorDrawToolMgr;
-    //HIconEditorSelectTool* m_pIconEditorSelectTool;
+    HGraphEditorDrawToolMgr* m_pGraphEditorDrawToolMgr;
+    HGraphEditorSelectTool* m_pGraphEditorSelectTool;
 private:
     DrawShape m_eDrawShape;
     QRectF m_logicRectF;  //scene的大小

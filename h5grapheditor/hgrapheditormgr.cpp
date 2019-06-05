@@ -11,6 +11,8 @@
 #include "hgraph.h"
 #include "hselectedmgr.h"
 #include "hmakeicon.h"
+#include "hgrapheditordrawtoolmgr.h"
+#include "hgrapheditorselecttool.h"
 //图形文件管理总类
 HGraphEditorMgr::HGraphEditorMgr()
     :m_logicRectF(-500,-500,1000,1000)
@@ -34,6 +36,8 @@ HGraphEditorMgr::HGraphEditorMgr()
     m_logicRectF.setHeight(height-100);
     m_eDrawShape = No;
 
+    m_pGraphEditorDrawToolMgr = NULL;
+    m_pGraphEditorSelectTool = NULL;
     //选择状态下的刷新
     connect(m_pSelectedMgr,SIGNAL(refreshSelect(QRectF)),m_pGraphEditorOp,SLOT(onRefreshSelect(QRectF)));
 }
@@ -110,6 +114,16 @@ HSelectedMgr* HGraphEditorMgr::selectedMgr()
     return m_pSelectedMgr;
 }
 
+HGraphEditorDrawToolMgr* HGraphEditorMgr::graphEditorDrawToolMgr()
+{
+    return m_pGraphEditorDrawToolMgr;
+}
+
+HGraphEditorSelectTool* HGraphEditorMgr::graphEditorSelectTool()
+{
+    return m_pGraphEditorSelectTool;
+}
+
 void HGraphEditorMgr::setGraphEditorView(HGraphEditorView* view)
 {
     if(view)
@@ -136,7 +150,23 @@ void HGraphEditorMgr::setGraphEditorView(HGraphEditorView* view)
            graphEditorDoc()->getCurGraph()->m_width = m_logicRectF.width();
            graphEditorDoc()->getCurGraph()->m_height = m_logicRectF.height();
         }
+
+        if(!m_pGraphEditorDrawToolMgr)
+        {
+            m_pGraphEditorDrawToolMgr = new HGraphEditorDrawToolMgr(this);
+            connect(m_pGraphEditorDrawToolMgr,SIGNAL(drawPath(const QList<Path>&)),m_pGraphEditorOp,SLOT(onDrawPath(const QList<Path>)));
+            connect(m_pGraphEditorDrawToolMgr,SIGNAL(endDraw()),m_pGraphEditorOp,SLOT(onEndDraw()));
+
+        }
+        if(!m_pGraphEditorSelectTool)
+        {
+            m_pGraphEditorSelectTool =new HGraphEditorSelectTool(this);
+            connect(m_pGraphEditorSelectTool,SIGNAL(refreshSelect(QRectF)),m_pGraphEditorOp,SLOT(onRefreshSelect(QRectF)));
+            connect(m_pGraphEditorSelectTool,SIGNAL(endDraw()),m_pGraphEditorOp,SLOT(onEndDraw()));
+            connect(m_pGraphEditorOp,SIGNAL(selectChanged()),m_pGraphEditorSelectTool,SLOT(onSelectChanged()));
+        }
     }
+
 }
 
 //设置逻辑界面大小
@@ -185,13 +215,17 @@ void HGraphEditorMgr::New(const QString& graphName)
     if(!m_pGraphEditorDoc)
         return;
     m_pGraphEditorDoc->addGraph(graphName);
+    m_pGraphEditorOp->setGraphicsView();
 }
 
 bool HGraphEditorMgr::Open(const QString& graphName,int id)
 {
     if(!m_pGraphEditorDoc)
         return false;
-    return m_pGraphEditorDoc->openGraph(graphName,id);
+    if(!m_pGraphEditorDoc->openGraph(graphName,id))
+        return false;
+    return true;
+
 }
 
 void HGraphEditorMgr::Save()

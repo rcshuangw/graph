@@ -12,9 +12,9 @@ HGraph::HGraph(const QString& name)
     nRefreshInterval = 3000;
     bStart = false;
     btType = 0;
-    setFillColorName("#000000");
-    m_width = 1600;
-    m_height = 900;
+    setFillColorName("#FFFFFF");
+    m_width = 1000;
+    m_height = 1000;
     setOX(0);
     setOY(0);
     setFrameSee(false);
@@ -281,6 +281,7 @@ HBaseObj* HGraph::createBaseObj(DrawShape s, HIconTemplate* icontemplate)
         HIconObj* obj = new HIconObj(pTemplate);
         HIconObj* pIconObj = (HIconObj*)obj;
         pIconObj->initIconTemplate();
+        pIconObj->iconSymbol()->setCurrentPattern(0);
         pObj = (HBaseObj*)obj;
     }
     else
@@ -293,6 +294,9 @@ HBaseObj* HGraph::createBaseObj(DrawShape s, HIconTemplate* icontemplate)
         int objID = getObjID();
         pObj->setObjID(objID);
     }
+
+    //增加到列表
+    addIconObj(pObj);
     return pObj;
 }
 
