@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>1591</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_F">
@@ -78,6 +78,9 @@
     <addaction name="actionPolygon"/>
     <addaction name="actionArc"/>
     <addaction name="actionText"/>
+    <addaction name="separator"/>
+    <addaction name="actionAutoYX"/>
+    <addaction name="actionAutoYC"/>
    </widget>
    <widget class="QMenu" name="menuTool">
     <property name="title">
@@ -101,8 +104,8 @@
   <widget class="QDockWidget" name="fileDockWidget">
    <property name="minimumSize">
     <size>
-     <width>80</width>
-     <height>38</height>
+     <width>90</width>
+     <height>41</height>
     </size>
    </property>
    <property name="windowTitle">
@@ -116,8 +119,8 @@
   <widget class="QDockWidget" name="resDockWidget">
    <property name="minimumSize">
     <size>
-     <width>80</width>
-     <height>38</height>
+     <width>90</width>
+     <height>41</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -285,9 +288,12 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionCircle"/>
-   <addaction name="actionPolyline"/>
+   <addaction name="actionLine"/>
    <addaction name="actionRectangle"/>
+   <addaction name="actionPolyline"/>
+   <addaction name="actionPolygon"/>
+   <addaction name="actionCircle"/>
+   <addaction name="actionArc"/>
    <addaction name="actionText"/>
   </widget>
   <widget class="QToolBar" name="widgetBar">
@@ -788,6 +794,30 @@
    </property>
    <property name="text">
     <string>PenColor</string>
+   </property>
+  </action>
+  <action name="actionAutoYX">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/auto.png</normaloff>:/images/auto.png</iconset>
+   </property>
+   <property name="text">
+    <string>自动生成遥信</string>
+   </property>
+   <property name="toolTip">
+    <string>自动生成遥信</string>
+   </property>
+  </action>
+  <action name="actionAutoYC">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/auto.png</normaloff>:/images/auto.png</iconset>
+   </property>
+   <property name="text">
+    <string>自动生成遥测</string>
+   </property>
+   <property name="toolTip">
+    <string>自动生成遥测</string>
    </property>
   </action>
  </widget>

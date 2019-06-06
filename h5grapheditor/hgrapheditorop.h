@@ -38,9 +38,16 @@ public:
     void setPicture();
 
     //线型填充等部分
-    void setLineStyle();
-    void setLineWidth();
-    void setFillBrush();
+    void setLineStyle(int style);
+    void setLineWidth(int width);
+    void setFillBrush(int brushStyle);
+
+    //字体
+    void setFontFamily(const QString& family);
+    void setFontSize(int size);
+    void setBold(bool b);
+    void setItalic(bool b);
+    void setUnderline(bool b);
 public:
     void alignLeft();
     void alignRight();

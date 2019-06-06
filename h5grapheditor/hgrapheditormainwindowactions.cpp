@@ -185,30 +185,43 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  //字体部分
  void HGraphEditorMainWindow::fontBox_clicked(int nIndex)
  {
-     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorDrawToolMgr())
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp() || nIndex == (int)-1)
          return;
-     QString strFamily = m_pFontBox->currentText();
-     m_pGraphEditorMgr->graphEditorDrawToolMgr()->m_vDrawAttribute.font.setFamily(strFamily);
+     QString strFamily = m_pLineStyleBox->currentText();
+     m_pGraphEditorMgr->graphEditorOp()->setFontFamily(strFamily);
+
  }
 
  void HGraphEditorMainWindow::fontSizeBox_clicked(int nIndex)
  {
-
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp() || nIndex == (int)-1)
+         return;
+     int nSize = m_pFontSizeBox->currentData().toInt();
+     m_pGraphEditorMgr->graphEditorOp()->setFontSize(nSize);
  }
 
  void HGraphEditorMainWindow::actionBold_clicked(bool bchecked)
  {
-
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp() )
+         return;
+     bool b = ui->actionBold->isChecked();
+     m_pGraphEditorMgr->graphEditorOp()->setBold(bchecked);
  }
 
  void HGraphEditorMainWindow::actionItalic_clicked(bool bchecked)
  {
-
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
+         return;
+     bool b = ui->actionItalic->isChecked();
+     m_pGraphEditorMgr->graphEditorOp()->setItalic(bchecked);
  }
 
  void HGraphEditorMainWindow::actionTextUnder_clicked(bool bchecked)
  {
-
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp() )
+         return;
+     bool b = ui->actionTextUnder->isChecked();
+     m_pGraphEditorMgr->graphEditorOp()->setUnderline(bchecked);
  }
 
  //颜色部分
@@ -239,17 +252,26 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
 
  void HGraphEditorMainWindow::lineStyleBox_clicked(int nIndex)
  {
-
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp() || nIndex == (int)-1)
+         return;
+     int nLineStyle = m_pLineStyleBox->currentData().toInt();
+     m_pGraphEditorMgr->graphEditorOp()->setLineStyle(nLineStyle);
  }
 
  void HGraphEditorMainWindow::lineWidthBox_clicked(int nIndex)
  {
-
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp() || nIndex == (int)-1)
+         return;
+     int nLineWidth = m_pLineWidthBox->currentData().toInt();
+     m_pGraphEditorMgr->graphEditorOp()->setLineWidth(nLineWidth);
  }
 
  void HGraphEditorMainWindow::fillBrushBox_clicked(int nIndex)
  {
-
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp() || nIndex == (int)-1)
+         return;
+     int nFillStyle = m_pFillBrushBox->currentData().toInt();
+     m_pGraphEditorMgr->graphEditorOp()->setFillBrush(nFillStyle);
  }
 
  //组合

@@ -51,8 +51,14 @@ public:
     void setFontWeight(int weight);
     int fontWeight();
 
+    void setFontBold(bool b);
+    bool fontBold();
+
     void setFontItalic(bool bitalic);
     bool fontItalic();
+
+    void setFontUnderline(bool b);
+    bool fontUnderline();
 
     //内容、格式、前后缀
     void setText(QString strContent);
@@ -84,6 +90,8 @@ private:
     int m_nFontSize;//字体大小
     int m_nFontWeight;//粗体
     bool m_nFontItalic;//斜体
+    bool m_bFontBold;
+    bool m_bFontUnderline;
 };
 
 

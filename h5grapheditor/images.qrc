@@ -53,5 +53,6 @@
         <file>images/hand_select.png</file>
         <file>images/fillColor.png</file>
         <file>images/penColor.png</file>
+        <file>images/auto.png</file>
     </qresource>
 </RCC>

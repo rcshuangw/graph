@@ -227,6 +227,25 @@ int HText::fontWeight()
     //return m_nFontWeight;
     return m_Font.weight();
 }
+void HText::setFontBold(bool b)
+{
+    m_bFontBold = b;
+}
+
+bool HText::fontBold()
+{
+    return m_bFontBold;
+}
+
+void HText::setFontUnderline(bool b)
+{
+    m_bFontUnderline = b;
+}
+
+bool HText::fontUnderline()
+{
+    return m_bFontUnderline;
+}
 
 void HText::setFontItalic(bool bitalic)
 {

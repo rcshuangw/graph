@@ -16,6 +16,7 @@
 #include "hline.h"
 #include "hgraph.h"
 #include "hgroup.h"
+#include "htext.h"
 #include "hselectedmgr.h"
 #include "htempcontainer.h"
 #include "hdrawhelper.h"
@@ -986,17 +987,162 @@ void HGraphEditorOp::setPicture()
 }
 
 //线型填充等部分
-void HGraphEditorOp::setLineStyle()
+void HGraphEditorOp::setLineStyle(int linestyle)
 {
-
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer)
+        return;
+    Qt::PenStyle style = (Qt::PenStyle)linestyle;
+    m_pGraphEditorMgr->graphEditorDrawToolMgr()->m_vDrawAttribute.drawPen.setStyle(style);
+    int sz = tempContainer->size();
+    for(int i = 0;i < sz;i++)
+    {
+        HBaseObj* pObj = tempContainer->at(i);
+        if(pObj)
+        {
+            pObj->setLineStyle(style);
+        }
+    }
 }
 
-void HGraphEditorOp::setLineWidth()
+void HGraphEditorOp::setLineWidth(int linewidth)
 {
-
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer)
+        return;
+    m_pGraphEditorMgr->graphEditorDrawToolMgr()->m_vDrawAttribute.drawPen.setWidth(linewidth);
+    int sz = tempContainer->size();
+    for(int i = 0;i < sz;i++)
+    {
+        HBaseObj* pObj = tempContainer->at(i);
+        if(pObj)
+        {
+            pObj->setLineWidth(linewidth);
+        }
+    }
 }
 
-void HGraphEditorOp::setFillBrush()
+void HGraphEditorOp::setFillBrush(int brushStyle)
 {
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer)
+        return;
+    Qt::BrushStyle style = (Qt::BrushStyle)brushStyle;
+    int sz = tempContainer->size();
+    for(int i = 0;i < sz;i++)
+    {
+        HBaseObj* pObj = tempContainer->at(i);
+        if(!pObj) continue;
+        HShapeObj* obj = dynamic_cast<HShapeObj*>(pObj);
+        if(obj)
+        {
+            obj->setFillStyle(style);
+        }
+    }
+}
 
+void HGraphEditorOp::setFontFamily(const QString& family)
+{
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer)
+        return;
+    int sz = tempContainer->size();
+    for(int i = 0;i < sz;i++)
+    {
+        HBaseObj* pObj = tempContainer->at(i);
+        if(!pObj) continue;
+        if(pObj->getShapeType() == Text)
+        {
+            HText *pText = (HText*)pObj;
+            pText->setFontFamily(family);
+        }
+    }
+}
+
+void HGraphEditorOp::setFontSize(int size)
+{
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer)
+        return;
+    int sz = tempContainer->size();
+    for(int i = 0;i < sz;i++)
+    {
+        HBaseObj* pObj = tempContainer->at(i);
+        if(!pObj) continue;
+        if(pObj->getShapeType() == Text)
+        {
+            HText *pText = (HText*)pObj;
+            pText->setFontSize(size);
+        }
+    }
+}
+
+void HGraphEditorOp::setBold(bool b)
+{
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer)
+        return;
+    int sz = tempContainer->size();
+    for(int i = 0;i < sz;i++)
+    {
+        HBaseObj* pObj = tempContainer->at(i);
+        if(!pObj) continue;
+        if(pObj->getShapeType() == Text)
+        {
+            HText *pText = (HText*)pObj;
+            pText->setFontBold(b);
+        }
+    }
+}
+
+void HGraphEditorOp::setItalic(bool b)
+{
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer)
+        return;
+    int sz = tempContainer->size();
+    for(int i = 0;i < sz;i++)
+    {
+        HBaseObj* pObj = tempContainer->at(i);
+        if(!pObj) continue;
+        if(pObj->getShapeType() == Text)
+        {
+            HText *pText = (HText*)pObj;
+            pText->setFontItalic(b);
+        }
+    }
+}
+
+void HGraphEditorOp::setUnderline(bool b)
+{
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer)
+        return;
+    int sz = tempContainer->size();
+    for(int i = 0;i < sz;i++)
+    {
+        HBaseObj* pObj = tempContainer->at(i);
+        if(!pObj) continue;
+        if(pObj->getShapeType() == Text)
+        {
+            HText *pText = (HText*)pObj;
+            pText->setFontUnderline(b);
+        }
+    }
 }
