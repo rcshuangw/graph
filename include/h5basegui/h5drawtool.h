@@ -32,6 +32,8 @@ public:
     QString templateUuid() {return m_strObjUuid;}
 	HDrawManager* toolManager(){return m_pToolManager;}
 
+    void setDrawAttribute(HBaseObj* obj);
+
 protected:
 	HDrawManager* m_pToolManager;
     DrawShape m_edrawShape;

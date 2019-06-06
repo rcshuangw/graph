@@ -9,6 +9,7 @@
 #include "hicontabwidget.h"
 #include "hiconvieweditor.h"
 #include "hfonthelper.h"
+#include "hiconhelper.h"
 #include <QLineEdit>
 #include <QFileInfo>
 #include <QComboBox>
@@ -66,14 +67,11 @@ void HGraphEditorMainWindow::createActions()
     //ui->actionPaste_V->setEnabled(true);
     m_pEditAndBringGroup->addAction(ui->actionDelete);
 
-
     //置顶置底
     connect(ui->actionTop_T,SIGNAL(triggered(bool)),this,SLOT(actionTop_clicked()));
     connect(ui->actionBottom_B,SIGNAL(triggered(bool)),this,SLOT(actionBottom_clicked()));
     m_pEditAndBringGroup->addAction(ui->actionTop_T);
     m_pEditAndBringGroup->addAction(ui->actionBottom_B);
-
-
 
     //属性
     connect(ui->actionAttribute,SIGNAL(triggered(bool)),this,SLOT(actionAttribute_clicked()));
@@ -106,7 +104,6 @@ void HGraphEditorMainWindow::createActions()
     m_pFlipGroup->addAction(ui->actionFlipVertical);
     m_pFlipGroup->setEnabled(false);
 
-
     //字体部分的actions()
     connect(m_pFontBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontBox_clicked(int)));
     connect(m_pFontSizeBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontSizeBox_clicked(int)));
@@ -115,7 +112,7 @@ void HGraphEditorMainWindow::createActions()
     connect(ui->actionTextUnder,SIGNAL(triggered(bool)),this,SLOT(actionTextUnder_clicked(bool)));
 
     //颜色部分
-    connect(ui->actionColor,SIGNAL(triggered(bool)),this,SLOT(actionColor_clicked()));
+    connect(ui->actionPenColor,SIGNAL(triggered(bool)),this,SLOT(actionPenColor_clicked()));
     connect(ui->actionFillColor,SIGNAL(triggered(bool)),this,SLOT(actionFillColor_clicked()));
     connect(ui->actionBackPicture,SIGNAL(triggered(bool)),this,SLOT(actionBackPicture_clicked()));
 
@@ -186,26 +183,36 @@ void HGraphEditorMainWindow::createToolBars()
 {
    //字体 默认的字体都是可以Bold italic
    m_pFontBox = new QComboBox(ui->fontBar);
-   QStringList fontList = HFontHelper::Instance()->fontFamilies();
-   m_pFontBox->insertItems(0,fontList);
+   HFontHelper::Instance()->initFontFamilyComboBox(m_pFontBox);
    m_pFontBox->setCurrentIndex(0);
    ui->fontBar->insertWidget(ui->actionBold,m_pFontBox);
 
    //大小
    m_pFontSizeBox = new QComboBox(ui->fontBar);
-   m_pFontSizeBox->clear();
-   QString strFont = m_pFontSizeBox->currentText();
-   QList<int> fontSize = HFontHelper::Instance()->pointSizes(strFont);
-   for(int i = 0;i < fontSize.count();i++)
-   {
-       QString str = QString("%1").arg(fontSize[i]);
-       m_pFontSizeBox->insertItem(i,str,QVariant(fontSize[i]));
-   }
+   HFontHelper::Instance()->initFontSizeComboBox(m_pFontSizeBox,m_pFontBox->currentText());
    ui->fontBar->insertWidget(ui->actionBold,m_pFontSizeBox);
 
    //最后插入文本编辑框
    m_pTextEdit = new QLineEdit(ui->fontBar);
    ui->fontBar->addWidget(m_pTextEdit);
+
+   //插入线型、线宽、填充方式
+   m_pLineStyleBox = new QComboBox(ui->attrBar);
+   HIconHelper::Instance()->InitPenStyleComboBox(m_pLineStyleBox);
+   m_pLineStyleBox->setCurrentIndex(0);
+   ui->attrBar->insertWidget(ui->actionBackPicture,m_pLineStyleBox);
+   connect(m_pLineStyleBox,SIGNAL(currentIndexChanged(int)),this,SLOT(lineStyleBox_clicked(int)));
+
+   m_pLineWidthBox = new QComboBox(ui->attrBar);
+   HIconHelper::Instance()->InitPenWidthComboBox(m_pLineWidthBox);
+   m_pLineWidthBox->setCurrentIndex(0);
+   ui->attrBar->addWidget(m_pLineWidthBox);
+   connect(m_pLineWidthBox,SIGNAL(currentIndexChanged(int)),this,SLOT(lineWidthBox_clicked(int)));
+
+   m_pFillBrushBox = new QComboBox(ui->attrBar);
+   HIconHelper::Instance()->InitBrushStyleComboBox(m_pFillBrushBox);
+   ui->attrBar->addWidget(m_pFillBrushBox);
+   connect(m_pFillBrushBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fillBrushBox_clicked(int)));
 }
 
 void HGraphEditorMainWindow::createFontBar()
@@ -255,6 +262,7 @@ void HGraphEditorMainWindow::initMainWindow()
     connect(m_pGraphEditorMgr->graphEditorScene(),SIGNAL(mousePosChanged(const QPointF&)),this,SLOT(viewMousePosChanged(const QPointF&)));
 
     connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(setSelectTool()),this,SLOT(onSelectTool()));
+    connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(selectChanged()),this,SLOT(onSelectChanged()));
     connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(updateBaseAction(HBaseObj*)),this,SLOT(onUpdateBaseAction(HBaseObj*)));
     connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(updateStatus(const QString&)),this,SLOT(onUpdateStatus(const QString&)));
 
@@ -433,4 +441,67 @@ void HGraphEditorMainWindow::onUpdateStatus(const QString &showText)
 void HGraphEditorMainWindow::onSelectTool()
 {
     ui->actionSelect->trigger();
+}
+
+void HGraphEditorMainWindow::onSelectChanged()
+{
+
+}
+
+QIcon HGraphEditorMainWindow::createPenWidthIcon(int width)
+{
+    QPixmap pixmap(30,16);
+    QPainter painter(&pixmap);
+    painter.fillRect(QRect(0,0,30,16),Qt::white);
+    QPen pen;
+    pen.setWidthF(width);
+    painter.setPen(pen);
+    painter.drawLine(0,8,30,8);
+    return QIcon(pixmap);
+}
+
+QIcon HGraphEditorMainWindow::createPenStyleIcon(Qt::PenStyle style)
+{
+    QPixmap pixmap(30,16);
+    QPainter painter(&pixmap);
+    painter.fillRect(QRect(0,0,30,16),Qt::white);
+    QPen pen;
+    pen.setStyle(style);
+    pen.setWidth(2);
+    painter.setPen(pen);
+    painter.drawLine(0,8,30,8);
+
+    return QIcon(pixmap);
+}
+
+QIcon HGraphEditorMainWindow::createBrushStyleIcon(Qt::BrushStyle brushStyle)
+{
+    QPixmap pixmap(30,16);
+    pixmap.fill(Qt::white);
+    QPainter painter(&pixmap);
+    if(brushStyle == Qt::LinearGradientPattern)
+    {
+        QLinearGradient linearGradient(0,0,30,16);
+        linearGradient.setColorAt(0.0,Qt::white);
+        linearGradient.setColorAt(1.0,Qt::black);
+        painter.setBrush(linearGradient);
+    }
+    else if(brushStyle == Qt::RadialGradientPattern)
+    {
+        QRadialGradient radialGradient(15,8,30,15,8);
+        radialGradient.setColorAt(0.0,Qt::white);
+        radialGradient.setColorAt(1.0,Qt::black);
+        painter.setBrush(radialGradient);
+    }
+    else if(brushStyle == Qt::ConicalGradientPattern)
+    {
+        QConicalGradient conicalGradient(15,8,0);
+        conicalGradient.setColorAt(0.0,Qt::white);
+        conicalGradient.setColorAt(1.0,Qt::black);
+        painter.setBrush(conicalGradient);
+    }
+    else
+        painter.setBrush(brushStyle);
+    painter.drawRect(0,0,29,15);
+    return QIcon(pixmap);
 }

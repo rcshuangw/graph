@@ -4,6 +4,7 @@
 #include <QPixmap>
 #include <QString>
 #include <QList>
+#include <QComboBox>
 #include "hiconapi.h"
 class HBaseObj;
 class HIconTemplate;
@@ -30,6 +31,43 @@ public:
 
     //通过图元类型来获得存储的文件夹类型
     bool IsIconInFolder(const QString& strFolderName,const int nIconType);
+
+
+public:
+    //绘制颜色或者填充颜色图符
+    QIcon createPenorBrushColorIcon(const QIcon& icon,const QColor& clr);
+
+    //初始化线宽列表
+    void InitPenWidthComboBox(QComboBox* comboBox);
+
+    //初始化线型列表
+    void InitPenStyleComboBox(QComboBox* comboBox);
+
+    //初始化线头列表
+    void InitPenCapStyleComboBox(QComboBox* comboBox);
+
+    //初始化填充方式列表
+    void InitBrushStyleComboBox(QComboBox* comboBox);
+
+    //初始化直线箭头列表
+    void InitArrowStyleComboBox(QComboBox* comboBox,bool head = true);
+
+private:
+    //绘制线宽图符
+    QIcon createPenWidthIcon(int width);
+
+    //绘制线型图符
+    QIcon createPenStyleIcon(Qt::PenStyle style);
+
+    //绘制线头图符
+    QIcon createPenCapStyleIcon(Qt::PenCapStyle capStyle);
+
+    //绘制线刷(填充方式)图符
+    QIcon createBrushStyleIcon(Qt::BrushStyle brushStyle);
+
+    //绘制箭头
+    QIcon createArrowIcon(quint8 style,bool head);
+
 
 };
 

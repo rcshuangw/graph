@@ -74,3 +74,24 @@ int HFontHelper::weight(const QString &family, const QString &style) const
 {
     return fontDatabase.weight(family,style);
 }
+
+void HFontHelper::initFontFamilyComboBox(QComboBox* comboBox)
+{
+    if(!comboBox)
+        return;
+    comboBox->clear();
+    QStringList fontList = fontFamilies();
+    comboBox->insertItems(0,fontList);
+}
+void HFontHelper::initFontSizeComboBox(QComboBox* comboBox,QString strFamily)
+{
+    if(!comboBox)
+        return;
+    comboBox->clear();
+    QList<int> fontSize = pointSizes(strFamily);
+    for(int i = 0;i < fontSize.count();i++)
+    {
+        QString str = QString("%1").arg(fontSize[i]);
+        comboBox->insertItem(i,str,QVariant(fontSize[i]));
+    }
+}

@@ -182,44 +182,62 @@ int HText::verticalAlign()
     return m_nVerticalAlign;
 }
 
+void HText::setFont(QFont &font)
+{
+    m_Font = font;
+}
+
+QFont HText::font()
+{
+    return m_Font;
+}
+
 void HText::setFontFamily(QString strFontName)
 {
-    m_strFontFamily = strFontName;
+    //m_strFontFamily = strFontName;
+    m_Font.setFamily(strFontName);
 }
 
 QString HText::fontFamily()
 {
-    return m_strFontFamily;
+    //return m_strFontFamily;
+    return m_Font.family();
 }
 
 void HText::setFontSize(int ptSize)
 {
-    m_nFontSize = ptSize;
+    //m_nFontSize = ptSize;
+    m_Font.setPointSize(ptSize);
 }
 
 int HText::fontSize()
 {
-    return m_nFontSize;
+    //return m_nFontSize;
+    return m_Font.pointSize();
 }
 
 void HText::setFontWeight(int weight)
 {
-    this->m_nFontWeight = weight;
+    //this->m_nFontWeight = weight;
+    m_Font.setWeight(weight);
 }
 
 int HText::fontWeight()
 {
-    return m_nFontWeight;
+    //return m_nFontWeight;
+    return m_Font.weight();
 }
 
 void HText::setFontItalic(bool bitalic)
 {
-    m_nFontItalic = bitalic;
+    //m_nFontItalic = bitalic;
+    m_Font.setItalic(bitalic);
 }
 
 bool HText::fontItalic()
 {
-    return m_nFontItalic;
+    //return m_nFontItalic;
+    return m_Font.italic();
 }
 
 void HText::setText(QString text)
@@ -282,7 +300,7 @@ void HText::paint(QPainter* painter)
     int nFontSize = fontSize();
     int nFontWeight = fontWeight();
     bool bFontItalic = (bool)fontItalic();
-    QFont font(strFontFamily,nFontSize,nFontWeight,bFontItalic);
+    QFont font = m_Font;//(strFontFamily,nFontSize,nFontWeight,bFontItalic);
 
     QPen textPen = QPen(QColor(textClrName()));
     painter->setPen(textPen);

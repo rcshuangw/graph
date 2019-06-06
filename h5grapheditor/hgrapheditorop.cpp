@@ -3,6 +3,7 @@
 #include <QGraphicsItem>
 #include <QProcessEnvironment>
 #include <QScrollBar>
+#include <QColorDialog>
 #include "hgrapheditormgr.h"
 #include "hgrapheditorscene.h"
 #include "hgrapheditordoc.h"
@@ -21,6 +22,7 @@
 #include "hmakeicon.h"
 #include "hgrapheditordrawtoolmgr.h"
 #include "hgrapheditorselecttool.h"
+
 HGraphEditorOp::HGraphEditorOp(HGraphEditorMgr* mgr)
     :m_pGraphEditorMgr(mgr)
 {
@@ -165,6 +167,12 @@ void HGraphEditorOp::selectTool(SelectMode selMode)
     if(m_pGraphEditorMgr->graphEditorView())
         m_pGraphEditorMgr->graphEditorView()->setCursor(cursor);
 
+}
+
+void HGraphEditorOp::onRefreshSelect(const QRectF &rect)
+{
+    if(m_pGraphEditorMgr && m_pGraphEditorMgr->graphEditorScene())
+        m_pGraphEditorMgr->graphEditorScene()->onRefreshSelect(rect);
 }
 
 void HGraphEditorOp::switchSelectTool()
@@ -883,3 +891,112 @@ void HGraphEditorOp::zoomSame()
     setupMatrix();
 }
 
+//颜色部分
+QColor HGraphEditorOp::getPenColor()
+{
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer)
+        return QColor();
+    QColor clr;
+    if(tempContainer->size() <= 0)
+    {
+        clr = m_pGraphEditorMgr->graphEditorDrawToolMgr()->m_vDrawAttribute.drawPen.color();
+    }
+    else
+    {
+        HBaseObj* pObj = tempContainer->at(0);
+        if(pObj)
+        {
+            clr = QColor(pObj->getLineColorName());
+        }
+    }
+
+    clr = QColorDialog::getColor(clr);
+    if(clr.isValid())
+    {
+        if(tempContainer->size() <= 0)
+        {
+            m_pGraphEditorMgr->graphEditorDrawToolMgr()->m_vDrawAttribute.drawPen.setColor(clr);
+        }
+        else
+        {
+            HBaseObj* pObj = tempContainer->at(0);
+            if(pObj)
+            {
+                pObj->setLineColorName(clr.name());
+                if(pObj->getShapeType() == Text)
+                {
+                    pObj->setTextColor(&clr);
+                }
+            }
+        }
+    }
+    return clr;
+}
+
+QColor HGraphEditorOp::getFillColor()
+{
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    QColor clr;
+    if(!tempContainer)
+        return clr;
+
+    if(tempContainer->size() <= 0)
+    {
+        clr = m_pGraphEditorMgr->graphEditorDrawToolMgr()->m_vDrawAttribute.brush.color();
+    }
+    else
+    {
+        HBaseObj* pObj = tempContainer->at(0);
+        HShapeObj* obj = dynamic_cast<HShapeObj*>(pObj);
+        if(obj)
+        {
+            clr = QColor(obj->getFillColorName());
+        }
+        else
+        {
+            clr = Qt::white;
+        }
+    }
+
+    clr = QColorDialog::getColor(clr);
+    if(clr.isValid())
+    {
+        if(tempContainer->size() <= 0)
+        {
+            m_pGraphEditorMgr->graphEditorDrawToolMgr()->m_vDrawAttribute.brush.setColor(clr);
+        }
+        else
+        {
+            HBaseObj* pObj = tempContainer->at(0);
+            HShapeObj* obj = dynamic_cast<HShapeObj*>(pObj);
+            if(obj)
+            {
+                obj->setFillColorName(clr.name());
+            }
+            m_pGraphEditorMgr->graphEditorDrawToolMgr()->m_vDrawAttribute.brush.setColor(clr);
+        }
+    }
+    return clr;
+}
+
+void HGraphEditorOp::setPicture()
+{
+
+}
+
+//线型填充等部分
+void HGraphEditorOp::setLineStyle()
+{
+
+}
+
+void HGraphEditorOp::setLineWidth()
+{
+
+}
+
+void HGraphEditorOp::setFillBrush()
+{
+
+}

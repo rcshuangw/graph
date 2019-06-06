@@ -348,7 +348,6 @@ void HIconEditorOp::bringToTop()
         pItem->setZValue(maxZValue);
         pObj->setZValue(maxZValue);
     }
-
 }
 
 void HIconEditorOp::bringToBottom()

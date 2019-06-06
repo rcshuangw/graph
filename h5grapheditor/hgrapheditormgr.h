@@ -5,6 +5,9 @@
 #include <QRectF>
 #include <QUndoStack>
 #include <QUndoCommand>
+#include <QFont>
+#include <QColor>
+#include <QImage>
 #include "hiconapi.h"
 class HGraphEditorScene;
 class HGraphEditorView;
@@ -52,6 +55,9 @@ public:
     DrawShape getDrawShape();
     void setLogicRect(const QRectF& rect);
     QRectF getLogicRect();
+
+    //属性相关操作
+    //void initBaseAttribute();
 public:
     //增加command
     void addNewCommand(HBaseObj* pObj);

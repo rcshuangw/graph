@@ -48,7 +48,11 @@ void HGraphEditorScene::drawBackground(QPainter *painter, const QRectF &rect)
 
 void HGraphEditorScene::drawForeground(QPainter *painter, const QRectF &rect)
 {
-
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr() || !m_pGraphEditorMgr->graphEditorView())
+        return;
+    QRect rectTemp = QRect(QPoint(),QSize(6,6));
+    QRectF selRect = m_pGraphEditorMgr->graphEditorView()->mapToScene(rectTemp).boundingRect();
+    m_pGraphEditorMgr->selectedMgr()->paint(painter,rect,selRect);
 }
 
 void HGraphEditorScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)

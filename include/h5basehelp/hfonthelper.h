@@ -5,6 +5,7 @@
 #include <QFont>
 #include <QFontInfo>
 #include <QFontDatabase>
+#include <QComboBox>
 #include "h5basehelpexport.h"
 class H5BASEHELP_EXPORT HFontHelper
 {
@@ -27,7 +28,9 @@ public:
     QString styleString(const QFontInfo &fontInfo);
     QStringList styles(const QString &family) const;
     int weight(const QString &family, const QString &style) const;
-
+public:
+    void initFontFamilyComboBox(QComboBox* comboBox);
+    void initFontSizeComboBox(QComboBox* comboBox,QString strFamily);
 private:
     QFontDatabase fontDatabase;
 };

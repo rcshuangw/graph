@@ -18,8 +18,6 @@
         <file>images/text_italic.png</file>
         <file>images/text_underline.png</file>
         <file>images/rotate.png</file>
-        <file>images/format_fill_color.png</file>
-        <file>images/format_stroke_color.png</file>
         <file>images/games_config_background.png</file>
         <file>images/shape_rotate_clockwise.png</file>
         <file>images/copy.png</file>
@@ -53,5 +51,7 @@
         <file>images/Folder.png</file>
         <file>images/Folder_Documents.png</file>
         <file>images/hand_select.png</file>
+        <file>images/fillColor.png</file>
+        <file>images/penColor.png</file>
     </qresource>
 </RCC>

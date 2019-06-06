@@ -86,9 +86,14 @@ public slots:
     void actionTextUnder_clicked(bool bchecked = false);
 
     //颜色部分
-    void actionColor_clicked();
+    void actionPenColor_clicked();
     void actionFillColor_clicked();
     void actionBackPicture_clicked();
+
+    //线型填充等部分
+    void lineStyleBox_clicked(int nIndex);
+    void lineWidthBox_clicked(int nIndex);
+    void fillBrushBox_clicked(int nIndex);
     
     //组合
     void actionGroup_clicked();
@@ -116,8 +121,17 @@ public slots:
     void onSelectTool();
     void onUpdateBaseAction(HBaseObj* obj);
     void onUpdateStatus(const QString& showText);
+    void onSelectChanged();//刷新工具栏
+
     //关于
     void about();
+
+public:
+    QIcon createPenWidthIcon(int width);
+    QIcon createPenStyleIcon(Qt::PenStyle style);
+    //QIcon createPenCapStyleIcon(Qt::PenCapStyle capStyle);
+    QIcon createBrushStyleIcon(Qt::BrushStyle brushStyle);
+
 public slots:
     void itemInserted(int);
     void viewMousePosChanged(const QPointF &logPos);
@@ -141,6 +155,10 @@ private:
     QComboBox* m_pFontBox;
     QComboBox* m_pFontSizeBox;
     QLineEdit* m_pTextEdit;
+
+    QComboBox* m_pLineStyleBox;
+    QComboBox* m_pLineWidthBox;
+    QComboBox* m_pFillBrushBox;
 };
 
 #endif // HGRAPHEDITORMAINWINDOW_H

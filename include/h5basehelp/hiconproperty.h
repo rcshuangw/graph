@@ -35,11 +35,6 @@ public:
     void initBaseTab();
     void initLineTab();
     void initShapeTab();
-    QIcon createPenWidthIcon(int width);
-    QIcon createPenStyleIcon(Qt::PenStyle style);
-    QIcon createPenCapStyleIcon(Qt::PenCapStyle capStyle);
-    QIcon createBrushStyleIcon(Qt::BrushStyle brushStyle);
-    QIcon createArrowIcon(quint8 style,bool head);
 public slots:
     void ok_clicked();
     void no_clicked();

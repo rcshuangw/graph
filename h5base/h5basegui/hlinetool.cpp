@@ -93,6 +93,7 @@ void HLineTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
 		points << m_ptStPoint << m_ptCurPoint;
         pObj->setPointList(points);
         pObj->setShapeType(m_edrawShape);
+        setDrawAttribute(pObj);
 		m_pToolManager->appendObj(pObj);
 	}
 	m_pToolManager->endDraw();

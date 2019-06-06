@@ -12,6 +12,14 @@ struct Path
     bool coordType; //false 逻辑坐标 true 设备坐标
 };
 
+//界面上绘制的基本属性
+struct DrawAttribute
+{
+    QFont font;
+    QPen drawPen;
+    QPen textPen;
+    QBrush brush;
+};
 /*
  * 绘制工具管理类
 */
@@ -35,6 +43,9 @@ public:
 signals:
     void drawPath(const QList<Path> &pathList);
     void endDraw();
+
+public:
+    DrawAttribute m_vDrawAttribute;
 protected:
     int m_nCurdrawShape;
     HDrawTool *m_pDrawTool;

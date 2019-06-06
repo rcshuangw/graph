@@ -266,3 +266,211 @@ QString HIconHelper::getIconFolder(int nType)
         strFolderName = QStringLiteral("其他");
     return strFolderName;
 }
+
+
+QIcon HIconHelper::createPenorBrushColorIcon(const QIcon& icon,const QColor& clr)
+{
+    QPixmap pix = icon.pixmap(icon.actualSize(QSize(32, 32)));
+    QPainter p(&pix);
+    p.setPen(Qt::NoPen);
+    p.setBrush(clr);
+    p.drawRect(0, 22, 32, 9);
+    return QIcon(pix);
+}
+
+void HIconHelper::InitPenWidthComboBox(QComboBox* comboBox)
+{
+    if(!comboBox)
+        return;
+    comboBox->clear();
+    comboBox->setIconSize(QSize(32,16));
+    QStringList strLineWidthList;
+    strLineWidthList<<"0"<<"1"<<"2"<<"3"<<"4"<<"5"<<"6"<<"7"<<"8"<<"9"<<"10"<<"11"<<"12";
+    for(int i = 0; i < strLineWidthList.count();i++)
+        comboBox->addItem(createPenWidthIcon(strLineWidthList[i].toInt()),strLineWidthList[i],strLineWidthList[i].toInt());
+}
+
+void HIconHelper::InitPenStyleComboBox(QComboBox* comboBox)
+{
+    if(!comboBox)
+        return;
+    comboBox->clear();
+    comboBox->setIconSize(QSize(30,16));
+    QStringList strLineStyleList;
+    strLineStyleList<<QStringLiteral("实线")<<QStringLiteral("虚线")<<QStringLiteral("点线")
+                   <<QStringLiteral("点-虚线")<<QStringLiteral("点-点-虚线");
+    for(int i = 0; i < strLineStyleList.count();i++)
+    {
+        int penStyle = Qt::PenStyle(i+1);
+        comboBox->addItem(createPenStyleIcon(Qt::PenStyle(i+1)),strLineStyleList[i],penStyle);
+    }
+}
+
+void HIconHelper::InitPenCapStyleComboBox(QComboBox* comboBox)
+{
+    if(!comboBox)
+        return;
+    comboBox->addItem(createPenCapStyleIcon(Qt::FlatCap),QStringLiteral("平角"),Qt::FlatCap);
+    comboBox->addItem(createPenCapStyleIcon(Qt::SquareCap),QStringLiteral("方角"),Qt::SquareCap);
+    comboBox->addItem(createPenCapStyleIcon(Qt::RoundCap),QStringLiteral("圆角"),Qt::RoundCap);
+}
+
+void HIconHelper::InitBrushStyleComboBox(QComboBox* comboBox)
+{
+    if(!comboBox)
+        return;
+    comboBox->clear();
+    comboBox->setIconSize(QSize(30,16));
+    QStringList fillStyleList;
+    fillStyleList<<QStringLiteral("无填充")<<QStringLiteral("实填充")<<QStringLiteral("密度1")<<QStringLiteral("密度2")
+                 <<QStringLiteral("密度3")<<QStringLiteral("密度4")<<QStringLiteral("密度5")<<QStringLiteral("密度6")
+                 <<QStringLiteral("密度7")<<QStringLiteral("水平线")<<QStringLiteral("垂直线")<<QStringLiteral("横平竖直线")
+                 <<QStringLiteral("斜线")<<QStringLiteral("反斜线")<<QStringLiteral("交叉斜线")<<QStringLiteral("线性渐变")
+                 <<QStringLiteral("径向渐变")<<QStringLiteral("锥形渐变");
+
+    for(int i = 0; i < fillStyleList.count();i++)
+    {
+        int brushStyle = Qt::BrushStyle(i);
+        comboBox->addItem(createBrushStyleIcon(Qt::BrushStyle(i)),fillStyleList[i],brushStyle);
+    }
+}
+
+void HIconHelper::InitArrowStyleComboBox(QComboBox* comboBox,bool head)
+{
+    if(!comboBox)
+        return;
+    comboBox->addItem(createArrowIcon(0,head),QStringLiteral("无箭头"),0);
+    comboBox->addItem(createArrowIcon(1,head),QStringLiteral("箭头"),1);
+    comboBox->addItem(createArrowIcon(2,head),QStringLiteral("空心三角"),2);
+    comboBox->addItem(createArrowIcon(3,head),QStringLiteral("实心三角"),3);
+}
+
+QIcon HIconHelper::createPenWidthIcon(int width)
+{
+    QPixmap pixmap(30,16);
+    QPainter painter(&pixmap);
+    painter.fillRect(QRect(0,0,30,16),Qt::white);
+    QPen pen;
+    pen.setWidthF(width);
+    painter.setPen(pen);
+    painter.drawLine(0,8,30,8);
+    return QIcon(pixmap);
+}
+
+QIcon HIconHelper::createPenStyleIcon(Qt::PenStyle style)
+{
+    QPixmap pixmap(30,16);
+    QPainter painter(&pixmap);
+    painter.fillRect(QRect(0,0,30,16),Qt::white);
+    QPen pen;
+    pen.setStyle(style);
+    pen.setWidth(2);
+    painter.setPen(pen);
+    painter.drawLine(0,8,30,8);
+
+    return QIcon(pixmap);
+}
+
+
+QIcon HIconHelper::createPenCapStyleIcon(Qt::PenCapStyle capStyle)
+{
+    QPixmap pixmap(30,16);
+    QPainter painter(&pixmap);
+    painter.fillRect(QRect(0,0,30,16),Qt::white);
+    QPen pen(capStyle);
+    pen.setWidth(5);
+    pen.setCapStyle(capStyle);
+    painter.setPen(pen);
+    painter.drawLine(5,8,25,8);
+
+    return QIcon(pixmap);
+}
+
+QIcon HIconHelper::createBrushStyleIcon(Qt::BrushStyle brushStyle)
+{
+    QPixmap pixmap(30,16);
+    pixmap.fill(Qt::white);
+    QPainter painter(&pixmap);
+    if(brushStyle == Qt::LinearGradientPattern)
+    {
+        QLinearGradient linearGradient(0,0,30,16);
+        linearGradient.setColorAt(0.0,Qt::white);
+        linearGradient.setColorAt(1.0,Qt::black);
+        painter.setBrush(linearGradient);
+    }
+    else if(brushStyle == Qt::RadialGradientPattern)
+    {
+        QRadialGradient radialGradient(15,8,30,15,8);
+        radialGradient.setColorAt(0.0,Qt::white);
+        radialGradient.setColorAt(1.0,Qt::black);
+        painter.setBrush(radialGradient);
+    }
+    else if(brushStyle == Qt::ConicalGradientPattern)
+    {
+        QConicalGradient conicalGradient(15,8,0);
+        conicalGradient.setColorAt(0.0,Qt::white);
+        conicalGradient.setColorAt(1.0,Qt::black);
+        painter.setBrush(conicalGradient);
+    }
+    else
+        painter.setBrush(brushStyle);
+    painter.drawRect(0,0,29,15);
+    return QIcon(pixmap);
+}
+
+//箭头
+QIcon HIconHelper::createArrowIcon(quint8 style,bool head)
+{
+    QPixmap pixmap(30,16);
+    QPainter painter(&pixmap);
+    painter.fillRect(QRect(0,0,30,16),Qt::white);
+    painter.setRenderHint(QPainter::Antialiasing,true);
+    QPoint arrowStart(2,8);
+    QPoint arrowEnd(28,8);
+    QLine line(arrowStart,arrowEnd);
+    int len = 5;
+    switch(style)
+    {
+    case 0:
+     {
+        painter.drawLine(line);
+        break;
+     }
+    case 1: //单箭头
+     {
+        painter.drawLine(arrowStart,arrowEnd);
+        painter.drawLine(arrowStart,QPoint(arrowStart.x()+2*len,arrowStart.y()-len));
+        painter.drawLine(arrowStart,QPoint(arrowStart.x()+2*len,arrowStart.y()+len));
+        break;
+     }
+    case 2: //空心箭头
+     {
+        painter.drawLine(QPoint(arrowStart.x()+2*len,arrowStart.y()),arrowEnd);
+        painter.drawLine(arrowStart,QPoint(arrowStart.x()+2*len,arrowStart.y()-len));
+        painter.drawLine(arrowStart,QPoint(arrowStart.x()+2*len,arrowStart.y()+len));
+        painter.drawLine(QPoint(arrowStart.x()+2*len,arrowStart.y()-len),QPoint(arrowStart.x()+2*len,arrowStart.y()+len));
+        break;
+     }
+    case 3: //实心箭头
+     {
+        painter.drawLine(arrowStart,arrowEnd);
+        QPolygon points;
+        points.append(arrowStart);
+        points.append(QPoint(arrowStart.x()+2*len,arrowStart.y()-len));
+        points.append(QPoint(arrowStart.x()+2*len,arrowStart.y()+len));
+        painter.save();
+        painter.setBrush(Qt::black);
+        painter.drawPolygon(points);
+        painter.restore();
+        break;
+     }
+    }
+    if(head)
+    {
+        QTransform matrix;
+        matrix.scale(-1,1);
+        QPixmap pix = pixmap.transformed(matrix);
+        return QIcon(pix);
+    }
+    return QIcon(pixmap);
+}

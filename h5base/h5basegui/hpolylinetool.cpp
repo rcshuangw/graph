@@ -117,6 +117,7 @@ void HPolylineTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
         pObj = HMakeIcon::Instance()->newObj(m_edrawShape);
         if(NULL == pObj) return;
         pObj->setPointList(m_ptPolygons);
+        setDrawAttribute(pObj);
         m_pToolManager->appendObj(pObj);
         m_pToolManager->endDraw();
         m_bStart = false;

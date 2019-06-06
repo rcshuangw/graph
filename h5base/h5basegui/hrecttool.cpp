@@ -90,6 +90,7 @@ void HRectTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
     //设置属性
     Path path;
     path.coordType = false;
+    //path.pen.setColor(Qt::green);
     path.pen.setStyle(Qt::DashLine);
     path.painterPath = painterPath;
     if(m_edrawShape == Text)
@@ -150,6 +151,7 @@ void HRectTool::onMouseReleaseEvent(QMouseEvent* event,QVariant &data)
         points.append(bounding.topLeft());
         points.append(bounding.bottomRight());
         pObj->setPointList(points);
+        setDrawAttribute(pObj);
         m_pToolManager->appendObj(pObj);
     }
 	m_pToolManager->endDraw();

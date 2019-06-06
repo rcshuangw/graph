@@ -17,6 +17,7 @@ public:
 public:
     void setGraphicsView();
 
+public:
     void cut();
     void copy();
     void paste();
@@ -29,6 +30,17 @@ public:
 
     void groupObj();
     void ungroupObj();
+
+public:
+    //颜色部分
+    QColor getPenColor();
+    QColor getFillColor();
+    void setPicture();
+
+    //线型填充等部分
+    void setLineStyle();
+    void setLineWidth();
+    void setFillBrush();
 public:
     void alignLeft();
     void alignRight();
@@ -71,9 +83,11 @@ public:
     void objSelectChanged(HBaseObj *obj, bool isSelected);
     void onUpdateStatus(const QString& text);
 public slots:
+    void onRefreshSelect(const QRectF&);
     void onDrawPath(const QList<Path>& path);
     void onEndDraw();
 signals:
+    void selectChanged();
     void setSelectTool();
     void updateStatus(const QString& text);
     void updateBaseAction(HBaseObj* obj);

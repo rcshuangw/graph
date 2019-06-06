@@ -16,6 +16,7 @@
 #include "hpolygon.h"
 #include "hpolyline.h"
 #include "hgroup.h"
+#include "hiconhelper.h"
 HPropertyDlg::HPropertyDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::IconProperty)
@@ -314,12 +315,7 @@ void HPropertyDlg::initLineTab()
     ui->lineColor->setStyleSheet(strbkColor);
 
     //线宽
-    ui->lineWidth->clear();
-    ui->lineWidth->setIconSize(QSize(30,16));
-    QStringList strLineWidthList;
-    strLineWidthList<<"0"<<"1"<<"2"<<"3"<<"4"<<"5"<<"6"<<"7"<<"8";
-    for(int i = 0; i < strLineWidthList.count();i++)
-        ui->lineWidth->addItem(createPenWidthIcon(strLineWidthList[i].toInt()),strLineWidthList[i],strLineWidthList[i].toInt());
+    HIconHelper::Instance()->InitPenWidthComboBox(ui->lineWidth);
     ui->lineWidth->setCurrentIndex(0);
     if(pCurObj)
     {
@@ -328,16 +324,7 @@ void HPropertyDlg::initLineTab()
     }
 
     //线型
-    ui->lineStyle->clear();
-    ui->lineStyle->setIconSize(QSize(30,16));
-    QStringList strLineStyleList;
-    strLineStyleList<<QStringLiteral("实线")<<QStringLiteral("虚线")<<QStringLiteral("点线")
-                   <<QStringLiteral("点-虚线")<<QStringLiteral("点-点-虚线");
-    for(int i = 0; i < strLineStyleList.count();i++)
-    {
-        int penStyle = Qt::PenStyle(i+1);
-        ui->lineStyle->addItem(createPenStyleIcon(Qt::PenStyle(i+1)),strLineStyleList[i],penStyle);
-    }
+    HIconHelper::Instance()->InitPenStyleComboBox(ui->lineStyle);
     ui->lineStyle->setCurrentIndex(0);
     if(pCurObj)
     {
@@ -346,29 +333,15 @@ void HPropertyDlg::initLineTab()
     }
 
     //线角
-    ui->lineCapStyle->clear();
-    ui->lineCapStyle->setIconSize(QSize(30,16));
-    ui->lineCapStyle->addItem(createPenCapStyleIcon(Qt::FlatCap),QStringLiteral("平角"),Qt::FlatCap);
-    ui->lineCapStyle->addItem(createPenCapStyleIcon(Qt::SquareCap),QStringLiteral("方角"),Qt::SquareCap);
-    ui->lineCapStyle->addItem(createPenCapStyleIcon(Qt::RoundCap),QStringLiteral("圆角"),Qt::RoundCap);
+    HIconHelper::Instance()->InitPenCapStyleComboBox(ui->lineCapStyle);
     ui->lineCapStyle->setCurrentIndex(0);
 
     //箭头部分
-    ui->lineStartArrow->clear();
-    ui->lineStartArrow->setIconSize(QSize(30,16));
-    ui->lineStartArrow->addItem(createArrowIcon(0,false),QStringLiteral("无箭头"),0);
-    ui->lineStartArrow->addItem(createArrowIcon(1,false),QStringLiteral("箭头"),1);
-    ui->lineStartArrow->addItem(createArrowIcon(2,false),QStringLiteral("空心三角"),2);
-    ui->lineStartArrow->addItem(createArrowIcon(3,false),QStringLiteral("实心三角"),3);
+    HIconHelper::Instance()->InitArrowStyleComboBox(ui->lineStartArrow,false);
     ui->lineStartArrow->setCurrentIndex(0);
 
     //尾部箭头部分
-    ui->lineTailArrow->clear();
-    ui->lineTailArrow->setIconSize(QSize(30,16));
-    ui->lineTailArrow->addItem(createArrowIcon(0,true),QStringLiteral("无箭头"),0);
-    ui->lineTailArrow->addItem(createArrowIcon(1,true),QStringLiteral("箭头"),1);
-    ui->lineTailArrow->addItem(createArrowIcon(2,true),QStringLiteral("空心三角"),2);
-    ui->lineTailArrow->addItem(createArrowIcon(3,true),QStringLiteral("实心三角"),3);
+    HIconHelper::Instance()->InitArrowStyleComboBox(ui->lineTailArrow,true);
     ui->lineTailArrow->setCurrentIndex(0);
 
     //角度部分
@@ -455,20 +428,7 @@ void HPropertyDlg::initShapeTab()
     ui->transSlider->setValue(0);
 
     //填充方式
-    ui->fillStyle->clear();
-    ui->fillStyle->setIconSize(QSize(30,16));
-    QStringList fillStyleList;
-    fillStyleList<<QStringLiteral("无填充")<<QStringLiteral("实填充")<<QStringLiteral("密度1")<<QStringLiteral("密度2")
-                 <<QStringLiteral("密度3")<<QStringLiteral("密度4")<<QStringLiteral("密度5")<<QStringLiteral("密度6")
-                 <<QStringLiteral("密度7")<<QStringLiteral("水平线")<<QStringLiteral("垂直线")<<QStringLiteral("横平竖直线")
-                 <<QStringLiteral("斜线")<<QStringLiteral("反斜线")<<QStringLiteral("交叉斜线")<<QStringLiteral("线性渐变")
-                 <<QStringLiteral("径向渐变")<<QStringLiteral("锥形渐变");
-
-    for(int i = 0; i < fillStyleList.count();i++)
-    {
-        int brushStyle = Qt::BrushStyle(i);
-        ui->fillStyle->addItem(createBrushStyleIcon(Qt::BrushStyle(i)),fillStyleList[i],brushStyle);
-    }
+    HIconHelper::Instance()->InitBrushStyleComboBox(ui->fillStyle);
 
     //填充颜色
     //QString strFillColor;
@@ -542,78 +502,7 @@ void HPropertyDlg::initShapeTab()
 }
 
 
-QIcon HPropertyDlg::createPenWidthIcon(int width)
-{
-    QPixmap pixmap(30,16);
-    QPainter painter(&pixmap);
-    painter.fillRect(QRect(0,0,30,16),Qt::white);
-    QPen pen;
-    pen.setWidthF(width);
-    painter.setPen(pen);
-    painter.drawLine(0,8,30,8);
-    return QIcon(pixmap);
-}
 
-QIcon HPropertyDlg::createPenStyleIcon(Qt::PenStyle style)
-{
-    QPixmap pixmap(30,16);
-    QPainter painter(&pixmap);
-    painter.fillRect(QRect(0,0,30,16),Qt::white);
-    QPen pen;
-    pen.setStyle(style);
-    pen.setWidth(2);
-    painter.setPen(pen);
-    painter.drawLine(0,8,30,8);
-
-    return QIcon(pixmap);
-}
-
-
-QIcon HPropertyDlg::createPenCapStyleIcon(Qt::PenCapStyle capStyle)
-{
-    QPixmap pixmap(30,16);
-    QPainter painter(&pixmap);
-    painter.fillRect(QRect(0,0,30,16),Qt::white);
-    QPen pen(capStyle);
-    pen.setWidth(5);
-    pen.setCapStyle(capStyle);
-    painter.setPen(pen);
-    painter.drawLine(5,8,25,8);
-
-    return QIcon(pixmap);
-}
-
-QIcon HPropertyDlg::createBrushStyleIcon(Qt::BrushStyle brushStyle)
-{
-    QPixmap pixmap(30,16);
-    pixmap.fill(Qt::white);
-    QPainter painter(&pixmap);
-    if(brushStyle == Qt::LinearGradientPattern)
-    {
-        QLinearGradient linearGradient(0,0,30,16);
-        linearGradient.setColorAt(0.0,Qt::white);
-        linearGradient.setColorAt(1.0,Qt::black);
-        painter.setBrush(linearGradient);
-    }
-    else if(brushStyle == Qt::RadialGradientPattern)
-    {
-        QRadialGradient radialGradient(15,8,30,15,8);
-        radialGradient.setColorAt(0.0,Qt::white);
-        radialGradient.setColorAt(1.0,Qt::black);
-        painter.setBrush(radialGradient);
-    }
-    else if(brushStyle == Qt::ConicalGradientPattern)
-    {
-        QConicalGradient conicalGradient(15,8,0);
-        conicalGradient.setColorAt(0.0,Qt::white);
-        conicalGradient.setColorAt(1.0,Qt::black);
-        painter.setBrush(conicalGradient);
-    }
-    else
-        painter.setBrush(brushStyle);
-    painter.drawRect(0,0,29,15);
-    return QIcon(pixmap);
-}
 
 //线条颜色
 void HPropertyDlg::lineColor_clicked()
@@ -628,63 +517,6 @@ void HPropertyDlg::lineColor_clicked()
     if(!color.isValid()) return;
     strLineColor = color.name(QColor::HexRgb);
     ui->lineColor->setStyleSheet(QString("background-color:")+strLineColor);
-}
-
-//箭头
-QIcon HPropertyDlg::createArrowIcon(quint8 style,bool head)
-{
-    QPixmap pixmap(30,16);
-    QPainter painter(&pixmap);
-    painter.fillRect(QRect(0,0,30,16),Qt::white);
-    painter.setRenderHint(QPainter::Antialiasing,true);
-    QPoint arrowStart(2,8);
-    QPoint arrowEnd(28,8);
-    QLine line(arrowStart,arrowEnd);
-    int len = 5;
-    switch(style)
-    {
-    case 0:
-     {
-        painter.drawLine(line);
-        break;
-     }
-    case 1: //单箭头
-     {
-        painter.drawLine(arrowStart,arrowEnd);
-        painter.drawLine(arrowStart,QPoint(arrowStart.x()+2*len,arrowStart.y()-len));
-        painter.drawLine(arrowStart,QPoint(arrowStart.x()+2*len,arrowStart.y()+len));
-        break;
-     }
-    case 2: //空心箭头
-     {
-        painter.drawLine(QPoint(arrowStart.x()+2*len,arrowStart.y()),arrowEnd);
-        painter.drawLine(arrowStart,QPoint(arrowStart.x()+2*len,arrowStart.y()-len));
-        painter.drawLine(arrowStart,QPoint(arrowStart.x()+2*len,arrowStart.y()+len));
-        painter.drawLine(QPoint(arrowStart.x()+2*len,arrowStart.y()-len),QPoint(arrowStart.x()+2*len,arrowStart.y()+len));
-        break;
-     }
-    case 3: //实心箭头
-     {
-        painter.drawLine(arrowStart,arrowEnd);
-        QPolygon points;
-        points.append(arrowStart);
-        points.append(QPoint(arrowStart.x()+2*len,arrowStart.y()-len));
-        points.append(QPoint(arrowStart.x()+2*len,arrowStart.y()+len));
-        painter.save();
-        painter.setBrush(Qt::black);
-        painter.drawPolygon(points);
-        painter.restore();
-        break;
-     }
-    }
-    if(head)
-    {
-        QTransform matrix;
-        matrix.scale(-1,1);
-        QPixmap pix = pixmap.transformed(matrix);
-        return QIcon(pix);
-    }
-    return QIcon(pixmap);
 }
 
 void HPropertyDlg::ok_clicked()

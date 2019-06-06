@@ -5,6 +5,9 @@
 #include "hgrapheditordoc.h"
 #include "hgrapheditorview.h"
 #include "hgrapheditorop.h"
+#include "hgrapheditordrawtoolmgr.h"
+#include "hiconhelper.h"
+#include <QComboBox>
 //文件部分
 void HGraphEditorMainWindow::actionNew_clicked()
 {
@@ -182,7 +185,10 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  //字体部分
  void HGraphEditorMainWindow::fontBox_clicked(int nIndex)
  {
-
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorDrawToolMgr())
+         return;
+     QString strFamily = m_pFontBox->currentText();
+     m_pGraphEditorMgr->graphEditorDrawToolMgr()->m_vDrawAttribute.font.setFamily(strFamily);
  }
 
  void HGraphEditorMainWindow::fontSizeBox_clicked(int nIndex)
@@ -206,17 +212,42 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
  }
 
  //颜色部分
- void HGraphEditorMainWindow::actionColor_clicked()
+ void HGraphEditorMainWindow::actionPenColor_clicked()
  {
-
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
+         return;
+     QColor color = m_pGraphEditorMgr->graphEditorOp()->getPenColor();
+     QIcon icon = ui->actionPenColor->icon();
+     icon = HIconHelper::Instance()->createPenorBrushColorIcon(icon,color);
+     ui->actionPenColor->setIcon(icon);
  }
 
  void HGraphEditorMainWindow::actionFillColor_clicked()
  {
-
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
+         return;
+     QColor color = m_pGraphEditorMgr->graphEditorOp()->getFillColor();
+     QIcon icon = ui->actionFillColor->icon();
+     icon = HIconHelper::Instance()->createPenorBrushColorIcon(icon,color);
+     ui->actionFillColor->setIcon(icon);
  }
 
  void HGraphEditorMainWindow::actionBackPicture_clicked()
+ {
+
+ }
+
+ void HGraphEditorMainWindow::lineStyleBox_clicked(int nIndex)
+ {
+
+ }
+
+ void HGraphEditorMainWindow::lineWidthBox_clicked(int nIndex)
+ {
+
+ }
+
+ void HGraphEditorMainWindow::fillBrushBox_clicked(int nIndex)
  {
 
  }
