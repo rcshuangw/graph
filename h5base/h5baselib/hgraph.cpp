@@ -12,7 +12,7 @@ HGraph::HGraph(const QString& name)
     nRefreshInterval = 3000;
     bStart = false;
     btType = 0;
-    setFillColorName("#FFFFFF");
+    setFillColorName("#000000");
     m_width = 1000;
     m_height = 1000;
     setOX(0);

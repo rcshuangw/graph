@@ -7,6 +7,9 @@
 #include "hgrapheditorop.h"
 #include "hgrapheditordrawtoolmgr.h"
 #include "hiconhelper.h"
+#include "hiconproperty.h"
+#include "hselectedmgr.h"
+#include "htempcontainer.h"
 #include <QComboBox>
 //文件部分
 void HGraphEditorMainWindow::actionNew_clicked()
@@ -392,3 +395,28 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
 
  }
 
+ void HGraphEditorMainWindow::onAttributeChanged()
+ {
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
+         return;
+     if(m_pGraphEditorMgr->graphEditorOp()->toolType() != ICON_SELECT_TOOL)
+         return;
+     //qDebug()<<"before selectMgr"<<;
+     if(m_pGraphEditorMgr->selectedMgr())
+     {
+         QVector<HBaseObj*> objs = m_pGraphEditorMgr->selectedMgr()->selectObj()->getObjList();
+         if(objs.size() > 1 || objs.size() == 0) return;
+
+        // qDebug()<<"HPropertyDlg"<<;
+         HPropertyDlg dlg(objs.at(0));
+         if(dlg.exec() == QDialog::Accepted)
+         {
+             QRectF rectF = objs.at(0)->boundingRect(1);
+             m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(rectF);
+             m_pGraphEditorMgr->selectedMgr()->clear();
+             objs.at(0)->iconGraphicsItem()->setSelected(true);
+             objs.at(0)->iconGraphicsItem()->setPos(objs.at(0)->pos());
+             m_pGraphEditorMgr->selectedMgr()->recalcSelect();
+         }
+     }
+ }

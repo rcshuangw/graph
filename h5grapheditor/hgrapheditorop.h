@@ -89,6 +89,7 @@ public:
 
     void objSelectChanged(HBaseObj *obj, bool isSelected);
     void onUpdateStatus(const QString& text);
+    void setObjAttribute();
 public slots:
     void onRefreshSelect(const QRectF&);
     void onDrawPath(const QList<Path>& path);
@@ -97,7 +98,8 @@ signals:
     void selectChanged();
     void setSelectTool();
     void updateStatus(const QString& text);
-    void updateBaseAction(HBaseObj* obj);
+    void updateBaseAction();
+    void attributeChanged();
 private:
     HGraphEditorMgr* m_pGraphEditorMgr;
     Qt::Alignment m_Alignment;

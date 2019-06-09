@@ -32,6 +32,8 @@ HIconHelper* HIconHelper::Instance()
     return m_pInstance;
 }
 
+//根据uuid找到template,然后根据nCurPattern找到对应的icon
+//注意此种方式不能立即刷新
 QPixmap HIconHelper::iconPixmap(const QString& strType,const QString& uuid,const QSizeF& ratioSizeF,int nCurPattern)
 {
     HIconTemplate* pIconTemplate = new HIconTemplate(QString());

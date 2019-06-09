@@ -12,7 +12,8 @@ HDrawManager::HDrawManager()
 
 HDrawManager::~HDrawManager()
 {
-
+    while(!m_drawToolList.isEmpty())
+        delete m_drawToolList.takeFirst();
 }
 
 void HDrawManager::onEvent(HEvent& e)
@@ -23,6 +24,8 @@ void HDrawManager::onEvent(HEvent& e)
 
 void HDrawManager::selectTool(DrawShape shape,const QString& catalogName,const QString& uuid)
 {
+    if(findTool(shape,catalogName,uuid))
+        return;
     switch(shape)
     {
     case Line:
@@ -36,9 +39,13 @@ void HDrawManager::selectTool(DrawShape shape,const QString& catalogName,const Q
     case Text:
     case Icon:
         m_pDrawTool = new HRectTool(this,shape,catalogName,uuid);
+        if(m_pDrawTool)
+            m_drawToolList.append(m_pDrawTool);
         break;
     case Arc:
         m_pDrawTool = new HArcTool(this,shape,catalogName,uuid);
+        if(m_pDrawTool)
+            m_drawToolList.append(m_pDrawTool);
         break;
     case Polygon:
     case Polyline:

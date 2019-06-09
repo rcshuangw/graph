@@ -63,6 +63,7 @@ void HGraphEditorOp::setGraphicsView()
     m_pGraphEditorMgr->refreshView();
 }
 
+//创建测点图元
 void HGraphEditorOp::createIconObj(const QString& TypeName,const QString& uuid,int shape,QPointF fpoint,QList<H5GraphicsItem*> &items)
 {
     if(!m_pGraphEditorMgr->graphEditorDoc() || !m_pGraphEditorMgr->graphEditorDoc()->getCurGraph())
@@ -127,7 +128,8 @@ void HGraphEditorOp::objSelectChanged(HBaseObj *obj, bool isSelected)
     if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->selectedMgr())
         return;
     m_pGraphEditorMgr->selectedMgr()->selectChanged(obj,isSelected);
-    emit updateBaseAction(obj);
+    m_pGraphEditorMgr->selectedMgr()->recalcSelect();
+    emit updateBaseAction();
 }
 
 void HGraphEditorOp::onDrawPath(const QList<Path>& path)
@@ -1145,4 +1147,9 @@ void HGraphEditorOp::setUnderline(bool b)
             pText->setFontUnderline(b);
         }
     }
+}
+
+void HGraphEditorOp::setObjAttribute()
+{
+    emit attributeChanged();
 }

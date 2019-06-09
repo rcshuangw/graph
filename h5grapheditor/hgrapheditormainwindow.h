@@ -119,23 +119,18 @@ public slots:
 
     //工具栏刷新、状态栏刷新
     void onSelectTool();
-    void onUpdateBaseAction(HBaseObj* obj);
+    void onUpdateBaseAction();
     void onUpdateStatus(const QString& showText);
     void onSelectChanged();//刷新工具栏
 
     //关于
     void about();
 
-public:
-    QIcon createPenWidthIcon(int width);
-    QIcon createPenStyleIcon(Qt::PenStyle style);
-    //QIcon createPenCapStyleIcon(Qt::PenCapStyle capStyle);
-    QIcon createBrushStyleIcon(Qt::BrushStyle brushStyle);
-
 public slots:
     void itemInserted(int);
     void viewMousePosChanged(const QPointF &logPos);
     void selectItemChanged(int);
+    void onAttributeChanged();
 
 private:
     HGraphEditorMgr *m_pGraphEditorMgr;

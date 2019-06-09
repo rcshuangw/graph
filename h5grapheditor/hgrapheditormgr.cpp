@@ -156,7 +156,6 @@ void HGraphEditorMgr::setGraphEditorView(HGraphEditorView* view)
             m_pGraphEditorDrawToolMgr = new HGraphEditorDrawToolMgr(this);
             connect(m_pGraphEditorDrawToolMgr,SIGNAL(drawPath(const QList<Path>&)),m_pGraphEditorOp,SLOT(onDrawPath(const QList<Path>)));
             connect(m_pGraphEditorDrawToolMgr,SIGNAL(endDraw()),m_pGraphEditorOp,SLOT(onEndDraw()));
-
         }
         if(!m_pGraphEditorSelectTool)
         {
@@ -216,6 +215,14 @@ void HGraphEditorMgr::New(const QString& graphName)
         return;
     m_pGraphEditorDoc->addGraph(graphName);
     m_pGraphEditorOp->setGraphicsView();
+
+    if(!m_pGraphEditorDrawToolMgr)
+        return;
+    QColor bgColor = QColor(graphEditorDoc()->getCurGraph()->getFillColorName());
+    m_pGraphEditorDrawToolMgr->m_vDrawAttribute.brush.setColor(bgColor);
+    QColor fgColor = QColor(255-bgColor.red(),255-bgColor.green(),255-bgColor.blue());
+    m_pGraphEditorDrawToolMgr->m_vDrawAttribute.drawPen.setColor(fgColor);
+    m_pGraphEditorDrawToolMgr->m_vDrawAttribute.textPen.setColor(fgColor);
 }
 
 bool HGraphEditorMgr::Open(const QString& graphName,int id)

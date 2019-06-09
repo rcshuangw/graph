@@ -67,6 +67,7 @@ void HLineTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
 	//设置属性
 	Path path;
 	path.coordType = false;
+    path.pen = m_pToolManager->m_vDrawAttribute.drawPen;
     path.pen.setStyle(Qt::DashLine);
 	path.painterPath = painterPath;
 	//由绘制管理发送给editor

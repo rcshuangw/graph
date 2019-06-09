@@ -84,6 +84,7 @@ void HPolylineTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
     QPainterPath painterPath;
     painterPath.addPolygon(m_ptPolygons);
     Path path;
+    path.pen = m_pToolManager->m_vDrawAttribute.drawPen;
     path.coordType = false;
     path.pen.setStyle(Qt::SolidLine);
     path.painterPath = painterPath;
@@ -93,6 +94,7 @@ void HPolylineTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
     painterPath1.lineTo(point);
     Path path1;
     path1.coordType = false;
+    path1.pen = m_pToolManager->m_vDrawAttribute.drawPen;
     path1.pen.setStyle(Qt::DashLine);
     path1.painterPath = painterPath1;
 

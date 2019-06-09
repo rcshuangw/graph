@@ -14,6 +14,7 @@ HGraphEditorDoc::HGraphEditorDoc(HGraphEditorMgr* mgr)
     :m_pGraphEditorMgr(mgr)
 {
     m_pCurGraph = NULL;
+    m_bGraphValid = false;
 }
 
 HGraphEditorDoc::~HGraphEditorDoc()
@@ -280,12 +281,13 @@ HGraph* HGraphEditorDoc::addGraph(const QString& name)
     }
     HGraph* newGraph = new HGraph(name);
     newGraph->setGraphID(getGraphID());
-    //newGraph->m_height = m_pGraphEditorMgr->getLogicRect().height();
-    //newGraph->m_width = m_pGraphEditorMgr->getLogicRect().width();
+    newGraph->m_height = m_pGraphEditorMgr->getLogicRect().height();
+    newGraph->m_width = m_pGraphEditorMgr->getLogicRect().width();
     m_pGraphList.append(newGraph);
 
     m_pCurGraph = new HGraph("tempGraph");
     newGraph->copyTo(m_pCurGraph);
+    m_bGraphValid = true;
     return newGraph;
 }
 
@@ -304,6 +306,7 @@ bool HGraphEditorDoc::delGraph(const QString& name,const int id)
         delete m_pCurGraph;
         m_pCurGraph = NULL;
     }
+    m_bGraphValid = false;
     return true;
 }
 
@@ -326,6 +329,7 @@ bool HGraphEditorDoc::openGraph(const QString& name,const int id)
     m_pCurGraph = new HGraph("tempGraph");
     if(!m_pCurGraph) return false;
     graph->copyTo(m_pCurGraph);
+    m_bGraphValid = true;
     return true;
 }
 

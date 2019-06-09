@@ -38,7 +38,6 @@
         <file>images/arc.png</file>
         <file>images/circle.png</file>
         <file>images/line.png</file>
-        <file>images/pie.png</file>
         <file>images/polygon.png</file>
         <file>images/polyline.png</file>
         <file>images/rectangle.png</file>
@@ -54,5 +53,6 @@
         <file>images/fillColor.png</file>
         <file>images/penColor.png</file>
         <file>images/auto.png</file>
+        <file>images/ellipse.png</file>
     </qresource>
 </RCC>

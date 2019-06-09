@@ -292,6 +292,7 @@
    <addaction name="actionRectangle"/>
    <addaction name="actionPolyline"/>
    <addaction name="actionPolygon"/>
+   <addaction name="actionEllipse"/>
    <addaction name="actionCircle"/>
    <addaction name="actionArc"/>
    <addaction name="actionText"/>
@@ -393,6 +394,12 @@
    </property>
   </action>
   <action name="actionCopy_C">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../images.qrc">
      <normaloff>:/images/copy.png</normaloff>:/images/copy.png</iconset>
@@ -820,10 +827,23 @@
     <string>自动生成遥测</string>
    </property>
   </action>
+  <action name="actionEllipse">
+   <property name="icon">
+    <iconset resource="../../h5iconeditor/icon.qrc">
+     <normaloff>:/images/ellipse.png</normaloff>:/images/ellipse.png</iconset>
+   </property>
+   <property name="text">
+    <string>椭圆</string>
+   </property>
+   <property name="toolTip">
+    <string>画椭圆</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
   <include location="../images.qrc"/>
+  <include location="../../h5iconeditor/icon.qrc"/>
  </resources>
  <connections/>
 </ui>

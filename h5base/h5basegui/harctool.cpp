@@ -75,6 +75,7 @@ void HArcTool::onMouseMoveEvent(QMouseEvent* event,QVariant &data)
     painterPath.closeSubpath();
     Path path;
     path.coordType = false;
+    path.pen = m_pToolManager->m_vDrawAttribute.drawPen;
     path.pen.setStyle(Qt::DashLine);
     path.painterPath = painterPath;
 

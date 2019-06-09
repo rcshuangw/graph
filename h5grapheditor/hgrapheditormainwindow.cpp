@@ -10,6 +10,8 @@
 #include "hiconvieweditor.h"
 #include "hfonthelper.h"
 #include "hiconhelper.h"
+#include "hselectedmgr.h"
+#include "htempcontainer.h"
 #include <QLineEdit>
 #include <QFileInfo>
 #include <QComboBox>
@@ -29,6 +31,7 @@ ui(new Ui::GraphEditorMainWindow),m_pGraphEditorMgr(pMgr)
     createDockWidget();
     showMaximized();
     setWindowTitle(QStringLiteral("测试界面"));
+    onUpdateBaseAction();
 }
 
 HGraphEditorMainWindow::~HGraphEditorMainWindow()
@@ -43,7 +46,7 @@ void HGraphEditorMainWindow::createActions()
     m_pDivideGroup = new QActionGroup(this);
     m_pFlipGroup = new QActionGroup(this);
     m_pEditAndBringGroup = new QActionGroup(this);
-    m_pEditAndBringGroup->setEnabled(false);
+    //m_pEditAndBringGroup->setEnabled(false);
     //文件部分
     connect(ui->actionNew_N,SIGNAL(triggered(bool)),this,SLOT(actionNew_clicked()));
     connect(ui->actionOpen_O,SIGNAL(triggered(bool)),this,SLOT(actionOpen_clicked()));
@@ -63,7 +66,7 @@ void HGraphEditorMainWindow::createActions()
     connect(ui->actionDelete,SIGNAL(triggered(bool)),this,SLOT(actionDelete_clicked()));
     m_pEditAndBringGroup->addAction(ui->actionCut_X);
     m_pEditAndBringGroup->addAction(ui->actionCopy_C);
-    //m_pEditAndBringGroup->addAction(ui->actionPaste_V);
+    m_pEditAndBringGroup->addAction(ui->actionPaste_V);
     //ui->actionPaste_V->setEnabled(true);
     m_pEditAndBringGroup->addAction(ui->actionDelete);
 
@@ -89,7 +92,7 @@ void HGraphEditorMainWindow::createActions()
     m_pAlignGroup->addAction(ui->actionAlignLeft);
     m_pAlignGroup->addAction(ui->actionAlignVCenter);
     m_pAlignGroup->addAction(ui->actionAlignRight);
-    m_pAlignGroup->setEnabled(false);
+    //m_pAlignGroup->setEnabled(true);
 
     //旋转
     connect(ui->actionRotate,SIGNAL(triggered(bool)),this,SLOT(actionRotate_clicked()));
@@ -102,7 +105,7 @@ void HGraphEditorMainWindow::createActions()
     m_pFlipGroup->addAction(ui->actionFlipRight);
     m_pFlipGroup->addAction(ui->actionFlipHorizon);
     m_pFlipGroup->addAction(ui->actionFlipVertical);
-    m_pFlipGroup->setEnabled(false);
+    //m_pFlipGroup->setEnabled(true);
 
     //字体部分的actions()
     connect(m_pFontBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontBox_clicked(int)));
@@ -127,18 +130,28 @@ void HGraphEditorMainWindow::createActions()
     connect(ui->actionHand_H,SIGNAL(triggered(bool)),this,SLOT(handTool()));
 
     //工具
+    ui->actionText->setCheckable(true);
     ui->actionText->setData(Text);
     connect(ui->actionText,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionLine->setCheckable(true);
     ui->actionLine->setData(Line);
     connect(ui->actionLine,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionRectangle->setCheckable(true);
     ui->actionRectangle->setData(Rectangle);
     connect(ui->actionRectangle,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionPolyline->setCheckable(true);
     ui->actionPolyline->setData(Polyline);
     connect(ui->actionPolyline,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionPolygon->setCheckable(true);
     ui->actionPolygon->setData(Polygon);
     connect(ui->actionPolygon,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionEllipse->setCheckable(true);
+    ui->actionEllipse->setData(Ellipse);
+    connect(ui->actionEllipse,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionCircle->setCheckable(true);
     ui->actionCircle->setData(Circle);
     connect(ui->actionCircle,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
+    ui->actionArc->setCheckable(true);
     ui->actionArc->setData(Arc);
     connect(ui->actionArc,SIGNAL(triggered(bool)),this,SLOT(drawTool()));
     QActionGroup * actionGroup = new QActionGroup(this);
@@ -147,6 +160,7 @@ void HGraphEditorMainWindow::createActions()
     actionGroup->addAction(ui->actionRectangle);
     actionGroup->addAction(ui->actionPolyline);
     actionGroup->addAction(ui->actionPolygon);
+    actionGroup->addAction(ui->actionEllipse);
     actionGroup->addAction(ui->actionCircle);
     actionGroup->addAction(ui->actionArc);
     actionGroup->addAction(ui->actionSelect);
@@ -168,12 +182,12 @@ void HGraphEditorMainWindow::createActions()
     m_pEqualGroup->addAction(ui->actionSameWidth);
     m_pEqualGroup->addAction(ui->actionSameHeight);
     m_pEqualGroup->addAction(ui->actionSame);
-    m_pEqualGroup->setEnabled(false);
+    //m_pEqualGroup->setEnabled(false);
     connect(ui->actionHSameSpace,SIGNAL(triggered(bool)),this,SLOT(actionHSameSpace_clicked()));
     connect(ui->actionVSameSpace,SIGNAL(triggered(bool)),this,SLOT(actionVSameSpace_clicked()));
     m_pDivideGroup->addAction(ui->actionHSameSpace);
     m_pDivideGroup->addAction(ui->actionVSameSpace);
-    m_pDivideGroup->setEnabled(false);
+    //m_pDivideGroup->setEnabled(true);
 
     //关于
     connect(ui->actionAbout_A,SIGNAL(triggered(bool)),this,SLOT(about()));
@@ -262,8 +276,9 @@ void HGraphEditorMainWindow::initMainWindow()
     connect(m_pGraphEditorMgr->graphEditorScene(),SIGNAL(mousePosChanged(const QPointF&)),this,SLOT(viewMousePosChanged(const QPointF&)));
 
     connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(setSelectTool()),this,SLOT(onSelectTool()));
+    connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(attributeChanged()),this,SLOT(onAttributeChanged()));
     connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(selectChanged()),this,SLOT(onSelectChanged()));
-    connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(updateBaseAction(HBaseObj*)),this,SLOT(onUpdateBaseAction(HBaseObj*)));
+    connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(updateBaseAction()),this,SLOT(onUpdateBaseAction()));
     connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(updateStatus(const QString&)),this,SLOT(onUpdateStatus(const QString&)));
 
 }
@@ -294,7 +309,8 @@ void HGraphEditorMainWindow::New(const QString& graphName)
     //m_pGraphEditorMgr->delGraphSceneItem();
     m_pGraphEditorMgr->New(graphName);
     m_pGraphTreeWidget->addGraphTreeWidgetItem();
-    m_pGraphEditorMgr->refreshView();
+    //m_pGraphEditorMgr->refreshView();
+    onUpdateBaseAction();
 }
 
 void HGraphEditorMainWindow::Open(const QString& name,const int id)
@@ -317,7 +333,8 @@ void HGraphEditorMainWindow::Open(const QString& name,const int id)
     //m_pGraphEditorMgr->delGraphSceneItem();
     m_pGraphEditorMgr->Open(name,id);
     ///m_pGraphEditorMgr->openGraphScene();
-    m_pGraphEditorMgr->refreshView();
+    //m_pGraphEditorMgr->refreshView();
+    onUpdateBaseAction();
 }
 
 void HGraphEditorMainWindow::ImportFile(const QString& name)
@@ -351,6 +368,7 @@ void HGraphEditorMainWindow::ImportFile(const QString& name)
     m_pGraphEditorMgr->Open("",graphID);
     m_pGraphTreeWidget->addGraphTreeWidgetItem();
     m_pGraphEditorMgr->refreshView();
+    onUpdateBaseAction();
 }
 
 
@@ -383,6 +401,7 @@ void HGraphEditorMainWindow::Del(const QString& graphName,const int graphID)
     m_pGraphEditorMgr->Del(graphName,graphID);
     m_pGraphTreeWidget->delGraphTreeWidgetItem();
     m_pGraphEditorMgr->refreshView();
+    onUpdateBaseAction();
 
 }
 
@@ -394,30 +413,7 @@ void HGraphEditorMainWindow::itemInserted(int type)
 
 void HGraphEditorMainWindow::selectItemChanged(int nSelectMode)
 {
-    m_pFlipGroup->setEnabled(true);
-    m_pEditAndBringGroup->setEnabled(true);
-    if(nSelectMode == SELECT_MODE_NO)
-    {
-        m_pAlignGroup->setEnabled(false);
-        m_pEqualGroup->setEnabled(false);
-        m_pDivideGroup->setEnabled(false);
-        m_pFlipGroup->setEnabled(false);
-        m_pEditAndBringGroup->setEnabled(false);
-    }
-    else if(nSelectMode == SELECT_MODE_SINGLE)
-    {
-        m_pAlignGroup->setEnabled(false);
-        m_pEqualGroup->setEnabled(false);
-        m_pDivideGroup->setEnabled(false);
-    }
-    else if(nSelectMode == SELECT_MODE_2MULTIPLE || nSelectMode == SELECT_MODE_MULTIPLE)
-    {
-        m_pAlignGroup->setEnabled(true);
-        m_pEqualGroup->setEnabled(true);
-        m_pDivideGroup->setEnabled(false);
-        if(nSelectMode == SELECT_MODE_MULTIPLE)
-            m_pDivideGroup->setEnabled(true);
-    }
+
 }
 
 void HGraphEditorMainWindow::viewMousePosChanged(const QPointF &logPos)
@@ -428,9 +424,72 @@ void HGraphEditorMainWindow::viewMousePosChanged(const QPointF &logPos)
     statusBar()->showMessage(strLogicPos );
 }
 
-void HGraphEditorMainWindow::onUpdateBaseAction(HBaseObj *obj)
+//刷新菜单工具栏状态
+void HGraphEditorMainWindow::onUpdateBaseAction()
 {
-    if(!obj) return;
+    //还要判断当前是否已经打开graph
+    bool bMgr = m_pGraphEditorMgr->graphEditorDoc()->m_bGraphValid;
+    //if(m_pGraphEditorMgr)
+    //    bMgr = true;
+    //undo redo
+    ui->actionRedo_R->setEnabled(bMgr&&m_pGraphEditorMgr->graphEditorStack()&&m_pGraphEditorMgr->graphEditorStack()->canUndo());
+    ui->actionUndo_U->setEnabled(bMgr&&m_pGraphEditorMgr->graphEditorStack()&&m_pGraphEditorMgr->graphEditorStack()->canRedo());
+
+    //cut copy paste del
+    bool bselectObj = bMgr&&m_pGraphEditorMgr->selectedMgr()&&m_pGraphEditorMgr->selectedMgr()->selectObj();
+    int nSelectObjCount = m_pGraphEditorMgr->selectedMgr()->selectObj()->getObjList().size();
+    bool b = bselectObj && nSelectObjCount > 0;
+    ui->actionCopy_C->setEnabled(bselectObj&&nSelectObjCount>0);
+    ui->actionCut_X->setEnabled(bselectObj&&nSelectObjCount>0);
+    ui->actionPaste_V->setEnabled(m_pGraphEditorMgr&&m_pGraphEditorMgr->graphEditorOp()->isClipboardAvailable());
+    ui->actionDelete->setEnabled(bselectObj&&nSelectObjCount>0);
+
+    //bringtotop bringtobottom
+    ui->actionTop_T->setEnabled(bselectObj&&nSelectObjCount==1);
+    ui->actionBottom_B->setEnabled(bselectObj&&nSelectObjCount==1);
+
+    //group ungroup
+    ui->actionGroup->setEnabled(bselectObj&&nSelectObjCount>1);
+    if(bselectObj&&nSelectObjCount==1&&
+        m_pGraphEditorMgr->selectedMgr()->selectObj()->getObjList().at(0)->getShapeType()==Group){
+            ui->actionUngroup->setEnabled(true);
+        }
+    else{
+        ui->actionUngroup->setEnabled(false);
+    }
+
+    //draw obj
+    ui->actionLine->setEnabled(bMgr);
+    ui->actionRectangle->setEnabled(bMgr);
+    ui->actionPolyline->setEnabled(bMgr);
+    ui->actionPolygon->setEnabled(bMgr);
+    ui->actionEllipse->setEnabled(bMgr);
+    ui->actionCircle->setEnabled(bMgr);
+    ui->actionArc->setEnabled(bMgr);
+    ui->actionText->setEnabled(bMgr);
+
+    //zoom
+    ui->actionZoom->setEnabled(bMgr);
+    ui->actionZoomin->setEnabled(bMgr);
+    ui->actionZoomout->setEnabled(bMgr);
+    ui->actionZoomSame->setEnabled(bMgr);
+
+    //align
+    ui->actionAlignLeft->setEnabled(bselectObj&&nSelectObjCount>0);
+    ui->actionAlignRight->setEnabled(bselectObj&&nSelectObjCount>0);
+    ui->actionAlignHCenter->setEnabled(bselectObj&&nSelectObjCount>0);
+    ui->actionAlignTop->setEnabled(bselectObj&&nSelectObjCount>0);
+    ui->actionAlignBottom->setEnabled(bselectObj&&nSelectObjCount>0);
+    ui->actionAlignVCenter->setEnabled(bselectObj&&nSelectObjCount>0);
+
+    //same
+    ui->actionSame->setEnabled(bselectObj&&nSelectObjCount>1);
+    ui->actionSameHeight->setEnabled(bselectObj&&nSelectObjCount>1);
+    ui->actionSameWidth->setEnabled(bselectObj&&nSelectObjCount>1);
+
+    //等分
+    ui->actionHSameSpace->setEnabled(bselectObj&&nSelectObjCount>2);
+    ui->actionVSameSpace->setEnabled(bselectObj&&nSelectObjCount>2);
 }
 
 void HGraphEditorMainWindow::onUpdateStatus(const QString &showText)
@@ -446,62 +505,4 @@ void HGraphEditorMainWindow::onSelectTool()
 void HGraphEditorMainWindow::onSelectChanged()
 {
 
-}
-
-QIcon HGraphEditorMainWindow::createPenWidthIcon(int width)
-{
-    QPixmap pixmap(30,16);
-    QPainter painter(&pixmap);
-    painter.fillRect(QRect(0,0,30,16),Qt::white);
-    QPen pen;
-    pen.setWidthF(width);
-    painter.setPen(pen);
-    painter.drawLine(0,8,30,8);
-    return QIcon(pixmap);
-}
-
-QIcon HGraphEditorMainWindow::createPenStyleIcon(Qt::PenStyle style)
-{
-    QPixmap pixmap(30,16);
-    QPainter painter(&pixmap);
-    painter.fillRect(QRect(0,0,30,16),Qt::white);
-    QPen pen;
-    pen.setStyle(style);
-    pen.setWidth(2);
-    painter.setPen(pen);
-    painter.drawLine(0,8,30,8);
-
-    return QIcon(pixmap);
-}
-
-QIcon HGraphEditorMainWindow::createBrushStyleIcon(Qt::BrushStyle brushStyle)
-{
-    QPixmap pixmap(30,16);
-    pixmap.fill(Qt::white);
-    QPainter painter(&pixmap);
-    if(brushStyle == Qt::LinearGradientPattern)
-    {
-        QLinearGradient linearGradient(0,0,30,16);
-        linearGradient.setColorAt(0.0,Qt::white);
-        linearGradient.setColorAt(1.0,Qt::black);
-        painter.setBrush(linearGradient);
-    }
-    else if(brushStyle == Qt::RadialGradientPattern)
-    {
-        QRadialGradient radialGradient(15,8,30,15,8);
-        radialGradient.setColorAt(0.0,Qt::white);
-        radialGradient.setColorAt(1.0,Qt::black);
-        painter.setBrush(radialGradient);
-    }
-    else if(brushStyle == Qt::ConicalGradientPattern)
-    {
-        QConicalGradient conicalGradient(15,8,0);
-        conicalGradient.setColorAt(0.0,Qt::white);
-        conicalGradient.setColorAt(1.0,Qt::black);
-        painter.setBrush(conicalGradient);
-    }
-    else
-        painter.setBrush(brushStyle);
-    painter.drawRect(0,0,29,15);
-    return QIcon(pixmap);
 }
