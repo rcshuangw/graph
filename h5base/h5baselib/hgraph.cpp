@@ -276,7 +276,7 @@ HBaseObj* HGraph::createBaseObj(DrawShape s, HIconTemplate* icontemplate)
             return NULL;
         HIconTemplate* pTemplate = new HIconTemplate("");
         icontemplate->copyTo(pTemplate);
-        addIconTemplate(pTemplate);
+        //addIconTemplate(pTemplate);
 
         HIconObj* obj = new HIconObj(pTemplate);
         HIconObj* pIconObj = (HIconObj*)obj;
@@ -296,7 +296,7 @@ HBaseObj* HGraph::createBaseObj(DrawShape s, HIconTemplate* icontemplate)
     }
 
     //增加到列表
-    addIconObj(pObj);
+    //addIconObj(pObj);
     return pObj;
 }
 
@@ -317,6 +317,10 @@ void HGraph::addIconObj(HBaseObj* pObj)
             if(itt!=it)
             {
                 io->setIconTemplate(itt);
+                if(it){
+                    delete it;
+                    it = NULL;
+                }
             }
         }
     }
@@ -383,7 +387,7 @@ HIconTemplate* HGraph::findIconTemplate(const QUuid& uid)
     return NULL;
 }
 
-HIconTemplate* HGraph::addIconTemplate(HIconTemplate* temp)
+HIconTemplate* HGraph::addIconTemplate(HIconTemplate* temp,bool bCopy)
 {
     if(!temp)
         return NULL;
@@ -395,10 +399,11 @@ HIconTemplate* HGraph::addIconTemplate(HIconTemplate* temp)
             pIconTemplateList.append(it);
         }
     }
-    else
+    else if(bCopy)
     {
         temp->copyTo(it);
     }
+    return it;
 }
 
 void HGraph::removeIconTemplate(HIconTemplate* temp)

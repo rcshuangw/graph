@@ -97,7 +97,7 @@ void HGraphEditorOp::createIconObj(const QString& TypeName,const QString& uuid,i
         height = 30;
     }
 
-    pIconObj->setShapeType((DrawShape)shape);
+    //pIconObj->setShapeType((DrawShape)shape);
     QPointF ptLeft = QPointF(fpoint.x() - width/2,fpoint.y() - height/2);
     QPointF ptRight = QPointF(fpoint.x() + width/2,fpoint.y() + height/2);
     HPointFList points;

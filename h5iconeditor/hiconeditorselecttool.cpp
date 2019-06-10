@@ -148,7 +148,6 @@ void HIconEditorSelectTool::onMousePressEvent(QMouseEvent* event, QVariant &data
             m_SelectMode = Select;
         }
     }
-
 }
 
 void HIconEditorSelectTool::onMouseMoveEvent(QMouseEvent* event, QVariant &data)

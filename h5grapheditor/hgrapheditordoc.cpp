@@ -344,7 +344,6 @@ HGraph* HGraphEditorDoc::getCurGraph()
     return m_pCurGraph;
 }
 
-
 QList<HIconTemplate*> HGraphEditorDoc::getIconTemplateList()
 {
     return m_pIconTemplateList;

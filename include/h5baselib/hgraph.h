@@ -69,7 +69,7 @@ public:
     int iconTemplateNum();
     HIconTemplate* IconTemplateAt(int index);
     virtual HIconTemplate* findIconTemplate(const QUuid& uid);
-    virtual HIconTemplate* addIconTemplate(HIconTemplate* temp);
+    virtual HIconTemplate* addIconTemplate(HIconTemplate* temp,bool bCopy = false);
     virtual void removeIconTemplate(HIconTemplate* temp);
     virtual void clearIconTemplate();
     virtual void resetIconTemplate();

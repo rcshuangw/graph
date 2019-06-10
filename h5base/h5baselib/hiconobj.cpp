@@ -30,7 +30,6 @@ HIconObj::HIconObj(HIconTemplate* it)
     btGraphOperator = MODE_OPEN_GRAPH;
     btGraphComfirm = COMFIRM_MODE_GRAPH;
     initIconTemplate();
-
 }
 
 HIconObj::~HIconObj()
@@ -352,6 +351,7 @@ uchar HIconObj::getGraphComfirm()
 void HIconObj::setIconTemplate(HIconTemplate* t)
 {
     m_pIconTemplate = t;
+    //还要刷新m_pIconSymbol的内容 --huangw
     if(!m_pIconSymbol)
     {
         m_pIconSymbol = new HIconSymbol(t);

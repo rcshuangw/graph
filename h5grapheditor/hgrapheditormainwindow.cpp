@@ -311,6 +311,7 @@ void HGraphEditorMainWindow::New(const QString& graphName)
     m_pGraphTreeWidget->addGraphTreeWidgetItem();
     //m_pGraphEditorMgr->refreshView();
     onUpdateBaseAction();
+    ui->actionSelect->trigger();
 }
 
 void HGraphEditorMainWindow::Open(const QString& name,const int id)

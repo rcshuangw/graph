@@ -405,7 +405,7 @@ void HDrawHelper::movePoint(DrawShape drawShape,int index,QPointF& curPoint)
         {
             HIconObj* pObj = (HIconObj*)m_pBaseObj;
             QRectF rectF = points.boundingRect();
-            pObj->iconSymbol()->resize(rectF.width(),rectF.height());
+            pObj->iconSymbol()->resize(rectF.width(),rectF.height());//--huangw
         }
         points = trans.map(points);
         //--huangw--

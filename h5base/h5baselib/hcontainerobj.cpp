@@ -10,7 +10,7 @@
 #include "hmakeicon.h"
 HContainerObj::HContainerObj()
 {
-
+    m_bTempObj = false;
 }
 
 HContainerObj::~HContainerObj()
@@ -284,7 +284,7 @@ void HContainerObj::clear()
 void HContainerObj::addObj(HBaseObj* obj)
 {
 	if (!obj) return;
-    if(m_bTempObj)
+    if(m_bTempObj)//是不是临时容器，如果是临时容器则增加，如果不是重置父对象
         m_pObjList.append(obj);
     else
         obj->resetParent(this);
