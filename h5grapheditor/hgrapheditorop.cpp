@@ -225,13 +225,14 @@ void HGraphEditorOp::copy()
         {
             HIconObj* obj = (HIconObj*)pObj;
             stream<<obj->getUuid();
-            HIconObj* pIcon = new HIconObj(obj->iconTemplate());
-            pIcon->initIconTemplate();
-            pNewObj = (HBaseObj*)pIcon;
+            //HIconObj* pIcon = new HIconObj(obj->iconTemplate());
+            //pIcon->initIconTemplate();
+            HIconObj* pIconObj = (HIconObj*)m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->createBaseObj((DrawShape)obj->getShapeType(),obj->iconTemplate());
+            pNewObj = (HBaseObj*)pIconObj;
         }
         else
         {
-            pNewObj = HMakeIcon::Instance()->newObj(pObj->getShapeType());
+            pNewObj = m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->createBaseObj((DrawShape)pObj->getShapeType(),NULL);
         }
         if(!pNewObj) continue;
         pObj->copyTo(pNewObj);
@@ -286,7 +287,7 @@ void HGraphEditorOp::paste()
                 }
                 pObj = (HBaseObj*)pIconObj;
             }
-            if(bOk)
+            if(!bOk)
             {
                 HIconObj* pObj = new HIconObj(NULL);
                 pObj->readData(0,&stream);
@@ -300,6 +301,7 @@ void HGraphEditorOp::paste()
             if(!pObj) continue;
             pObj->readData(0,&stream);
         }
+        m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->addIconObj(pObj);
         ObjCreated(pObj,true);
         objList.append(pObj);
      }

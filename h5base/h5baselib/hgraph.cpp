@@ -304,6 +304,7 @@ void HGraph::addIconObj(HBaseObj* pObj)
 {
     if(!pObj) return;
 
+    //此处要设置ID --huangw
     addObj(pObj);
 
     //如果是iconsymbol就要修正对应模板

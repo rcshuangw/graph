@@ -94,6 +94,10 @@ HBaseObj* HMakeIcon::newObj(DrawShape nObjType,const QString& arg, HBaseObj* par
     {
         pObj = new HTempContainer();
     }
+    else if(nObjType == Icon)
+    {
+
+    }
     pObj->setShapeType((DrawShape)nObjType);
     return pObj;
 }

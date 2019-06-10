@@ -3,6 +3,7 @@
 #include "hicontemplate.h"
 #include "hline.h"
 #include "hrectangle.h"
+#include "hgroup.h"
 #include <QVariant>
 HIconSymbol::HIconSymbol(HIconTemplate* t):m_pIconTemplate(t)
 {
@@ -203,8 +204,25 @@ bool HIconSymbol::findObjID(int nObjID)
     for(int i = 0;i < getObjList().count();i++)
     {
         HBaseObj* pObj = (HBaseObj*)getObjList().at(i);
-       if(pObj && pObj->getObjID() == nObjID)
-           return true;
+       if(pObj)
+       {
+           if(pObj->getShapeType() == Group)
+           {
+               HGroup* pGroup = (HGroup*)pObj;
+               //两个group组合到一起还是一个group包含所有对象，而不是一个group包含两个group,所以此处不必递归查找
+               for(int j = 0; j < pGroup->getObjList().size();i++)
+               {
+                   HBaseObj* obj = pGroup->at(i);
+                   if(obj && obj->getObjID() == nObjID)
+                       return true
+               }
+           }
+           else
+           {
+               if(pObj->getObjID() == nObjID)
+                   return true;
+           }
+       }
     }
     return false;
 }
