@@ -146,7 +146,7 @@ QPainterPath HPolyline::shape(qint8 flag)
 
 void HPolyline::paint(QPainter* painter)
 {
-    QColor penClr = QColor(getLineColorName()); //线条颜色
+    QColor penClr = QColor(getLineColor()); //线条颜色
     int penWidth = getLineWidth();//线条宽度
     Qt::PenStyle penStyle = getLineStyle(); //线条形状
     Qt::PenCapStyle capStyle = getLineCapStyle(); //线条角度

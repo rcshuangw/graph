@@ -8,7 +8,10 @@
 #include <QFileDialog>
 #include "hiconsymbol.h"
 #include "hiconapi.h"
+#include "hiconobj.h"
 #include "hgraphhelper.h"
+#include "htext.h"
+#include "hicontemplate.h"
 HRelayPage::HRelayPage(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::relayPage)
@@ -120,9 +123,9 @@ void HRelayPage::initBaseProperty()
         }
         else
         {
-            HText* pTextObj = pCurObj->getIconSymbol()->getFirstTextObj();
-            ui->textLineEdit->setText(pTextObj->getTextContent());
-            strTextColor = pTextObj->getTextColorName(); //文字颜色
+            HText* pTextObj = pCurObj->iconSymbol()->getFirstTextObj();
+            ui->textLineEdit->setText(pTextObj->text());
+            strTextColor = pTextObj->getTextColor(); //文字颜色
             QString strColor = QString("background-color:")+ strTextColor;
             ui->textClrBtn->setStyleSheet(strColor);
             ui->seeFrameCheck->setChecked(pTextObj->getFrameSee());
@@ -140,10 +143,10 @@ void HRelayPage::initBaseProperty()
             emit btnGroup->buttonClicked(id);
 
             //字体设置
-            font.setFamily(pTextObj->getTextFontName());
-            font.setPointSize(pTextObj->getPointSize());
-            font.setWeight(pTextObj->getWeigth());
-            font.setItalic(pTextObj->getItalic());
+            font.setFamily(pTextObj->fontFamily());
+            font.setPointSize(pTextObj->fontSize());
+            font.setWeight(pTextObj->fontWeight());
+            font.setItalic(pTextObj->fontItalic());
 
             ui->transHSlider->setValue(pTextObj->getTransparency());
             int nFillStyle = ui->fillStyleCombo->findData(int(pTextObj->getFillStyle()));
@@ -154,7 +157,7 @@ void HRelayPage::initBaseProperty()
             ui->fillClrBtn->setStyleSheet(strColor);
 
             //图片部分
-            ui->picLineEdit->setText(pTextObj->getImagePath());
+            ui->picLineEdit->setText(pTextObj->getBkImagePath());
             ui->keepPicCheck->setChecked(pTextObj->getKeepImageRatio());
             if(pTextObj->getKeepImageRatio())
             {
@@ -224,7 +227,7 @@ void HRelayPage::initRelayPorperty()
         HGraph* pGraph = (HGraph*)m_pGraphList[i];
         if(!pGraph) continue;
         QString strGraphName = pGraph->getGraphName();
-        int nGraphID = pGraph->getGraphID();
+        int nGraphID = pGraph->graphID();
         ui->openPicCombo->addItem(strGraphName,QVariant(nGraphID));
     }
 
@@ -291,11 +294,11 @@ void HRelayPage::onTextClrBtn_clicked()
 void HRelayPage::onFontBtn_clicked()
 {
     bool ok;
-    HText* pTextObj = pCurObj->getIconSymbol()->getFirstTextObj();//获取文字信息
-    font.setFamily(pTextObj->getTextFontName());
-    font.setPointSize(pTextObj->getPointSize());
-    font.setWeight(pTextObj->getWeigth());
-    font.setItalic(pTextObj->getItalic());
+    HText* pTextObj = pCurObj->iconSymbol()->getFirstTextObj();//获取文字信息
+    font.setFamily(pTextObj->fontFamily());
+    font.setPointSize(pTextObj->fontSize());
+    font.setWeight(pTextObj->fontWeight());
+    font.setItalic(pTextObj->fontItalic());
     QFont newFont = QFontDialog::getFont(&ok,font,this,QStringLiteral("选择字体"));
     if(ok)
     {
@@ -462,7 +465,7 @@ void HRelayPage::loadAllGraph()
 
 void HRelayPage::onOk()
 {
-    HText *pTextObj = (HText*)pCurObj->getIconSymbol()->getFirstTextObj();
+    HText *pTextObj = (HText*)pCurObj->iconSymbol()->getFirstTextObj();
 
     //边框可见
     bool bFrameSee = false;
@@ -476,18 +479,18 @@ void HRelayPage::onOk()
     pTextObj->setFillColorName(strFillColor);
 
     //填充字体和颜色
-    pTextObj->setTextFontName(font.family());
-    pTextObj->setPointSize(font.pointSize());
-    pTextObj->setWeight(font.weight());
-    pTextObj->setItalic(font.italic());
-    pTextObj->setTextColorName(strTextColor);
-    pTextObj->setTextContent(ui->textLineEdit->text());
+    pTextObj->setFontFamily(font.family());
+    pTextObj->setFontSize(font.pointSize());
+    pTextObj->setFontWeight(font.weight());
+    pTextObj->setFontItalic(font.italic());
+    pTextObj->setTextColor(strTextColor);
+    pTextObj->setText(ui->textLineEdit->text());
 
 
     if(btnGroup->checkedId() == 1)//当前是颜色填充就不能用画面填充，当前是图片填充且如果两种填充都有画面填充优于颜色填充
-        pTextObj->setImagePath("");
+        pTextObj->setBkImagePath("");
     else
-        pTextObj->setImagePath(ui->picLineEdit->text());
+        pTextObj->setBkImagePath(ui->picLineEdit->text());
     bool bKeep = false;
     if(ui->keepPicCheck->checkState() == Qt::Checked)
         bKeep = true;

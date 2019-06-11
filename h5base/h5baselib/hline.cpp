@@ -170,7 +170,7 @@ void HLine::paint(QPainter* painter)
 			painter->setBrush(Qt::NoBrush);
 			if (getStartArrowType() == 3)
 			{
-                painter->setBrush(QColor(getLineColorName()));
+                painter->setBrush(QColor(getLineColor()));
 			}
 			painter->drawPath(path);
 			painter->restore();
@@ -182,7 +182,7 @@ void HLine::paint(QPainter* painter)
 			painter->setBrush(Qt::NoBrush);
 			if (getEndArrowType() == 3)
 			{
-                painter->setBrush(QColor(getLineColorName()));
+                painter->setBrush(QColor(getLineColor()));
 			}
 			painter->drawPath(path);
 			painter->restore();

@@ -142,12 +142,12 @@ void HText::copyTo(HBaseObj* obj)
     ob->m_btFormat = m_btFormat;
 }
 
-void HText::setTextClr(QString strClrName)
+void HText::setTextColor(const QString& strClrName)
 {
     m_strTextClr = strClrName;
 }
 
-QString HText::textClrName()
+QString HText::getTextColor()
 {
     return m_strTextClr;
 }
@@ -321,7 +321,7 @@ void HText::paint(QPainter* painter)
     bool bFontItalic = (bool)fontItalic();
     QFont font = m_Font;//(strFontFamily,nFontSize,nFontWeight,bFontItalic);
 
-    QPen textPen = QPen(QColor(textClrName()));
+    QPen textPen = QPen(QColor(getTextColor()));
     painter->setPen(textPen);
     painter->setFont(font);
 

@@ -8,9 +8,8 @@
 typedef struct _tagATTRINFO
 {
     unsigned short wAttrib;
-    char* szName;
+    std::string strName;
 }ATTRINFO;
-
 
 //厂站类
 //class HWord;

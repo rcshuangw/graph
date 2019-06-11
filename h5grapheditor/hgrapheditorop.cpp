@@ -10,6 +10,7 @@
 #include "hgrapheditorview.h"
 #include "hbaseobj.h"
 #include "hiconobj.h"
+#include "hnormalobj.h"
 #include "hrectangle.h"
 #include "hcircle.h"
 #include "hellipse.h"
@@ -63,8 +64,8 @@ void HGraphEditorOp::setGraphicsView()
     m_pGraphEditorMgr->refreshView();
 }
 
-//创建测点图元
-void HGraphEditorOp::createIconObj(const QString& TypeName,const QString& uuid,int shape,QPointF fpoint,QList<H5GraphicsItem*> &items)
+//创建测点图元 参数:遥信\遥测,uuid,shape(TEMPALTE_XXX_)
+void HGraphEditorOp::createIconObj(const QString& strTypeName,const QString& uuid,int shape,QPointF fpoint,QList<H5GraphicsItem*> &items)
 {
     if(!m_pGraphEditorMgr->graphEditorDoc() || !m_pGraphEditorMgr->graphEditorDoc()->getCurGraph())
         return;
@@ -76,10 +77,23 @@ void HGraphEditorOp::createIconObj(const QString& TypeName,const QString& uuid,i
         return;
     }
 
-    HBaseObj* pObj = pGraphEditorDoc->getCurGraph()->createBaseObj(Icon,pIconTemplate);
-    HIconObj* pIconObj = (HIconObj*)pObj;
-    pIconObj->setOX(fpoint.x());
-    pIconObj->setOY(fpoint.y());
+    HBaseObj* pObj = NULL;
+    if(shape > TEMPLATE_TYPE_NULL && shape <=TEMPLATE_TYPE_CONTROL)
+    {
+        pObj = pGraphEditorDoc->getCurGraph()->createBaseObj(Icon,pIconTemplate);
+        HIconObj* pIconObj = (HIconObj*)pObj;
+        pIconObj->setObjType(shape);
+        pIconObj->setCatalogName(strTypeName);
+    }
+    else if(shape >=TEMPLATE_TYPE_TRANSFORMER2 && shape<=TEMPLATE_TYPE_REACTOR)
+    {
+        pObj = pGraphEditorDoc->getCurGraph()->createBaseObj(Normal,pIconTemplate);
+        HNormalObj* pNormalObj = (HNormalObj*)pObj;
+        pNormalObj->setObjType(shape);
+        pNormalObj->setCatalogName(strTypeName);
+    }
+    pObj->setOX(fpoint.x());
+    pObj->setOY(fpoint.y());
     //设置图元坐标位置
     double width = 100;
     double height = 100;
@@ -225,8 +239,6 @@ void HGraphEditorOp::copy()
         {
             HIconObj* obj = (HIconObj*)pObj;
             stream<<obj->getUuid();
-            //HIconObj* pIcon = new HIconObj(obj->iconTemplate());
-            //pIcon->initIconTemplate();
             HIconObj* pIconObj = (HIconObj*)m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->createBaseObj((DrawShape)obj->getShapeType(),obj->iconTemplate());
             pNewObj = (HBaseObj*)pIconObj;
         }
@@ -912,7 +924,7 @@ QColor HGraphEditorOp::getPenColor()
         HBaseObj* pObj = tempContainer->at(0);
         if(pObj)
         {
-            clr = QColor(pObj->getLineColorName());
+            clr = QColor(pObj->getLineColor());
         }
     }
 
@@ -928,10 +940,10 @@ QColor HGraphEditorOp::getPenColor()
             HBaseObj* pObj = tempContainer->at(0);
             if(pObj)
             {
-                pObj->setLineColorName(clr.name());
+                pObj->setLineColor(clr.name());
                 if(pObj->getShapeType() == Text)
                 {
-                    pObj->setTextColor(&clr);
+                    pObj->setTextColor(clr.name());
                 }
             }
         }

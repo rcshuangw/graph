@@ -23,30 +23,30 @@ INCLUDEPATH += \
 CONFIG += qt thread all
 SOURCES += \
     hdrawhelper.cpp \
-    #hanaloguepage.cpp \
+    hanaloguepage.cpp \
     #hdatapropertydlg.cpp \
-    #hdigitalpage.cpp \
+    hdigitalpage.cpp \
     hfonthelper.cpp \
     hgraphhelper.cpp \
     #hgraphpage.cpp \
     hiconhelper.cpp \
     hiconproperty.cpp \
-    #hrelaypage.cpp \
+    hrelaypage.cpp \
     hstation.cpp
        
 
 HEADERS +=\
     ../../include/h5basehelp/hdrawhelper.h \
     ../../include/h5basehelp/h5basehelpexport.h \
-    #../../include/h5basehelp/hanaloguepage.h \
+    ../../include/h5basehelp/hanaloguepage.h \
     #../../include/h5basehelp/hdatapropertydlg.h \
-    #../../include/h5basehelp/hdigitalpage.h \
+    ../../include/h5basehelp/hdigitalpage.h \
     ../../include/h5basehelp/hfonthelper.h \
     ../../include/h5basehelp/hgraphhelper.h \
     #../../include/h5basehelp/hgraphpage.h \
     ../../include/h5basehelp/hiconhelper.h \
     ../../include/h5basehelp/hiconproperty.h \
-    #../../include/h5basehelp/hrelaypage.h \
+    ../../include/h5basehelp/hrelaypage.h \
     ../../include/h5basehelp/hstation.h
         
 		  
@@ -75,10 +75,10 @@ RESOURCES += \
     images.qrc
 
 FORMS += \
-    #UI/analoguepage.ui \
-    #UI/digitalpage.ui \
+    UI/analoguepage.ui \
+    UI/digitalpage.ui \
     #UI/graphpage.ui \
     UI/iconproperty.ui \
     #UI/propertydlg.ui \
-    #UI/relaypage.ui
+    UI/relaypage.ui
 

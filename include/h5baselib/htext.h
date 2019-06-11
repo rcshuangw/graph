@@ -26,8 +26,10 @@ public:
     virtual QPainterPath shape(qint8 flag = 0);
     virtual void paint(QPainter* painter);
 public:
-    void setTextClr(QString strClrName);
-    QString textClrName();
+    //void setTextClr(QString strClrName);
+    //QString textClrName();
+    virtual void setTextColor(const QString& clr);
+    virtual QString getTextColor();
 
     void setLayout(ushort layout);
     ushort layout();

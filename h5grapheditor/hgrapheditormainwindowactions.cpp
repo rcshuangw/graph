@@ -8,8 +8,12 @@
 #include "hgrapheditordrawtoolmgr.h"
 #include "hiconhelper.h"
 #include "hiconproperty.h"
+#include "hdigitalpage.h"
+#include "hanaloguepage.h"
+#include "hrelaypage.h"
 #include "hselectedmgr.h"
 #include "htempcontainer.h"
+#include "hiconobj.h"
 #include <QComboBox>
 //文件部分
 void HGraphEditorMainWindow::actionNew_clicked()
@@ -406,17 +410,63 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
      {
          QVector<HBaseObj*> objs = m_pGraphEditorMgr->selectedMgr()->selectObj()->getObjList();
          if(objs.size() > 1 || objs.size() == 0) return;
-
-        // qDebug()<<"HPropertyDlg"<<;
-         HPropertyDlg dlg(objs.at(0));
-         if(dlg.exec() == QDialog::Accepted)
+         HBaseObj *obj = objs.at(0);
+         if(obj->getShapeType() == Icon)
          {
-             QRectF rectF = objs.at(0)->boundingRect(1);
-             m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(rectF);
-             m_pGraphEditorMgr->selectedMgr()->clear();
-             objs.at(0)->iconGraphicsItem()->setSelected(true);
-             objs.at(0)->iconGraphicsItem()->setPos(objs.at(0)->pos());
-             m_pGraphEditorMgr->selectedMgr()->recalcSelect();
+             HIconObj* icon = (HIconObj*)obj;
+             int nPointType = icon->getObjType();
+             if(nPointType == TEMPLATE_TYPE_DIGITAL)
+             {
+                 HDigitalPage dlg(icon);
+                 if(dlg.exec() == QDialog::Accepted)
+                 {
+                     QRectF rectF = objs.at(0)->boundingRect(1);
+                     m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(rectF);
+                     m_pGraphEditorMgr->selectedMgr()->clear();
+                     objs.at(0)->iconGraphicsItem()->setSelected(true);
+                     objs.at(0)->iconGraphicsItem()->setPos(objs.at(0)->pos());
+                     m_pGraphEditorMgr->selectedMgr()->recalcSelect();
+                 }
+             }
+             else if(nPointType == TEMPLATE_TYPE_ANALOGUE)
+             {
+                 HAnaloguePage dlg(icon);
+                 if(dlg.exec() == QDialog::Accepted)
+                 {
+                     QRectF rectF = objs.at(0)->boundingRect(1);
+                     m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(rectF);
+                     m_pGraphEditorMgr->selectedMgr()->clear();
+                     objs.at(0)->iconGraphicsItem()->setSelected(true);
+                     objs.at(0)->iconGraphicsItem()->setPos(objs.at(0)->pos());
+                     m_pGraphEditorMgr->selectedMgr()->recalcSelect();
+                 }
+             }
+             else if(nPointType == TEMPLATE_TYPE_RELAY || nPointType == TEMPLATE_TYPE_CONTROL)
+             {
+                 HRelayPage dlg(icon);
+                 if(dlg.exec() == QDialog::Accepted)
+                 {
+                     QRectF rectF = objs.at(0)->boundingRect(1);
+                     m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(rectF);
+                     m_pGraphEditorMgr->selectedMgr()->clear();
+                     objs.at(0)->iconGraphicsItem()->setSelected(true);
+                     objs.at(0)->iconGraphicsItem()->setPos(objs.at(0)->pos());
+                     m_pGraphEditorMgr->selectedMgr()->recalcSelect();
+                 }
+             }
+         }
+         else
+         {
+             HPropertyDlg dlg(objs.at(0));
+             if(dlg.exec() == QDialog::Accepted)
+             {
+                 QRectF rectF = objs.at(0)->boundingRect(1);
+                 m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(rectF);
+                 m_pGraphEditorMgr->selectedMgr()->clear();
+                 objs.at(0)->iconGraphicsItem()->setSelected(true);
+                 objs.at(0)->iconGraphicsItem()->setPos(objs.at(0)->pos());
+                 m_pGraphEditorMgr->selectedMgr()->recalcSelect();
+             }
          }
      }
  }

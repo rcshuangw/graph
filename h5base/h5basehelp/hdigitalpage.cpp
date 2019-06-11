@@ -5,13 +5,12 @@
 #include "hdigitalpage.h"
 #include "ui_digitalpage.h"
 #include "hiconsymbol.h"
+#include "hiconobj.h"
 #include "hdynamicobj.h"
 #include "hstation.h"
 #include "hiconhelper.h"
-
-
+#include "hicontemplate.h"
 extern ATTRINFO DgtAttrInfo[];
-
 HDigitalPage::HDigitalPage(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::digitalPage)
@@ -24,9 +23,9 @@ HDigitalPage::HDigitalPage(HBaseObj* pObj,QWidget *parent)
 {
     ui->setupUi(this);
     pCurObj = (HIconObj*)pObj;
-    wStation = pCurObj->getDynamicObj()->getDBStation();
-    wPoint = pCurObj->getDynamicObj()->getDBPoint();
-    wAttrib = pCurObj->getDynamicObj()->getDBAttr();
+    wStation = pCurObj->dynamicObj()->getDBStation();
+    wPoint = pCurObj->dynamicObj()->getDBPoint();
+    wAttrib = pCurObj->dynamicObj()->getDBAttr();
     connect(ui->okBtn,SIGNAL(clicked()),this,SLOT(onOk()));
     connect(ui->cancelBtn,SIGNAL(clicked()),this,SLOT(onCancel()));
 
@@ -73,9 +72,9 @@ void HDigitalPage::initBaseProper()
     //布局
     ui->ptX->setText(QString("%1").arg(pCurObj->getOX(),0,'f',2));
     ui->ptY->setText(QString("%1").arg(pCurObj->getOY(),0,'f',2));
-    ui->ptWidth->setText(QString("%1").arg(pCurObj->getRectWidth(),0,'f',2));
-    ui->ptHeight->setText(QString("%1").arg(pCurObj->getRectHeight(),0,'f',2));
-    ui->ptRotate->setText(QString("%1°").arg(pCurObj->getRotateAngle()));
+    //ui->ptWidth->setText(QString("%1").arg(pCurObj->m_width,0,'f',2));
+    //ui->ptHeight->setText(QString("%1").arg(pCurObj->getRectHeight(),0,'f',2));
+    //ui->ptRotate->setText(QString("%1°").arg(pCurObj->getRotateAngle()));
     //connect(ui->ptRotate,SIGNAL(),this,SLOT());
     //图符 可以用hiconhelper操作
     //QIcon openIcon,closeIcon,wrongOpenIcon,wrongCloseIcon;
@@ -175,18 +174,18 @@ void HDigitalPage::setDigitalAttr(HDigital* pDigital)
     if(NULL == pDigital)
         return;
     ui->attrComboBox->clear();
-    ushort wAttrib = pCurObj->getDynamicObj()->getDBAttr();
-    for(int i = 0;DgtAttrInfo[i].szName != 0;i++)
+    ushort wAttrib = pCurObj->dynamicObj()->getDBAttr();
+    for(int i = 0;(DgtAttrInfo[i].strName.empty() != false);i++)
     {
         if(ATTR_DGT_4_STATE_VALUE == DgtAttrInfo[i].wAttrib)
         {
             if((ushort)-1 != pDigital->getDoubleDNo())
             {
-                ui->attrComboBox->addItem(QStringLiteral("%1").arg(DgtAttrInfo[i].szName),DgtAttrInfo[i].wAttrib);
-                if(pCurObj->getDynamicObj()->getDBAttr() != DgtAttrInfo[i].wAttrib)
+                ui->attrComboBox->addItem(QStringLiteral("%1").arg(QString::fromStdString(DgtAttrInfo[i].strName)),DgtAttrInfo[i].wAttrib);
+                if(pCurObj->dynamicObj()->getDBAttr() != DgtAttrInfo[i].wAttrib)
                 {
                     wAttrib = DgtAttrInfo[i].wAttrib;
-                    pCurObj->getDynamicObj()->setDBAttr(DgtAttrInfo[i].wAttrib);
+                    pCurObj->dynamicObj()->setDBAttr(DgtAttrInfo[i].wAttrib);
                 }
             }
         }
@@ -195,21 +194,21 @@ void HDigitalPage::setDigitalAttr(HDigital* pDigital)
             if((ushort)-1 == pDigital->getDoubleDNo())
             {
 
-                ui->attrComboBox->addItem(QStringLiteral("%1").arg(DgtAttrInfo[i].szName),DgtAttrInfo[i].wAttrib);
-                if(pCurObj->getDynamicObj()->getDBAttr() != DgtAttrInfo[i].wAttrib)
+                ui->attrComboBox->addItem(QStringLiteral("%1").arg(QString::fromStdString(DgtAttrInfo[i].strName)),DgtAttrInfo[i].wAttrib);
+                if(pCurObj->dynamicObj()->getDBAttr() != DgtAttrInfo[i].wAttrib)
                 {
                     wAttrib = DgtAttrInfo[i].wAttrib;
-                    pCurObj->getDynamicObj()->setDBAttr(DgtAttrInfo[i].wAttrib);
+                    pCurObj->dynamicObj()->setDBAttr(DgtAttrInfo[i].wAttrib);
                 }
             }
         }
         else
         {
-            ui->attrComboBox->addItem(QStringLiteral("%1").arg(QString(DgtAttrInfo[i].szName)),DgtAttrInfo[i].wAttrib);
-            if(pCurObj->getDynamicObj()->getDBAttr() != DgtAttrInfo[i].wAttrib)
+            ui->attrComboBox->addItem(QStringLiteral("%1").arg(QString::fromStdString(DgtAttrInfo[i].strName)),DgtAttrInfo[i].wAttrib);
+            if(pCurObj->dynamicObj()->getDBAttr() != DgtAttrInfo[i].wAttrib)
             {
                 wAttrib = DgtAttrInfo[i].wAttrib;
-                pCurObj->getDynamicObj()->setDBAttr(DgtAttrInfo[i].wAttrib);
+                pCurObj->dynamicObj()->setDBAttr(DgtAttrInfo[i].wAttrib);
             }
         }
     }
@@ -236,13 +235,13 @@ void HDigitalPage::onOk()
     if((int)-1 != ui->stComboBox->currentIndex())
     {
         wStation = ui->stComboBox->currentData().toInt();
-        pCurObj->getDynamicObj()->setDBStation(wStation);
+        pCurObj->dynamicObj()->setDBStation(wStation);
     }
     if(NULL != ui->ptListWidget->currentItem())
     {
         wPoint = ui->ptListWidget->currentItem()->data(Qt::UserRole).toUInt();
-        pCurObj->getDynamicObj()->setDBPoint(wPoint);
-        pCurObj->getDynamicObj()->setValueType(TYPE_DIGITAL);
+        pCurObj->dynamicObj()->setDBPoint(wPoint);
+        pCurObj->dynamicObj()->setValueType(TYPE_DIGITAL);
     }
     QDialog::accept();
 }

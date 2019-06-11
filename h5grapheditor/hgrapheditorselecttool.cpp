@@ -344,9 +344,9 @@ void HGraphEditorSelectTool::onMouseReleaseEvent(QMouseEvent* event, QVariant &d
 
 void HGraphEditorSelectTool::onMouseDoubleClickEvent(QMouseEvent* event, QVariant &data)
 {
-    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr() || !m_pGraphEditorMgr->graphEditorOp())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    //m_pIconEditorMgr->iconEditorOp()->setObjAttribute();
+    m_pGraphEditorMgr->graphEditorOp()->setObjAttribute();
 }
 
 void HGraphEditorSelectTool::onContextMenuEvent(QContextMenuEvent *event, QVariant &data)

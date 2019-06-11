@@ -288,7 +288,7 @@ void HPropertyDlg::initTextTab()
             font.setItalic(italic);
             ui->textFontBtn->setFont(font);
             ui->textFontBtn->setText(QStringLiteral("示范"));
-            strTextColor = pTextObj->textClrName();
+            strTextColor = pTextObj->getTextColor();
             QString textClr = QString("background-color:")+ strTextColor;
             ui->textColorBtn->setStyleSheet(textClr);
 
@@ -310,7 +310,7 @@ void HPropertyDlg::initLineTab()
     //QString strLineColor;
     strLineColor = "#FF0000";
     if(pCurObj)
-        strLineColor = pCurObj->getLineColorName();
+        strLineColor = pCurObj->getLineColor();
     QString strbkColor = QString("background-color:")+ strLineColor;
     ui->lineColor->setStyleSheet(strbkColor);
 
@@ -510,7 +510,7 @@ void HPropertyDlg::lineColor_clicked()
     QColor curColor = QColor(Qt::white);
     if(pCurObj)
     {
-        strLineColor = pCurObj->getLineColorName();
+        strLineColor = pCurObj->getLineColor();
         curColor = QColor(strLineColor);
     }
     const QColor color = QColorDialog::getColor(curColor, this, QStringLiteral("选择颜色"));
@@ -522,7 +522,7 @@ void HPropertyDlg::lineColor_clicked()
 void HPropertyDlg::ok_clicked()
 {
     DrawShape drawShape = pCurObj->getShapeType();
-    pCurObj->setLineColorName(strLineColor);
+    pCurObj->setLineColor(strLineColor);
     pCurObj->setLineWidth(ui->lineWidth->currentData().toUInt());
     pCurObj->setLineStyle(Qt::PenStyle(ui->lineStyle->currentData().toInt()));
     pCurObj->setLineCapStyle(Qt::PenCapStyle(ui->lineCapStyle->currentData().toInt()));
@@ -607,7 +607,7 @@ void HPropertyDlg::ok_clicked()
             pTextObj->setFontSize(font.pointSize());
             pTextObj->setFontWeight(font.weight());
             pTextObj->setFontItalic(font.italic());
-            pTextObj->setTextClr(strTextColor);
+           pTextObj->setTextColor(strTextColor);
             pTextObj->setText(ui->textEdit->text());
         }
     }

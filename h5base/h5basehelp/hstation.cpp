@@ -1,10 +1,11 @@
 ﻿#include "hstation.h"
-/*
+
+
 ATTRINFO DgtAttrInfo[] =
 {
     {ATTR_DGT_4_STATE_VALUE,   "工程值(双遥信)"},
     {ATTR_DGT_VALUE,           "工程值"},
-    {0,                          NULL}
+    {0,                          ""}
 };
 
 ATTRINFO AnaAttrInfo[] =
@@ -12,8 +13,8 @@ ATTRINFO AnaAttrInfo[] =
     {ATTR_ANA_VALUE,         "工程值"},
     {ATTR_ANA_CC1,           "偏移"},
     {ATTR_ANA_CC2,           "系数"},
-    {0,                      NULL}
-};*/
+    {0,                      ""}
+};
 
 HStationHelper::HStationHelper()
 {

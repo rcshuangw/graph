@@ -5,6 +5,7 @@
 #include <QDomElement>
 #include <QTextCodec>
 #include "hiconobj.h"
+#include "hnormalobj.h"
 #include "hmakeicon.h"
 HGraph::HGraph(const QString& name)
     :m_strGraphName(name)
@@ -284,6 +285,20 @@ HBaseObj* HGraph::createBaseObj(DrawShape s, HIconTemplate* icontemplate)
         pIconObj->iconSymbol()->setCurrentPattern(0);
         pObj = (HBaseObj*)obj;
     }
+    else if(s == Normal)
+    {
+        if(!icontemplate)
+            return NULL;
+        HIconTemplate* pTemplate = new HIconTemplate("");
+        icontemplate->copyTo(pTemplate);
+        //addIconTemplate(pTemplate);
+
+        HNormalObj* obj = new HNormalObj(pTemplate);
+        HNormalObj* pIconObj = (HNormalObj*)obj;
+        pIconObj->initIconTemplate();
+        pIconObj->iconSymbol()->setCurrentPattern(0);
+        pObj = (HBaseObj*)obj;
+    }
     else
     {
         pObj = HMakeIcon::Instance()->newObj(s);
@@ -295,8 +310,6 @@ HBaseObj* HGraph::createBaseObj(DrawShape s, HIconTemplate* icontemplate)
         pObj->setObjID(objID);
     }
 
-    //增加到列表
-    //addIconObj(pObj);
     return pObj;
 }
 

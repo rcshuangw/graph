@@ -41,7 +41,8 @@ SOURCES += \
         hpolyline.cpp \
         hmakeicon.cpp \
     hgraph.cpp \
-    harc.cpp
+    harc.cpp \
+    hnormalobj.cpp
 
 HEADERS += \
     ../../include/hiconapi.h \
@@ -67,7 +68,8 @@ HEADERS += \
     ../../include/h5baselib/hpolyline.h \
     ../../include/h5baselib/hmakeicon.h \
     ../../include/h5baselib/hgraph.h \
-    ../../include/h5baselib/harc.h
+    ../../include/h5baselib/harc.h \
+    ../../include/h5baselib/hnormalobj.h
 
 
 unix{

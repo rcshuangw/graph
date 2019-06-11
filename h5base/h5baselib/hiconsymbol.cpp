@@ -214,7 +214,7 @@ bool HIconSymbol::findObjID(int nObjID)
                {
                    HBaseObj* obj = pGroup->at(i);
                    if(obj && obj->getObjID() == nObjID)
-                       return true
+                       return true;
                }
            }
            else

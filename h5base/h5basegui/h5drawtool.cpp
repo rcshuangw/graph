@@ -30,7 +30,7 @@ void HDrawTool::setDrawAttribute(HBaseObj *obj)
     if(obj->getShapeType() == Icon)
         return;
     QColor clr = m_pToolManager->m_vDrawAttribute.drawPen.color();
-    obj->setLineColorName(clr.name());
+    obj->setLineColor(clr.name());
     obj->setLineStyle(m_pToolManager->m_vDrawAttribute.drawPen.style());
     if(obj->getShapeType() == Text)
     {
@@ -45,7 +45,7 @@ void HDrawTool::setDrawAttribute(HBaseObj *obj)
     if(obj->getShapeType() == Text)
     {
         pText = (HText*)obj;
-        pText->setTextClr(m_pToolManager->m_vDrawAttribute.textPen.color().name());
+        pText->setTextColor(m_pToolManager->m_vDrawAttribute.textPen.color().name());
         pText->setFont(m_pToolManager->m_vDrawAttribute.font);
     }
 

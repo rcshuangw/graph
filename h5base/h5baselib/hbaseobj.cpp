@@ -258,12 +258,12 @@ void HBaseObj::setShapeType(DrawShape t)
 }
 
 //线条颜色
-void HBaseObj::setLineColorName(QString clrName)
+void HBaseObj::setLineColor(QString clrName)
 {
     m_strLineColor = clrName;
 }
 
-QString HBaseObj::getLineColorName()
+QString HBaseObj::getLineColor()
 {
    return m_strLineColor;
 }
@@ -312,25 +312,25 @@ Qt::PenCapStyle HBaseObj::getLineCapStyle()
 }
 
 //边框色
-void HBaseObj::setBorderColor(const QColor* c)
+void HBaseObj::setBorderColor(const QString& s)
 {
 
 }
 
-QColor HBaseObj::getBorderColor()
+QString HBaseObj::getBorderColor()
 {
-    return QColor();
+    return QString();
 }
 
 //文字色
-void HBaseObj::setTextColor(const QColor* c)
+void HBaseObj::setTextColor(const QString& c)
 {
 
 }
 
-QColor HBaseObj::getTextColor()
+QString HBaseObj::getTextColor()
 {
-    return QColor();
+    return QString();
 }
 
 
@@ -638,7 +638,7 @@ void HBaseObj::setPainter(QPainter* painter)
         painter->setTransform(trans,true);
     }
     //设置属性
-    QColor penClr = QColor(getLineColorName()); //线条颜色
+    QColor penClr = QColor(getLineColor()); //线条颜色
     int penWidth = getLineWidth();//线条宽度
     Qt::PenStyle penStyle = getLineStyle(); //线条形状
     Qt::PenCapStyle capStyle = getLineCapStyle(); //线条角度

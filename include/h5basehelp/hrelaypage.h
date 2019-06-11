@@ -2,7 +2,7 @@
 #define HRELAYPAGE_H
 
 #include <QDialog>
-#include "h5iconhelpexport.h"
+#include "h5basehelpexport.h"
 #include "hgraph.h"
 class QListWidgetItem;
 class HBaseObj;
@@ -13,7 +13,7 @@ namespace Ui {
 class relayPage;
 }
 
-class H5ICONHELP_EXPORT HRelayPage : public QDialog
+class H5BASEHELP_EXPORT HRelayPage : public QDialog
 {
     Q_OBJECT
 

@@ -1,11 +1,14 @@
 ﻿#include "hanaloguepage.h"
 #include "ui_analoguepage.h"
 #include "hiconsymbol.h"
+#include "hiconobj.h"
 #include "hdynamicobj.h"
 #include "hstation.h"
+#include "htext.h"
 #include "hiconhelper.h"
 #include <QColorDialog>
 #include <QFontDialog>
+
 extern ATTRINFO AnaAttrInfo[];
 HAnaloguePage::HAnaloguePage(QWidget *parent) :
     QDialog(parent),
@@ -52,9 +55,9 @@ void HAnaloguePage::initDataProperty()
     connect(ui->jgComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(onIntervalCurrentIndexChanged(int)));
     connect(ui->ptListWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListWidgetItemDoubleClicked(QListWidgetItem*)));
     connect(ui->pointFormatComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(formatCombo_clicked()));
-    wStation = pCurObj->getDynamicObj()->getDBStation();
-    wPoint = pCurObj->getDynamicObj()->getDBPoint();
-    wAttrib = pCurObj->getDynamicObj()->getDBAttr();
+    wStation = pCurObj->dynamicObj()->getDBStation();
+    wPoint = pCurObj->dynamicObj()->getDBPoint();
+    wAttrib = pCurObj->dynamicObj()->getDBAttr();
 
     ui->stComboBox->clear();
     QList<HStation*> stationList = HStationHelper::Instance()->getStationList();
@@ -143,11 +146,11 @@ void HAnaloguePage::setAnaAttrib(HAnalogue* pAna)
     if(NULL == pAna)
         return;
     ui->attrComboBox->clear();
-    for(int i = 0;AnaAttrInfo[i].szName != 0;i++)
+    for(int i = 0;(AnaAttrInfo[i].strName.empty() != false) ;i++)
     {
-        ui->attrComboBox->addItem(QString(AnaAttrInfo[i].szName),AnaAttrInfo[i].wAttrib);
+        ui->attrComboBox->addItem(QString::fromStdString(AnaAttrInfo[i].strName),AnaAttrInfo[i].wAttrib);
     }
-    ushort wAttrib = pCurObj->getDynamicObj()->getDBAttr();
+    ushort wAttrib = pCurObj->dynamicObj()->getDBAttr();
     ui->attrComboBox->setCurrentIndex(ui->attrComboBox->findData(wAttrib));
 }
 
@@ -194,15 +197,15 @@ void HAnaloguePage::initBaseProperty()
     ui->suffixLineEdit->setText("");
 
 
-    HText* pTextObj = pCurObj->getIconSymbol()->getFirstTextObj();//获取文字信息
+    HText* pTextObj = pCurObj->iconSymbol()->getFirstTextObj();//获取文字信息
     if(pCurObj && pTextObj)
     {
-        ui->ptNameLineEdit->setText(pTextObj->getTextContent());
-        ui->hComboBox->setCurrentIndex(ui->hComboBox->findData(pTextObj->getHorizontalAlign()));
-        ui->vComboBox->setCurrentIndex(ui->vComboBox->findData(pTextObj->getVerticalAlign()));
+        ui->ptNameLineEdit->setText(pTextObj->text());
+        ui->hComboBox->setCurrentIndex(ui->hComboBox->findData(pTextObj->horizontalAlign()));
+        ui->vComboBox->setCurrentIndex(ui->vComboBox->findData(pTextObj->verticalAlign()));
 
 
-        strTextColor = pTextObj->getTextColorName();
+        strTextColor = pTextObj->getTextColor();
         strColor = QString("background-color:")+strTextColor;//文字颜色
         ui->textClrBtn->setStyleSheet(strColor);
         strBgColor = pTextObj->getFillColorName();
@@ -216,20 +219,20 @@ void HAnaloguePage::initBaseProperty()
             ui->transparentCheckBox->setCheckState(Qt::Unchecked);
 
         //格式
-        int index = ui->pointFormatComboBox->findData(pTextObj->getTextFormat());
+        int index = ui->pointFormatComboBox->findData(pTextObj->textFormat());
         if(-1 != index)
             ui->pointFormatComboBox->setCurrentIndex(index);
-        ui->prefixLineEdit->setText(pTextObj->getTextPrefix());
-        ui->suffixLineEdit->setText(pTextObj->getTextSuffix());
+        ui->prefixLineEdit->setText(pTextObj->textPrefix());
+        ui->suffixLineEdit->setText(pTextObj->textSuffix());
 
         //字体设置
-        font.setFamily(pTextObj->getTextFontName());
-        font.setPointSize(pTextObj->getPointSize());
-        font.setWeight(pTextObj->getWeigth());
-        font.setItalic(pTextObj->getItalic());
+        font.setFamily(pTextObj->fontFamily());
+        font.setPointSize(pTextObj->fontSize());
+        font.setWeight(pTextObj->fontWeight());
+        font.setItalic(pTextObj->fontItalic());
 
-        wStation = pCurObj->getDynamicObj()->getDBStation();
-        wPoint = pCurObj->getDynamicObj()->getDBPoint();
+        wStation = pCurObj->dynamicObj()->getDBStation();
+        wPoint = pCurObj->dynamicObj()->getDBPoint();
         HStation* pStation = HStationHelper::Instance()->getStation(wStation);
         if(pStation)
         {
@@ -262,10 +265,10 @@ void HAnaloguePage::fontBtn_clicked()
 void HAnaloguePage::textClrBtn_clicked()
 {
     QColor curColor = QColor(Qt::black);
-    HText* pTextObj = pCurObj->getIconSymbol()->getFirstTextObj();//获取文字信息
+    HText* pTextObj = pCurObj->iconSymbol()->getFirstTextObj();//获取文字信息
     if(pCurObj)
     {
-        strTextColor = pTextObj->getTextColorName();
+        strTextColor = pTextObj->getTextColor();
         curColor = QColor(strTextColor);
     }
     const QColor color = QColorDialog::getColor(curColor, this, QStringLiteral("选择颜色"));
@@ -279,7 +282,7 @@ void HAnaloguePage::bgClrBtn_clicked()
     QColor curColor = QColor(Qt::black);
     if(pCurObj)
     {
-        strBgColor = pCurObj->getFillColorName();
+        //strBgColor = pCurObj->getFillColorName();
         curColor = QColor(strBgColor);
     }
     const QColor color = QColorDialog::getColor(curColor, this, QStringLiteral("选择颜色"));
@@ -306,24 +309,24 @@ void HAnaloguePage::formatCombo_clicked()
 void HAnaloguePage::onOk()
 {
     if((int)-1 != ui->stComboBox->currentIndex())
-        pCurObj->getDynamicObj()->setDBStation(ui->stComboBox->currentData().toUInt());
+        pCurObj->dynamicObj()->setDBStation(ui->stComboBox->currentData().toUInt());
     if(NULL != ui->ptListWidget->currentItem()){
-        pCurObj->getDynamicObj()->setDBPoint(ui->ptListWidget->currentItem()->data(Qt::UserRole).toUInt());
-        pCurObj->getDynamicObj()->setValueType(TYPE_ANALOGUE);
+        pCurObj->dynamicObj()->setDBPoint(ui->ptListWidget->currentItem()->data(Qt::UserRole).toUInt());
+        pCurObj->dynamicObj()->setValueType(TYPE_ANALOGUE);
     }
     if((int)-1 != ui->attrComboBox->currentIndex())
-        pCurObj->getDynamicObj()->setDBAttr(ui->attrComboBox->currentData().toUInt());
+        pCurObj->dynamicObj()->setDBAttr(ui->attrComboBox->currentData().toUInt());
 
-    HText* pTextObj = pCurObj->getIconSymbol()->getFirstTextObj();//获取文字信息
-    pTextObj->setTextContent(ui->ptNameLineEdit->text());
+    HText* pTextObj = pCurObj->iconSymbol()->getFirstTextObj();//获取文字信息
+    pTextObj->setText(ui->ptNameLineEdit->text());
     pTextObj->setHorizontalAlign(ui->hComboBox->currentData().toInt());
     pTextObj->setVerticalAlign(ui->vComboBox->currentData().toInt());
-    pTextObj->setTextFontName(font.family());
-    pTextObj->setPointSize(font.pointSize());
-    pTextObj->setWeight(font.weight());
-    pTextObj->setItalic(font.italic());
+    pTextObj->setFontFamily(font.family());
+    pTextObj->setFontSize(font.pointSize());
+    pTextObj->setFontWeight(font.weight());
+    pTextObj->setFontItalic(font.italic());
 
-    pTextObj->setTextColorName(strTextColor);
+    pTextObj->setTextColor(strTextColor);
     pTextObj->setFillColorName(strBgColor);//填充颜色
     if(ui->transparentCheckBox->isChecked())
     {

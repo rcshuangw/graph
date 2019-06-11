@@ -52,8 +52,8 @@ public:
     virtual void setObjID(int nObjID);
 
     //线条颜色
-    virtual void setLineColorName(QString clrName);
-    virtual QString getLineColorName();
+    virtual void setLineColor(QString clrName);
+    virtual QString getLineColor();
 
     //线宽
     virtual void setLineWidth(quint8 lineWidth);
@@ -71,12 +71,12 @@ public:
     virtual Qt::PenCapStyle getLineCapStyle();
 
     //边框色
-    virtual void setBorderColor(const QColor* c);
-    virtual QColor getBorderColor();
+    virtual void setBorderColor(const QString& clr);
+    virtual QString getBorderColor();
 
     //文字色
-    virtual void setTextColor(const QColor* c);
-    virtual QColor getTextColor();
+    virtual void setTextColor(const QString& clr);
+    virtual QString getTextColor();
 
     //是否可见
     virtual void setVisible(bool,int nFlag = 0);

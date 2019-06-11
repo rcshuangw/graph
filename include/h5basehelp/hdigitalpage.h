@@ -2,7 +2,7 @@
 #define HDATAPROPERTYDLG_H
 
 #include <QDialog>
-#include "h5iconhelpexport.h"
+#include "h5basehelpexport.h"
 class HBaseObj;
 class HIconObj;
 class HDigital;
@@ -10,7 +10,7 @@ namespace Ui {
 class digitalPage;
 }
 
-class H5ICONHELP_EXPORT HDigitalPage : public QDialog
+class H5BASEHELP_EXPORT HDigitalPage : public QDialog
 {
     Q_OBJECT
 
