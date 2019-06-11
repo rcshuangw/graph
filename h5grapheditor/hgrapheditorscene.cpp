@@ -276,6 +276,20 @@ void HGraphEditorScene::onCreateObj(HBaseObj* obj,bool isPaste )
     connect(item,SIGNAL(recalcSelect()),this,SLOT(onRecalcSelect()));
 }
 
+void HGraphEditorScene::onObjRemoved(HBaseObj* obj)
+{
+    if(!m_pGraphEditorView)
+        return;
+    if(obj && obj->iconGraphicsItem())
+    {
+        H5GraphicsItem* item = (H5GraphicsItem*)obj->iconGraphicsItem();
+        removeItem(item);
+        item->setBaseObj(NULL);
+        disconnect(item,SIGNAL(objSelectChanged(HBaseObj*,bool)),this,SLOT(onObjSelectChanged(HBaseObj*,bool)));
+        disconnect(item,SIGNAL(recalcSelect()),this,SLOT(onRecalcSelect()));
+    }
+}
+
 void HGraphEditorScene::onRefreshSelect(const QRectF& rect)
 {
     invalidate(rect,QGraphicsScene::ForegroundLayer);

@@ -5,6 +5,7 @@
 #include <QDomElement>
 #include <QTextCodec>
 #include "hiconobj.h"
+#include "hgroup.h"
 #include "hnormalobj.h"
 #include "hmakeicon.h"
 HGraph::HGraph(const QString& name)
@@ -338,6 +339,24 @@ void HGraph::addIconObj(HBaseObj* pObj)
             }
         }
     }
+    else if(pObj->getShapeType() == Normal)
+    {
+        HNormalObj* io = (HNormalObj*)pObj;
+        HIconTemplate* it = io->iconTemplate();
+        if(it)
+        {
+            HIconTemplate*itt = addIconTemplate(it);
+            if(itt!=it)
+            {
+                io->setIconTemplate(itt);
+                if(it){
+                    delete it;
+                    it = NULL;
+                }
+            }
+        }
+    }
+
 
     //group里面有iconsymbol
     if(pObj->getShapeType() == Group)
@@ -376,6 +395,44 @@ void HGraph::removeIconObj(HBaseObj *pObj)
     removeObj(pObj);
     delete pObj;
     pObj = NULL;
+}
+
+//获取ObjID
+int HGraph::getObjID()
+{
+    int nObjID = 1;
+    while(findObjID(nObjID))
+        nObjID++;
+    return nObjID;
+}
+
+bool HGraph::findObjID(int nObjID)
+{
+    //这里要修改，有obj存在group等组合图形里面，不在getObjList()里面--huangw
+    for(int i = 0;i < getObjList().count();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)getObjList().at(i);
+       if(pObj)
+       {
+           if(pObj->getShapeType() == Group)
+           {
+               HGroup* pGroup = (HGroup*)pObj;
+               //两个group组合到一起还是一个group包含所有对象，而不是一个group包含两个group,所以此处不必递归查找
+               for(int j = 0; j < pGroup->getObjList().size();i++)
+               {
+                   HBaseObj* obj = pGroup->at(i);
+                   if(obj && obj->getObjID() == nObjID)
+                       return true;
+               }
+           }
+           else
+           {
+               if(pObj->getObjID() == nObjID)
+                   return true;
+           }
+       }
+    }
+    return false;
 }
 
 //模板部分

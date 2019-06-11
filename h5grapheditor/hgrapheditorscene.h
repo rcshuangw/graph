@@ -47,6 +47,7 @@ public slots:
     //virtual void onDrawPath(const QList<Path>& path);
     //virtual void onEndDraw();
     virtual void onCreateObj(HBaseObj* pObj,bool isPaste );
+    virtual void onRemoveObj(HBaseObj* pObj);
     virtual void onRefreshSelect(const QRectF& rect);
     virtual void onObjSelectChanged(HBaseObj *obj, bool isSelected);
     void onRecalcSelect();

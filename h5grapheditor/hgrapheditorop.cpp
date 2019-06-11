@@ -4,6 +4,7 @@
 #include <QProcessEnvironment>
 #include <QScrollBar>
 #include <QColorDialog>
+#include <QMessageBox>
 #include "hgrapheditormgr.h"
 #include "hgrapheditorscene.h"
 #include "hgrapheditordoc.h"
@@ -183,7 +184,6 @@ void HGraphEditorOp::selectTool(SelectMode selMode)
     QCursor cursor = m_pGraphEditorMgr->graphEditorSelectTool()->cursor();
     if(m_pGraphEditorMgr->graphEditorView())
         m_pGraphEditorMgr->graphEditorView()->setCursor(cursor);
-
 }
 
 void HGraphEditorOp::onRefreshSelect(const QRectF &rect)
@@ -235,7 +235,7 @@ void HGraphEditorOp::copy()
         stream<<(quint8)pObj->getShapeType();
         HBaseObj* pNewObj = NULL;
         //考虑objID,group,Icon
-        if(pObj->getShapeType() == Icon)
+        if(pObj->getShapeType() == Icon || pObj->getShapeType() == Normal)
         {
             HIconObj* obj = (HIconObj*)pObj;
             stream<<obj->getUuid();
@@ -283,7 +283,7 @@ void HGraphEditorOp::paste()
     {
         stream>>nType;
         HBaseObj* pObj = NULL;
-        if(nType == Icon)
+        if(nType == Icon || nType == Normal)
         {
             QString s;
             stream>>s;
@@ -291,20 +291,43 @@ void HGraphEditorOp::paste()
             bool bOk = false;
             if(ptemp)
             {
-                HIconObj* pIconObj = (HIconObj*)m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->createBaseObj((DrawShape)nType,ptemp);
-                if(pIconObj)
+                HBaseObj* obj = (HBaseObj*)m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->createBaseObj((DrawShape)nType,ptemp);
+                if(nType == Icon)
                 {
-                    bOk = true;
-                    pIconObj->readData(0,&stream);
+                    HIconObj* pIconObj = (HIconObj*)obj;
+                    if(pIconObj)
+                    {
+                        bOk = true;
+                        pIconObj->readData(0,&stream);
+                    }
                 }
-                pObj = (HBaseObj*)pIconObj;
+                else if(nType == Normal)
+                {
+                    HNormalObj* pNormalObj = (HNormalObj*)pObj;
+                    if(pNormalObj)
+                    {
+                        bOk = true;
+                        pNormalObj->readData(0,&stream);
+                    }
+                }
+                pObj = obj;
             }
             if(!bOk)
             {
-                HIconObj* pObj = new HIconObj(NULL);
-                pObj->readData(0,&stream);
-                delete pObj;
-                pObj = NULL;
+                if(nType == Icon)
+                {
+                    HIconObj* pObj = new HIconObj(NULL);
+                    pObj->readData(0,&stream);
+                    delete pObj;
+                    pObj = NULL;
+                }
+                else if(nType == Normal)
+                {
+                    HNormalObj* pObj = new HNormalObj(NULL);
+                    pObj->readData(0,&stream);
+                    delete pObj;
+                    pObj = NULL;
+                }
             }
         }
         else
@@ -455,23 +478,39 @@ void HGraphEditorOp::groupObj()
     HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
     if(!tempContainer) return;
     if(tempContainer->getObjList().count() < 2) return;
-/*
-    HTempContainer* tempSelect = (HTempContainer*)tempContainer;
-    for(int i = 0; i < tempSelect->getObjList().count();i++)
+
+    //不能与group合并
+    bool bGroup = false;
+    for(int i = 0; i < tempContainer->getObjList().size();i++)
     {
-        HBaseObj* pObj = (HBaseObj*)tempSelect->getObjList().at(i);
+        HBaseObj* pObj = (HBaseObj)tempContainer->at(i);
+        if(pObj && pObj->getShapeType() == Group)
+        {
+            bGroup = true;
+            break;
+        }
+    }
+
+    if(bGroup)
+    {
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("选择图符中包含组合，请先解除组合!"),QMessageBox::Ok);
+        return;
+    }
+
+    for(int i = 0; i < tempContainer->getObjList().count();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)tempContainer->getObjList().at(i);
         if(!pObj) continue;
-        onRemoveObj(pObj);//画面删除
-        //m_pIconEditorMgr->iconTemplate()->getSymbol()->removeBaseObj(pObj);//pattern删除
+        m_pGraphEditorMgr->graphEditorScene()->onRemoveObj(pObj);//画面删除
+        m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->takeIconObj(pObj);//pattern删除
         pObj->setDeleted(false);
     }
 
     HGroup* pGroup =  (HGroup*)HMakeIcon::Instance()->newObj(Group);
-    tempSelect->makeGroup(pGroup);
+    tempContainer->makeGroup(pGroup);
     m_pGraphEditorMgr->selectedMgr()->clear();
-    //m_pGraphEditorMgr->iconTemplate()->getSymbol()->addBaseObj(pGroup);//增加到pattern
-    onCreateObj(pGroup,false);//画面增加
-    */
+    m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->addIconObj(pGroup);//增加到pattern
+    m_pGraphEditorMgr->graphEditorScene()->onCreateObj(pGroup,false);//画面增加
 }
 
 //取消组合
@@ -479,6 +518,27 @@ void HGraphEditorOp::ungroupObj()
 {
     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr() || !m_pGraphEditorMgr->selectedMgr()->selectObj())
         return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(tempContainer->getObjList().size() != 1 || tempContainer->getObjList().at(0)->getShapeType() != Group)
+    {
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先单选组合再解除!"),QMessageBox::Ok);
+        return;
+    }
+    HGroup* pGroup = (HGroup*)tempContainer->getObjList().at(0);
+    if(!pGroup) return;
+    HTempContainer* tc = (HTempContainer*)HMakeIcon::Instance()->newObj(TempContainer);
+    pGroup->makeTempContainer(tc);
+    for(int i = 0; i < tc->getObjList().count();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)tc->getObjList().at(i);
+        if(!pObj) continue;
+        m_pGraphEditorMgr->graphEditorScene()->onCreateObj(pObj,false);
+        m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->addIconObj(pObj);//增加到pattern
+
+    }
+    m_pGraphEditorMgr->graphEditorScene()->onRemoveObj(pGroup);
+    m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->removeIconObj(pGroup);
+    m_pGraphEditorMgr->selectedMgr()->clear();
 
 }
 

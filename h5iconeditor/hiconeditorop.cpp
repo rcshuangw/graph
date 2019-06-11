@@ -2,6 +2,7 @@
 #include <QScrollBar>
 #include <QGraphicsView>
 #include <QDir>
+#include <QMessageBox>
 #include "hmakeicon.h"
 #include "hgroup.h"
 #include "hiconeditormgr.h"
@@ -389,6 +390,24 @@ void HIconEditorOp::groupObj()
     HTempContainer* tempContainer = m_pIconEditorMgr->selectedMgr()->selectObj();
     if(!tempContainer) return;
     if(tempContainer->getObjList().count() < 2) return;
+
+    //不能与group合并
+    bool bGroup = false;
+    for(int i = 0; i < tempContainer->getObjList().size();i++)
+    {
+        HBaseObj* pObj = (HBaseObj)tempContainer->at(i);
+        if(pObj && pObj->getShapeType() == Group)
+        {
+            bGroup = true;
+            break;
+        }
+    }
+
+    if(bGroup)
+    {
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("选择图符中包含组合，请先解除组合!"),QMessageBox::Ok);
+        return;
+    }
 
     HTempContainer* tempSelect = (HTempContainer*)tempContainer;
     for(int i = 0; i < tempSelect->getObjList().count();i++)
