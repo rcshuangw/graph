@@ -23,6 +23,11 @@ HGraphEditorScene::~HGraphEditorScene()
 
 }
 
+void HGraphEditorScene::clear()
+{
+    //将当前画面
+}
+
 void HGraphEditorScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
     if(NULL == m_pGraphEditorMgr)
