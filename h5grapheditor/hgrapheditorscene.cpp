@@ -281,7 +281,7 @@ void HGraphEditorScene::onCreateObj(HBaseObj* obj,bool isPaste )
     connect(item,SIGNAL(recalcSelect()),this,SLOT(onRecalcSelect()));
 }
 
-void HGraphEditorScene::onObjRemoved(HBaseObj* obj)
+void HGraphEditorScene::onRemoveObj(HBaseObj* obj)
 {
     if(!m_pGraphEditorView)
         return;

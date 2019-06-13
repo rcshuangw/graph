@@ -20,7 +20,6 @@ HGraph::HGraph(const QString& name)
     setOX(0);
     setOY(0);
     setFrameSee(false);
-
 }
 
 HGraph::~HGraph()
@@ -318,7 +317,6 @@ void HGraph::addIconObj(HBaseObj* pObj)
 {
     if(!pObj) return;
 
-    //此处要设置ID --huangw
     addObj(pObj);
 
     //如果是iconsymbol就要修正对应模板

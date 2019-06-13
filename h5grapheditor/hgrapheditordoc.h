@@ -87,7 +87,7 @@ public:
     QList<HStation*> m_pStationList;
     QList<HIconTemplate*> m_pIconTemplateList;
     QList<HGraph*> m_pGraphList;
-    bool m_bGraphValid;
+    bool m_bGraphValid;//是否打开graph
 
 protected:
     HGraphEditorMgr* m_pGraphEditorMgr;

@@ -208,6 +208,47 @@ DrawShape HGraphEditorMgr::getDrawShape()
     return m_eDrawShape;
 }
 
+void HGraphEditorMgr::reset()
+{
+    m_pSelectedMgr->clear();
+    m_pGraphEditorUndoStack->clear();
+
+    for(int i = 0; i < m_pGraphEditorScene->views().count();i++)
+        m_pGraphEditorScene->views().at(i)->setScene(0);
+
+    delete m_pGraphEditorScene;
+
+    m_pGraphEditorScene =  new HGraphEditorScene(this);
+
+    //初始化scene
+    m_pGraphEditorView->setScene(m_pGraphEditorScene);
+    m_pGraphEditorScene->setView(m_pGraphEditorView);
+    int width = qApp->desktop()->screen()->width();
+    int height = qApp->desktop()->screen()->height();
+    m_logicRectF.setX(0-(width-2)/2);
+    m_logicRectF.setY(0-(height-100)/2);
+    m_logicRectF.setWidth(width-2);
+    m_logicRectF.setHeight(height-100);
+    m_pGraphEditorScene->setSceneRect(m_logicRectF);
+
+    QScrollBar* pBar = m_pGraphEditorView->horizontalScrollBar();
+    if(pBar && pBar->isHidden() == false)
+    {
+        pBar->setSliderPosition(pBar->minimum());
+    }
+    pBar = m_pGraphEditorView->verticalScrollBar();
+    if(pBar && pBar->isHidden() == false)
+    {
+        pBar->setSliderPosition(pBar->minimum());
+    }
+
+    if(graphEditorDoc()->getCurGraph())
+    {
+       graphEditorDoc()->getCurGraph()->m_width = m_logicRectF.width();
+       graphEditorDoc()->getCurGraph()->m_height = m_logicRectF.height();
+    }
+}
+
 //新建文件
 void HGraphEditorMgr::New(const QString& graphName)
 {
@@ -231,6 +272,22 @@ bool HGraphEditorMgr::Open(const QString& graphName,int id)
         return false;
     if(!m_pGraphEditorDoc->openGraph(graphName,id))
         return false;
+    m_pGraphEditorOp->setGraphicsView();
+
+    if(!m_pGraphEditorDoc->getCurGraph())
+        return false;
+    for(int i = 0; i < m_pGraphEditorDoc->getCurGraph()->size();i++)
+    {
+        HBaseObj* obj = (HBaseObj*)m_pGraphEditorDoc->getCurGraph()->at(i);
+        m_pGraphEditorOp->ObjCreated(obj);
+    }
+    if(!m_pGraphEditorDrawToolMgr)
+        return false;
+    QColor bgColor = QColor(graphEditorDoc()->getCurGraph()->getFillColorName());
+    m_pGraphEditorDrawToolMgr->m_vDrawAttribute.brush.setColor(bgColor);
+    QColor fgColor = QColor(255-bgColor.red(),255-bgColor.green(),255-bgColor.blue());
+    m_pGraphEditorDrawToolMgr->m_vDrawAttribute.drawPen.setColor(fgColor);
+    m_pGraphEditorDrawToolMgr->m_vDrawAttribute.textPen.setColor(fgColor);
     return true;
 
 }

@@ -44,6 +44,8 @@ public:
     bool findGraphByName(const QString&);
     bool isGraphModify();
 public:
+    //
+    void reset();
     //文件
     void New(const QString&);
     bool Open(const QString&,int);

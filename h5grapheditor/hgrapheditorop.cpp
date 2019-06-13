@@ -483,7 +483,7 @@ void HGraphEditorOp::groupObj()
     bool bGroup = false;
     for(int i = 0; i < tempContainer->getObjList().size();i++)
     {
-        HBaseObj* pObj = (HBaseObj)tempContainer->at(i);
+        HBaseObj* pObj = (HBaseObj*)tempContainer->at(i);
         if(pObj && pObj->getShapeType() == Group)
         {
             bGroup = true;
@@ -493,7 +493,7 @@ void HGraphEditorOp::groupObj()
 
     if(bGroup)
     {
-        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("选择图符中包含组合，请先解除组合!"),QMessageBox::Ok);
+        QMessageBox::information(NULL, QString("提示"),QString("选择图符中包含组合，请先解除组合!"),QMessageBox::Ok,QMessageBox::Cancel);
         return;
     }
 
@@ -521,7 +521,7 @@ void HGraphEditorOp::ungroupObj()
     HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
     if(tempContainer->getObjList().size() != 1 || tempContainer->getObjList().at(0)->getShapeType() != Group)
     {
-        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先单选组合再解除!"),QMessageBox::Ok);
+        QMessageBox::information(NULL, QStringLiteral("提示"),QStringLiteral("请先单选组合再解除!"),QMessageBox::Ok,QMessageBox::Cancel);
         return;
     }
     HGroup* pGroup = (HGroup*)tempContainer->getObjList().at(0);

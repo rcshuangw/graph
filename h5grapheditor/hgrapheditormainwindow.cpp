@@ -306,10 +306,9 @@ void HGraphEditorMainWindow::New(const QString& graphName)
     }
 
     //view 或者 scene里面要清除掉所有内容
-    //m_pGraphEditorMgr->delGraphSceneItem();
+    m_pGraphEditorMgr->reset();
     m_pGraphEditorMgr->New(graphName);
     m_pGraphTreeWidget->addGraphTreeWidgetItem();
-    //m_pGraphEditorMgr->refreshView();
     onUpdateBaseAction();
     ui->actionSelect->trigger();
 }
@@ -331,11 +330,11 @@ void HGraphEditorMainWindow::Open(const QString& name,const int id)
     }
 
     //先删除原来的，在打开文件，最后显示
-    //m_pGraphEditorMgr->delGraphSceneItem();
+    //Reset();
+    m_pGraphEditorMgr->reset();
     m_pGraphEditorMgr->Open(name,id);
-    ///m_pGraphEditorMgr->openGraphScene();
-    //m_pGraphEditorMgr->refreshView();
     onUpdateBaseAction();
+    ui->actionSelect->trigger();
 }
 
 void HGraphEditorMainWindow::ImportFile(const QString& name)
@@ -398,7 +397,7 @@ void HGraphEditorMainWindow::Del(const QString& graphName,const int graphID)
     {
         return;
     }
-    //m_pGraphEditorMgr->delGraphSceneItem();
+    m_pGraphEditorMgr->reset();
     m_pGraphEditorMgr->Del(graphName,graphID);
     m_pGraphTreeWidget->delGraphTreeWidgetItem();
     m_pGraphEditorMgr->refreshView();
