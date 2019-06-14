@@ -5,6 +5,7 @@
 #include <QVector>
 class HBaseObj;
 class HIconTemplate;
+class HGraph;
 class H5BASELIB_EXPORT HMakeIcon
 {
 protected:
@@ -15,6 +16,8 @@ public:
     static void Exstance();
     virtual ~HMakeIcon();
 public:
+    void setGraph(HGraph* graph);
+    HGraph* getGraph();
     HBaseObj* newObj(DrawShape nObjType,const QString& arg = QString::null, HBaseObj* parent=0);
     void addObjID(int id);
     void clear();
@@ -25,6 +28,7 @@ private:
 
 private:
     QVector<int> m_nIdList;
+    HGraph* m_pGraph;
 };
 
 #endif // HMAKEICON_H

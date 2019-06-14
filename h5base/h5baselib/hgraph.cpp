@@ -8,6 +8,7 @@
 #include "hgroup.h"
 #include "hnormalobj.h"
 #include "hmakeicon.h"
+#include "hgraph.h"
 HGraph::HGraph(const QString& name)
     :m_strGraphName(name)
 {

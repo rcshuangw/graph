@@ -15,10 +15,12 @@
 #include "hpolyline.h"
 #include "hgroup.h"
 #include "harc.h"
+#include "hgraph.h"
 #include "htempcontainer.h"
 HMakeIcon::HMakeIcon()
 {
     clear();
+    m_pGraph = NULL;
 }
 
 HMakeIcon* HMakeIcon::m_pInstance = NULL;
@@ -100,6 +102,16 @@ HBaseObj* HMakeIcon::newObj(DrawShape nObjType,const QString& arg, HBaseObj* par
     }
     pObj->setShapeType((DrawShape)nObjType);
     return pObj;
+}
+
+void HMakeIcon::setGraph(HGraph *graph)
+{
+    m_pGraph = graph;
+}
+
+HGraph* HMakeIcon::getGraph()
+{
+    return m_pGraph;
 }
 
 void HMakeIcon::addObjID(int id)
