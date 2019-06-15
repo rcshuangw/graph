@@ -216,12 +216,12 @@ quint8 HShapeObj::getFillStyle()
 }
 
 //填充色
-void HShapeObj::setFillColorName(QString clrName)
+void HShapeObj::setFillColor(QString clrName)
 {
 	m_strFillColor = clrName;
 }
 
-QString HShapeObj::getFillColorName()
+QString HShapeObj::getFillColor()
 {
 	return m_strFillColor;
 }
@@ -271,7 +271,7 @@ void HShapeObj::setPainter(QPainter* painter)
 	quint8 nFillStyle = getFillStyle(); //填充风格
 	quint8 nTransparency = getTransparency(); //透明度
 	quint8 nFillDir = getFillDirection();//填充方向
-	QColor fillClr = QColor(getFillColorName());//填充颜色
+    QColor fillClr = QColor(getFillColor());//填充颜色
 	//quint8 nFillPercentage = getFillPercentage(); //填充比例
     m_list = getPointList(TRANS_NO_ROTATE|TRANS_NO_TURN);
     m_rect = m_list.boundingRect();

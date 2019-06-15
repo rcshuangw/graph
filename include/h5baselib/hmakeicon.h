@@ -3,6 +3,7 @@
 #include "h5baselibexport.h"
 #include "hiconapi.h"
 #include <QVector>
+#include <QUuid>
 class HBaseObj;
 class HIconTemplate;
 class HGraph;
@@ -19,15 +20,8 @@ public:
     void setGraph(HGraph* graph);
     HGraph* getGraph();
     HBaseObj* newObj(DrawShape nObjType,const QString& arg = QString::null, HBaseObj* parent=0);
-    void addObjID(int id);
-    void clear();
+    HBaseObj* newObj(DrawShape nObjType,const QUuid& uuid,const QString& arg = QString::null, HBaseObj* parent=0);
 private:
-    int getObjID();
-    bool findObjID(int nObjID);
-
-
-private:
-    QVector<int> m_nIdList;
     HGraph* m_pGraph;
 };
 

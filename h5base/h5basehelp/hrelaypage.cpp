@@ -152,7 +152,7 @@ void HRelayPage::initBaseProperty()
             int nFillStyle = ui->fillStyleCombo->findData(int(pTextObj->getFillStyle()));
             ui->fillStyleCombo->setCurrentIndex(nFillStyle);
 
-            strFillColor = pTextObj->getFillColorName();
+            strFillColor = pTextObj->getFillColor();
             strColor = QString("background-color:")+ strFillColor;
             ui->fillClrBtn->setStyleSheet(strColor);
 
@@ -476,7 +476,7 @@ void HRelayPage::onOk()
     //填充方式
     pTextObj->setFillWay(btnGroup->checkedId());
     pTextObj->setFillStyle((Qt::BrushStyle)ui->fillStyleCombo->currentData().toUInt());
-    pTextObj->setFillColorName(strFillColor);
+    pTextObj->setFillColor(strFillColor);
 
     //填充字体和颜色
     pTextObj->setFontFamily(font.family());

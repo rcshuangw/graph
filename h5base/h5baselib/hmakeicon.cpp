@@ -6,6 +6,7 @@
 #include "hbaseobj.h"
 #include "hicontemplate.h"
 #include "hiconobj.h"
+#include "hnormalobj.h"
 #include "hline.h"
 #include "hrectangle.h"
 #include "hellipse.h"
@@ -19,7 +20,6 @@
 #include "htempcontainer.h"
 HMakeIcon::HMakeIcon()
 {
-    clear();
     m_pGraph = NULL;
 }
 
@@ -45,12 +45,6 @@ void HMakeIcon::Exstance()
 
 HMakeIcon::~HMakeIcon()
 {
-    clear();
-}
-
-void HMakeIcon::clear()
-{
-    m_nIdList.clear();
 }
 
 HBaseObj* HMakeIcon::newObj(DrawShape nObjType,const QString& arg, HBaseObj* parent)
@@ -96,11 +90,42 @@ HBaseObj* HMakeIcon::newObj(DrawShape nObjType,const QString& arg, HBaseObj* par
     {
         pObj = new HTempContainer();
     }
-    else if(nObjType == Icon)
-    {
 
-    }
     pObj->setShapeType((DrawShape)nObjType);
+    return pObj;
+}
+
+HBaseObj* HMakeIcon::newObj(DrawShape nObjType,const QUuid& uuid,const QString& arg , HBaseObj* parent)
+{
+    if(m_pGraph == NULL)
+        return NULL;
+    HBaseObj* pObj = NULL;
+    if(nObjType == Icon)
+    {
+        HIconTemplate* ptemplate = m_pGraph->findIconTemplate(uuid);
+        if(ptemplate)
+        {
+            HIconObj* obj = new HIconObj(ptemplate);
+            HIconObj* pIconObj = (HIconObj*)obj;
+            pIconObj->initIconTemplate();
+            pIconObj->iconSymbol()->setCurrentPattern(0);
+            pObj = (HBaseObj*)obj;
+        }
+    }
+    else if(nObjType == Normal)
+    {
+        HIconTemplate* ptemplate = m_pGraph->findIconTemplate(uuid);
+        if(ptemplate)
+        {
+            HNormalObj* obj = new HNormalObj(ptemplate);
+            HNormalObj* pIconObj = (HNormalObj*)obj;
+            pIconObj->initIconTemplate();
+            pIconObj->iconSymbol()->setCurrentPattern(0);
+            pObj = (HBaseObj*)obj;
+        }
+    }
+    if(pObj)
+        pObj->setShapeType((DrawShape)nObjType);
     return pObj;
 }
 
@@ -112,26 +137,4 @@ void HMakeIcon::setGraph(HGraph *graph)
 HGraph* HMakeIcon::getGraph()
 {
     return m_pGraph;
-}
-
-void HMakeIcon::addObjID(int id)
-{
-    if(-1 == m_nIdList.indexOf(id))
-        m_nIdList.append(id);
-}
-
-//获取ObjID
-int HMakeIcon::getObjID()
-{
-    int nObjID = 1;
-    while(findObjID(nObjID))
-        nObjID++;
-    return nObjID;
-}
-
-bool HMakeIcon::findObjID(int nObjID)
-{
-    if(-1 == m_nIdList.indexOf(nObjID))
-        return false;
-    return true;
 }

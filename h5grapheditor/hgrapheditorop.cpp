@@ -1028,7 +1028,7 @@ QColor HGraphEditorOp::getFillColor()
         HShapeObj* obj = dynamic_cast<HShapeObj*>(pObj);
         if(obj)
         {
-            clr = QColor(obj->getFillColorName());
+            clr = QColor(obj->getFillColor());
         }
         else
         {
@@ -1049,7 +1049,7 @@ QColor HGraphEditorOp::getFillColor()
             HShapeObj* obj = dynamic_cast<HShapeObj*>(pObj);
             if(obj)
             {
-                obj->setFillColorName(clr.name());
+                obj->setFillColor(clr.name());
             }
             m_pGraphEditorMgr->graphEditorDrawToolMgr()->m_vDrawAttribute.brush.setColor(clr);
         }

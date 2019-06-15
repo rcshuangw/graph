@@ -2,12 +2,12 @@
 #define HGRAPHPAGE_H
 
 #include <QDialog>
-#include "h5iconhelpexport.h"
+#include "h5basehelpexport.h"
 namespace Ui {
 class graphPage;
 }
 class HGraph;
-class H5ICONHELP_EXPORT HGraphPage : public QDialog
+class H5BASEHELP_EXPORT HGraphPage : public QDialog
 {
     Q_OBJECT
 

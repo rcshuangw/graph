@@ -26,7 +26,7 @@ void HGraphEditorDrawToolMgr::appendObj(HBaseObj *obj)
     //模板里面增加
     if(m_pGraphEditorMgr && m_pGraphEditorMgr->graphEditorDoc() && m_pGraphEditorMgr->graphEditorDoc()->getCurGraph())
     {
-        m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->createBaseObj(obj->getShapeType(),NULL);
+        m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->addIconObj(obj);
     }
 
     //画面增加

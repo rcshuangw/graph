@@ -208,7 +208,7 @@ void HAnaloguePage::initBaseProperty()
         strTextColor = pTextObj->getTextColor();
         strColor = QString("background-color:")+strTextColor;//文字颜色
         ui->textClrBtn->setStyleSheet(strColor);
-        strBgColor = pTextObj->getFillColorName();
+        strBgColor = pTextObj->getFillColor();
         strColor = QString("background-color:")+ strBgColor; //填充颜色
         ui->bgClrBtn->setStyleSheet(strColor);
 
@@ -282,7 +282,7 @@ void HAnaloguePage::bgClrBtn_clicked()
     QColor curColor = QColor(Qt::black);
     if(pCurObj)
     {
-        //strBgColor = pCurObj->getFillColorName();
+        //strBgColor = pCurObj->getFillColor();
         curColor = QColor(strBgColor);
     }
     const QColor color = QColorDialog::getColor(curColor, this, QStringLiteral("选择颜色"));
@@ -327,7 +327,7 @@ void HAnaloguePage::onOk()
     pTextObj->setFontItalic(font.italic());
 
     pTextObj->setTextColor(strTextColor);
-    pTextObj->setFillColorName(strBgColor);//填充颜色
+    pTextObj->setFillColor(strBgColor);//填充颜色
     if(ui->transparentCheckBox->isChecked())
     {
         pTextObj->setFrameSee(false);

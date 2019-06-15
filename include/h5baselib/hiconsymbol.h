@@ -30,8 +30,8 @@ public:
     void addBaseObj(HBaseObj* pObj);
     void removeBaseObj(HBaseObj* pObj);
 
-    int getObjID();
-    bool findObjID(int nObjID);
+    //int getObjID();
+    //bool findObjID(int nObjID);
 
     //修改
     void setModify(bool b);

@@ -32,8 +32,8 @@ public:
     virtual quint8 getFillStyle();
 
     //填充色
-    virtual void setFillColorName(QString clrName);
-    virtual QString getFillColorName();
+    virtual void setFillColor(QString clrName);
+    virtual QString getFillColor();
 
     //填充方向
     virtual void setFillDirection(quint8 fillDirection);

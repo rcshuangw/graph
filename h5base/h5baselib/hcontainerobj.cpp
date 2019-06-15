@@ -8,6 +8,8 @@
 #include "hpolygon.h"
 #include "hpolyline.h"
 #include "hmakeicon.h"
+#include "hiconobj.h"
+#include "hnormalobj.h"
 HContainerObj::HContainerObj()
 {
     m_bTempObj = false;
@@ -29,7 +31,21 @@ void HContainerObj::readData(int v,QDataStream* data)
 	for (int i = 0; i < sz; i++)
 	{
 		*data >> type;
-        HBaseObj* pObj = HMakeIcon::Instance()->newObj(DrawShape(type));
+        HBaseObj* pObj = NULL;
+        if(type == Icon || type == Normal)
+        {
+            QString strUuid;
+            *data>>strUuid;
+            QString strCatalog;
+            *data>>strCatalog;
+            QUuid uuid(strUuid);
+            pObj = HMakeIcon::Instance()->newObj((DrawShape)type,uuid);
+        }
+        else
+        {
+            pObj = HMakeIcon::Instance()->newObj((DrawShape)type);
+        }
+
 		if (!pObj) continue;
         pObj->readData(v,data);
         pObj->setParent(this);
@@ -58,6 +74,18 @@ void HContainerObj::writeData(int v, QDataStream* data)
 		HBaseObj* pObj = (HBaseObj*)m_pObjList.at(i);
 		if (pObj && pObj->isDeleted()) continue;
 		*data << (quint8)pObj->getShapeType();
+        if(pObj->getShapeType() == Icon || pObj->getShapeType() == Normal)
+        {
+            HIconObj* obj = (HIconObj*)pObj;
+            *data << obj->getUuid();
+            *data <<obj->getCatalogName();
+        }
+        else if(pObj->getShapeType() == Normal)
+        {
+            HNormalObj* obj = (HNormalObj*)pObj;
+            *data << obj->getUuid();
+            *data <<obj->getCatalogName();
+        }
         pObj->writeData(v,data);
 	}
 }
@@ -74,7 +102,19 @@ void HContainerObj::readXml(int v, QDomElement* dom)
 	{
 		QDomElement e = n.toElement();
 		DrawShape objType = (DrawShape)e.attribute("ObjType").toInt();
-        HBaseObj* pObj = HMakeIcon::Instance()->newObj(objType);
+        HBaseObj* pObj = NULL;
+        if(objType == Icon || objType == Normal)
+        {
+            QString strUuid = e.attribute("UUID");
+            //QString strCatalog = e.attribute("CatalogName");
+            QUuid uuid(strUuid);
+            pObj = HMakeIcon::Instance()->newObj(objType,uuid);
+        }
+        else
+        {
+            pObj = HMakeIcon::Instance()->newObj(objType);
+        }
+
 		if (!pObj) continue;
         pObj->readXml(v,&e);
         pObj->setParent(this);
@@ -97,6 +137,18 @@ void HContainerObj::writeXml(int v, QDomElement* dom)
 			continue;
 		}
 		QDomElement childEle = dom->ownerDocument().createElement(pObj->tagName());
+        if(pObj->getShapeType() == Icon || pObj->getShapeType() == Normal)
+        {
+            HIconObj* obj = (HIconObj*)pObj;
+            childEle.setAttribute("UUID",obj->getUuid());
+            childEle.setAttribute("CatalogName",obj->getCatalogName());
+        }
+        else if(pObj->getShapeType() == Normal)
+        {
+            HNormalObj* obj = (HNormalObj*)pObj;
+            childEle.setAttribute("UUID",obj->getUuid());
+            childEle.setAttribute("CatalogName",obj->getCatalogName());
+        }
 		childDom.appendChild(childEle);
         pObj->writeXml(v,&childEle);
 	}
@@ -124,6 +176,43 @@ void HContainerObj::copyTo(HBaseObj* obj)
         pnewObj->setParent(pComplexObj);
         pComplexObj->getObjList().append(pnewObj);
     }
+}
+
+int HContainerObj::getObjID()
+{
+    int nObjID = 1;
+    while(findObjID(nObjID))
+        nObjID++;
+    return nObjID;
+}
+
+bool HContainerObj::findObjID(int nObjID)
+{
+    //这里要修改，有obj存在group等组合图形里面，不在getObjList()里面--huangw
+    for(int i = 0;i < getObjList().count();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)getObjList().at(i);
+       if(pObj)
+       {
+           if(pObj->getShapeType() == Group)
+           {
+               HGroup* pGroup = (HGroup*)pObj;
+               //两个group组合到一起还是一个group包含所有对象，而不是一个group包含两个group,所以此处不必递归查找
+               for(int j = 0; j < pGroup->getObjList().size();i++)
+               {
+                   HBaseObj* obj = pGroup->at(i);
+                   if(obj && obj->getObjID() == nObjID)
+                       return true;
+               }
+           }
+           else
+           {
+               if(pObj->getObjID() == nObjID)
+                   return true;
+           }
+       }
+    }
+    return false;
 }
 
 void HContainerObj::resize(double w, double h, bool scale)

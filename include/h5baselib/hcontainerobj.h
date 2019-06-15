@@ -25,6 +25,9 @@ public:
 
 	QVector<HBaseObj*>& getObjList();
 
+    int getObjID();
+    bool findObjID(int nObjID);
+
     virtual void setModify(bool modify);
     virtual bool isModify();
 

@@ -478,7 +478,7 @@ void HPropertyDlg::initShapeTab()
             int nFillStyle = ui->fillStyle->findData(int(pObj->getFillStyle()));
             ui->fillStyle->setCurrentIndex(nFillStyle);
 
-            strFillColor = pObj->getFillColorName();
+            strFillColor = pObj->getFillColor();
             QString strbgColor = QString("background-color:")+ strFillColor;
             ui->fillColor->setStyleSheet(strbgColor);
             ui->fillPercentage->setValue(pObj->getFillPercentage());
@@ -572,7 +572,7 @@ void HPropertyDlg::ok_clicked()
         pShapeObj->setTransparency(ui->transSlider->value());
         pShapeObj->setFillPercentage(ui->fillPercentage->value());
         pShapeObj->setFillStyle((Qt::BrushStyle)ui->fillStyle->currentData().toUInt());
-        pShapeObj->setFillColorName(strFillColor);
+        pShapeObj->setFillColor(strFillColor);
         pShapeObj->setFillDirection(ui->fillDirection->currentData().toUInt());
         pShapeObj->rotate(ui->x_rotate->value());
         bool bRound = false;
@@ -712,7 +712,7 @@ void HPropertyDlg::fillColor_clicked()
     if(pCurObj)
     {
         HShapeObj* pObj = (HShapeObj*)pCurObj;
-        strFillColor = pObj->getFillColorName();
+        strFillColor = pObj->getFillColor();
         curColor = QColor(strFillColor);
     }
     const QColor color = QColorDialog::getColor(curColor, this, QStringLiteral("选择颜色"));

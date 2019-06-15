@@ -51,9 +51,6 @@ public:
     qreal zoomScale();
     void setZoomScale(qreal f);
 
-    int getObjID();
-    bool findObjID(int nObjID);
-
 public:
     HBaseObj* createBaseObj(DrawShape s,HIconTemplate* icontemplate);
 

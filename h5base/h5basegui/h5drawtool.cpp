@@ -53,7 +53,7 @@ void HDrawTool::setDrawAttribute(HBaseObj *obj)
     if(drawShape == Rectangle ||drawShape ==Text || drawShape == Circle || drawShape == Ellipse || drawShape == Polygon)
     {
         HShapeObj* pSObj = dynamic_cast<HShapeObj*>(obj);
-        pSObj->setFillColorName(m_pToolManager->m_vDrawAttribute.brush.color().name());
+        pSObj->setFillColor(m_pToolManager->m_vDrawAttribute.brush.color().name());
         pSObj->setFillStyle((qint8)m_pToolManager->m_vDrawAttribute.brush.style());
     }
 

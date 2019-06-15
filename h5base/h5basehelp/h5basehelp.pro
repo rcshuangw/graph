@@ -28,7 +28,7 @@ SOURCES += \
     hdigitalpage.cpp \
     hfonthelper.cpp \
     hgraphhelper.cpp \
-    #hgraphpage.cpp \
+    hgraphpage.cpp \
     hiconhelper.cpp \
     hiconproperty.cpp \
     hrelaypage.cpp \
@@ -43,7 +43,7 @@ HEADERS +=\
     ../../include/h5basehelp/hdigitalpage.h \
     ../../include/h5basehelp/hfonthelper.h \
     ../../include/h5basehelp/hgraphhelper.h \
-    #../../include/h5basehelp/hgraphpage.h \
+    ../../include/h5basehelp/hgraphpage.h \
     ../../include/h5basehelp/hiconhelper.h \
     ../../include/h5basehelp/hiconproperty.h \
     ../../include/h5basehelp/hrelaypage.h \
@@ -77,7 +77,7 @@ RESOURCES += \
 FORMS += \
     UI/analoguepage.ui \
     UI/digitalpage.ui \
-    #UI/graphpage.ui \
+    UI/graphpage.ui \
     UI/iconproperty.ui \
     #UI/propertydlg.ui \
     UI/relaypage.ui

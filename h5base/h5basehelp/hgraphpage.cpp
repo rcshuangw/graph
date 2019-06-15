@@ -81,9 +81,9 @@ void HGraphPage::initGraphInfo()
         pGraph->setModify(true);
         ui->graphNameLineEdit->setText(pGraph->getGraphName());
         ui->startCheckBox->setChecked(pGraph->getStartFlag());
-        ui->wSpinBox->setValue(pGraph->getGraphWidth());
-        ui->hSpinBox->setValue(pGraph->getGraphHeight());
-        ui->picPathLineEdit->setText(pGraph->getFillPicture());
+        ui->wSpinBox->setValue(pGraph->m_width);
+        ui->hSpinBox->setValue(pGraph->m_height);
+        ui->picPathLineEdit->setText(pGraph->getBkImagePath());
         ui->refreshSpinBox->setValue(pGraph->getRefreshInterval());
         strFillColor = QString("background-color:")+ pGraph->getFillColor(); //文字颜色
         ui->bgClrBtn->setStyleSheet(strFillColor);
@@ -124,10 +124,10 @@ void HGraphPage::onOk()
         return;
     pGraph->setGraphName(ui->graphNameLineEdit->text());
     pGraph->setStartFlag(ui->startCheckBox->isChecked());
-    pGraph->setGraphWidth(ui->wSpinBox->value());
-    pGraph->setGraphHeight(ui->hSpinBox->value());
+    pGraph->m_width = ui->wSpinBox->value();
+    pGraph->m_height = ui->hSpinBox->value();
     pGraph->setFillColor(strFillColor);
-    pGraph->setFillPicture(ui->picPathLineEdit->text());
+    pGraph->setBkImagePath(ui->picPathLineEdit->text());
     pGraph->setRefreshInterval(ui->refreshSpinBox->value());
     pGraph->setGraphType(ui->typeComboBox->currentData().toUInt());
 

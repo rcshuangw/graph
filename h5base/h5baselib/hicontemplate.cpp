@@ -107,8 +107,8 @@ void HIconTemplate::readXml(int v,QDomElement* dom)
 {
     if(!dom)
         return;
-    strCatalogName = dom->attribute("TypeName");
-    nCatalogType = dom->attribute("TypeId").toInt();
+    strCatalogName = dom->attribute("CatalogName");
+    nCatalogType = dom->attribute("CatalogId").toInt();
     uUid = QUuid(dom->attribute("UUID"));
     double w = dom->attribute("DefaultWidth").toDouble();
     double h = dom->attribute("DefaultHeight").toDouble();
@@ -147,8 +147,8 @@ void HIconTemplate::writeXml(int v,QDomElement *dom)
     if(!dom)
         return;
 
-    dom->setAttribute("TypeName",strCatalogName);
-    dom->setAttribute("TypeId",nCatalogType);
+    dom->setAttribute("CatalogName",strCatalogName);
+    dom->setAttribute("CatalogId",nCatalogType);
     dom->setAttribute("UUID",uUid.toString());
     dom->setAttribute("DefaultWidth",sDefaultSize.width());
     dom->setAttribute("DefaultHeight",sDefaultSize.height());

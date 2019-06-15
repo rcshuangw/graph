@@ -395,7 +395,7 @@ void HIconEditorOp::groupObj()
     bool bGroup = false;
     for(int i = 0; i < tempContainer->getObjList().size();i++)
     {
-        HBaseObj* pObj = (HBaseObj)tempContainer->at(i);
+        HBaseObj* pObj = (HBaseObj*)tempContainer->at(i);
         if(pObj && pObj->getShapeType() == Group)
         {
             bGroup = true;
@@ -405,7 +405,7 @@ void HIconEditorOp::groupObj()
 
     if(bGroup)
     {
-        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("选择图符中包含组合，请先解除组合!"),QMessageBox::Ok);
+        QMessageBox::information(NULL, QStringLiteral("提示"),QStringLiteral("选择图符中包含组合，请先解除组合!"),QMessageBox::Ok);
         return;
     }
 

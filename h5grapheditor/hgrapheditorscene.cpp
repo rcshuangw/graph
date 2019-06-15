@@ -40,7 +40,7 @@ void HGraphEditorScene::drawBackground(QPainter *painter, const QRectF &rect)
     QColor clr;
     if(pGraph)
     {
-        clr = QColor(pGraph->getFillColorName());
+        clr = QColor(pGraph->getFillColor());
     }
     else
     {

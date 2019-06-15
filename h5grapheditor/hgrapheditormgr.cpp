@@ -259,7 +259,7 @@ void HGraphEditorMgr::New(const QString& graphName)
 
     if(!m_pGraphEditorDrawToolMgr)
         return;
-    QColor bgColor = QColor(graphEditorDoc()->getCurGraph()->getFillColorName());
+    QColor bgColor = QColor(graphEditorDoc()->getCurGraph()->getFillColor());
     m_pGraphEditorDrawToolMgr->m_vDrawAttribute.brush.setColor(bgColor);
     QColor fgColor = QColor(255-bgColor.red(),255-bgColor.green(),255-bgColor.blue());
     m_pGraphEditorDrawToolMgr->m_vDrawAttribute.drawPen.setColor(fgColor);
@@ -283,7 +283,7 @@ bool HGraphEditorMgr::Open(const QString& graphName,int id)
     }
     if(!m_pGraphEditorDrawToolMgr)
         return false;
-    QColor bgColor = QColor(graphEditorDoc()->getCurGraph()->getFillColorName());
+    QColor bgColor = QColor(graphEditorDoc()->getCurGraph()->getFillColor());
     m_pGraphEditorDrawToolMgr->m_vDrawAttribute.brush.setColor(bgColor);
     QColor fgColor = QColor(255-bgColor.red(),255-bgColor.green(),255-bgColor.blue());
     m_pGraphEditorDrawToolMgr->m_vDrawAttribute.drawPen.setColor(fgColor);

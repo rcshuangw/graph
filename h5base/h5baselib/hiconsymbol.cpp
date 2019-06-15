@@ -189,6 +189,7 @@ void HIconSymbol::copyTo(HBaseObj *obj)
     pSymbol->setCurrentPattern(m_nCurPattern);
 }
 
+/*
 //获取ObjID
 int HIconSymbol::getObjID()
 {
@@ -226,6 +227,7 @@ bool HIconSymbol::findObjID(int nObjID)
     }
     return false;
 }
+*/
 
 void HIconSymbol::updateShowPattern()
 {

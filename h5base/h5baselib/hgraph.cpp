@@ -15,7 +15,7 @@ HGraph::HGraph(const QString& name)
     nRefreshInterval = 3000;
     bStart = false;
     btType = 0;
-    setFillColorName("#000000");
+    setFillColor("#000000");
     m_width = 1000;
     m_height = 1000;
     setOX(0);
@@ -272,51 +272,33 @@ void HGraph::clear()
 HBaseObj* HGraph::createBaseObj(DrawShape s, HIconTemplate* icontemplate)
 {
     HBaseObj* pObj = NULL;
-    if(s == Icon)
+    if(s == Icon || s==Normal)
     {
         if(!icontemplate)
             return NULL;
         HIconTemplate* pTemplate = new HIconTemplate("");
         icontemplate->copyTo(pTemplate);
-        //addIconTemplate(pTemplate);
-
-        HIconObj* obj = new HIconObj(pTemplate);
-        HIconObj* pIconObj = (HIconObj*)obj;
-        pIconObj->initIconTemplate();
-        pIconObj->iconSymbol()->setCurrentPattern(0);
-        pObj = (HBaseObj*)obj;
-    }
-    else if(s == Normal)
-    {
-        if(!icontemplate)
-            return NULL;
-        HIconTemplate* pTemplate = new HIconTemplate("");
-        icontemplate->copyTo(pTemplate);
-        //addIconTemplate(pTemplate);
-
-        HNormalObj* obj = new HNormalObj(pTemplate);
-        HNormalObj* pIconObj = (HNormalObj*)obj;
-        pIconObj->initIconTemplate();
-        pIconObj->iconSymbol()->setCurrentPattern(0);
-        pObj = (HBaseObj*)obj;
+        pObj = HMakeIcon::Instance()->newObj(s,icontemplate->getUuid());
     }
     else
     {
         pObj = HMakeIcon::Instance()->newObj(s);
     }
     pObj->setShapeType((DrawShape)s);
-    if(pObj)
-    {
-        int objID = getObjID();
-        pObj->setObjID(objID);
-    }
-
     return pObj;
 }
 
 void HGraph::addIconObj(HBaseObj* pObj)
 {
     if(!pObj) return;
+
+    if(pObj)
+    {
+        int objID = getObjID();
+        pObj->setObjID(objID);
+        QString strObjName = QString("%1_%2_%3").arg(pObj->tagName()).arg(pObj->getShapeType()).arg(pObj->getObjID());
+        pObj->setObjName(strObjName);
+    }
 
     addObj(pObj);
 
@@ -394,44 +376,6 @@ void HGraph::removeIconObj(HBaseObj *pObj)
     removeObj(pObj);
     delete pObj;
     pObj = NULL;
-}
-
-//获取ObjID
-int HGraph::getObjID()
-{
-    int nObjID = 1;
-    while(findObjID(nObjID))
-        nObjID++;
-    return nObjID;
-}
-
-bool HGraph::findObjID(int nObjID)
-{
-    //这里要修改，有obj存在group等组合图形里面，不在getObjList()里面--huangw
-    for(int i = 0;i < getObjList().count();i++)
-    {
-        HBaseObj* pObj = (HBaseObj*)getObjList().at(i);
-       if(pObj)
-       {
-           if(pObj->getShapeType() == Group)
-           {
-               HGroup* pGroup = (HGroup*)pObj;
-               //两个group组合到一起还是一个group包含所有对象，而不是一个group包含两个group,所以此处不必递归查找
-               for(int j = 0; j < pGroup->getObjList().size();i++)
-               {
-                   HBaseObj* obj = pGroup->at(i);
-                   if(obj && obj->getObjID() == nObjID)
-                       return true;
-               }
-           }
-           else
-           {
-               if(pObj->getObjID() == nObjID)
-                   return true;
-           }
-       }
-    }
-    return false;
 }
 
 //模板部分

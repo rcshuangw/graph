@@ -38,7 +38,7 @@
    <item>
     <widget class="QTabWidget" name="propertyTab">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="baseTab">
       <attribute name="title">

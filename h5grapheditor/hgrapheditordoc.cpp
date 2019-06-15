@@ -5,6 +5,7 @@
 #include "hstation.h"
 #include "hgraphhelper.h"
 #include "hiconobj.h"
+#include "hmakeicon.h"
 #include <QDir>
 #include <QFile>
 #include <QFileInfoList>
@@ -15,6 +16,7 @@ HGraphEditorDoc::HGraphEditorDoc(HGraphEditorMgr* mgr)
 {
     m_pCurGraph = NULL;
     m_bGraphValid = false;
+    HMakeIcon::Instance()->setGraph(0);
 }
 
 HGraphEditorDoc::~HGraphEditorDoc()
@@ -172,6 +174,7 @@ void HGraphEditorDoc::saveCurGraph()
 
 int HGraphEditorDoc::importGraph(const QString& name)
 {
+    //HMakeIcon::Instance()->setGraph(0);  --huangw 确定要还是不要
     char szGraphPath[128];
     getDataFilePath(DFPATH_GRAPH,szGraphPath);
     QString graphsPath = QString(szGraphPath);
@@ -287,6 +290,7 @@ HGraph* HGraphEditorDoc::addGraph(const QString& name)
 
     m_pCurGraph = new HGraph("tempGraph");
     newGraph->copyTo(m_pCurGraph);
+    HMakeIcon::Instance()->setGraph(m_pCurGraph);
     m_bGraphValid = true;
     return newGraph;
 }
@@ -306,6 +310,7 @@ bool HGraphEditorDoc::delGraph(const QString& name,const int id)
         delete m_pCurGraph;
         m_pCurGraph = NULL;
     }
+    HMakeIcon::Instance()->setGraph(0);
     m_bGraphValid = false;
     return true;
 }
@@ -329,6 +334,7 @@ bool HGraphEditorDoc::openGraph(const QString& name,const int id)
     m_pCurGraph = new HGraph("tempGraph");
     if(!m_pCurGraph) return false;
     graph->copyTo(m_pCurGraph);
+    HMakeIcon::Instance()->setGraph(m_pCurGraph);
     m_bGraphValid = true;
     return true;
 }
