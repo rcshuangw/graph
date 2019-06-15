@@ -14,6 +14,7 @@
 #include "hselectedmgr.h"
 #include "htempcontainer.h"
 #include "hiconobj.h"
+#include "hgraphpage.h"
 #include <QComboBox>
 //文件部分
 void HGraphEditorMainWindow::actionNew_clicked()
@@ -406,10 +407,16 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
      if(m_pGraphEditorMgr->graphEditorOp()->toolType() != ICON_SELECT_TOOL)
          return;
      //qDebug()<<"before selectMgr"<<;
-     if(m_pGraphEditorMgr->selectedMgr())
+     if(m_pGraphEditorMgr->selectedMgr() && m_pGraphEditorMgr->selectedMgr()->selectObj())
      {
          QVector<HBaseObj*> objs = m_pGraphEditorMgr->selectedMgr()->selectObj()->getObjList();
-         if(objs.size() > 1 || objs.size() == 0) return;
+         if(objs.size() > 1) return;
+         if(objs.size() == 0)
+         {
+             HGraphPage dlg(m_pGraphEditorMgr->graphEditorDoc()->getCurGraph());
+             dlg.exec();
+             return;
+         }
          HBaseObj *obj = objs.at(0);
          if(obj->getShapeType() == Icon)
          {

@@ -24,6 +24,7 @@ HAnaloguePage::HAnaloguePage(HBaseObj* pObj,QWidget *parent):
     QDialog(parent),ui(new Ui::analoguePage)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     wStation = (ushort)-1;
     wPoint = (ushort)-1;
     wAttrib = 0;

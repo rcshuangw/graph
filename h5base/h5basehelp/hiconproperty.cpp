@@ -40,11 +40,13 @@ HPropertyDlg::HPropertyDlg(HBaseObj* pObj,QWidget *parent):
     QDialog(parent),ui(new Ui::IconProperty)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     btnGroup = new QButtonGroup;
     pCurObj = pObj;
     connect(ui->okBtn,SIGNAL(clicked(bool)),this,SLOT(ok_clicked()));
     connect(ui->noBtn,SIGNAL(clicked(bool)),this,SLOT(no_clicked()));
     initTab();
+
 //
 }
 

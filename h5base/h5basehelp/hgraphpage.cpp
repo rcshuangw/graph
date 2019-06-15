@@ -1,7 +1,4 @@
-﻿#if defined(_MSC_VER) &&(_MSC_VER >= 1600)
-#pragma execution_character_set("utf-8")
-#endif
-#include "hgraphpage.h"
+﻿#include "hgraphpage.h"
 #include "ui_graphpage.h"
 #include "hstation.h"
 #include "hgraph.h"
@@ -19,9 +16,10 @@ HGraphPage::HGraphPage(HGraph* graph,QWidget *parent):
     QDialog(parent),ui(new Ui::graphPage)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     pGraph = graph;
     initGraphInfo();
-    setWindowTitle("设置画面属性");
+    setWindowTitle(QStringLiteral("设置画面属性"));
 }
 
 

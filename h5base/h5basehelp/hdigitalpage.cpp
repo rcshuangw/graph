@@ -22,6 +22,7 @@ HDigitalPage::HDigitalPage(HBaseObj* pObj,QWidget *parent)
     :QDialog(parent),ui(new Ui::digitalPage)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     pCurObj = (HIconObj*)pObj;
     wStation = pCurObj->dynamicObj()->getDBStation();
     wPoint = pCurObj->dynamicObj()->getDBPoint();

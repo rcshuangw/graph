@@ -1,7 +1,4 @@
-﻿#if defined(_MSC_VER) &&(_MSC_VER >= 1600)
-#pragma execution_character_set("utf-8")
-#endif
-#include "hgraphhelper.h"
+﻿#include "hgraphhelper.h"
 #include "hicontemplate.h"
 #include "hbaseobj.h"
 #include "hiconobj.h"
@@ -10,7 +7,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QMessageBox>
-#include "../../include/hfileapi.h"
+#include "../../../include/hfileapi.h"
 
 HGraphHelper::HGraphHelper()
 {

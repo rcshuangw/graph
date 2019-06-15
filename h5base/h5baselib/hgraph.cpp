@@ -12,9 +12,9 @@
 HGraph::HGraph(const QString& name)
     :m_strGraphName(name)
 {
-    nRefreshInterval = 3000;
-    bStart = false;
-    btType = 0;
+    m_nRefreshInterval = 3000;
+    m_bStart = false;
+    m_btType = 0;
     setFillColor("#000000");
     m_width = 1000;
     m_height = 1000;
@@ -50,32 +50,32 @@ QString HGraph::getGraphName()
 
 void HGraph::setRefreshInterval(int val)
 {
-    nRefreshInterval = val;
+    m_nRefreshInterval = val;
 }
 
 int HGraph::getRefreshInterval()
 {
-    return nRefreshInterval;
+    return m_nRefreshInterval;
 }
 
 void HGraph::setStartFlag(bool start)
 {
-    bStart = start;
+    m_bStart = start;
 }
 
 bool HGraph::getStartFlag()
 {
-    return bStart;
+    return m_bStart;
 }
 
 void HGraph::setGraphType(ushort type)
 {
-    btType = type;
+    m_btType = type;
 }
 
 ushort HGraph::getGraphType()
 {
-    return btType;
+    return m_btType;
 }
 
 QString HGraph::getStationName()
@@ -101,13 +101,28 @@ void HGraph::readData(int v,QDataStream *d)
 
     //画面属性
     int n;
-    nRefreshInterval = n;
+    *d>>n;
+    m_nID = n;
+    QString s;
+    *d>>s;
+    m_strGraphName = s;
+    float f;
+    *d>>f;
+    m_fZoomScale = f;
+    bool b;
+    *d>>b;
+    m_bStart = b;
+    *d>>n;
+    m_btType = n;
+    *d>>n;
+    m_wStationID = n;
+    *d>>n;
+    m_nRefreshInterval = n;
 
     //模板
     *d>>n;
     int nCount = n;
-
-    QString s;
+    //QString s;
     clearIconTemplate();
     for(int i = 0; i < nCount;i++)
     {
@@ -128,9 +143,15 @@ void HGraph::writeData(int v,QDataStream *d)
 {
     if(!d)
         return;
-    *d<<nRefreshInterval;
+    *d<<(int)m_nID;
+    *d<<(QString)m_strGraphName;
+    *d<<(float)m_fZoomScale;
+    *d<<(bool)m_bStart;
+    *d<<(int)m_btType;
+    *d<<(int)m_wStationID;
+    *d<<(int)m_nRefreshInterval;
 
-    *d<<pIconTemplateList.count();
+    *d<<(int)pIconTemplateList.count();
     for(int i = 0; i < pIconTemplateList.count();i++)
     {
         HIconTemplate* iconTemplate = (HIconTemplate*)pIconTemplateList[i];
@@ -140,7 +161,7 @@ void HGraph::writeData(int v,QDataStream *d)
             continue;
         }
         struuid = iconTemplate->getUuid().toString();
-        *d<<struuid;
+        *d<<(QString)struuid;
         iconTemplate->writeData(v,d);
     }
 
@@ -178,7 +199,14 @@ void HGraph::readXml(int v,QDomElement *d)
   //分为本身属性，模板部分，动态数据部分
     if(!d)
         return;
-    nRefreshInterval = d->attribute("RefreshInterval").toInt();
+    QDomElement gaDom = d->namedItem("GraphAttribute").toElement();
+    m_nID              = gaDom.attribute("GraphID").toInt();
+    m_strGraphName     = gaDom.attribute("GraphName");
+    m_fZoomScale       = gaDom.attribute("GraphZoomScale").toFloat();
+    m_bStart           = gaDom.attribute("GraphStart").toUInt();
+    m_btType           = gaDom.attribute("GraphType").toUInt();
+    m_wStationID       = gaDom.attribute("GraphStationID").toUInt();
+    m_nRefreshInterval = gaDom.attribute("RefreshInterval").toInt();
 
     //读取模板信息
     clearIconTemplate();
@@ -224,7 +252,15 @@ void HGraph::writeXml(int v,QDomElement *d)
 {
     if(!d)
         return;
-    d->setAttribute("RefreshInterval",nRefreshInterval);
+    QDomElement ga = d->ownerDocument().createElement("GraphAttribute");
+    d->appendChild(ga);
+    ga.setAttribute("GraphID",m_nID);
+    ga.setAttribute("GraphName",m_strGraphName);
+    ga.setAttribute("GraphZoomScale",m_fZoomScale);
+    ga.setAttribute("GraphStart",m_bStart);
+    ga.setAttribute("GraphType",m_btType);
+    ga.setAttribute("GraphStationID",m_wStationID);
+    ga.setAttribute("RefreshInterval",m_nRefreshInterval);
 
     //再创建模板的xml结构
     QDomElement templateDom = d->ownerDocument().createElement("IconTemplates");
@@ -251,7 +287,13 @@ void HGraph::copyTo(HBaseObj* ob)
     if(!ob) return;
     HGraph* graph = (HGraph*)ob;
     HContainerObj::copyTo(graph);
-    graph->nRefreshInterval = nRefreshInterval;
+    graph->m_nRefreshInterval = m_nRefreshInterval;
+    graph->m_nID = m_nID;
+    graph->m_strGraphName = m_strGraphName; //名称
+    graph->m_fZoomScale = m_fZoomScale;
+    graph->m_bStart = m_bStart; //启动画面
+    graph->m_btType = m_btType;//画面类
+    graph->m_wStationID = m_wStationID;//关联的厂站
 }
 
 void HGraph::clear()

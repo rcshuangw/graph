@@ -79,10 +79,10 @@ protected:
     int m_nID;
     QString m_strGraphName; //名称
     double m_fZoomScale;
-    int nRefreshInterval; //刷新间隔
-    bool bStart; //启动画面
-    ushort btType;//画面类
-    ushort wStationID;//关联的厂站
+    int m_nRefreshInterval; //刷新间隔
+    bool m_bStart; //启动画面
+    ushort m_btType;//画面类
+    ushort m_wStationID;//关联的厂站
 };
 
 #endif // HGRAPH_H
