@@ -4,6 +4,7 @@
 #include <QObject>
 #include "hiconapi.h"
 #include "hdrawmanager.h"
+#define ICON_DRAW_NO     0x00
 #define ICON_DRAW_TOOL   0x01
 #define ICON_SELECT_TOOL 0x02
 class HGraphEditorMgr;
@@ -77,6 +78,7 @@ public:
     void zoomSame();
     void setupMatrix();
 public:
+    void setToolType(int type) {m_nToolType = type;}
     int toolType() {return m_nToolType;}
     void drawTool(DrawShape drawShape);
     void selectTool(SelectMode select);

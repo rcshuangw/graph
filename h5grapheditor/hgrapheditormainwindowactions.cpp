@@ -397,6 +397,12 @@ void HGraphEditorMainWindow::actionFlipVertical_clicked()
 
  void HGraphEditorMainWindow::handTool()
  {
+     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorView())
+         return;
+     //注意此时不能是选择或者绘制状态
+     m_pGraphEditorMgr->graphEditorOp()->setToolType(ICON_DRAW_NO);
+     m_pGraphEditorMgr->graphEditorView()->setInteractive(false);
+     m_pGraphEditorMgr->graphEditorView()->setDragMode(QGraphicsView::ScrollHandDrag);
 
  }
 

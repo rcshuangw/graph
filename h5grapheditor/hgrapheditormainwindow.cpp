@@ -127,6 +127,7 @@ void HGraphEditorMainWindow::createActions()
     //选择,工具
     ui->actionSelect->setData(None);
     connect(ui->actionSelect,SIGNAL(triggered(bool)),this,SLOT(selectTool()));
+    ui->actionHand_H->setCheckable(true);
     connect(ui->actionHand_H,SIGNAL(triggered(bool)),this,SLOT(handTool()));
 
     //工具
@@ -164,6 +165,7 @@ void HGraphEditorMainWindow::createActions()
     actionGroup->addAction(ui->actionCircle);
     actionGroup->addAction(ui->actionArc);
     actionGroup->addAction(ui->actionSelect);
+    actionGroup->addAction(ui->actionHand_H);
 
     //平移
 
