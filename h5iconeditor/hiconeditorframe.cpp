@@ -39,17 +39,8 @@ void HIconEditorFrame::clear()
         return;
 
     m_pView->scene()->clear();
-    foreach (QGraphicsItem *item, m_pView->scene()->items())
-    {
-        H5GraphicsItem* pItem = qgraphicsitem_cast<H5GraphicsItem*>(item);
-        if(!pItem) continue;
-        if(pItem->baseObj())
-            pItem->baseObj()->setIconGraphicsItem(NULL);
-        //pItem->setBaseObj(0);
-        m_pIconEditorMgr->iconEditorFrame()->view()->scene()->removeItem(pItem);
-        delete pItem;
-        pItem = NULL;
-     }
+    delete (HIconEditorScene)m_pView->scene();
+    m_pView->setScene(new HIconEditorScene(m_pIconEditorMgr));
 }
 
 void HIconEditorFrame::drawPath(const QList<Path>& pathList)
