@@ -16,6 +16,7 @@
 #include "hiconobj.h"
 #include "hgraphpage.h"
 #include <QComboBox>
+#include <QMessageBox>
 //文件部分
 void HGraphEditorMainWindow::actionNew_clicked()
 {
@@ -88,6 +89,8 @@ void HGraphEditorMainWindow::actionPaste_clicked()
 void HGraphEditorMainWindow::actionDelete_clicked()
 {
     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorView())
+        return;
+    if(QMessageBox::Cancel == QMessageBox::information(NULL,QStringLiteral("警告"),QStringLiteral("确认删除该图符吗？"),QMessageBox::Ok|QMessageBox::Cancel))
         return;
     m_pGraphEditorMgr->graphEditorOp()->del();
 }
