@@ -14,8 +14,8 @@ HIconEditorPreview::HIconEditorPreview(QWidget *parent) :
     ui->setupUi(this);
 
     ui->widget->installEventFilter(this);
-    ui->widthSpinBox->setRange(0,50);
-    ui->heightSpinBox->setRange(0,50);
+    ui->widthSpinBox->setRange(0,100);
+    ui->heightSpinBox->setRange(0,100);
 
     connect(ui->widthSpinBox,SIGNAL(editingFinished()),this,SLOT(onDefaultSizeChanged()));
     connect(ui->heightSpinBox,SIGNAL(editingFinished()),this,SLOT(onDefaultSizeChanged()));

@@ -39,7 +39,7 @@ void HIconEditorFrame::clear()
         return;
 
     m_pView->scene()->clear();
-    delete (HIconEditorScene)m_pView->scene();
+    delete (HIconEditorScene*)m_pView->scene();
     m_pView->setScene(new HIconEditorScene(m_pIconEditorMgr));
 }
 
