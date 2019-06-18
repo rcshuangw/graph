@@ -55,7 +55,7 @@ void HDrawHelper::updatePoints()
 
 }
 
-void HDrawHelper::ratate(int angle,QPointF* c)
+void HDrawHelper::rotate(int angle,QPointF* c)
 {
     if(!m_pBaseObj)
         return;

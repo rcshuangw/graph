@@ -151,33 +151,9 @@ void HIconMainWindow::createActions()
 
     toTopAct = new QAction(QIcon(":/images/shape_move_front.png"),QStringLiteral("置顶"),this);
     connect(toTopAct,SIGNAL(triggered(bool)),this,SLOT(bringToTop()));
-
     toBottomAct = new QAction(QIcon(":/images/shape_move_back.png"),QStringLiteral("置底"),this);
     connect(toBottomAct,SIGNAL(triggered(bool)),this,SLOT(bringToBottom()));
 
-/*
-    alignLeftAct = new QAction(QIcon(":/images/shape_align_left.png"),QStringLiteral("左对齐"),this);
-    connect(alignLeftAct,SIGNAL(triggered(bool)),this,SLOT(alignLeft()));
-    alignLeftAct->setEnabled(false);
-    alignVCenterAct = new QAction(QIcon(":/images/shape_align_middle.png"),QStringLiteral("纵向居中对齐"),this);
-    connect(alignVCenterAct,SIGNAL(triggered(bool)),this,SLOT(alignVCenter()));
-    alignRightAct = new QAction(QIcon(":/images/shape_align_right.png"),QStringLiteral("右对齐"),this);
-    connect(alignRightAct,SIGNAL(triggered(bool)),this,SLOT(alignRight()));
-
-    alignTopAct = new QAction(QIcon(":/images/shape_align_top.png"),QStringLiteral("上对齐"),this);
-    connect(alignTopAct,SIGNAL(triggered(bool)),this,SLOT(alignTop()));
-    alignHCenterAct = new QAction(QIcon(":/images/shape_align_center.png"),QStringLiteral("横向居中对齐"),this);
-    connect(alignHCenterAct,SIGNAL(triggered(bool)),this,SLOT(alignHCenter()));
-    alignBottomAct = new QAction(QIcon(":/images/shape_align_bottom.png"),QStringLiteral("下对齐"),this);;
-    connect(alignBottomAct,SIGNAL(triggered(bool)),this,SLOT(alignBottom()));
-*/
-    //同等单元
-   /* QAction *equlHSpaceAct;
-    QAction *equlVSpaceAct;
-    QAction *equlWidthAct;
-    QAction *equlHeightAct;
-    QAction *equlSizeAct;
-*/
     //组合单元
     groupObjAct = new QAction(QIcon(":/images/group.png"),QStringLiteral("组合"),this);;
     connect(groupObjAct,SIGNAL(triggered(bool)),this,SLOT(groupObj()));
@@ -248,33 +224,19 @@ void HIconMainWindow::createActions()
     actionGroup->addAction(selectAct);
 
 
-    tileAct = new QAction(tr("&Tile"), this);
-    tileAct->setStatusTip(tr("Tile the windows"));
-    cascadeAct = new QAction(tr("&Cascade"), this);
-    cascadeAct->setStatusTip(tr("Cascade the windows"));
-    nextAct = new QAction(tr("Ne&xt"), this);
-    nextAct->setShortcuts(QKeySequence::NextChild);
-    nextAct->setStatusTip(tr("Move the focus to the next window"));
-    previousAct = new QAction(tr("Pre&vious"), this);
-    previousAct->setShortcuts(QKeySequence::PreviousChild);
-    previousAct->setStatusTip(tr("Move the focus to the previous window"));
-
-
-    //windowMenuSeparatorAct = new QAction(this);
-    //windowMenuSeparatorAct->setSeparator(true);
-
-   // menuBar()->addSeparator();
-
-    //QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
+    selectAllAct = new QAction(QStringLiteral("全部选择"), this);
+    selectAllAct->setStatusTip(QStringLiteral("选择所有图元"));
+    deleteAllAct = new QAction(QStringLiteral("全部删除"), this);
+    deleteAllAct->setIcon(QIcon(":/images/del.png"));
+    deleteAllAct->setStatusTip(QStringLiteral("删除所有图元"));
+    AttributeAct = new QAction(QStringLiteral("属性"), this);
+    AttributeAct->setStatusTip(QStringLiteral("图元属性w、"));
+    pageAttrAct = new QAction(QStringLiteral("页面选项"), this);
+    pageAttrAct->setStatusTip(QStringLiteral("背景页面选项"));
 
     aboutAct = new QAction(QStringLiteral("关于"), this);
     connect(aboutAct,SIGNAL(triggered()),this,SLOT(about()));
     aboutAct->setStatusTip(tr("Show the application's About box"));
-
-    //QAction *aboutQtAct = helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
-    //aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
-
- //////////draw Toool/////////////////////
 }
 
 
@@ -360,22 +322,40 @@ void HIconMainWindow::createMenuBars()
     editMenu->addAction(cutAct);
     editMenu->addAction(copyAct);
     editMenu->addAction(pasteAct);
+    editMenu->addAction(deleteAct);
+    editMenu->addAction(deleteAllAct);
+    editMenu->addAction(selectAllAct);
+    editMenu->addSeparator();
+    editMenu->addAction(AttributeAct);
+    editMenu->addAction(pageAttrAct);
 
 
     viewMenu = menuBar()->addMenu(QStringLiteral("视图(&V)"));
     viewMenu->addAction(showRulerAct);
     viewMenu->addAction(showGridAct);
     viewMenu->addAction(showCLineAct);
+    viewMenu->addSeparator();
+    viewMenu->addAction(fitWidthAct);
+    viewMenu->addAction(fitHeightAct);
+    viewMenu->addSeparator();
+    viewMenu->addAction(zoomInAct);
+    viewMenu->addAction(zoomOutAct);
+    viewMenu->addAction(zoomOriAct);
 
     toolMenu = menuBar()->addMenu(QStringLiteral("绘制(&W)"));
+    toolMenu->addAction(selectAct);
+    toolMenu->addSeparator();
     toolMenu->addAction(lineAct);
     toolMenu->addAction(polylineAct);
-    toolMenu->addAction(rectAct);
-    toolMenu->addAction(ellipseAct);
-    toolMenu->addAction(hexagonAct);
     toolMenu->addAction(arcAct);
+    toolMenu->addSeparator();
+    toolMenu->addAction(rectAct);
+    toolMenu->addAction(hexagonAct);
+    toolMenu->addAction(ellipseAct);
+    toolMenu->addAction(circleAct);
     //toolMenu->addAction(fanAct);
     toolMenu->addAction(textAct);
+
 
     helpMenu = menuBar()->addMenu(QStringLiteral("帮助(&H)"));
     helpMenu->addAction(aboutAct);

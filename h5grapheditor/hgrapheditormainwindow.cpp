@@ -99,7 +99,7 @@ void HGraphEditorMainWindow::createActions()
     connect(ui->actionFilpLeft,SIGNAL(triggered(bool)),this,SLOT(actionFlipLeft_clicked()));
     connect(ui->actionFlipRight,SIGNAL(triggered(bool)),this,SLOT(actionFlipRight_clicked()));
     connect(ui->actionFlipHorizon,SIGNAL(triggered(bool)),this,SLOT(actionFlipHorizon_clicked()));
-    connect(ui->actionFlipHorizon,SIGNAL(triggered(bool)),this,SLOT(actionFlipVertical_clicked()));
+    connect(ui->actionFlipVertical,SIGNAL(triggered(bool)),this,SLOT(actionFlipVertical_clicked()));
     m_pFlipGroup->addAction(ui->actionRotate);
     m_pFlipGroup->addAction(ui->actionFilpLeft);
     m_pFlipGroup->addAction(ui->actionFlipRight);
@@ -287,27 +287,31 @@ void HGraphEditorMainWindow::initMainWindow()
 
 void HGraphEditorMainWindow::New(const QString& graphName)
 {
-    //主要要先保存，然后删除当前的，然后新建graph对象(mgr->doc)，然后树新增
     if(!m_pGraphEditorMgr)
         return;
     bool bfind = m_pGraphEditorMgr->findGraphByName(graphName);
     if(bfind)
     {
-        QMessageBox::information(this,QStringLiteral("提醒"),QStringLiteral("已经存在相同名字的图形文件，请修改名称"),QMessageBox::Ok);
+        QMessageBox mb(QMessageBox::Information,QStringLiteral("提醒"),QStringLiteral("已经存在相同名字的图形文件，请修改名称！"),QMessageBox::Yes);
+        mb.setButtonText( QMessageBox::Yes, QStringLiteral("是"));
+        mb.exec();
         return;
     }
 
-    //如果有修改的
     if(m_pGraphEditorMgr->isGraphModify())
     {
-        if(QMessageBox::Ok == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的画面文件吗？"),QMessageBox::Yes|QMessageBox::No))
-        {
-
-             //Save();
+        QMessageBox mb(QMessageBox::Information,QStringLiteral("提醒"),QStringLiteral("需要保存当前的画面文件吗？"),QMessageBox::Yes|QMessageBox::No);
+        mb.setButtonText( QMessageBox::Yes, QStringLiteral("是") );
+        mb.setButtonText( QMessageBox::No, QStringLiteral("否") );
+        switch( mb.exec() ) {
+            case QMessageBox::Yes:
+                m_pGraphEditorMgr->Save();
+            break;
+        default:
+            break;
         }
     }
 
-    //view 或者 scene里面要清除掉所有内容
     m_pGraphEditorMgr->reset();
     m_pGraphEditorMgr->New(graphName);
     m_pGraphTreeWidget->addGraphTreeWidgetItem();
@@ -317,22 +321,24 @@ void HGraphEditorMainWindow::New(const QString& graphName)
 
 void HGraphEditorMainWindow::Open(const QString& name,const int id)
 {
-    //主要要先保存，然后删除当前的，然后新建graph对象(mgr->doc)，然后树新增
     if(!m_pGraphEditorMgr)
         return;
 
-    //如果有修改的
     if(m_pGraphEditorMgr->isGraphModify())
     {
-        if(QMessageBox::Yes == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("需要保存当前的画面文件吗？"),QMessageBox::Yes|QMessageBox::No))
-        {
+        QMessageBox mb(QMessageBox::Information,QStringLiteral("提醒"),QStringLiteral("需要保存当前的画面文件吗？"),QMessageBox::Yes|QMessageBox::No);
+        mb.setButtonText( QMessageBox::Yes, QStringLiteral("是") );
+        mb.setButtonText( QMessageBox::No, QStringLiteral("否") );
+        switch( mb.exec() ) {
+            case QMessageBox::Yes:
+                m_pGraphEditorMgr->Save();
+            break;
+        default:
+            break;
 
-             m_pGraphEditorMgr->Save();
         }
     }
 
-    //先删除原来的，在打开文件，最后显示
-    //Reset();
     m_pGraphEditorMgr->reset();
     m_pGraphEditorMgr->Open(name,id);
     onUpdateBaseAction();
@@ -343,20 +349,19 @@ void HGraphEditorMainWindow::ImportFile(const QString& name)
 {
     if(!m_pGraphEditorMgr)
         return;
-    //对文件进行判断
     QFileInfo fileInfo(name);
     QString strName = fileInfo.completeSuffix();
     if(strName.compare("grf") != 0)
     {
-        if(QMessageBox::Ok == QMessageBox::information(NULL,QStringLiteral("警告"),QStringLiteral("画面后缀为grf,请修改"),QMessageBox::Yes))
-        {
-             return;
-        }
+        QMessageBox mb(QMessageBox::Information,QStringLiteral("提醒"),QStringLiteral("画面后缀为grf,请修改!"),QMessageBox::Yes);
+        mb.setButtonText( QMessageBox::Yes, QStringLiteral("是"));
+        mb.exec();
+        return;
     }
     int graphID = m_pGraphEditorMgr->ImportFile(name);
     if((int)-1 == graphID)
     {
-        //提示导入失败
+        //huangw 提示
         return;
     }
     if(m_pGraphEditorMgr->isGraphModify())
@@ -366,7 +371,6 @@ void HGraphEditorMainWindow::ImportFile(const QString& name)
              //Save();
         }
     }
-    //通知属性控件刷新
     m_pGraphEditorMgr->Open("",graphID);
     m_pGraphTreeWidget->addGraphTreeWidgetItem();
     m_pGraphEditorMgr->refreshView();
@@ -395,10 +399,16 @@ void HGraphEditorMainWindow::Del(const QString& graphName,const int graphID)
 {
     if(!m_pGraphEditorMgr)
         return;
-    if(QMessageBox::No == QMessageBox::information(NULL,QStringLiteral("提醒"),QStringLiteral("确定需要删除该画面吗？"),QMessageBox::Yes|QMessageBox::No))
-    {
+    QMessageBox mb(QMessageBox::Information,QStringLiteral("提醒"),QStringLiteral("确定需要删除该画面吗？"),QMessageBox::Yes|QMessageBox::No);
+    mb.setButtonText( QMessageBox::Yes, QStringLiteral("是") );
+    mb.setButtonText( QMessageBox::No, QStringLiteral("否") );
+    switch( mb.exec() ) {
+        case QMessageBox::No:
         return;
+    default:
+        break;
     }
+
     m_pGraphEditorMgr->reset();
     m_pGraphEditorMgr->Del(graphName,graphID);
     m_pGraphTreeWidget->delGraphTreeWidgetItem();
@@ -492,6 +502,13 @@ void HGraphEditorMainWindow::onUpdateBaseAction()
     //等分
     ui->actionHSameSpace->setEnabled(bselectObj&&nSelectObjCount>2);
     ui->actionVSameSpace->setEnabled(bselectObj&&nSelectObjCount>2);
+
+    //旋转
+    ui->actionRotate->setEnabled(bselectObj&&nSelectObjCount>0);
+    ui->actionFilpLeft->setEnabled(bselectObj&&nSelectObjCount>0);
+    ui->actionFlipRight->setEnabled(bselectObj&&nSelectObjCount>0);
+    ui->actionFlipHorizon->setEnabled(bselectObj&&nSelectObjCount>0);
+    ui->actionFlipVertical->setEnabled(bselectObj&&nSelectObjCount>0);
 }
 
 void HGraphEditorMainWindow::onUpdateStatus(const QString &showText)

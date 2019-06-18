@@ -168,6 +168,7 @@ void HGraphEditorDoc::saveCurGraph()
     HGraph* graph = findGraph(m_pCurGraph->graphID());
     if(!graph)
         return;
+    m_pCurGraph->setModify(false);
     m_pCurGraph->copyTo(graph);
     HGraphHelper::Instance()->saveGraph(graph);
 }
@@ -366,6 +367,5 @@ bool HGraphEditorDoc::isGraphModify()
     //只需要判断当前画面是否存在修改
     if(!m_pCurGraph)
         return false;
-    //return m_pCurGraph->odify();
-    return false;
+    return m_pCurGraph->isModify();
 }

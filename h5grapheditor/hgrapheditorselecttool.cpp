@@ -8,7 +8,7 @@
 #include "htempcontainer.h"
 #include "hselectedmgr.h"
 #include "hgrapheditorview.h"
-//#include "hiconcommand.h"
+#include "hgraphcommand.h"
 #include "hdrawhelper.h"
 HGraphEditorSelectTool::HGraphEditorSelectTool(HGraphEditorMgr* manager)
     :m_pGraphEditorMgr(manager),m_bIsSelectPoint(false)
@@ -299,8 +299,8 @@ void HGraphEditorSelectTool::onMouseReleaseEvent(QMouseEvent* event, QVariant &d
                     }
                 }
 
-                //HResizeIconCommand* reizeCommand = new HResizeIconCommand(m_pIconEditorMgr,objs,m_vlOldPoints,points);
-                //m_pIconEditorMgr->iconEditorUndoStack()->push(reizeCommand);
+                HGraphResizeCommand* reizeCommand = new HGraphResizeCommand(m_pGraphEditorMgr,objs,m_vlOldPoints,points);
+                m_pGraphEditorMgr->graphEditorStack()->push(reizeCommand);
             }
         }
     }
@@ -335,8 +335,8 @@ void HGraphEditorSelectTool::onMouseReleaseEvent(QMouseEvent* event, QVariant &d
                 double dy = m_ptCurPoint.y() - m_ptOriPoint.y();
                 if(qFuzzyCompare(dx,0) && qFuzzyCompare(dy,0))
                     return;
-                //HMoveIconCommand* moveCommand = new HMoveIconCommand(m_pIconEditorMgr,objs,dx,dy);
-                //m_pIconEditorMgr->iconEditorUndoStack()->push(moveCommand);
+                HGraphMoveCommand* moveCommand = new HGraphMoveCommand(m_pGraphEditorMgr,objs,dx,dy);
+                m_pGraphEditorMgr->graphEditorStack()->push(moveCommand);
             }
         }
     }
@@ -443,8 +443,8 @@ void HGraphEditorSelectTool::onKeyPressEvent(QKeyEvent *event, QVariant& data)
         }
 
     }
-    //HMoveIconCommand* moveCommand = new HMoveIconCommand(m_pIconEditorMgr,objs,ndx,ndy);
-    //m_pIconEditorMgr->iconEditorUndoStack()->push(moveCommand);
+    HGraphMoveCommand* moveCommand = new HGraphMoveCommand(m_pGraphEditorMgr,objs,ndx,ndy);
+    m_pGraphEditorMgr->graphEditorStack()->push(moveCommand);
 }
 
 QCursor HGraphEditorSelectTool::cursor()

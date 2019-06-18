@@ -632,6 +632,11 @@ void HBaseObj::setPainter(QPainter* painter)
     {
         flag|=TRANS_PARENT;
     }
+    else if(parObj && (parObj->getShapeType() == Icon||parObj->getShapeType() == Normal))
+    {
+        if(parObj->parent())
+            flag|= TRANS_PARENT;
+    }
     QTransform trans;
     if(transform(trans,flag))
     {

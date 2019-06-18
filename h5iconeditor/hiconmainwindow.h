@@ -94,7 +94,6 @@ public slots:
     //打开 save falg = true
     void Open(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
 
-    //
     void Del(const QString &strTemplateName, int nTemplateType, const QString &strUuid);
 
     void Rename(const QString& strTemplateName,const int& nTemplateType, const QString &strUuid);
@@ -131,54 +130,6 @@ public slots:
     //缩小
     void zoomOut();
 
-    //原始大小
-    //void normalSize();
-/*
-    //对齐方式--左对齐
-    void alignLeft();
-
-    //右对齐
-    void alignRight();
-
-    //水平中间对齐
-    void alignHCenter();
-
-    //垂直中间对齐
-    void alignVCenter();
-
-    //上对齐
-    void alignTop();
-
-    //下对齐
-    void alignBottom();
-
-    //同等方式--水平同等间隔
-    void equivalentHSpace();
-
-    //垂直同等间隔
-    void equivalentVSpace();
-
-    //同等宽度
-    void equivalentWidth();
-
-    //同等高度
-    void equivalentHeight();
-
-    //同等大小
-    void equivalentSize();
-
-    //翻转--水平翻转
-    void horizontalTurn();
-
-    //垂直翻转
-    void verticalTurn();
-
-    //左旋转
-    void rotateLeft();
-
-    //右旋转
-    void rotateRight();
-*/
     //组合
     void groupObj();
 
@@ -206,7 +157,6 @@ public slots:
     void onSelectChanged();
 //函数
 private:
-
     void createActions();
     void createStatusBar();
     void createMenuBars();
@@ -266,7 +216,7 @@ private:
     //其他单元
     QAction *selectAct;
     QAction *rotateAct;
-
+/*
     //对其单元
     QAction *alignLeftAct;
     QAction *alignRightAct;
@@ -282,15 +232,17 @@ private:
     QAction *equlHeightAct;
     QAction *equlSizeAct;
 
-    //组合单元
-    QAction *groupObjAct;
-    QAction *ungroupObjAct;
-
     //翻转
     QAction *hTurnAct;
     QAction *vTurnAct;
     QAction *rotateLeftAct;
     QAction *rotateRightAct;
+*/
+    //组合单元
+    QAction *groupObjAct;
+    QAction *ungroupObjAct;
+
+
 
     //移动
     QAction *toTopAct;
@@ -306,14 +258,14 @@ private:
     QAction* circleAct;
     QAction* hexagonAct;
     QAction* polylineAct;
-    QAction* fanAct;
+    //QAction* fanAct;
     QAction* textAct;
 
-    //排列单元
-    QAction *tileAct;
-    QAction *cascadeAct;
-    QAction *nextAct;
-    QAction *previousAct;
+    //其他
+    QAction *selectAllAct;
+    QAction *deleteAllAct;
+    QAction *AttributeAct;
+    QAction *pageAttrAct;
 
     //关于
     QAction* aboutAct;

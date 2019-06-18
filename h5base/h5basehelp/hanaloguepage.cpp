@@ -227,10 +227,7 @@ void HAnaloguePage::initBaseProperty()
         ui->suffixLineEdit->setText(pTextObj->textSuffix());
 
         //字体设置
-        font.setFamily(pTextObj->fontFamily());
-        font.setPointSize(pTextObj->fontSize());
-        font.setWeight(pTextObj->fontWeight());
-        font.setItalic(pTextObj->fontItalic());
+        font = pTextObj->font();
 
         wStation = pCurObj->dynamicObj()->getDBStation();
         wPoint = pCurObj->dynamicObj()->getDBPoint();
@@ -322,11 +319,7 @@ void HAnaloguePage::onOk()
     pTextObj->setText(ui->ptNameLineEdit->text());
     pTextObj->setHorizontalAlign(ui->hComboBox->currentData().toInt());
     pTextObj->setVerticalAlign(ui->vComboBox->currentData().toInt());
-    pTextObj->setFontFamily(font.family());
-    pTextObj->setFontSize(font.pointSize());
-    pTextObj->setFontWeight(font.weight());
-    pTextObj->setFontItalic(font.italic());
-
+    pTextObj->setFont(font);
     pTextObj->setTextColor(strTextColor);
     pTextObj->setFillColor(strBgColor);//填充颜色
     if(ui->transparentCheckBox->isChecked())

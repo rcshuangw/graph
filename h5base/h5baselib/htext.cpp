@@ -7,13 +7,11 @@ HText::HText()
     m_strText = QString("text example");
 
     m_strTextClr = "#000000";//线条颜色
-    m_strFontFamily = QStringLiteral("微软雅黑");
     m_nLayout = LAYOUT_TEXT_NULL;
     m_nHorizontalAlign = Qt::AlignHCenter;
     m_nVerticalAlign = Qt::AlignVCenter;
-    setFontSize(18);
-    m_nFontWeight = QFont::Normal;//粗体
-    m_nFontItalic = false;//斜体
+    m_Font.setFamily( QStringLiteral("微软雅黑"));
+    m_Font.setPointSize(18);
 
     m_bFrameSee = false;
     m_nFillStyle = (quint8)Qt::NoBrush;
@@ -46,13 +44,16 @@ void HText::readData(int v,QDataStream* data)
     *data>>n;
     m_nVerticalAlign = n;
     *data>>s;
-    m_strFontFamily = s;
+    m_Font.setFamily(s);
     *data>>n;
-    m_nFontSize = n;
-    *data>>n;
-    m_nFontWeight = n;
-    *data>>n;
-    m_nFontItalic = n;
+    m_Font.setPointSize(n);
+    bool b;
+    *data>>b;
+    m_Font.setBold(b);
+    *data>>b;
+    m_Font.setItalic(b);
+    *data>>b;
+    m_Font.setUnderline(b);
     *data>>s;
     m_strPrefix = s;
     *data>>s;
@@ -71,10 +72,11 @@ void HText::writeData(int v,QDataStream* data)
     *data<<(quint8)m_nLayout;
     *data<<(int)m_nHorizontalAlign;
     *data<<(int)m_nVerticalAlign;
-    *data<<(QString)m_strFontFamily;
-    *data<<(int)m_nFontSize;
-    *data<<(int)m_nFontWeight;
-    *data<<(int)m_nFontItalic;
+    *data<<(QString)m_Font.family();
+    *data<<(int)m_Font.pointSize();
+    *data<<(bool)m_Font.bold();
+    *data<<(bool)m_Font.italic();
+    *data<<(bool)m_Font.underline();
     *data<<(QString)m_strPrefix;
     *data<<(QString)m_strSuffix;
     *data<<(uchar)m_btFormat;
@@ -90,10 +92,17 @@ void HText::readXml(int v,QDomElement* dom)
     m_nLayout = dom->attribute("Layout").toInt();
     m_nHorizontalAlign = dom->attribute("HorizontalAlign").toInt();
     m_nVerticalAlign = dom->attribute("VerticalAlign").toInt();
-    m_strFontFamily = dom->attribute("FontFamily");
-    m_nFontSize = dom->attribute("FontSize").toInt();
-    m_nFontWeight = dom->attribute("FontWeight").toInt();
-    m_nFontItalic = dom->attribute("FontItalic").toInt();
+    QString s = dom->attribute("FontFamily");
+    m_Font.setFamily(s);
+    int ptsz = dom->attribute("FontSize").toInt();
+    m_Font.setPointSize(ptsz);
+    bool b;
+    b = dom->attribute("FontBold").toUInt();
+    m_Font.setBold(b);
+    b = dom->attribute("FontItalic").toUInt();
+    m_Font.setItalic(b);
+    b = dom->attribute("FontUnderline").toUInt();
+    m_Font.setUnderline(b);
     m_strPrefix = dom->attribute("Prefix");
     m_strSuffix = dom->attribute("Suffix");
     m_btFormat = dom->attribute("Format").toUInt();
@@ -108,10 +117,11 @@ void HText::writeXml(int v,QDomElement* dom)
     dom->setAttribute("Layout",m_nLayout);
     dom->setAttribute("HorizontalAlign",m_nHorizontalAlign);
     dom->setAttribute("VerticalAlign",m_nVerticalAlign);
-    dom->setAttribute("FontFamily",m_strFontFamily);
-    dom->setAttribute("FontSize",m_nFontSize);
-    dom->setAttribute("FontWeight",m_nFontWeight);
-    dom->setAttribute("FontItalic",m_nFontItalic);
+    dom->setAttribute("FontFamily",m_Font.family());
+    dom->setAttribute("FontSize",m_Font.pointSize());
+    dom->setAttribute("FontBold",m_Font.bold());
+    dom->setAttribute("FontItalic",m_Font.italic());
+    dom->setAttribute("FontUnderline",m_Font.underline());
     dom->setAttribute("Prefix",m_strPrefix);
     dom->setAttribute("Suffix",m_strSuffix);
     dom->setAttribute("Format",m_btFormat);
@@ -133,10 +143,7 @@ void HText::copyTo(HBaseObj* obj)
     ob->m_nLayout = m_nLayout;
     ob->m_nHorizontalAlign = m_nHorizontalAlign;
     ob->m_nVerticalAlign = m_nVerticalAlign;
-    ob->m_strFontFamily = m_strFontFamily;
-    ob->m_nFontSize = m_nFontSize;
-    ob->m_nFontWeight = m_nFontWeight;
-    ob->m_nFontItalic = m_nFontItalic;
+    ob->m_Font = m_Font;
     ob->m_strPrefix = m_strPrefix;
     ob->m_strSuffix = m_strSuffix;
     ob->m_btFormat = m_btFormat;
@@ -229,22 +236,23 @@ int HText::fontWeight()
 }
 void HText::setFontBold(bool b)
 {
-    m_bFontBold = b;
+    m_Font.setBold(b);
 }
 
 bool HText::fontBold()
 {
-    return m_bFontBold;
+    return m_Font.bold();
 }
 
 void HText::setFontUnderline(bool b)
 {
-    m_bFontUnderline = b;
+    m_Font.setUnderline(b);
 }
 
 bool HText::fontUnderline()
 {
-    return m_bFontUnderline;
+    //return m_bFontUnderline;
+    return m_Font.underline();
 }
 
 void HText::setFontItalic(bool bitalic)
@@ -258,6 +266,7 @@ bool HText::fontItalic()
     //return m_nFontItalic;
     return m_Font.italic();
 }
+
 
 void HText::setText(QString text)
 {
@@ -315,12 +324,7 @@ void HText::paint(QPainter* painter)
         painter->drawPath(path);
 
     //设置字体部分
-    QString strFontFamily = fontFamily();
-    int nFontSize = fontSize();
-    int nFontWeight = fontWeight();
-    bool bFontItalic = (bool)fontItalic();
     QFont font = m_Font;//(strFontFamily,nFontSize,nFontWeight,bFontItalic);
-
     QPen textPen = QPen(QColor(getTextColor()));
     painter->setPen(textPen);
     painter->setFont(font);

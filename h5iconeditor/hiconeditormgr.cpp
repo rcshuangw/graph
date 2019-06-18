@@ -20,7 +20,7 @@ HIconEditorMgr::HIconEditorMgr()
     m_bShowCenterLine = true;
     m_strBgClr = "#FFFFFF";
     m_drawShape = No;
-
+//
     //选择状态下的刷新
     connect(m_pSelectedMgr,SIGNAL(refreshSelect(QRectF)),m_pIconEditorOp,SLOT(onRefreshSelect(QRectF)));
 }

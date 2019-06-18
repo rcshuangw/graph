@@ -169,14 +169,14 @@ void HGraphEditorMainWindow::actionFlipLeft_clicked()
 {
     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    m_pGraphEditorMgr->graphEditorOp()->flipLeft90();
+    m_pGraphEditorMgr->graphEditorOp()->rotateLeft90();
 }
 
 void HGraphEditorMainWindow::actionFlipRight_clicked()
 {
     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorOp())
         return;
-    m_pGraphEditorMgr->graphEditorOp()->flipRight90();
+    m_pGraphEditorMgr->graphEditorOp()->rotateRight90();
 }
 
 void HGraphEditorMainWindow::actionFlipHorizon_clicked()

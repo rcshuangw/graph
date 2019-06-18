@@ -100,7 +100,7 @@ void HIconEditorPreview::drawIcon(QPainter *p)
     if(!pTemplate) return;
     HIconObj* obj = new HIconObj(pTemplate);
     if(!obj)return;
-    obj->initIconTemplate();
+    //obj->initIconTemplate();
     obj->resize(m_boundingRect.width(),m_boundingRect.height());
     p->save();
     p->setPen(Qt::DotLine);

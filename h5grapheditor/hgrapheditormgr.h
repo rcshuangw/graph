@@ -61,16 +61,6 @@ public:
     //属性相关操作
     //void initBaseAttribute();
 public:
-    //增加command
-    void addNewCommand(HBaseObj* pObj);
-    void addDelCommand(QList<HBaseObj*> pObjs);
-    void addPasteCommand(QList<HBaseObj*> pObjs);
-    void addMoveCommand(QList<HBaseObj*> pObjs,qreal dx,qreal dy);
-    void addRotateCommand(QList<HBaseObj*> pObjs,float angle);
-    void addTurnCommand(QList<HBaseObj*> pObjs,bool bdirection);
-    void addResizeCommand(QList<HBaseObj*> pObjs,QList<QPolygonF> oldPts,QList<QPolygonF> newPts);
-
-public:
     //刷新view
     void refreshView();
 protected:

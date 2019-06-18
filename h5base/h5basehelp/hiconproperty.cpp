@@ -279,15 +279,7 @@ void HPropertyDlg::initTextTab()
             ui->horizAlignComboBox->setCurrentIndex(ui->horizAlignComboBox->findData(pTextObj->horizontalAlign()));
             ui->vertiAlignComboBox->setCurrentIndex(ui->vertiAlignComboBox->findData(pTextObj->verticalAlign()));
             ui->layoutComboBox->setCurrentIndex(ui->layoutComboBox->findData(pTextObj->layout()));
-            QString strFontName = pTextObj->fontFamily();
-            int pointSize = pTextObj->fontSize();
-            int weight = pTextObj->fontWeight();
-            bool italic = pTextObj->fontItalic();
-            QFont font1(strFontName,pointSize,weight,italic);
-            font.setFamily(strFontName);
-            font.setPointSize(pointSize);
-            font.setWeight(weight);
-            font.setItalic(italic);
+            font = pTextObj->font();
             ui->textFontBtn->setFont(font);
             ui->textFontBtn->setText(QStringLiteral("示范"));
             strTextColor = pTextObj->getTextColor();
@@ -605,11 +597,8 @@ void HPropertyDlg::ok_clicked()
             pTextObj->setHorizontalAlign(ui->horizAlignComboBox->currentData().toInt());
             pTextObj->setVerticalAlign(ui->vertiAlignComboBox->currentData().toInt());
             pTextObj->setLayout(ui->layoutComboBox->currentData().toUInt());
-            pTextObj->setFontFamily(font.family());
-            pTextObj->setFontSize(font.pointSize());
-            pTextObj->setFontWeight(font.weight());
-            pTextObj->setFontItalic(font.italic());
-           pTextObj->setTextColor(strTextColor);
+            pTextObj->setFont(font);
+            pTextObj->setTextColor(strTextColor);
             pTextObj->setText(ui->textEdit->text());
         }
     }

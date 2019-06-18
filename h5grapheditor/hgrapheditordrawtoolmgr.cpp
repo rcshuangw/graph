@@ -7,7 +7,7 @@
 #include "hgrapheditorop.h"
 #include "hgrapheditordoc.h"
 #include "hgraph.h"
-//#include "hiconcommand.h"
+#include "hgraphcommand.h"
 HGraphEditorDrawToolMgr::HGraphEditorDrawToolMgr(HGraphEditorMgr* pMgr):m_pGraphEditorMgr(pMgr)
 {
     //curDrawShape = enumSelection;
@@ -34,9 +34,8 @@ void HGraphEditorDrawToolMgr::appendObj(HBaseObj *obj)
         m_pGraphEditorMgr->graphEditorOp()->ObjCreated(obj,false);
 
     //undostack增加
-    /*
-    HNewIconCommand *newCommand = new HNewIconCommand(m_pIconEditorMgr,obj);
+    HGraphNewCommand *newCommand = new HGraphNewCommand(m_pGraphEditorMgr,obj);
     if(!newCommand) return;
-    m_pIconEditorMgr->iconEditorUndoStack()->push(newCommand);*/
+    m_pGraphEditorMgr->addNewCommand(newCommand);
 }
 

@@ -144,10 +144,7 @@ void HRelayPage::initBaseProperty()
             emit btnGroup->buttonClicked(id);
 
             //字体设置
-            font.setFamily(pTextObj->fontFamily());
-            font.setPointSize(pTextObj->fontSize());
-            font.setWeight(pTextObj->fontWeight());
-            font.setItalic(pTextObj->fontItalic());
+            font = pTextObj->font();
 
             ui->transHSlider->setValue(pTextObj->getTransparency());
             int nFillStyle = ui->fillStyleCombo->findData(int(pTextObj->getFillStyle()));
@@ -212,10 +209,10 @@ void HRelayPage::initRelayPorperty()
 
     //填充方式
     relayGroup = new QButtonGroup(this);
-    relayGroup->addButton(ui->openGraphRadio,MODE_OPEN_GRAPH);
-    relayGroup->addButton(ui->picOperRadio,MODE_OPERATOR_GRAPH);
-    relayGroup->addButton(ui->relayRadio,MODE_RELAY_CONTROL);
-    ui->openGraphRadio->setChecked(true);
+    //relayGroup->addButton(ui->openGraphRadio,MODE_OPEN_GRAPH);
+    //relayGroup->addButton(ui->picOperRadio,MODE_OPERATOR_GRAPH);
+    //relayGroup->addButton(ui->relayRadio,MODE_RELAY_CONTROL);
+    //ui->openGraphRadio->setChecked(true);
     ui->groupBox->setEnabled(false);
     ui->groupBox_2->setEnabled(true);
     connect(relayGroup,SIGNAL(buttonClicked(int)),this,SLOT(relayGroup_clicked(int)));
@@ -260,14 +257,14 @@ void HRelayPage::createIcons()
 {
     QListWidgetItem* operBtn = new QListWidgetItem(ui->listWidget);
     operBtn->setText(QStringLiteral("画面操作"));
-    operBtn->setIcon(QIcon(":/images/picoperator.png"));
+    operBtn->setIcon(QIcon(":/images/opengraph.png"));
     operBtn->setTextAlignment(Qt::AlignCenter);
     operBtn->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     ui->listWidget->insertItem(0,operBtn);
 
     QListWidgetItem* relayBtn = new QListWidgetItem(ui->listWidget);
     relayBtn->setText(QStringLiteral("遥控操作"));
-    relayBtn->setIcon(QIcon(":/images/runcontrol.png"));
+    relayBtn->setIcon(QIcon(":/images/ykctrl.png"));
     relayBtn->setTextAlignment(Qt::AlignCenter);
     relayBtn->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     ui->listWidget->insertItem(1,relayBtn);
@@ -296,10 +293,7 @@ void HRelayPage::onFontBtn_clicked()
 {
     bool ok;
     HText* pTextObj = pCurObj->iconSymbol()->getFirstTextObj();//获取文字信息
-    font.setFamily(pTextObj->fontFamily());
-    font.setPointSize(pTextObj->fontSize());
-    font.setWeight(pTextObj->fontWeight());
-    font.setItalic(pTextObj->fontItalic());
+    font = pTextObj->font();
     QFont newFont = QFontDialog::getFont(&ok,font,this,QStringLiteral("选择字体"));
     if(ok)
     {
@@ -480,10 +474,7 @@ void HRelayPage::onOk()
     pTextObj->setFillColor(strFillColor);
 
     //填充字体和颜色
-    pTextObj->setFontFamily(font.family());
-    pTextObj->setFontSize(font.pointSize());
-    pTextObj->setFontWeight(font.weight());
-    pTextObj->setFontItalic(font.italic());
+    pTextObj->setFont(font);
     pTextObj->setTextColor(strTextColor);
     pTextObj->setText(ui->textLineEdit->text());
 

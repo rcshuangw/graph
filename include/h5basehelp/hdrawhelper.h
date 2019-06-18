@@ -19,7 +19,7 @@ public:
     HPointFList getMidPoints(HPointFList points,bool bclose = true);
     void updatePoints();
 
-    void ratate(int angle,QPointF* c=0);
+    void rotate(int angle,QPointF* c=0);
     void turn(bool b,QPointF* c = 0);
 
     QCursor cursor(int index);

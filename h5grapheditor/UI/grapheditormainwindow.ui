@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>1591</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_F">
@@ -68,30 +68,62 @@
     <addaction name="actionZoom"/>
     <addaction name="actionZoomSame"/>
    </widget>
-   <widget class="QMenu" name="menuInsert_I">
-    <property name="title">
-     <string>Insert(&amp;I)</string>
-    </property>
-    <addaction name="actionLine"/>
-    <addaction name="actionRectangle"/>
-    <addaction name="actionPolyline"/>
-    <addaction name="actionPolygon"/>
-    <addaction name="actionArc"/>
-    <addaction name="actionText"/>
-    <addaction name="separator"/>
-    <addaction name="actionAutoYX"/>
-    <addaction name="actionAutoYC"/>
-   </widget>
    <widget class="QMenu" name="menuTool">
     <property name="title">
      <string>Tool(&amp;T)</string>
     </property>
+    <addaction name="actionGroup"/>
+    <addaction name="actionUngroup"/>
+    <addaction name="separator"/>
+    <addaction name="actionAlignTop"/>
+    <addaction name="actionAlignHCenter"/>
+    <addaction name="actionAlignBottom"/>
+    <addaction name="actionAlignLeft"/>
+    <addaction name="actionAlignVCenter"/>
+    <addaction name="actionAlignRight"/>
+    <addaction name="separator"/>
+    <addaction name="actionSameWidth"/>
+    <addaction name="actionSameHeight"/>
+    <addaction name="actionSame"/>
+    <addaction name="actionHSameSpace"/>
+    <addaction name="actionVSameSpace"/>
+    <addaction name="separator"/>
+    <addaction name="actionFilpLeft"/>
+    <addaction name="actionFlipRight"/>
+    <addaction name="actionFlipHorizon"/>
+    <addaction name="actionFlipVertical"/>
    </widget>
    <widget class="QMenu" name="menuHelp_H">
     <property name="title">
      <string>Help(&amp;H)</string>
     </property>
     <addaction name="actionAbout_A"/>
+   </widget>
+   <widget class="QMenu" name="menuInsert_I">
+    <property name="title">
+     <string>Insert(&amp;I)</string>
+    </property>
+    <widget class="QMenu" name="menuBase">
+     <property name="title">
+      <string>基本图元</string>
+     </property>
+     <addaction name="actionLine"/>
+     <addaction name="actionPolyline"/>
+     <addaction name="actionArc"/>
+     <addaction name="separator"/>
+     <addaction name="actionRectangle"/>
+     <addaction name="actionPolygon"/>
+     <addaction name="actionEllipse"/>
+     <addaction name="actionCircle"/>
+     <addaction name="actionText"/>
+    </widget>
+    <addaction name="menuBase"/>
+    <addaction name="separator"/>
+    <addaction name="actionAutoYX"/>
+    <addaction name="actionAutoYC"/>
+    <addaction name="separator"/>
+    <addaction name="actionSelect"/>
+    <addaction name="actionHand_H"/>
    </widget>
    <addaction name="menuFile_F"/>
    <addaction name="menuEdit_E"/>
@@ -611,7 +643,7 @@
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
@@ -829,7 +861,7 @@
   </action>
   <action name="actionEllipse">
    <property name="icon">
-    <iconset resource="../../h5iconeditor/icon.qrc">
+    <iconset resource="../images.qrc">
      <normaloff>:/images/ellipse.png</normaloff>:/images/ellipse.png</iconset>
    </property>
    <property name="text">
@@ -843,7 +875,6 @@
  <layoutdefault spacing="6" margin="11"/>
  <resources>
   <include location="../images.qrc"/>
-  <include location="../../h5iconeditor/icon.qrc"/>
  </resources>
  <connections/>
 </ui>

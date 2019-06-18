@@ -87,13 +87,13 @@ private:
 
     QString m_strTextClr;
     QFont m_Font;
-
+/*
     QString m_strFontFamily;
     int m_nFontSize;//字体大小
     int m_nFontWeight;//粗体
     bool m_nFontItalic;//斜体
     bool m_bFontBold;
-    bool m_bFontUnderline;
+    bool m_bFontUnderline;*/
 };
 
 

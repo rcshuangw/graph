@@ -107,7 +107,7 @@ HBaseObj* HMakeIcon::newObj(DrawShape nObjType,const QUuid& uuid,const QString& 
         {
             HIconObj* obj = new HIconObj(ptemplate);
             HIconObj* pIconObj = (HIconObj*)obj;
-            pIconObj->initIconTemplate();
+            //pIconObj->initIconTemplate();
             pIconObj->iconSymbol()->setCurrentPattern(0);
             pObj = (HBaseObj*)obj;
         }
@@ -119,7 +119,7 @@ HBaseObj* HMakeIcon::newObj(DrawShape nObjType,const QUuid& uuid,const QString& 
         {
             HNormalObj* obj = new HNormalObj(ptemplate);
             HNormalObj* pIconObj = (HNormalObj*)obj;
-            pIconObj->initIconTemplate();
+            //pIconObj->initIconTemplate();
             pIconObj->iconSymbol()->setCurrentPattern(0);
             pObj = (HBaseObj*)obj;
         }

@@ -25,7 +25,7 @@
 #include "hmakeicon.h"
 #include "hgrapheditordrawtoolmgr.h"
 #include "hgrapheditorselecttool.h"
-
+#include "hgraphcommand.h"
 HGraphEditorOp::HGraphEditorOp(HGraphEditorMgr* mgr)
     :m_pGraphEditorMgr(mgr)
 {
@@ -367,6 +367,9 @@ void HGraphEditorOp::paste()
     }
     m_pGraphEditorMgr->selectedMgr()->refreshObjs();
     m_pGraphEditorMgr->selectedMgr()->recalcSelect();
+    HGraphPasteCommand* pasteIconCommand = new HGraphPasteCommand(m_pGraphEditorMgr,objList);
+    m_pGraphEditorMgr->graphEditorStack()->push(pasteIconCommand);
+    m_pGraphEditorMgr->graphEditorView()->setFocus();
 }
 
 void HGraphEditorOp::del()
@@ -385,8 +388,8 @@ void HGraphEditorOp::del()
     //此处画面要设置modify ---huangw
     //m_pIconEditorMgr->iconTemplate()->setModify(true);
     m_pGraphEditorMgr->selectedMgr()->clear();
-
-    m_pGraphEditorMgr->addDelCommand(objList);
+    HGraphDelCommand* delCommand = new HGraphDelCommand(m_pGraphEditorMgr,objList);
+    m_pGraphEditorMgr->graphEditorStack()->push(delCommand);
 }
 
 QString HGraphEditorOp::getClipboardFile()
@@ -550,6 +553,16 @@ void HGraphEditorOp::alignAlgorithm()
     HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
     if(tempContainer->size() < 2)
         return;
+
+    QList<QPointF> oldPts;
+    for(int i = 0; i < tempContainer->size();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)tempContainer->at(i);
+        if(pObj){
+            oldPts.append(pObj->pos(1));
+        }
+    }
+
     HBaseObj* pObj = tempContainer->at(0);
     if(!pObj) return;
     HPointFList points = pObj->getPointList(1);
@@ -657,6 +670,18 @@ void HGraphEditorOp::alignAlgorithm()
     m_pGraphEditorMgr->selectedMgr()->refreshObjs();
     m_pGraphEditorMgr->selectedMgr()->recalcSelect();
 
+    QList<HBaseObj*> objs;
+    QList<QPointF> newPts;
+    for(int i = 0; i < tempContainer->size();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)tempContainer->at(i);
+        if(pObj){
+            objs.append(pObj);
+            newPts.append(pObj->pos(1));
+        }
+    }
+    HGraphMoveCommand* moveCommand = new HGraphMoveCommand(m_pGraphEditorMgr,objs,oldPts,newPts);
+    m_pGraphEditorMgr->graphEditorStack()->push(moveCommand);
 }
 
 //左对齐
@@ -740,6 +765,65 @@ void HGraphEditorOp::sizeEqualComplete()
     equalAlgorithm();
 }
 
+void HGraphEditorOp::equalAlgorithm()
+{
+    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer || tempContainer->size() < 2)
+        return;
+    QList<QPointF> oldPts;
+    QList<HBaseObj*> objs;
+    QList<QPointF> newPts;
+
+    HBaseObj* pFObj = tempContainer->getObjList().at(0);
+    if(!pFObj) return;
+    QTransform trans;
+    pFObj->transform(trans,1);
+    qreal width = trans.inverted().map(pFObj->getPointList(1)).boundingRect().width();
+    qreal height = trans.inverted().map(pFObj->getPointList(1)).boundingRect().height();
+    for(int i = 0; i < tempContainer->getObjList().size();i++)
+    {
+        HBaseObj* obj = (HBaseObj*)tempContainer->getObjList().at(i);
+        if(obj)
+        {
+            QTransform trans1;
+            qreal oldWidth,oldHeight;
+            if(m_Equalway = IconSize::EqualWidth)
+            {
+               obj->transform(trans1,1);
+               oldHeight = trans1.inverted().map(obj->getPointList(1)).boundingRect().height();
+               oldPts.append(obj->getPointList(1));
+               obj->resize(width,oldHeight);
+               newPts.append(obj->getPointList(1));
+               objs.append(obj);
+            }
+            else if(m_Equalway == IconSize::EqualHeight)
+            {
+                obj->transform(trans1,1);
+                oldWidth = trans1.inverted().map(obj->getPointList(1)).boundingRect().width();
+                oldPts.append(obj->getPointList(1));
+                obj->resize(oldWidth,height);
+                newPts.append(obj->getPointList(1));
+                objs.append(obj);
+            }
+            else if(m_Equalway == IconSize::EqualComplete)
+            {
+                oldPts.append(obj->getPointList(1));
+                obj->resize(width,height);
+                newPts.append(obj->getPointList(1));
+                objs.append(obj);
+
+            }
+        }
+    }
+    m_pGraphEditorMgr->selectedMgr()->refreshObjs();
+    m_pGraphEditorMgr->selectedMgr()->recalcSelect();
+
+    HGraphResizeCommand* moveCommand = new HGraphResizeCommand(m_pGraphEditorMgr,objs,oldPts,newPts);
+    m_pGraphEditorMgr->graphEditorStack()->push(moveCommand);
+}
+
 //横向等间距
 void HGraphEditorOp::sizeHEqualSpace()
 {
@@ -748,6 +832,15 @@ void HGraphEditorOp::sizeHEqualSpace()
     HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
     if(tempContainer->size() < 3)
         return;
+    QList<QPointF> oldPts;
+    for(int i = 0; i < tempContainer->size();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)tempContainer->at(i);
+        if(pObj){
+            oldPts.append(pObj->pos(1));
+        }
+    }
+
     HBaseObj* pFObj = tempContainer->getObjList().first();
     HBaseObj* pLObj = tempContainer->getObjList().last();
     if(!pFObj || !pLObj) return;
@@ -767,6 +860,19 @@ void HGraphEditorOp::sizeHEqualSpace()
     }
     m_pGraphEditorMgr->selectedMgr()->refreshObjs();
     m_pGraphEditorMgr->selectedMgr()->recalcSelect();
+
+    QList<HBaseObj*> objs;
+    QList<QPointF> newPts;
+    for(int i = 0; i < tempContainer->size();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)tempContainer->at(i);
+        if(pObj){
+            objs.append(pObj);
+            newPts.append(pObj->pos(1));
+        }
+    }
+    HGraphMoveCommand* moveCommand = new HGraphMoveCommand(m_pGraphEditorMgr,objs,oldPts,newPts);
+    m_pGraphEditorMgr->graphEditorStack()->push(moveCommand);
 }
 
 //纵向等间距
@@ -777,6 +883,15 @@ void HGraphEditorOp::sizeVEqualSpace()
     HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
     if(tempContainer->size() < 3)
         return;
+    QList<QPointF> oldPts;
+    for(int i = 0; i < tempContainer->size();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)tempContainer->at(i);
+        if(pObj){
+            oldPts.append(pObj->pos(1));
+        }
+    }
+
     HBaseObj* pFObj = tempContainer->getObjList().first();
     HBaseObj* pLObj = tempContainer->getObjList().last();
     if(!pFObj || !pLObj) return;
@@ -796,101 +911,22 @@ void HGraphEditorOp::sizeVEqualSpace()
     }
     m_pGraphEditorMgr->selectedMgr()->refreshObjs();
     m_pGraphEditorMgr->selectedMgr()->recalcSelect();
-}
 
-void HGraphEditorOp::equalAlgorithm()
-{
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->selectedMgr())
-        return;
-    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
-    if(!tempContainer || tempContainer->size() < 2)
-        return;
-
-    HBaseObj* pFObj = tempContainer->getObjList().at(0);
-    if(!pFObj) return;
-    QTransform trans;
-    pFObj->transform(trans,1);
-    qreal width = trans.inverted().map(pFObj->getPointList(1)).boundingRect().width();
-    qreal height = trans.inverted().map(pFObj->getPointList(1)).boundingRect().height();
-    for(int i = 0; i < tempContainer->getObjList().size();i++)
-    {
-        HBaseObj* obj = (HBaseObj*)tempContainer->getObjList().at(i);
-        if(obj)
-        {
-            QTransform trans1;
-            qreal oldWidth,oldHeight;
-            if(m_Equalway = IconSize::EqualWidth)
-            {
-               obj->transform(trans1,1);
-               oldHeight = trans1.inverted().map(obj->getPointList(1)).boundingRect().height();
-               obj->resize(width,oldHeight);
-            }
-            else if(m_Equalway == IconSize::EqualHeight)
-            {
-                obj->transform(trans1,1);
-                oldWidth = trans1.inverted().map(obj->getPointList(1)).boundingRect().width();
-                obj->resize(oldWidth,height);
-            }
-            else if(m_Equalway == IconSize::EqualComplete)
-            {
-                obj->resize(width,height);
-            }
-        }
-    }
-    m_pGraphEditorMgr->selectedMgr()->refreshObjs();
-    m_pGraphEditorMgr->selectedMgr()->recalcSelect();
-}
-
-void HGraphEditorOp::flipAlgorithm()
-{
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->selectedMgr())
-        return;
-    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
-    if(!tempContainer) return;
     QList<HBaseObj*> objs;
-    QList<QPointF> oldpts;
-    for(int i = 0; i < tempContainer->getObjList().size() - 1;i++)
+    QList<QPointF> newPts;
+    for(int i = 0; i < tempContainer->size();i++)
     {
-        HBaseObj* obj = (HBaseObj*)tempContainer->getObjList().at(i);
-        if(obj)
-        {
-            objs.append(obj);
-            oldpts.append(obj->pos(1));
+        HBaseObj* pObj = (HBaseObj*)tempContainer->at(i);
+        if(pObj){
+            objs.append(pObj);
+            newPts.append(pObj->pos(1));
         }
     }
-
-    if(HDrawHelper::Instance())
-    {
-        if(m_Flipway == LeftFlip90)
-        {
-            HDrawHelper::Instance()->ratate(-90);
-        }
-        else if(m_Flipway == RightFlip90)
-        {
-            HDrawHelper::Instance()->ratate(90);
-        }
-        else if(m_Flipway == HorizonFlip)
-        {
-            HDrawHelper::Instance()->turn(true);
-        }
-        else if(m_Flipway == VerticalFlip)
-        {
-            HDrawHelper::Instance()->turn(false);
-        }
-    }
-
-    QList<QPointF> newpts;
-    for(int i = 0; i < tempContainer->getObjList().size() - 1;i++)
-    {
-        HBaseObj* obj = (HBaseObj*)tempContainer->getObjList().at(i);
-        if(obj)
-        {
-            newpts.append(obj->pos(1));
-        }
-    }
+    HGraphMoveCommand* moveCommand = new HGraphMoveCommand(m_pGraphEditorMgr,objs,oldPts,newPts);
+    m_pGraphEditorMgr->graphEditorStack()->push(moveCommand);
 }
 
-void HGraphEditorOp::flipLeft90()
+void HGraphEditorOp::rotateLeft90()
 {
     if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
         return;
@@ -899,12 +935,64 @@ void HGraphEditorOp::flipLeft90()
 
 }
 
-void HGraphEditorOp::flipRight90()
+void HGraphEditorOp::rotateRight90()
 {
     if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_Flipway = IconFlip::RightFlip90;
     flipAlgorithm();
+}
+
+void HGraphEditorOp::rotateAlgorithm()
+{
+    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer) return;
+    QList<HBaseObj*> objs;
+    QList<QPointF> oldPts;
+    for(int i = 0; i < tempContainer->getObjList().size() - 1;i++)
+    {
+        HBaseObj* obj = (HBaseObj*)tempContainer->getObjList().at(i);
+        if(obj)
+        {
+            objs.append(obj);
+            oldPts.append(obj->pos(1));
+        }
+    }
+
+    int rotate = -90;
+    if(HDrawHelper::Instance())
+    {
+        if(m_Flipway == LeftFlip90)
+        {
+            rotate = -90;
+            HDrawHelper::Instance()->rotate(-90);
+        }
+        else if(m_Flipway == RightFlip90)
+        {
+            rotate = 90;
+            HDrawHelper::Instance()->rotate(90);
+        }
+    }
+
+    QList<QPointF> newPts;
+    for(int i = 0; i < tempContainer->getObjList().size() - 1;i++)
+    {
+        HBaseObj* obj = (HBaseObj*)tempContainer->getObjList().at(i);
+        if(obj)
+        {
+            newPts.append(obj->pos(1));
+        }
+    }
+    //trun
+    m_pGraphEditorMgr->graphEditorStack()->beginMacro("Trun");
+    HGraphMoveCommand* moveCommand = new HGraphMoveCommand(m_pGraphEditorMgr,objs,oldPts,newPts);
+    m_pGraphEditorMgr->graphEditorStack()->push(moveCommand);
+    HGraphRotateCommand* rotateCommand = new HGraphRotateCommand(m_pGraphEditorMgr,objs,rotate);
+    m_pGraphEditorMgr->graphEditorStack()->push(rotateCommand);
+    m_pGraphEditorMgr->graphEditorStack()->endMacro();
+
 }
 
 void HGraphEditorOp::flipHorizon()
@@ -921,6 +1009,56 @@ void HGraphEditorOp::flipVertical()
         return;
     m_Flipway = IconFlip::VerticalFlip;
     flipAlgorithm();
+}
+
+void HGraphEditorOp::flipAlgorithm()
+{
+    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->selectedMgr())
+        return;
+    HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
+    if(!tempContainer) return;
+    QList<HBaseObj*> objs;
+    QList<QPointF> oldPts;
+    for(int i = 0; i < tempContainer->getObjList().size() - 1;i++)
+    {
+        HBaseObj* obj = (HBaseObj*)tempContainer->getObjList().at(i);
+        if(obj)
+        {
+            objs.append(obj);
+            oldPts.append(obj->pos(1));
+        }
+    }
+
+    bool bTurn = false;
+    if(HDrawHelper::Instance())
+    {
+        if(m_Flipway == HorizonFlip)
+        {
+            bTurn = true;
+            HDrawHelper::Instance()->turn(true);
+        }
+        else if(m_Flipway == VerticalFlip)
+        {
+            HDrawHelper::Instance()->turn(false);
+        }
+    }
+
+    QList<QPointF> newPts;
+    for(int i = 0; i < tempContainer->getObjList().size() - 1;i++)
+    {
+        HBaseObj* obj = (HBaseObj*)tempContainer->getObjList().at(i);
+        if(obj)
+        {
+            newPts.append(obj->pos(1));
+        }
+    }
+    //trun
+    m_pGraphEditorMgr->graphEditorStack()->beginMacro("Rotate");
+    HGraphMoveCommand* moveCommand = new HGraphMoveCommand(m_pGraphEditorMgr,objs,oldPts,newPts);
+    m_pGraphEditorMgr->graphEditorStack()->push(moveCommand);
+    HGraphTurnCommand* turnCommand = new HGraphTurnCommand(m_pGraphEditorMgr,objs,bTurn);
+    m_pGraphEditorMgr->graphEditorStack()->push(turnCommand);
+    m_pGraphEditorMgr->graphEditorStack()->endMacro();
 }
 
 void HGraphEditorOp::setupMatrix()

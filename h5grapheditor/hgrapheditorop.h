@@ -66,11 +66,12 @@ public: //等宽
     bool getbenchMarkSize(QPointF& pt);
     void equalAlgorithm();
 public: //旋转
-    void flipLeft90();
-    void flipRight90();
+    void rotateLeft90();
+    void rotateRight90();
     void flipHorizon();
     void flipVertical();
     void flipAlgorithm();
+    void rotateAlgorithm();
 public:
     void zoomIn();
     void zoomOut();

@@ -255,6 +255,7 @@ void HGraphTreeWidget::importFileGraph()
         return;
     emit graphImport(graphName);
 }
+
 void HGraphTreeWidget::addGraphTreeWidgetItem()
 {
     if(!pGraphEditorMgr)
@@ -276,8 +277,8 @@ void HGraphTreeWidget::addGraphTreeWidgetItem()
     fileItem->setGraphTreeID(pGraph->graphID());
     fileItem->setIcon(0,QIcon(":/images/document-text.png"));
     fileItem->setText(0,QStringLiteral("最新版本"));
-    //setCurrentItem(fileItem);
-    emit itemClicked(newItem,0);
+    setCurrentItem(newItem);
+    //emit itemClicked(newItem,0);
 }
 
 void HGraphTreeWidget::delGraphTreeWidgetItem()
