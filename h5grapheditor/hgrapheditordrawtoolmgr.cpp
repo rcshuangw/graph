@@ -31,11 +31,11 @@ void HGraphEditorDrawToolMgr::appendObj(HBaseObj *obj)
 
     //画面增加
     if(m_pGraphEditorMgr && m_pGraphEditorMgr->graphEditorOp())
-        m_pGraphEditorMgr->graphEditorOp()->ObjCreated(obj,false);
+        m_pGraphEditorMgr->graphEditorOp()->objCreated(obj,false);
 
     //undostack增加
     HGraphNewCommand *newCommand = new HGraphNewCommand(m_pGraphEditorMgr,obj);
     if(!newCommand) return;
-    m_pGraphEditorMgr->addNewCommand(newCommand);
+    m_pGraphEditorMgr->graphEditorStack()->push(newCommand);
 }
 

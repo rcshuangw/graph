@@ -2,9 +2,15 @@
 #include "hiconapi.h"
 #include "hbaseobj.h"
 #include "hiconobj.h"
+#include "hgraph.h"
+#include "hgroup.h"
+#include "htempcontainer.h"
 #include "hgrapheditormgr.h"
+#include "hgrapheditorop.h"
 #include "hgrapheditorview.h"
 #include "hgrapheditorscene.h"
+#include "hgrapheditordoc.h"
+#include "hselectedmgr.h"
 HGraphCommand::HGraphCommand(HGraphEditorMgr* graphEditorMgr):m_pGraphEditorMgr(graphEditorMgr)
 {
     bFirstTime = true;
@@ -66,6 +72,7 @@ void HGraphNewCommand::redo()
     {
         m_pGraphEditorMgr->graphEditorView()->ensureVisible(item);
         item->setVisible(true);
+        m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(pObj->boundingRect(1));
     }
 }
 
@@ -76,8 +83,12 @@ void HGraphNewCommand::undo()
     //删除新建的
     pObj->setDeleted(true);
     H5GraphicsItem* item = pObj->iconGraphicsItem();
-    if(item)
+    if(item && m_pGraphEditorMgr->graphEditorView())
+    {
+        m_pGraphEditorMgr->graphEditorView()->ensureVisible(item);
         item->setVisible(false);
+        m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(pObj->boundingRect(1));
+    }
 }
 
 ////////////////////////////////////////删除///////////////////////////////////////////
@@ -103,8 +114,9 @@ void HGraphDelCommand::redo()
         bFirstTime = false;
         return;
     }
-    if(!m_pGraphEditorMgr || pObjList.isEmpty())
+    if(!m_pGraphEditorMgr || pObjList.isEmpty() || !m_pGraphEditorMgr->graphEditorView())
         return;
+    m_pGraphEditorMgr->graphEditorView()->scene()->setSelectionArea(QPainterPath());
     QRectF bounding;
     for(int i = 0; i < pObjList.count();i++)
     {
@@ -113,16 +125,17 @@ void HGraphDelCommand::redo()
         H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         obj->setDeleted(true);
-        bounding = bounding.united(item->boundingRect());
+        bounding = bounding.united(obj->boundingRect(1));
         item->setVisible(false);
     }
-    //pIconMgr->getIconFrame()->refreshSelected(bounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(bounding);
 }
 
 void HGraphDelCommand::undo()
 {
     if(!m_pGraphEditorMgr || pObjList.isEmpty())
         return;
+    m_pGraphEditorMgr->graphEditorView()->scene()->setSelectionArea(QPainterPath());
     QRectF bounding;
     for(int i = 0; i < pObjList.count();i++)
     {
@@ -131,10 +144,10 @@ void HGraphDelCommand::undo()
         H5GraphicsItem* item = obj->iconGraphicsItem();
         if(!item) continue;
         obj->setDeleted(false);
-        bounding = bounding.united(item->boundingRect());
+        bounding = bounding.united(obj->boundingRect(1));
         item->setVisible(true);
     }
-    //pIconMgr->getIconFrame()->refreshSelected(bounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(bounding);
 }
 
 
@@ -161,38 +174,41 @@ void HGraphPasteCommand::redo()
         bFirstTime = false;
         return;
     }
-    if(!m_pGraphEditorMgr || pObjList.isEmpty())
+    if(!m_pGraphEditorMgr || pObjList.isEmpty() || !m_pGraphEditorMgr->selectedMgr())
         return;
+    m_pGraphEditorMgr->graphEditorView()->scene()->setSelectionArea(QPainterPath());
     QRectF bounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
         obj->setDeleted(false);
-        bounding = bounding.united(item->boundingRect());
-        item->setVisible(true);
+        bounding = bounding.united(obj->boundingRect(1));
+        obj->iconGraphicsItem()->setVisible(true);
+        obj->iconGraphicsItem()->setSelected(true);
     }
-    //pIconMgr->getIconFrame()->refreshSelected(bounding);
+    m_pGraphEditorMgr->graphEditorView()->ensureVisible(bounding);
+    m_pGraphEditorMgr->selectedMgr()->recalcSelect();
 }
 
 void HGraphPasteCommand::undo()
 {
-    if(!m_pGraphEditorMgr || pObjList.isEmpty())
-        return;
+    if(!m_pGraphEditorMgr || pObjList.isEmpty() || !m_pGraphEditorMgr->selectedMgr())
+            return;
+    m_pGraphEditorMgr->graphEditorView()->scene()->setSelectionArea(QPainterPath());
     QRectF bounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
         obj->setDeleted(true);
-        bounding = bounding.united(item->boundingRect());
-        item->setVisible(false);
+        bounding = bounding.united(obj->boundingRect(1));
+        obj->iconGraphicsItem()->setVisible(false);
     }
-    //pIconMgr->getIconFrame()->refreshSelected(bounding);
+
+    m_pGraphEditorMgr->graphEditorView()->ensureVisible(bounding);
+    m_pGraphEditorMgr->selectedMgr()->clear();
+    m_pGraphEditorMgr->selectedMgr()->recalcSelect();
 }
 
 
@@ -243,45 +259,46 @@ void HGraphMoveCommand::redo()
         bFirstTime = false;
         return;
     }
-    if(!m_pGraphEditorMgr || pObjList.isEmpty())
-        return;
+    if(!m_pGraphEditorMgr || pObjList.isEmpty() || !m_pGraphEditorMgr->graphEditorView())
+            return;
+    m_pGraphEditorMgr->graphEditorView()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        oldBounding = oldBounding.united(item->boundingRect());
-        newBounding = newBounding.united(item->boundingRect().translated(dxList[i],dyList[i]));
-        //item->moveItemBy(dxList[i],dyList[i]);
+        obj->setModify(true);
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        newBounding = newBounding.united(obj->boundingRect(1).translated(dxList[i],dyList[i]));
+        obj->iconGraphicsItem()->moveBy(dxList[i],dyList[i]);
     }
-    //需要把select给删除掉
-    //m_pGraphEditorMgr->graphEditorScene()->clearSelectItem();
-    //pIconMgr->getIconFrame()->refreshSelected(oldBounding);
-   // pIconMgr->getIconFrame()->refreshSelected(newBounding);
-   // m_pGraphEditorMgr->graphEditorView()->ensureVisible(newBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(oldBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(newBounding);
+    m_pGraphEditorMgr->graphEditorView()->ensureVisible(newBounding);
 }
 
 void HGraphMoveCommand::undo()
 {
     if(!m_pGraphEditorMgr || pObjList.isEmpty())
         return;
+    if(!m_pGraphEditorMgr || pObjList.isEmpty() || !m_pGraphEditorMgr->graphEditorView())
+            return;
+    m_pGraphEditorMgr->graphEditorView()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        oldBounding = oldBounding.united(item->boundingRect());
-        newBounding = newBounding.united(item->boundingRect().translated(-dxList[i],-dyList[i]));
-        //item->moveItemBy(-dxList[i],-dyList[i]);
+        obj->setModify(false);
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        newBounding = newBounding.united(obj->boundingRect(1).translated(dxList[i],dyList[i]));
+        obj->iconGraphicsItem()->moveBy(-dxList[i],-dyList[i]);
     }
-    //m_pGraphEditorMgr->graphEditorScene()->clearSelectItem();
-    //m_pGraphEditorMgr->graphEditorView()->ensureVisible(newBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(oldBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(newBounding);
+    m_pGraphEditorMgr->graphEditorView()->ensureVisible(newBounding);
 }
 
 
@@ -319,43 +336,44 @@ void HGraphRotateCommand::redo()
         bFirstTime = false;
         return;
     }
-    if(!m_pGraphEditorMgr || pObjList.isEmpty())
-        return;
+
+    if(!m_pGraphEditorMgr || pObjList.isEmpty() || !m_pGraphEditorMgr->graphEditorView())
+            return;
+    m_pGraphEditorMgr->graphEditorView()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        //oldBounding = oldBounding.united(item->boundingRect());
-        //obj->setRotateAdd(angleList[i]);
-        newBounding = newBounding.united(item->boundingRect());
+        obj->setModify(true);
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        obj->rotateBy(angleList[i]);
+        newBounding = newBounding.united(obj->boundingRect(1));
     }
-    //pIconMgr->getIconFrame()->refreshSelected(oldBounding);
-    //pIconMgr->getIconFrame()->refreshSelected(newBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(oldBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(newBounding);
     m_pGraphEditorMgr->graphEditorView()->ensureVisible(newBounding);
 }
 
 void HGraphRotateCommand::undo()
 {
-    if(!m_pGraphEditorMgr || pObjList.isEmpty())
-        return;
+    if(!m_pGraphEditorMgr || pObjList.isEmpty() || !m_pGraphEditorMgr->graphEditorView())
+            return;
+    m_pGraphEditorMgr->graphEditorView()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        oldBounding = oldBounding.united(item->boundingRect());
-        //obj->setRotateAdd(-angleList[i]);
-        newBounding = newBounding.united(item->boundingRect());
+        obj->setModify(false);
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        obj->rotateBy(-angleList[i]);
+        newBounding = newBounding.united(obj->boundingRect(1));
     }
-    //pIconMgr->getIconFrame()->refreshSelected(oldBounding);
-   // pIconMgr->getIconFrame()->refreshSelected(newBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(oldBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(newBounding);
     m_pGraphEditorMgr->graphEditorView()->ensureVisible(newBounding);
 }
 
@@ -458,42 +476,131 @@ void HGraphResizeCommand::redo()
         bFirstTime = false;
         return;
     }
-    if(!m_pGraphEditorMgr || pObjList.isEmpty() )
-        return;
+    if(!m_pGraphEditorMgr || pObjList.isEmpty() || !m_pGraphEditorMgr->graphEditorView())
+            return;
+    m_pGraphEditorMgr->graphEditorView()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        oldBounding = oldBounding.united(item->boundingRect());
-        //item->resizeItem(newPtList[i]);
-        newBounding = newBounding.united(item->boundingRect());
+        obj->setModify(true);
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        HPointFList points = newPtList.at(i);
+        obj->setPointList(points);
+        newBounding = newBounding.united(obj->boundingRect(1));
+        obj->iconGraphicsItem()->setPos(obj->pos(1));
     }
-    //pIconMgr->getIconFrame()->refreshSelected(oldBounding);
-    //pIconMgr->getIconFrame()->refreshSelected(newBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(oldBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(newBounding);
     m_pGraphEditorMgr->graphEditorView()->ensureVisible(newBounding);
 }
 
 void HGraphResizeCommand::undo()
 {
-    if(!m_pGraphEditorMgr || pObjList.isEmpty())
+    if(!m_pGraphEditorMgr || pObjList.isEmpty() || !m_pGraphEditorMgr->graphEditorView())
         return;
+    m_pGraphEditorMgr->graphEditorView()->scene()->setSelectionArea(QPainterPath());
     QRectF oldBounding;
     QRectF newBounding;
     for(int i = 0; i < pObjList.count();i++)
     {
         HBaseObj* obj = (HBaseObj*)pObjList[i];
         if(!obj) continue;
-        H5GraphicsItem* item = obj->iconGraphicsItem();
-        if(!item) continue;
-        oldBounding = oldBounding.united(item->boundingRect());
-        //item->resizeItem(oldPtList[i]);
-        newBounding = newBounding.united(item->boundingRect());
+        obj->setModify(false);
+        oldBounding = oldBounding.united(obj->boundingRect(1));
+        HPointFList points = oldPtList.at(i);
+        obj->setPointList(points);
+        newBounding = newBounding.united(obj->boundingRect(1));
+        obj->iconGraphicsItem()->setPos(obj->pos(1));
     }
-    //pIconMgr->getIconFrame()->refreshSelected(oldBounding);
-    //pIconMgr->getIconFrame()->refreshSelected(newBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(oldBounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(newBounding);
     m_pGraphEditorMgr->graphEditorView()->ensureVisible(newBounding);
+}
+
+//////////////////////////////////////////组合////////////////////////////////////////////////
+HGraphGroupCommand::HGraphGroupCommand(HGraphEditorMgr* graphEditorMgr,HTempContainer* temp,HGroup* group,bool changed)
+    :HGraphCommand(graphEditorMgr),m_pTempContainer(temp),m_pGroup(group),m_bChanged(changed)
+{
+    setText("group object");
+}
+
+HGraphGroupCommand::~HGraphGroupCommand()
+{
+
+}
+
+int HGraphGroupCommand::id() const
+{
+    return Group;
+}
+
+void HGraphGroupCommand::redo()
+{
+    if(bFirstTime)
+    {
+        bFirstTime = false;
+        return;
+    }
+    if(m_bChanged)
+        group();
+    else
+        unGroup();
+}
+
+void HGraphGroupCommand::undo()
+{
+    if(m_bChanged)
+        unGroup();
+    else
+        group();
+}
+
+void HGraphGroupCommand::group()
+{
+    if(!m_pGraphEditorMgr ||  !m_pGraphEditorMgr->graphEditorOp())
+        return;
+    if(!m_pTempContainer) return;
+    for(int i = 0; i < m_pTempContainer->getObjList().count();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)m_pTempContainer->getObjList().at(i);
+        if(!pObj) continue;
+        m_pGraphEditorMgr->graphEditorOp()->objRemove(pObj);//画面删除
+    }
+    m_pTempContainer->makeGroup(m_pGroup);
+    m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->addIconObj(m_pGroup);
+    m_pGroup->setDeleted(false);
+    m_pGraphEditorMgr->graphEditorOp()->objCreated(m_pGroup,false);
+
+    m_pGraphEditorMgr->graphEditorView()->scene()->setSelectionArea(QPainterPath());
+    m_pGraphEditorMgr->graphEditorView()->ensureVisible(m_pGroup->boundingRect(1));
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(m_pGroup->boundingRect(1));
+
+}
+
+void HGraphGroupCommand::unGroup()
+{
+    if(!m_pGraphEditorMgr ||  !m_pGraphEditorMgr->graphEditorOp())
+        return;
+    if(!m_pGroup) return;
+    m_pGroup->makeTempContainer(m_pTempContainer);
+    QRectF bounding;
+    for(int i = 0; i < m_pTempContainer->getObjList().count();i++)
+    {
+        HBaseObj* pObj = (HBaseObj*)m_pTempContainer->getObjList().at(i);
+        if(!pObj) continue;
+        m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->addIconObj(pObj);
+        m_pGraphEditorMgr->graphEditorOp()->objCreated(pObj,false);
+        bounding = bounding.united(pObj->boundingRect(1));
+    }
+
+    m_pGraphEditorMgr->graphEditorOp()->objRemove(m_pGroup);
+    m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->takeIconObj(m_pGroup);
+    m_pGroup->setDeleted(true);
+
+    m_pGraphEditorMgr->selectedMgr()->clear();
+    m_pGraphEditorMgr->graphEditorView()->ensureVisible(bounding);
+    m_pGraphEditorMgr->graphEditorOp()->onRefreshSelect(bounding);
 }

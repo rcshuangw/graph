@@ -8,6 +8,8 @@
 
 class HGraphEditorMgr;
 class HBaseObj;
+class HTempContainer;
+class HGroup;
 class HGraphCommand : public QUndoCommand
 {
 public:
@@ -142,6 +144,24 @@ protected:
     QList<HBaseObj*> pObjList;
     QList<QPolygonF> oldPtList;
     QList<QPolygonF> newPtList;
+
+};
+
+class HGraphGroupCommand : public HGraphCommand
+{
+public:
+    HGraphGroupCommand(HGraphEditorMgr* graphEditorMgr,HTempContainer* temp,HGroup* group,bool changed);
+    ~HGraphGroupCommand();
+public:
+    virtual int id() const;
+    virtual void redo();
+    virtual void undo();
+    void group();
+    void unGroup();
+protected:
+    HTempContainer* m_pTempContainer;
+    HGroup* m_pGroup;
+    bool m_bChanged;
 
 };
 #endif // HGRAPHUNDOCOMMAND_H

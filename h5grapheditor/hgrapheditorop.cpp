@@ -128,14 +128,20 @@ void HGraphEditorOp::addIconObj(HBaseObj* pObj,bool bPaste)
     if(!pObj)
         return;
     m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->addIconObj(pObj);
-    ObjCreated(pObj,bPaste);
+    objCreated(pObj,bPaste);
 }
 
-void HGraphEditorOp::ObjCreated(HBaseObj* pObj,bool bPaste)
+void HGraphEditorOp::objCreated(HBaseObj* pObj,bool bPaste)
 {
     if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_pGraphEditorMgr->graphEditorScene()->onCreateObj(pObj,bPaste);
+}
+
+void HGraphEditorOp::objRemove(HBaseObj* pObj)
+{
+    if(m_pGraphEditorMgr && m_pGraphEditorMgr->graphEditorScene())
+        m_pGraphEditorMgr->graphEditorScene()->onRemoveObj(pObj);
 }
 
 void HGraphEditorOp::objSelectChanged(HBaseObj *obj, bool isSelected)
@@ -337,7 +343,7 @@ void HGraphEditorOp::paste()
             pObj->readData(0,&stream);
         }
         m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->addIconObj(pObj);
-        ObjCreated(pObj,true);
+        objCreated(pObj,true);
         objList.append(pObj);
      }
 
@@ -772,9 +778,9 @@ void HGraphEditorOp::equalAlgorithm()
     HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
     if(!tempContainer || tempContainer->size() < 2)
         return;
-    QList<QPointF> oldPts;
+    QList<HPointFList> oldPts;
     QList<HBaseObj*> objs;
-    QList<QPointF> newPts;
+    QList<HPointFList> newPts;
 
     HBaseObj* pFObj = tempContainer->getObjList().at(0);
     if(!pFObj) return;
@@ -820,8 +826,8 @@ void HGraphEditorOp::equalAlgorithm()
     m_pGraphEditorMgr->selectedMgr()->refreshObjs();
     m_pGraphEditorMgr->selectedMgr()->recalcSelect();
 
-    HGraphResizeCommand* moveCommand = new HGraphResizeCommand(m_pGraphEditorMgr,objs,oldPts,newPts);
-    m_pGraphEditorMgr->graphEditorStack()->push(moveCommand);
+    HGraphResizeCommand* resizeCommand = new HGraphResizeCommand(m_pGraphEditorMgr,objs,oldPts,newPts);
+    m_pGraphEditorMgr->graphEditorStack()->push(resizeCommand);
 }
 
 //横向等间距
@@ -931,7 +937,7 @@ void HGraphEditorOp::rotateLeft90()
     if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_Flipway = IconFlip::LeftFlip90;
-    flipAlgorithm();
+    rotateAlgorithm();
 
 }
 
@@ -940,7 +946,7 @@ void HGraphEditorOp::rotateRight90()
     if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_Flipway = IconFlip::RightFlip90;
-    flipAlgorithm();
+    rotateAlgorithm();
 }
 
 void HGraphEditorOp::rotateAlgorithm()

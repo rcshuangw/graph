@@ -279,7 +279,7 @@ bool HGraphEditorMgr::Open(const QString& graphName,int id)
     for(int i = 0; i < m_pGraphEditorDoc->getCurGraph()->size();i++)
     {
         HBaseObj* obj = (HBaseObj*)m_pGraphEditorDoc->getCurGraph()->at(i);
-        m_pGraphEditorOp->ObjCreated(obj);
+        m_pGraphEditorOp->objCreated(obj);
     }
     if(!m_pGraphEditorDrawToolMgr)
         return false;

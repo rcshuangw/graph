@@ -87,7 +87,8 @@ public:
 
 public:
     void createIconObj(const QString&,const QString&,int shape,QPointF,QList<H5GraphicsItem*> &items);
-    void ObjCreated(HBaseObj* pObj,bool bPaste = false);
+    void objCreated(HBaseObj* pObj,bool bPaste = false);
+    void objRemove(HBaseObj* pObj);
     void addIconObj(HBaseObj* pObj,bool bPaste = false);
 
     void objSelectChanged(HBaseObj *obj, bool isSelected);
