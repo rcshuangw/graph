@@ -59,6 +59,8 @@ void HGraphEditorMainWindow::createActions()
     connect(ui->actionUndo_U,SIGNAL(triggered(bool)),this,SLOT(acitonUndo_clicked()));
     connect(ui->actionRedo_R,SIGNAL(triggered(bool)),this,SLOT(actionRedo_clicked()));
 
+    ui->actionUndo_U->setShortcut(QKeySequence(QKeySequence::Undo));
+    ui->actionRedo_R->setShortcut(QKeySequence(QKeySequence::Redo));
     //编辑部分
     connect(ui->actionCut_X,SIGNAL(triggered(bool)),this,SLOT(actionCut_clicked()));
     connect(ui->actionCopy_C,SIGNAL(triggered(bool)),this,SLOT(actionCopy_clicked()));
@@ -283,6 +285,9 @@ void HGraphEditorMainWindow::initMainWindow()
     connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(updateBaseAction()),this,SLOT(onUpdateBaseAction()));
     connect(m_pGraphEditorMgr->graphEditorOp(),SIGNAL(updateStatus(const QString&)),this,SLOT(onUpdateStatus(const QString&)));
 
+    connect(m_pGraphEditorMgr->graphEditorStack(),SIGNAL(canUndoChanged(bool)),ui->actionUndo_U, SLOT(setEnabled(bool)));
+    connect(m_pGraphEditorMgr->graphEditorStack(),SIGNAL(canRedoChanged(bool)),ui->actionRedo_R, SLOT(setEnabled(bool)));
+
 }
 
 void HGraphEditorMainWindow::New(const QString& graphName)
@@ -444,8 +449,8 @@ void HGraphEditorMainWindow::onUpdateBaseAction()
     //if(m_pGraphEditorMgr)
     //    bMgr = true;
     //undo redo
-    ui->actionRedo_R->setEnabled(bMgr&&m_pGraphEditorMgr->graphEditorStack()&&m_pGraphEditorMgr->graphEditorStack()->canUndo());
-    ui->actionUndo_U->setEnabled(bMgr&&m_pGraphEditorMgr->graphEditorStack()&&m_pGraphEditorMgr->graphEditorStack()->canRedo());
+    ui->actionRedo_R->setEnabled(bMgr&&m_pGraphEditorMgr->graphEditorStack()&&m_pGraphEditorMgr->graphEditorStack()->canRedo());
+    ui->actionUndo_U->setEnabled(bMgr&&m_pGraphEditorMgr->graphEditorStack()&&m_pGraphEditorMgr->graphEditorStack()->canUndo());
 
     //cut copy paste del
     bool bselectObj = bMgr&&m_pGraphEditorMgr->selectedMgr()&&m_pGraphEditorMgr->selectedMgr()->selectObj();
@@ -523,5 +528,5 @@ void HGraphEditorMainWindow::onSelectTool()
 
 void HGraphEditorMainWindow::onSelectChanged()
 {
-
+    onUpdateBaseAction();
 }

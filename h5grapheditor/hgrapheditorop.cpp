@@ -520,6 +520,8 @@ void HGraphEditorOp::groupObj()
     m_pGraphEditorMgr->selectedMgr()->clear();
     m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->addIconObj(pGroup);//增加到pattern
     m_pGraphEditorMgr->graphEditorScene()->onCreateObj(pGroup,false);//画面增加
+    HGraphGroupCommand* groupCommand = new HGraphGroupCommand(m_pGraphEditorMgr,tempContainer,pGroup,true);
+    m_pGraphEditorMgr->graphEditorStack()->push(groupCommand);
 }
 
 //取消组合
@@ -546,8 +548,10 @@ void HGraphEditorOp::ungroupObj()
 
     }
     m_pGraphEditorMgr->graphEditorScene()->onRemoveObj(pGroup);
-    m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->removeIconObj(pGroup);
+    m_pGraphEditorMgr->graphEditorDoc()->getCurGraph()->takeIconObj(pGroup);
     m_pGraphEditorMgr->selectedMgr()->clear();
+    HGraphGroupCommand* groupCommand = new HGraphGroupCommand(m_pGraphEditorMgr,tempContainer,pGroup,false);
+    m_pGraphEditorMgr->graphEditorStack()->push(groupCommand);
 
 }
 
@@ -693,7 +697,7 @@ void HGraphEditorOp::alignAlgorithm()
 //左对齐
 void HGraphEditorOp::alignLeft()
 {
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_Alignment = Qt::AlignLeft;
     alignAlgorithm();
@@ -702,7 +706,7 @@ void HGraphEditorOp::alignLeft()
 //右对齐
 void HGraphEditorOp::alignRight()
 {
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_Alignment = Qt::AlignRight;
     alignAlgorithm();
@@ -711,7 +715,7 @@ void HGraphEditorOp::alignRight()
 //垂直居中
 void HGraphEditorOp::alignVCenter()
 {
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_Alignment = Qt::AlignVCenter;
     alignAlgorithm();
@@ -720,7 +724,7 @@ void HGraphEditorOp::alignVCenter()
 //上对齐
 void HGraphEditorOp::alignTop()
 {
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_Alignment = Qt::AlignTop;
     alignAlgorithm();
@@ -729,7 +733,7 @@ void HGraphEditorOp::alignTop()
 //下对齐
 void HGraphEditorOp::alignBottom()
 {
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_Alignment = Qt::AlignBottom;
     alignAlgorithm();
@@ -738,7 +742,7 @@ void HGraphEditorOp::alignBottom()
 //水平居中
 void HGraphEditorOp::alignHCenter()
 {
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_Alignment = Qt::AlignHCenter;
     alignAlgorithm();
@@ -756,7 +760,7 @@ void HGraphEditorOp::sizeEqualWidth()
 //等高
 void HGraphEditorOp::sizeEqualHeight()
 {
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_Equalway = IconSize::EqualHeight;
     equalAlgorithm();
@@ -765,7 +769,7 @@ void HGraphEditorOp::sizeEqualHeight()
 //完全相等
 void HGraphEditorOp::sizeEqualComplete()
 {
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->graphEditorScene())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->graphEditorScene())
         return;
     m_Equalway = IconSize::EqualComplete;
     equalAlgorithm();
@@ -773,7 +777,7 @@ void HGraphEditorOp::sizeEqualComplete()
 
 void HGraphEditorOp::equalAlgorithm()
 {
-    if(!m_pGraphEditorMgr && !m_pGraphEditorMgr->selectedMgr())
+    if(!m_pGraphEditorMgr || !m_pGraphEditorMgr->selectedMgr())
         return;
     HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
     if(!tempContainer || tempContainer->size() < 2)
@@ -795,7 +799,7 @@ void HGraphEditorOp::equalAlgorithm()
         {
             QTransform trans1;
             qreal oldWidth,oldHeight;
-            if(m_Equalway = IconSize::EqualWidth)
+            if(m_Equalway == IconSize::EqualWidth)
             {
                obj->transform(trans1,1);
                oldHeight = trans1.inverted().map(obj->getPointList(1)).boundingRect().height();

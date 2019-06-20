@@ -28,7 +28,6 @@ void HIconEditorDrawToolMgr::appendObj(HBaseObj *obj)
     //画面增加
     if(m_pIconEditorMgr && m_pIconEditorMgr->iconEditorOp())
         m_pIconEditorMgr->iconEditorOp()->onCreateObj(obj,false);
-
     //undostack增加
     HNewIconCommand *newCommand = new HNewIconCommand(m_pIconEditorMgr,obj);
     if(!newCommand) return;

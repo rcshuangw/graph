@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/start.png</file>
+        <file>images/start1.png</file>
+        <file>images/start2.png</file>
+        <file>images/color0.bmp</file>
+        <file>images/color1.bmp</file>
+        <file>images/color2.bmp</file>
+        <file>images/color3.bmp</file>
+        <file>images/color4.bmp</file>
+        <file>images/color5.bmp</file>
+        <file>images/color6.bmp</file>
+        <file>images/color7.bmp</file>
+        <file>images/color8.bmp</file>
+        <file>images/color9.bmp</file>
+        <file>images/colorblack.bmp</file>
+        <file>images/colorline.bmp</file>
+        <file>images/colorpoint.bmp</file>
+    </qresource>
+</RCC>

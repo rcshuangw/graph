@@ -86,11 +86,11 @@ void HIconMainWindow::createActions()
 
     //编辑项
     undoAct = new QAction(QIcon(":/images/undo.png"),QStringLiteral("撤销(&U)"),this);
-    undoAct->setShortcut(QKeySequence(QKeySequence::Undo));
+    //undoAct->setShortcut(QKeySequence(QKeySequence::Undo));
     connect(undoAct,SIGNAL(triggered(bool)),this,SLOT(undo()));
 
     redoAct = new QAction(QIcon(":/images/redo.png"),QStringLiteral("重做(&R)"),this);
-    redoAct->setShortcut(QKeySequence(QKeySequence::Redo));
+    //redoAct->setShortcut(QKeySequence(QKeySequence::Redo));
     connect(redoAct,SIGNAL(triggered(bool)),this,SLOT(redo()));
 
     cutAct = new QAction(QIcon(":/images/cut.png"), QStringLiteral("剪切(&X)"), this);

@@ -35,7 +35,6 @@ void HGraphEditorDrawToolMgr::appendObj(HBaseObj *obj)
 
     //undostack增加
     HGraphNewCommand *newCommand = new HGraphNewCommand(m_pGraphEditorMgr,obj);
-    if(!newCommand) return;
     m_pGraphEditorMgr->graphEditorStack()->push(newCommand);
 }
 
