@@ -81,7 +81,7 @@ void HGraphTreeWidget::initGraphTreeWidget()
             continue;
         HGraphTreeWidgetItem* newItem = new HGraphTreeWidgetItem(rootItem,GRAPHTREE_TYPE_FILE);
         newItem->setGraphTreeID(graph->graphID());
-        newItem->setText(0,graph->getGraphName());
+        newItem->setText(0,graph->graphName());
         newItem->setIcon(0,QIcon(":/images/Folder_Documents.png"));
         rootItem->addChild(newItem);
         HGraphTreeWidgetItem* fileItem = new HGraphTreeWidgetItem(newItem,GRAPHTREE_TYPE_CFILE);
@@ -269,7 +269,7 @@ void HGraphTreeWidget::addGraphTreeWidgetItem()
 
     HGraphTreeWidgetItem* newItem = new HGraphTreeWidgetItem(parentItem,GRAPHTREE_TYPE_FILE);
     newItem->setGraphTreeID(pGraph->graphID());
-    newItem->setText(0,pGraph->getGraphName());
+    newItem->setText(0,pGraph->graphName());
     newItem->setIcon(0,QIcon(":/images/Folder_Documents.png"));
     parentItem->addChild(newItem);
     expandItem(newItem);

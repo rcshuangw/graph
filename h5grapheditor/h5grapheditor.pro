@@ -9,6 +9,9 @@ TEMPLATE = app
 CONFIG += qt warn_off thread exceptions
 DESTDIR += ../../lib
 #QMAKE_LFLAGS += /MANIFESTUAC:"level='requireAdministrator'uiAccess='false'"
+QT += gui
+QT += widgets
+QT += xml
 
 INCLUDEPATH += \
     ../include \
@@ -75,6 +78,3 @@ win32{
     OBJECTS_DIR	= temp/obj
     LIBS += \
 }
-QT += gui
-QT += widgets
-QT += xml

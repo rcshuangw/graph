@@ -226,7 +226,7 @@ int HGraphEditorDoc::importGraph(const QString& name)
         pGraph = NULL;
         return (int)-1;
     }
-    if(pGraph->getGraphName().compare(strFolder) != 0)
+    if(pGraph->graphName().compare(strFolder) != 0)
         pGraph->setGraphName(strFolder);
     //在里面寻找graphID 如果找到了，graphID就要更改了
     if(findGraph(pGraph->graphID()))
@@ -267,7 +267,7 @@ HGraph* HGraphEditorDoc::findGraph(const QString& graphName)
     for(graphIterator = m_pGraphList.begin();graphIterator != m_pGraphList.end();graphIterator++)
     {
         graph = *graphIterator;
-        if(graph->getGraphName() == graphName)
+        if(graph->graphName() == graphName)
             return graph;
     }
     return NULL;

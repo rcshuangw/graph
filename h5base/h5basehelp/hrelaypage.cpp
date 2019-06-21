@@ -224,7 +224,7 @@ void HRelayPage::initRelayPorperty()
     {
         HGraph* pGraph = (HGraph*)m_pGraphList[i];
         if(!pGraph) continue;
-        QString strGraphName = pGraph->getGraphName();
+        QString strGraphName = pGraph->graphName();
         int nGraphID = pGraph->graphID();
         ui->openPicCombo->addItem(strGraphName,QVariant(nGraphID));
     }

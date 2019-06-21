@@ -131,7 +131,7 @@ void HGraphHelper::saveAllGraph(QList<HGraph*> *pGraphList,HGraph* pCurGraph)
         HGraph* pGraph = (HGraph*)pGraphList->at(i);
         if(!pGraph)
             continue;
-        QString strGraphName = pGraph->getGraphName();
+        QString strGraphName = pGraph->graphName();
         if((int)-1 != curExistFolderList.indexOf(strGraphName)) //当前画面找到了
         {
             //saveGraph(path,graph)
@@ -177,7 +177,7 @@ void HGraphHelper::saveGraph(HGraph* graph)
     if(!dirIconsPath.exists())
         dirIconsPath.mkdir(graphsPath);
 
-    QString strGraphPath = graphsPath + "/" +graph->getGraphName();
+    QString strGraphPath = graphsPath + "/" +graph->graphName();
     if(!QDir(strGraphPath).exists())
     {
        if(!QDir(graphsPath).mkdir(strGraphPath))

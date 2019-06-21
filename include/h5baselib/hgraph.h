@@ -32,7 +32,7 @@ public:
 
 public:
     void setGraphName(const QString& name);
-    QString getGraphName();
+    QString graphName();
 
     void setGraphID(int id);
     int graphID();

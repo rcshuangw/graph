@@ -77,7 +77,7 @@ void HGraphPage::initGraphInfo()
     if(pGraph)
     {
         pGraph->setModify(true);
-        ui->graphNameLineEdit->setText(pGraph->getGraphName());
+        ui->graphNameLineEdit->setText(pGraph->graphName());
         ui->startCheckBox->setChecked(pGraph->getStartFlag());
         ui->wSpinBox->setValue(pGraph->m_width);
         ui->hSpinBox->setValue(pGraph->m_height);

@@ -43,7 +43,7 @@ void HGraph::setGraphName(const QString& name)
     m_strGraphName = name;
 }
 
-QString HGraph::getGraphName()
+QString HGraph::graphName()
 {
     return m_strGraphName;
 }
