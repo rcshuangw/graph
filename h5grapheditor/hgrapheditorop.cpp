@@ -834,6 +834,17 @@ void HGraphEditorOp::equalAlgorithm()
     m_pGraphEditorMgr->graphEditorStack()->push(resizeCommand);
 }
 
+bool caseInsensitiveLessThanH(HBaseObj* s1, HBaseObj* s2)
+{
+    return s1->getPointList(1).boundingRect().left() < s2->getPointList(1).boundingRect().left();
+}
+
+
+bool caseInsensitiveLessThanV(HBaseObj* s1, HBaseObj* s2)
+{
+    return s1->getPointList(1).boundingRect().top() < s2->getPointList(1).boundingRect().top();
+}
+
 //横向等间距
 void HGraphEditorOp::sizeHEqualSpace()
 {
@@ -842,6 +853,8 @@ void HGraphEditorOp::sizeHEqualSpace()
     HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
     if(tempContainer->size() < 3)
         return;
+    qSort(tempContainer->getObjList().begin(),tempContainer->getObjList().end(),caseInsensitiveLessThanH);
+
     QList<QPointF> oldPts;
     for(int i = 0; i < tempContainer->size();i++)
     {
@@ -857,7 +870,7 @@ void HGraphEditorOp::sizeHEqualSpace()
     qreal dFdx = pFObj->getPointList(1).boundingRect().left();
     qreal dLdx = pLObj->getPointList(1).boundingRect().left();
     qreal dSpace = ( dLdx - dFdx)/(tempContainer->getObjList().count() - 1);
-    for(int i = 0; i < tempContainer->getObjList().size() - 1;i++)
+    for(int i = 1; i < tempContainer->getObjList().size() - 1;i++)
     {
         HBaseObj* obj = (HBaseObj*)tempContainer->getObjList().at(i);
         if(obj)
@@ -865,7 +878,7 @@ void HGraphEditorOp::sizeHEqualSpace()
             QRectF nRect = obj->getPointList(1).boundingRect();
             qreal dx = nRect.left();
             obj->moveBy(i*dSpace-(dx - dFdx),0);
-            obj->iconGraphicsItem()->setPos(obj->pos(1));
+            obj->iconGraphicsItem()->setPos(obj->pos(0));
         }
     }
     m_pGraphEditorMgr->selectedMgr()->refreshObjs();
@@ -893,6 +906,8 @@ void HGraphEditorOp::sizeVEqualSpace()
     HTempContainer* tempContainer = m_pGraphEditorMgr->selectedMgr()->selectObj();
     if(tempContainer->size() < 3)
         return;
+    qSort(tempContainer->getObjList().begin(),tempContainer->getObjList().end(),caseInsensitiveLessThanV);
+
     QList<QPointF> oldPts;
     for(int i = 0; i < tempContainer->size();i++)
     {
@@ -908,7 +923,7 @@ void HGraphEditorOp::sizeVEqualSpace()
     qreal dFdy = pFObj->getPointList(1).boundingRect().top();
     qreal dLdy = pLObj->getPointList(1).boundingRect().top();
     qreal dSpace = ( dLdy - dFdy)/(tempContainer->getObjList().count() - 1);
-    for(int i = 0; i < tempContainer->getObjList().size() - 1;i++)
+    for(int i = 1; i < tempContainer->getObjList().size() - 1;i++)
     {
         HBaseObj* obj = (HBaseObj*)tempContainer->getObjList().at(i);
         if(obj)
@@ -916,7 +931,7 @@ void HGraphEditorOp::sizeVEqualSpace()
             QRectF nRect = obj->getPointList(1).boundingRect();
             qreal dy = nRect.top();
             obj->moveBy(0,i*dSpace-(dy - dFdy));
-            obj->iconGraphicsItem()->setPos(obj->pos(1));
+            obj->iconGraphicsItem()->setPos(obj->pos(0));
         }
     }
     m_pGraphEditorMgr->selectedMgr()->refreshObjs();
@@ -985,6 +1000,7 @@ void HGraphEditorOp::rotateAlgorithm()
             HDrawHelper::Instance()->rotate(90);
         }
     }
+    m_pGraphEditorMgr->selectedMgr()->recalcSelect();
 
     QList<QPointF> newPts;
     for(int i = 0; i < tempContainer->getObjList().size() - 1;i++)
@@ -996,7 +1012,7 @@ void HGraphEditorOp::rotateAlgorithm()
         }
     }
     //trun
-    m_pGraphEditorMgr->graphEditorStack()->beginMacro("Trun");
+    m_pGraphEditorMgr->graphEditorStack()->beginMacro("Rotate");
     HGraphMoveCommand* moveCommand = new HGraphMoveCommand(m_pGraphEditorMgr,objs,oldPts,newPts);
     m_pGraphEditorMgr->graphEditorStack()->push(moveCommand);
     HGraphRotateCommand* rotateCommand = new HGraphRotateCommand(m_pGraphEditorMgr,objs,rotate);
@@ -1052,6 +1068,8 @@ void HGraphEditorOp::flipAlgorithm()
             HDrawHelper::Instance()->turn(false);
         }
     }
+
+    m_pGraphEditorMgr->selectedMgr()->recalcSelect();
 
     QList<QPointF> newPts;
     for(int i = 0; i < tempContainer->getObjList().size() - 1;i++)
