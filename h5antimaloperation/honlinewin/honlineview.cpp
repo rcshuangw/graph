@@ -1,6 +1,6 @@
 ﻿#include "honlineview.h"
 #include <QScrollBar>
-HGraphicsView::HGraphicsView(QWidget *parent)
+HOnlineView::HOnlineView(QWidget *parent)
     :QGraphicsView (parent)
 {
     setAcceptDrops(false);
@@ -10,9 +10,20 @@ HGraphicsView::HGraphicsView(QWidget *parent)
     setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
     viewport()->setMouseTracking(true);
+    m_pOnlineMgr = NULL;
 }
 
-void HGraphicsView::refresh()
+void HOnlineView::setOnlineMgr(HOnlineMgr* mgr)
+{
+    m_pOnlineMgr = mgr;
+}
+
+HOnlineMgr* HOnlineView::onlineMgr()
+{
+    return m_pOnlineMgr;
+}
+
+void HOnlineView::refresh()
 {
     QScrollBar* pBar = horizontalScrollBar();
     int hBar = 0;
@@ -30,5 +41,11 @@ void HGraphicsView::refresh()
     int height = viewport()->height() + vBar;
     resize(width-1,height-1);
     resize(width,height);
+
+}
+
+
+void HOnlineView::eventFilter(QObject *o, QEvent *e)
+{
 
 }

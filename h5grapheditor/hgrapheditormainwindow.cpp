@@ -294,7 +294,7 @@ void HGraphEditorMainWindow::New(const QString& graphName)
 {
     if(!m_pGraphEditorMgr)
         return;
-    bool bfind = m_pGraphEditorMgr->findGraphByName(graphName);
+    bool bfind = m_pGraphEditorMgr->isExistGraph(graphName);
     if(bfind)
     {
         QMessageBox mb(QMessageBox::Information,QStringLiteral("提醒"),QStringLiteral("已经存在相同名字的图形文件，请修改名称！"),QMessageBox::Yes);

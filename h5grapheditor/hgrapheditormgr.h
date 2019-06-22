@@ -41,7 +41,7 @@ public:
     void loadTemplates();
     void loadGraphs();
 
-    bool findGraphByName(const QString&);
+    bool isExistGraph(const QString&);
     bool isGraphModify();
 public:
     //

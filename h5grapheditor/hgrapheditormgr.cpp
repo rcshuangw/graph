@@ -180,7 +180,7 @@ QRectF HGraphEditorMgr::getLogicRect()
 }
 
 //判断graph文件名是否存在
-bool HGraphEditorMgr::findGraphByName(const QString& graphName)
+bool HGraphEditorMgr::isExistGraph(const QString& graphName)
 {
     if(!m_pGraphEditorDoc)
         return false;
