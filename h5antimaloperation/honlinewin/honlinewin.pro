@@ -1,28 +1,29 @@
 TARGET = online
 TEMPLATE = app
 
+QT += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 CONFIG += qt warn_off thread exceptions
 DESTDIR += ../../lib
 #QMAKE_LFLAGS += /MANIFESTUAC:"level='requireAdministrator'uiAccess='false'"
-QT += gui
-QT += widgets
-QT += xml
+
 
 INCLUDEPATH += \
+          ../include \
     ../../include \
     ../../include/h5baselib \
     ../../include/h5basehelp \
     ../../include/h5basegui
 
 HEADERS += \
-    honlineapi.h \
     #honlineframe.h \
+    ../include/honlineframe.h \
+    ../include/honlinemgr.h \
+    ../include/honlinedoc.h \
     honlinetreewidget.h \
-    honlineframe.h \
     honlinescene.h \
-    honlineview.h \
-    honlinemgr.h \
-    honlinedoc.h
+    honlineview.h
 
 SOURCES += \
     #honlineframe.cpp \

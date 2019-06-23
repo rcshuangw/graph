@@ -12,6 +12,13 @@ TARGET = Test
 TEMPLATE = app
 DEFINES += H5MAINWINDOW_DLL
 
+INCLUDEPATH += \
+          ../include
+    ../../include \
+    ../../include/h5baselib \
+    ../../include/h5basehelp \
+    ../../include/h5basegui
+
 SOURCES += main.cpp\
     hsystool.cpp \
     hclient.cpp \
@@ -19,11 +26,11 @@ SOURCES += main.cpp\
     hmainwindow.cpp
 
 HEADERS  += \
-    hsystool.h \
-    hclient.h \
-    hclock.h \
+    ../include/hsystool.h \
+    ../include/hclient.h \
+    ../include/hmainwindow.h \
     h5mainwindowexport.h \
-    hmainwindow.h
+    hclock.h
 
 FORMS    += mainwindow.ui
 
