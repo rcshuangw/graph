@@ -1,14 +1,14 @@
 #ifndef HONLINEFRAME1_H
 #define HONLINEFRAME1_H
-#include "hframe.h"
+#include "hbaseframe.h"
 class HGraphView;
 class HAntiMalopMgr;
-class HGraphFrame : public HFrame
+class HGraphFrame : public HBaseFrame
 {
     Q_OBJECT
 
 public:
-    HGraphFrame(HAntiMalopMgr* mgr,HFrame *parent = 0);
+    HGraphFrame(HAntiMalopMgr* mgr,HBaseFrame *parent = 0);
     ~HGraphFrame();
 
 public:
@@ -19,7 +19,6 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
 private:
     HGraphView* m_pGraphView;
-    HAntiMalopMgr* m_pAntiMalpoMgr;
 };
 
 #endif // HONLINEFRAME1_H

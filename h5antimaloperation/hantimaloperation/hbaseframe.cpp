@@ -1,4 +1,5 @@
 #include "hbaseframe.h"
+#include <QHBoxLayout>
 #include "hantimalopmgr.h"
 #include "hgraphview.h"
 #include "hgraphscene.h"
@@ -21,5 +22,10 @@ void HBaseFrame::init()
     m_pGraphScene = new HGraphScene(m_pAntiMalpoMgr);
     m_pGraphView->setScene(m_pGraphScene);
     m_pGraphView->setSceneRect(m_pAntiMalpoMgr->getLogicRect());
+
+    QHBoxLayout* layout = new QHBoxLayout;
+    layout->setContentsMargins(2,2,2,2);
+    layout->addWidget(m_pGraphView);
+    setLayout(layout);
 }
 

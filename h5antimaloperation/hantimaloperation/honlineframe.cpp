@@ -52,7 +52,7 @@ void HOnlineFrame::initOnlineFrame()
     //创建信号
 
     //右边
-    HGraphFrame* graphFrame = new HGraphFrame(m_pAntiMalpoMgr,this);
+    HGraphFrame* graphFrame = new HGraphFrame(m_pAntiMalpoMgr);
     m_pSplitter->addWidget(graphFrame);
     //创建信号
 

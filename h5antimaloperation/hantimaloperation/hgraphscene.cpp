@@ -42,7 +42,7 @@ void HGraphScene::drawBackground(QPainter *painter, const QRectF &rect)
     }
     else
     {
-        clr = QColor(Qt::darkGray);
+        clr = QColor(Qt::black);
     }
     QRectF rectF = m_pAntiMalopMgr->getLogicRect();
     painter->fillRect(rectF,clr);

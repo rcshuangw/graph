@@ -1,8 +1,8 @@
 #include "hgraphframe.h"
 #include "hgraphview.h"
 #include "hantimalopmgr.h"
-HGraphFrame::HGraphFrame(HAntiMalopMgr* mgr,HFrame *parent) :
-    m_pAntiMalpoMgr(mgr),HFrame(parent)
+HGraphFrame::HGraphFrame(HAntiMalopMgr* mgr,HBaseFrame *parent) :
+    HBaseFrame(mgr,parent)
 {
     //设置左右比例
     //ui->splitter->setStretchFactor(0,3);
