@@ -9,16 +9,18 @@
 #include <QGraphicsSceneDragDropEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
+#include "hdrawmanager.h"
 class HBaseObj;
 class HGraph;
-class HOnlineFrame;
-class HOnlineMgr;
-class HOnlineScene : public QGraphicsScene
+class HGraphFrame;
+class HAntiMalopMgr;
+class HGraphView;
+class HGraphScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    HOnlineScene(HOnlineMgr* mgr);
-    ~HOnlineScene();
+    HGraphScene(HAntiMalopMgr* mgr);
+    ~HGraphScene();
 public:
     void setView(QGraphicsView* v);
     QGraphicsView* view();
@@ -41,7 +43,8 @@ public:
 public:
     QList<QGraphicsPathItem*> m_pGraphicsPathItems;
     HGraph* m_pGraph;
-    HOnlineMgr* m_pOnlineMgr;
+    HAntiMalopMgr* m_pAntiMalopMgr;
+    HGraphView* m_pGraphView;
 public:
 
 };

@@ -1,5 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS += hantimaloperation \
-		       honlinewin \
-           hpreviewwin \
-           htypicalwin
+SUBDIRS += hantimaloperation 

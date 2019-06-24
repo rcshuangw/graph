@@ -4,14 +4,14 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
-class HWfSystemMgr;
+class HAntiMalopMgr;
 class QContextMenuEvent;
-class HOnlineTreeWidgetItem:public QTreeWidgetItem
+class HGraphTreeWidgetItem:public QTreeWidgetItem
 {
 public:
-    HOnlineTreeWidgetItem(QTreeWidget * parent, int type = UserType);
-    HOnlineTreeWidgetItem(QTreeWidgetItem * parent, int type = UserType);
-    ~HOnlineTreeWidgetItem();
+    HGraphTreeWidgetItem(QTreeWidget * parent, int type = UserType);
+    HGraphTreeWidgetItem(QTreeWidgetItem * parent, int type = UserType);
+    ~HGraphTreeWidgetItem();
 
 public:
     void setGraphTreeID(int graphTreeID);
@@ -20,12 +20,12 @@ private:
     int wGraphTreeID;
 };
 
-class HOnlineTreeWidget : public QTreeWidget
+class HGraphTreeWidget : public QTreeWidget
 {
     Q_OBJECT
 public:
-    HOnlineTreeWidget(HWfSystemMgr *pMgr);
-    ~HOnlineTreeWidget();
+    HGraphTreeWidget(HAntiMalopMgr *pMgr);
+    ~HGraphTreeWidget();
 public:
     //初始化树结构
     void initGraphTreeWidget();
@@ -40,7 +40,7 @@ public slots:
 signals:
     void graphOpen(const QString&,const int graphID);
 protected:
-    HWfSystemMgr* m_pWfSystemMgr;
+    HAntiMalopMgr* m_pAntiMalopMgr;
     int nPreGraphID;
 };
 

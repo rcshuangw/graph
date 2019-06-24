@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "h5baselibexport.h"
-#include "hiconapi.h"
+//#include "hiconapi.h"
 #include "hicontemplate.h"
 #include "hiconsymbol.h"
 class QPainter;

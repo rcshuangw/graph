@@ -1,27 +1,24 @@
-﻿#include "honlinedoc.h"
-#include "honlinemgr.h".h"
+﻿#include "hantimalopdoc.h"
+#include "hantimalopmgr.h"
 #include "hgraph.h"
 #include "hgraphhelper.h"
-//#include "hbaseobj.h"
-//#include "hiconobj.h"
-//#include "hiconsymbol.h"
 #include <QDir>
 #include <QFile>
 #include <QFileInfoList>
 #include <QProcessEnvironment>
 //图形文件存储类
-HOnlineDoc::HOnlineDoc(HOnlineMgr* mgr)
-    :m_pOnlineMgr(mgr)
+HAntiMalopDoc::HAntiMalopDoc(HAntiMalopMgr* mgr)
+    :m_pAntiMalopMgr(mgr)
 {
     m_pCurGraph = NULL;
 }
 
-HOnlineDoc::~HOnlineDoc()
+HAntiMalopDoc::~HAntiMalopDoc()
 {
 
 }
 
-void HOnlineDoc::loadAllGraph()
+void HAntiMalopDoc::loadAllGraph()
 {
     HGraphHelper::Instance()->loadAllGraph(&m_pGraphList);
     m_pCurGraph = getRootGraph();
@@ -31,7 +28,7 @@ void HOnlineDoc::loadAllGraph()
 }
 
 //更新所有画面里面的模板信息
-void HOnlineDoc::updateGraphList()
+void HAntiMalopDoc::updateGraphList()
 {
     /*
     for(int i = 0; i < m_pGraphList.count();i++)
@@ -67,7 +64,7 @@ void HOnlineDoc::updateGraphList()
     }*/
 }
 
-HGraph* HOnlineDoc::getRootGraph()
+HGraph* HAntiMalopDoc::getRootGraph()
 {
     HGraph* pRootGraph = NULL;
     for(int i = 0; i < m_pGraphList.count();i++)
@@ -82,7 +79,7 @@ HGraph* HOnlineDoc::getRootGraph()
     return pRootGraph;
 }
 
-HGraph* HOnlineDoc::findGraph(int graphID)
+HGraph* HAntiMalopDoc::findGraph(int graphID)
 {
     HGraph *graph = NULL;
     QList<HGraph*>::Iterator graphIterator;
@@ -95,7 +92,7 @@ HGraph* HOnlineDoc::findGraph(int graphID)
     return NULL;
 }
 
-HGraph* HOnlineDoc::findGraph(const QString& graphName)
+HGraph* HAntiMalopDoc::findGraph(const QString& graphName)
 {
     HGraph *graph = NULL;
     QList<HGraph*>::Iterator graphIterator;
@@ -108,7 +105,7 @@ HGraph* HOnlineDoc::findGraph(const QString& graphName)
     return NULL;
 }
 
-bool HOnlineDoc::openGraph(const QString& name,const int id)
+bool HAntiMalopDoc::openGraph(const QString& name,const int id)
 {
     HGraph* graph = findGraph(id);
     if(!graph)
@@ -117,7 +114,7 @@ bool HOnlineDoc::openGraph(const QString& name,const int id)
     return true;
 }
 
-HGraph* HOnlineDoc::getCurGraph()
+HGraph* HAntiMalopDoc::getCurGraph()
 {
     return m_pCurGraph;
 }

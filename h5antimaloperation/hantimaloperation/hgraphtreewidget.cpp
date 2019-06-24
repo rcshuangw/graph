@@ -1,7 +1,7 @@
-﻿#include "honlinetreewidget.h"
+﻿#include "hgraphtreewidget.h"
 #include <QContextMenuEvent>
-#include "hwfsystemmgr.h"
-#include "honlinedoc.h"
+#include "hantimalopmgr.h"
+#include "hantimalopdoc.h"
 #include "hgraph.h"
 #include <QMenu>
 #include <QInputDialog>
@@ -12,22 +12,22 @@
 #define GRAPHTREE_TYPE_FILE  1
 #define GRAPHTREE_TYPE_CFILE 2
 
-HOnlineTreeWidgetItem::HOnlineTreeWidgetItem(QTreeWidget * parent, int type ):QTreeWidgetItem(parent,type)
+HGraphTreeWidgetItem::HGraphTreeWidgetItem(QTreeWidget * parent, int type ):QTreeWidgetItem(parent,type)
 {
 
 }
 
-HOnlineTreeWidgetItem::HOnlineTreeWidgetItem(QTreeWidgetItem * parent, int type)
+HGraphTreeWidgetItem::HGraphTreeWidgetItem(QTreeWidgetItem * parent, int type)
     :QTreeWidgetItem (parent,type)
 {
 
 }
 
-HOnlineTreeWidgetItem::~HOnlineTreeWidgetItem()
+HGraphTreeWidgetItem::~HGraphTreeWidgetItem()
 {
     for(int i = 0; i < childCount();i++)
     {
-        HOnlineTreeWidgetItem* item = (HOnlineTreeWidgetItem*)child(i);
+        HGraphTreeWidgetItem* item = (HGraphTreeWidgetItem*)child(i);
         if(item)
         {
             delete item;
@@ -36,20 +36,20 @@ HOnlineTreeWidgetItem::~HOnlineTreeWidgetItem()
     }
 }
 
-void HOnlineTreeWidgetItem::setGraphTreeID(int graphTreeID)
+void HGraphTreeWidgetItem::setGraphTreeID(int graphTreeID)
 {
     wGraphTreeID = graphTreeID;
 }
 
-int HOnlineTreeWidgetItem::getGraphTreeID()
+int HGraphTreeWidgetItem::getGraphTreeID()
 {
     return wGraphTreeID;
 }
 
-///////////////////////////////////////////////////////HOnlineTreeWidget////////////////////////////////////
+///////////////////////////////////////////////////////HGraphTreeWidget////////////////////////////////////
 
-HOnlineTreeWidget::HOnlineTreeWidget(HWfSystemMgr *pMgr)
-    :m_pWfSystemMgr(pMgr)
+HGraphTreeWidget::HGraphTreeWidget(HAntiMalopMgr *pMgr)
+    :m_pAntiMalopMgr(pMgr)
 {
     nPreGraphID = (int)-1;
     setRootIsDecorated(true);
@@ -57,35 +57,35 @@ HOnlineTreeWidget::HOnlineTreeWidget(HWfSystemMgr *pMgr)
     initGraphTreeWidget();
 }
 
-HOnlineTreeWidget::~HOnlineTreeWidget()
+HGraphTreeWidget::~HGraphTreeWidget()
 {
 
 }
 
-void HOnlineTreeWidget::initGraphTreeWidget()
+void HGraphTreeWidget::initGraphTreeWidget()
 {
-    HOnlineTreeWidgetItem* rootItem = new HOnlineTreeWidgetItem(this,GRAPHTREE_TYPE_ROOT);
-    rootItem->setText(0,QStringLiteral("厂站五防画面总览"));
+    HGraphTreeWidgetItem* rootItem = new HGraphTreeWidgetItem(this,GRAPHTREE_TYPE_ROOT);
+    rootItem->setText(0,QStringLiteral("厂站五防画面"));
     rootItem->setIcon(0,QIcon(":/images/Folder.png"));
     rootItem->setGraphTreeID(9999);
     addTopLevelItem(rootItem);
     //expandItem(rootItem);
 
-    HWfSystemDoc* doc = m_pWfSystemMgr->wfSystemDoc();
+    HAntiMalopDoc* doc = m_pAntiMalopMgr->antiMalopDoc();
     if(!doc) return;
-    QList<HGraph*> graphList = doc->pGraphList;
+    QList<HGraph*> graphList = doc->m_pGraphList;
     for(int i = 0; i < graphList.count();i++)
     {
         HGraph* graph = (HGraph*)graphList[i];
         if(!graph)
             continue;
-        HOnlineTreeWidgetItem* newItem = new HOnlineTreeWidgetItem(rootItem,GRAPHTREE_TYPE_FILE);
-        newItem->setGraphTreeID(graph->getGraphID());
+        HGraphTreeWidgetItem* newItem = new HGraphTreeWidgetItem(rootItem,GRAPHTREE_TYPE_FILE);
+        newItem->setGraphTreeID(graph->graphID());
         newItem->setText(0,graph->graphName());
         newItem->setIcon(0,QIcon(":/images/Folder_Documents.png"));
         rootItem->addChild(newItem);
-        HOnlineTreeWidgetItem* fileItem = new HOnlineTreeWidgetItem(newItem,GRAPHTREE_TYPE_CFILE);
-        fileItem->setGraphTreeID(graph->getGraphID());
+        HGraphTreeWidgetItem* fileItem = new HGraphTreeWidgetItem(newItem,GRAPHTREE_TYPE_CFILE);
+        fileItem->setGraphTreeID(graph->graphID());
         fileItem->setIcon(0,QIcon(":/images/document-text.png"));
         fileItem->setText(0,QStringLiteral("最新版本"));
     }
@@ -94,21 +94,20 @@ void HOnlineTreeWidget::initGraphTreeWidget()
 
 }
 
-void HOnlineTreeWidget::clickGraphItem(QTreeWidgetItem* item,int column)
+void HGraphTreeWidget::clickGraphItem(QTreeWidgetItem* item,int column)
 {
-    HOnlineTreeWidgetItem* clickItem = dynamic_cast<HOnlineTreeWidgetItem*>(item);
+    HGraphTreeWidgetItem* clickItem = dynamic_cast<HGraphTreeWidgetItem*>(item);
     int nCurGraphID = clickItem->getGraphTreeID();
     if(nCurGraphID != nPreGraphID)
     {
-        //if(GRAPHTREE_TYPE_FILE == clickItem->type());
         int count = topLevelItemCount();
         for(int k = 0; k < count;k++)
         {
-            HOnlineTreeWidgetItem* rootItem = static_cast<HOnlineTreeWidgetItem*>(topLevelItem(k));
+            HGraphTreeWidgetItem* rootItem = static_cast<HGraphTreeWidgetItem*>(topLevelItem(k));
            if(!rootItem) continue;
            for(int i = 0;i < rootItem->childCount();i++)
            {
-               HOnlineTreeWidgetItem* childItem = static_cast<HOnlineTreeWidgetItem*>(rootItem->child(i));
+               HGraphTreeWidgetItem* childItem = static_cast<HGraphTreeWidgetItem*>(rootItem->child(i));
                collapseItem(childItem);
            }
        }
@@ -125,7 +124,7 @@ void HOnlineTreeWidget::clickGraphItem(QTreeWidgetItem* item,int column)
     if(GRAPHTREE_TYPE_FILE == type)
     {
         //要切换到子文件里面
-        HOnlineTreeWidgetItem* childItem = dynamic_cast<HOnlineTreeWidgetItem*>(clickItem->child(column));
+        HGraphTreeWidgetItem* childItem = dynamic_cast<HGraphTreeWidgetItem*>(clickItem->child(column));
         if(childItem && GRAPHTREE_TYPE_CFILE == childItem->type())
         {
             setCurrentItem(childItem);
@@ -140,9 +139,9 @@ void HOnlineTreeWidget::clickGraphItem(QTreeWidgetItem* item,int column)
     openGraph();
 }
 
-void HOnlineTreeWidget::openGraph()
+void HGraphTreeWidget::openGraph()
 {
-    HOnlineTreeWidgetItem* pCurItem = dynamic_cast<HOnlineTreeWidgetItem*> (currentItem());
+    HGraphTreeWidgetItem* pCurItem = dynamic_cast<HGraphTreeWidgetItem*> (currentItem());
     if(!pCurItem) return;
     QString strGraphName = pCurItem->text(0);
     int nGraphID = pCurItem->getGraphTreeID();

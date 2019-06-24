@@ -1,30 +1,40 @@
-﻿#include "honlinescene.h"
-#include "honlinedoc.h"
-#include "hiconapi.h"
+﻿#include "hgraphscene.h"
+#include "hantimalopdoc.h"
+//#include "hiconapi.h"
 #include "hiconsymbol.h"
 #include "hgraph.h"
-#include "honlinemgr.h"
-HOnlineScene::HOnlineScene(HOnlineMgr *mgr)
-    :m_pOnlineMgr(mgr)
+#include "hantimalopmgr.h"
+#include "hgraphview.h"
+HGraphScene::HGraphScene(HAntiMalopMgr *mgr)
+    :m_pAntiMalopMgr(mgr)
 {
     //setSceneRect(m_pOnlineMgr->getLogicRect());
 }
 
-HOnlineScene::~HOnlineScene()
+HGraphScene::~HGraphScene()
 {
 
 }
 
-
-void HOnlineScene::drawBackground(QPainter *painter, const QRectF &rect)
+void HGraphScene::setView(QGraphicsView *v)
 {
-    if(NULL == m_pOnlineMgr)
+    m_pGraphView = dynamic_cast<HGraphView*>(v);
+}
+
+QGraphicsView* HGraphScene::view()
+{
+    return m_pGraphView;
+}
+
+void HGraphScene::drawBackground(QPainter *painter, const QRectF &rect)
+{
+    if(NULL == m_pAntiMalopMgr)
         return;
     painter->save();
     painter->setBrush(backgroundBrush());
     QGraphicsScene::drawBackground(painter,rect);
 
-    HGraph* pGraph = m_pOnlineMgr->onlineDoc()->getCurGraph();
+    HGraph* pGraph = m_pAntiMalopMgr->antiMalopDoc()->getCurGraph();
     QColor clr;
     if(pGraph)
     {
@@ -34,22 +44,23 @@ void HOnlineScene::drawBackground(QPainter *painter, const QRectF &rect)
     {
         clr = QColor(Qt::darkGray);
     }
-    QRectF rectF = m_pOnlineMgr->getLogicRect();
+    QRectF rectF = m_pAntiMalopMgr->getLogicRect();
     painter->fillRect(rectF,clr);
     painter->restore();
 }
 
-void HOnlineScene::drawForeground(QPainter *painter, const QRectF &rect)
+void HGraphScene::drawForeground(QPainter *painter, const QRectF &rect)
 {
     QGraphicsScene::drawForeground(painter,rect);
 }
 
 
-void HOnlineScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+void HGraphScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
     QPointF point = event->scenePos();
-    if(!m_pOnlineMgr || !m_pOnlineMgr->onlineOp())
+    if(!m_pAntiMalopMgr)
         return;
+    /*
     if(event->mimeData()->hasFormat("DragIcon"))
     {
         ptStart = point;
@@ -67,18 +78,19 @@ void HOnlineScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 
     }
     else
-        event->ignore();
+        event->ignore();*/
 }
 
-void HOnlineScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+void HGraphScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
 
 }
 
-void HOnlineScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+void HGraphScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
-    if(!m_pOnlineMgr || !m_pOnlineMgr->onlineDoc() || !m_pOnlineMgr->onlineDoc()->getCurGraph())
+    if(!m_pAntiMalopMgr || !m_pAntiMalopMgr->antiMalopDoc() || !m_pAntiMalopMgr->antiMalopDoc()->getCurGraph())
         return;
+    /*
     QPointF pointF = event->scenePos();
     if(event->mimeData()->hasFormat("DragIcon"))
     {
@@ -89,24 +101,26 @@ void HOnlineScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     }
     else
         event->ignore();
+        */
 }
 
-void HOnlineScene::dropEvent(QGraphicsSceneDragDropEvent *event)
+void HGraphScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    if(!m_pOnlineMgr || !m_pOnlineMgr->onlineDoc() || !m_pOnlineMgr->onlineDoc()->getCurGraph())
+    if(!m_pAntiMalopMgr || !m_pAntiMalopMgr->antiMalopDoc() || !m_pAntiMalopMgr->antiMalopDoc()->getCurGraph())
         return;
+    /*
     if(event->mimeData()->hasFormat("DragIcon"))
     {
         event->setDropAction(Qt::MoveAction);
         event->accept();
     }
     else
-        event->ignore();
+        event->ignore();*/
 }
 
-void HOnlineScene::onCreateObj(HBaseObj* obj,bool isPaste )
+void HGraphScene::onCreateObj(HBaseObj* obj,bool isPaste )
 {
-    if(!m_pOnlineMgr || !m_pOnlineMgr->onlineView())
+    if(!m_pAntiMalopMgr || !view())
         return;
     obj->setModify(true);
     H5GraphicsItem *item = new H5GraphicsItem(obj);
@@ -124,9 +138,9 @@ void HOnlineScene::onCreateObj(HBaseObj* obj,bool isPaste )
     connect(item,SIGNAL(recalcSelect()),this,SLOT(onRecalcSelect()));
 }
 
-void HOnlineScene::onRemoveObj(HBaseObj* obj)
+void HGraphScene::onRemoveObj(HBaseObj* obj)
 {
-    if(!m_pOnlineMgr || !m_pOnlineMgr->onlineView())
+    if(!m_pAntiMalopMgr || !view())
         return;
     if(obj && obj->iconGraphicsItem())
     {
@@ -139,7 +153,7 @@ void HOnlineScene::onRemoveObj(HBaseObj* obj)
 }
 
 //绘制
-void HOnlineScene::drawPath(const QList<Path>& pathList)
+void HGraphScene::drawPath(const QList<Path>& pathList)
 {
     for(int i = 0;i < pathList.count();i++)
     {
@@ -173,7 +187,7 @@ void HOnlineScene::drawPath(const QList<Path>& pathList)
     }
 }
 
-void HOnlineScene::endDraw()
+void HGraphScene::endDraw()
 {
     for(int i = 0; i < m_pGraphicsPathItems.count();i++)
     {

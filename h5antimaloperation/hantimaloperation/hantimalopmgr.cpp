@@ -1,22 +1,14 @@
-#include "honlinemgr.h"
+#include "hantimalopmgr.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QScrollBar>
-#include "honlineview.h"
-#include "honlinescene.h"
-#include "honlinedoc.h"
+#include "hantimalopdoc.h"
 
 #include "hgraph.h"
-HOnlineMgr::HOnlineMgr(QObject *parent) : QObject(parent),m_logicRectF(-500,-500,1000,1000)
+HAntiMalopMgr::HAntiMalopMgr(QObject *parent) : QObject(parent),m_logicRectF(-500,-500,1000,1000)
 {
-    m_pOnlineDoc = new HOnlineDoc(this);
-    Q_ASSERT(m_pOnlineDoc);
-
-    m_pOnlineOp = new HOnlineOp(this);
-    m_pSelectedMgr = new HSelectedMgr;
-
-    m_pOnlineScene = new HOnlineScene(this);
-    m_pOnlineView = NULL;
+    m_pAntiMalopDoc = new HAntiMalopDoc(this);
+    Q_ASSERT(m_pAntiMalopDoc);
 
     int width = qApp->desktop()->screen()->width();
     int height = qApp->desktop()->screen()->height();
@@ -26,35 +18,31 @@ HOnlineMgr::HOnlineMgr(QObject *parent) : QObject(parent),m_logicRectF(-500,-500
     m_logicRectF.setHeight(height-100);
 }
 
-HOnlineScene* HOnlineMgr::onlineScene()
+HGraphFrame* HAntiMalopMgr::graphFrame()
 {
-
+    return m_pGraphFrame;
 }
 
-HOnlineView* HOnlineMgr::onlineView()
+HPreviewGraphFrame* HAntiMalopMgr::previewGraphFrame()
 {
-
+    return m_pPreviewGraphFrame;
 }
 
-HOnlineDoc* HOnlineMgr::onlineDoc()
+HEditGraphFrame* HAntiMalopMgr::editGraphFrame()
 {
-
+    return m_pEditGraphFrame;
 }
 
-HOnlineOp* HOnlineMgr::onlineOp()
+HAntiMalopDoc* HAntiMalopMgr::antiMalopDoc()
 {
-
+    return m_pAntiMalopDoc;
 }
-
-HSelectedMgr* HOnlineMgr::selectedMgr()
-{
-
-}
-
-void HOnlineMgr::setGraphEditorView(HOnlineView* view)
+/*
+void HAntiMalopMgr::setGraphEditorView(HOnlineView* view)
 {
     if(view)
     {
+
         m_pOnlineView = view;
         m_pOnlineView->setScene(m_pOnlineScene);
         m_pOnlineScene->setView(m_pOnlineView);
@@ -78,18 +66,18 @@ void HOnlineMgr::setGraphEditorView(HOnlineView* view)
            m_pOnlineDoc->getCurGraph()->m_height = m_logicRectF.height();
         }
     }
-}
+}*/
 
-void HOnlineMgr::loadGraphs()
+void HAntiMalopMgr::loadGraphs()
 {
-    if(!m_pOnlineDoc)
+    if(!m_pAntiMalopDoc)
         return;
-    m_pOnlineDoc->loadAllGraph();
+    m_pAntiMalopDoc->loadAllGraph();
 }
 
-bool HOnlineMgr::Open(const QString& graphName,int id)
+bool HAntiMalopMgr::openGraph(const QString& graphName,int id)
 {
-    if(!m_pOnlineDoc)
+ /*   if(!m_pOnlineDoc)
         return false;
     if(!m_pOnlineDoc->openGraph(graphName,id))
         return false;
@@ -122,12 +110,13 @@ bool HOnlineMgr::Open(const QString& graphName,int id)
     {
         HBaseObj* obj = (HBaseObj*)m_pOnlineDoc->getCurGraph()->at(i);
         m_pOnlineScene->onCreateObj(obj);
-    }
+    }*/
+    return true;
 }
 
-void HOnlineMgr::reset()
+void HAntiMalopMgr::reset()
 {
-    m_pSelectedMgr->clear();
+   /* m_pSelectedMgr->clear();
     for(int i = 0; i < m_pOnlineScene->views().count();i++)
         m_pOnlineScene->views().at(i)->setScene(0);
 
@@ -136,20 +125,20 @@ void HOnlineMgr::reset()
     m_pOnlineScene =  new HOnlineScene(this);
 
     //初始化scene
-    setGraphEditorView(m_pOnlineView);
+    setGraphEditorView(m_pOnlineView);*/
 }
 
-void HOnlineMgr::setLogicRect(const QRectF& rect)
+void HAntiMalopMgr::setLogicRect(const QRectF& rect)
 {
     m_logicRectF = rect;
 }
 
-QRectF HOnlineMgr::getLogicRect()
+QRectF HAntiMalopMgr::getLogicRect()
 {
     return m_logicRectF;
 }
 
-void HOnlineMgr::refreshView()
+void HAntiMalopMgr::refreshView()
 {
 
 }
