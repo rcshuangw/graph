@@ -42,7 +42,7 @@ void HGraphScene::drawBackground(QPainter *painter, const QRectF &rect)
     }
     else
     {
-        clr = QColor(Qt::black);
+        clr = QColor(Qt::darkGray);
     }
     QRectF rectF = m_pAntiMalopMgr->getLogicRect();
     painter->fillRect(rectF,clr);
@@ -134,8 +134,11 @@ void HGraphScene::onCreateObj(HBaseObj* obj,bool isPaste )
     }
 
     addItem(item);
-    connect(item,SIGNAL(objSelectChanged(HBaseObj*,bool)),this,SLOT(onObjSelectChanged(HBaseObj*,bool)));
-    connect(item,SIGNAL(recalcSelect()),this,SLOT(onRecalcSelect()));
+    if(obj->getShapeType() == Icon || obj->getShapeType() == Normal)
+        item->setToolTip(obj->getObjName());
+
+    //connect(item,SIGNAL(objSelectChanged(HBaseObj*,bool)),this,SLOT(onObjSelectChanged(HBaseObj*,bool)));
+    //connect(item,SIGNAL(recalcSelect()),this,SLOT(onRecalcSelect()));
 }
 
 void HGraphScene::onRemoveObj(HBaseObj* obj)

@@ -3,8 +3,8 @@
 #include <QDesktopWidget>
 #include <QScrollBar>
 #include "hantimalopdoc.h"
-
 #include "hgraph.h"
+#include "hgraphframe.h"
 HAntiMalopMgr::HAntiMalopMgr(QObject *parent) : QObject(parent),m_logicRectF(-500,-500,1000,1000)
 {
     m_pAntiMalopDoc = new HAntiMalopDoc(this);
@@ -77,40 +77,11 @@ void HAntiMalopMgr::loadGraphs()
 
 bool HAntiMalopMgr::openGraph(const QString& graphName,int id)
 {
- /*   if(!m_pOnlineDoc)
+    if(!m_pAntiMalopDoc)
         return false;
-    if(!m_pOnlineDoc->openGraph(graphName,id))
+    if(!m_pAntiMalopDoc->openGraph(graphName,id))
         return false;
-
-    int width = m_pOnlineDoc->getCurGraph()->m_width;
-    int height = m_pOnlineDoc->getCurGraph()->m_height;
-    QRectF newLogicRectF = QRectF(QPointF(0-width/2,0-height/2),QSizeF(width,height));
-    if(!m_pOnlineScene || !m_pOnlineView)
-        return;
-    m_pOnlineScene->setSceneRect(newLogicRectF);
-    if(m_pOnlineView)
-    {
-        QScrollBar* pBar = m_pOnlineView->horizontalScrollBar();
-        if(pBar && pBar->isHidden() == false)
-        {
-            pBar->setSliderPosition(pBar->minimum());
-        }
-        pBar = m_pOnlineView->verticalScrollBar();
-        if(pBar && pBar->isHidden() == false)
-        {
-            pBar->setSliderPosition(pBar->minimum());
-        }
-    }
-    refreshView();
-
-
-    if(!m_pOnlineDoc->getCurGraph())
-        return false;
-    for(int i = 0; i < m_pOnlineDoc->getCurGraph()->size();i++)
-    {
-        HBaseObj* obj = (HBaseObj*)m_pOnlineDoc->getCurGraph()->at(i);
-        m_pOnlineScene->onCreateObj(obj);
-    }*/
+    m_pGraphFrame->openGraph();
     return true;
 }
 

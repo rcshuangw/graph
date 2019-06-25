@@ -29,3 +29,13 @@ void HBaseFrame::init()
     setLayout(layout);
 }
 
+void HBaseFrame::reset()
+{
+    if(m_pGraphScene){
+        delete m_pGraphScene;
+        m_pGraphScene = NULL;
+    }
+    m_pGraphScene = new HGraphScene(m_pAntiMalpoMgr);
+    m_pGraphView->setScene(m_pGraphScene);
+    m_pGraphView->setSceneRect(m_pAntiMalpoMgr->getLogicRect());
+}

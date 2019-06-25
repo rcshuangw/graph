@@ -12,7 +12,7 @@ public:
     ~HBaseFrame();
 public:
     void init();
-
+    void reset();
 private:
     HGraphView* m_pGraphView;
     HGraphScene *m_pGraphScene;
