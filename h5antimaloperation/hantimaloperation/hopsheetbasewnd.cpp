@@ -42,7 +42,7 @@ void HOpSheetBaseWnd::createOpSheetBaseWnd()
 
     //窗口属性设置
     if (this->objectName().isEmpty())
-        this->setObjectName(QStringLiteral("操作票窗口"));
+        this->setObjectName("OpSheetBaseWnd");
     this->resize(748, 502);
     QFont font;
     font.setFamily(QString::fromUtf8("\345\256\213\344\275\223"));//宋体
