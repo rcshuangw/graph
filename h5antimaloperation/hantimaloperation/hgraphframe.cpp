@@ -51,6 +51,7 @@ void HGraphFrame::openGraph()
     }
 }
 
+/*
 bool HGraphFrame::eventFilter(QObject *obj, QEvent *event)
 {
     QEvent::Type type = event->type();
@@ -78,7 +79,7 @@ bool HGraphFrame::eventFilter(QObject *obj, QEvent *event)
         break;
     }
     return false;
-}
+}*/
 
 bool HGraphFrame::onMousePressEvent(QObject *obj, QEvent *event)
 {
@@ -88,18 +89,19 @@ bool HGraphFrame::onMousePressEvent(QObject *obj, QEvent *event)
     QGraphicsScene* scene = m_pGraphView->scene();
     if(!scene) return false;
 
-    //记录下按下的点 后面牌可以可能要拖动
+    //记录下按下的点 后面牌、控制点可以可能要拖动
 
 }
 
 bool HGraphFrame::onMouseMoveEvent(QObject *obj, QEvent *event)
 {
-
+    //主要是移动鼠标到牌或者控制点上要有颜色过渡效果
+    //牌的移动等操作
 }
 
 bool HGraphFrame::onMouseReleaseEvent(QObject *obj, QEvent *event)
 {
-
+    //按到牌或者控制点上后的操作要在这里处理
 }
 
 bool HGraphFrame::onMouseDoubleClickEvent(QObject *obj, QEvent *event)
@@ -119,5 +121,5 @@ bool HGraphFrame::onWheelEvent(QObject *obj, QEvent *event)
 
 bool HGraphFrame::onContextMenuEvent(QObject *obj, QEvent *event)
 {
-
+    //右键效果 1.按到遥信遥测等图元上 2.按到普通图元、控制点上 3.按到后面的画面层上
 }

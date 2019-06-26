@@ -22,11 +22,14 @@ public:
     virtual bool onWheelEvent(QObject *obj, QEvent *event);
     virtual bool onContextMenuEvent(QObject *obj, QEvent *event);
 protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+    //bool eventFilter(QObject *obj, QEvent *event);
 private:
     HGraphView* m_pGraphView;
     HIconObj* m_pCurControlBtn; //当前操作的控制点
     HIconObj* m_pMovedCtrlBtn;//移动的控制点
+  protected:
+    int m_nDatabaseID;
+    quint8 m_btGraphType;
 
 };
 

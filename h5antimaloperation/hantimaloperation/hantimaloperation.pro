@@ -15,7 +15,7 @@ DEFINES += H5MAINWINDOW_DLL
 
 DESTDIR += ../../../lib
 INCLUDEPATH += \
-    ../../include \
+    ../../../include \
     ../../include/h5baselib \
     ../../include/h5basehelp \
     ../../include/h5basegui
@@ -34,7 +34,11 @@ SOURCES += main.cpp\
     hgraphtreewidget.cpp \
     hframe.cpp \
     honlineframe.cpp \
-    hbaseframe.cpp
+    hbaseframe.cpp \
+    hpreviewgraphframe.cpp \
+    hopsheetbasewnd.cpp \
+    hopsheetpreviewwnd.cpp \
+    hopsheetrunwidget.cpp
 
 HEADERS  += \
     hsystool.h \
@@ -50,10 +54,15 @@ HEADERS  += \
     hgraphtreewidget.h \
     hframe.h \
     honlineframe.h \
-    hbaseframe.h
+    hbaseframe.h \
+    hpreviewgraphframe.h \
+    hopsheetbasewnd.h \
+    hopsheetpreviewwnd.h \
+    hopsheetrunwidget.h
 
 LIBS += -L../../../lib -lh5basehelp -lh5basegui -lh5baselib -ldatafile
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    opsheetbasewnd.ui
 
 RESOURCES += \
     images.qrc
