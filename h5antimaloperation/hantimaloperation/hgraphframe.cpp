@@ -43,7 +43,7 @@ void HGraphFrame::openGraph()
 
 
     if(!m_pAntiMalpoMgr->antiMalopDoc()->getCurGraph())
-        return false;
+        return;
     for(int i = 0; i < m_pAntiMalpoMgr->antiMalopDoc()->getCurGraph()->size();i++)
     {
         HBaseObj* obj = (HBaseObj*)m_pAntiMalpoMgr->antiMalopDoc()->getCurGraph()->at(i);
@@ -99,38 +99,41 @@ bool HGraphFrame::onMouseMoveEvent(QObject *obj, QEvent *event)
 {
     //主要是移动鼠标到牌或者控制点上要有颜色过渡效果
     //牌的移动等操作
+    return false;
 }
 
 bool HGraphFrame::onMouseReleaseEvent(QObject *obj, QEvent *event)
 {
     //按到牌或者控制点上后的操作要在这里处理
+    return false;
 }
 
 bool HGraphFrame::onMouseDoubleClickEvent(QObject *obj, QEvent *event)
 {
-
+return false;
 }
 
 bool HGraphFrame::onKeyPressEvent(QObject *obj, QEvent *event)
 {
-
+    return false;
 }
 
 bool HGraphFrame::onWheelEvent(QObject *obj, QEvent *event)
 {
-
+    return false;
 }
 
 bool HGraphFrame::onContextMenuEvent(QObject *obj, QEvent *event)
 {
     //右键效果 1.按到遥信遥测等图元上 2.按到普通图元、控制点上 3.按到后面的画面层上
-    HBaseObj* pObj = NULL;
+   // HBaseObj* pObj = NULL;
     //获取pObj对象  可以根据当前画面类型判断，形成共有的操作
-    if(pObj->getShapeType() == Icon)
+   // if(pObj->getShapeType() == Icon)
     {
         //除了遥信其他都不要
         //弹出操作
     }
     //如果获取的对象未空，没有点击到画面上 则弹出画面菜单
+    return false;
 
 }

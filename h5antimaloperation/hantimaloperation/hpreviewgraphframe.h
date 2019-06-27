@@ -1,4 +1,4 @@
-#ifndef HPREVIEWGRAPHFRAME_H
+﻿#ifndef HPREVIEWGRAPHFRAME_H
 #define HPREVIEWGRAPHFRAME_H
 #include "hgraphframe.h"
 #include "hfileapi.h"
@@ -13,7 +13,7 @@ class HPreviewGraphFrame : public HGraphFrame
 {
     Q_OBJECT
 public:
-    HPreviewGraphFrame(quint8 btGraphType);//编辑票/预演票
+    HPreviewGraphFrame(quint8 btGraphType,HAntiMalopMgr* mgr,HGraphFrame *parent = 0);//编辑票/预演票
     ~HPreviewGraphFrame();
 
 public:

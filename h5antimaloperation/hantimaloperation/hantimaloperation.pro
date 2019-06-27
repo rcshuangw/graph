@@ -16,6 +16,7 @@ DEFINES += H5MAINWINDOW_DLL
 DESTDIR += ../../../lib
 INCLUDEPATH += \
     ../../../include \
+    ../../include \
     ../../include/h5baselib \
     ../../include/h5basehelp \
     ../../include/h5basegui

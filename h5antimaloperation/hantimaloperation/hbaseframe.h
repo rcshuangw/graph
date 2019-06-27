@@ -13,7 +13,7 @@ public:
 public:
     void init();
     void reset();
-private:
+protected:
     HGraphView* m_pGraphView;
     HGraphScene *m_pGraphScene;
     HAntiMalopMgr* m_pAntiMalpoMgr;

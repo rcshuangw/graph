@@ -4,7 +4,8 @@
 #include <QDesktopWidget>
 #include <QMdiArea>
 #include <QMdiSubWindow>
-#include <honlineframe.h>
+#include "honlineframe.h"
+#include "hopsheetrunwidget.h"
 #include "hantimalopmgr.h"
 MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent)//,
@@ -28,8 +29,11 @@ MainWindow::MainWindow(QWidget *parent) :
     //setUnifiedTitleAndToolBarOnMac(true);
     m_pClient->setGeometry(0,0,win_width,win_height - m_pSysTool->m_nHeight);
 
-    HOnlineFrame* frame = new HOnlineFrame(mgr);
-    m_pClient->addSubWindow(frame);
+   // HOnlineFrame* frame = new HOnlineFrame(mgr);
+    //m_pClient->addSubWindow(frame);
+
+    HOpSheetRunWidget* runWidget = new HOpSheetRunWidget(mgr);
+    m_pClient->addSubWindow(runWidget);
 
 }
 

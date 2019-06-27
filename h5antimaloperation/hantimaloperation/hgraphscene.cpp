@@ -1,6 +1,7 @@
 ﻿#include "hgraphscene.h"
 #include "hantimalopdoc.h"
-//#include "hiconapi.h"
+#include "hiconapi.h"
+#include "hbaseobj.h"
 #include "hiconsymbol.h"
 #include "hgraph.h"
 #include "hantimalopmgr.h"

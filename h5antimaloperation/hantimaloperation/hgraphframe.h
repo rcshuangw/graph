@@ -23,11 +23,11 @@ public:
     virtual bool onContextMenuEvent(QObject *obj, QEvent *event);
 protected:
     //bool eventFilter(QObject *obj, QEvent *event);
-private:
+public:
     HGraphView* m_pGraphView;
     HIconObj* m_pCurControlBtn; //当前操作的控制点
     HIconObj* m_pMovedCtrlBtn;//移动的控制点
-  protected:
+protected:
     int m_nDatabaseID;
     quint8 m_btGraphType;
 

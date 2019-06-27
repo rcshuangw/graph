@@ -1,6 +1,6 @@
-#include "hpreviewgraphframe.h"
-
-HPreviewGraphFrame::HPreviewGraphFrame(quint8 btGraphType)
+﻿#include "hpreviewgraphframe.h"
+HPreviewGraphFrame::HPreviewGraphFrame(quint8 btGraphType,HAntiMalopMgr* mgr,HGraphFrame *parent)
+    :HGraphFrame(mgr,parent)
 {
     m_btGraphType = btGraphType;
 }
@@ -9,6 +9,8 @@ HPreviewGraphFrame::~HPreviewGraphFrame()
 {
 
 }
+
+
 
 void HPreviewGraphFrame::getOperatorSentence( OPERATORSHEETSTEP* pStep )
 {
@@ -22,17 +24,17 @@ void HPreviewGraphFrame::getOperatorRemark( OPERATORSHEETSTEP* pStep )
 
 QString HPreviewGraphFrame::makeOpSentence( QString szString, quint16 wOpSTID, quint16 wOpPTID )
 {
-
+    return QString();
 }
 
 QString HPreviewGraphFrame::makeOpSentence( QString szString, QString szChar, quint16 wOpSTID, quint16 wOpPTID )
 {
-
+    return QString();
 }
 
 QString HPreviewGraphFrame::makeCheckOpSentence( QString szString )
 {
-
+    return QString();
 }
 
 void HPreviewGraphFrame::onPreviewCheckOp( const int nCheckType )
@@ -52,22 +54,22 @@ void HPreviewGraphFrame::onClearManualSet()
 
 bool HPreviewGraphFrame::isPreviewing()
 {
-
+    return false;
 }
 
 int  HPreviewGraphFrame::databaseID()
 {
-
+    return 0;
 }
 
 bool HPreviewGraphFrame::onMousePressEvent(QObject *obj, QEvent *event)
 {
-
+    return false;
 }
 
 bool HPreviewGraphFrame::onContextMenuEvent(QObject *obj, QEvent *event)
 {
-
+    return false;
 }
 
 void HPreviewGraphFrame::onPreviewStart()

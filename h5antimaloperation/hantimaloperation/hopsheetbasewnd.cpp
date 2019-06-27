@@ -1,4 +1,4 @@
-#include "hopsheetbasewnd.h"
+﻿#include "hopsheetbasewnd.h"
 #include "ui_opsheetbasewnd.h"
 
 #include <QtWidgets/QWidget>
@@ -13,13 +13,15 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QVBoxLayout>
-
-
-HOpSheetBaseWnd::HOpSheetBaseWnd(QWidget *parent) :
+#include <QToolBar>
+#include <QMouseEvent>
+#include <QMenu>
+HOpSheetBaseWnd::HOpSheetBaseWnd(quint8 btOpenType,QWidget *parent) :
     QWidget(parent),
     ui(new Ui::OpSheetBaseWnd)
 {
-    ui->setupUi(this);
+    //ui->setupUi(this);
+    createOpSheetBaseWnd();
 }
 
 HOpSheetBaseWnd::~HOpSheetBaseWnd()
@@ -56,9 +58,22 @@ void HOpSheetBaseWnd::createOpSheetBaseWnd()
 
      //工具栏layout
     m_toolBarLayout = new QHBoxLayout();
+    m_toolBar = new QToolBar(this);
+    m_toolBar->setIconSize(QSize(26,21));
+    m_toolBarLayout->addWidget(m_toolBar);
 
     //工具栏以下部分
     verticalLayout = new QVBoxLayout();
+    //QLabel 操作票说明
+    m_sheetLabel = new QLabel(this);
+    m_sheetLabel->setText(QStringLiteral("正在......"));
+    //m_sheetLabel->setFrameShape(QFrame::Box);
+    m_sheetLabel->setMinimumSize(QSize(0, 28));
+    QFont font1 = font;
+    font1.setPointSize(15);
+    font1.setBold(true);
+    m_sheetLabel->setFont(font1);
+
     //以下第一行
     firstLineLayout = new QHBoxLayout();
 
@@ -112,14 +127,14 @@ void HOpSheetBaseWnd::createOpSheetBaseWnd()
     //操作票步骤Table
     m_sheetStepTable = new QTableWidget(this);
     //end 操作票步骤
-
+    verticalLayout->addWidget(m_sheetLabel);
     verticalLayout->addLayout(firstLineLayout);
     verticalLayout->addLayout(secondLineLayout);
     verticalLayout->addWidget(m_sheetStepTable);
 
     mainLayout->addLayout(m_toolBarLayout);
     mainLayout->addLayout(verticalLayout);
-    mainLayout->setStretch(0, 1);
-    mainLayout->setStretch(1, 9);
-
+    mainLayout->setStretch(0, 2);
+    mainLayout->setStretch(1, 8);
 }
+

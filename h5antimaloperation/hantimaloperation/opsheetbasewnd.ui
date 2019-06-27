@@ -19,27 +19,31 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,9">
-   <property name="spacing">
-    <number>4</number>
-   </property>
-   <property name="leftMargin">
-    <number>2</number>
-   </property>
-   <property name="topMargin">
-    <number>2</number>
-   </property>
-   <property name="rightMargin">
-    <number>2</number>
-   </property>
-   <property name="bottomMargin">
-    <number>2</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QHBoxLayout" name="toolBarLayout"/>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="midLineWidth">
+        <number>0</number>
+       </property>
+       <property name="text">
+        <string>正在......</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,8">
        <item>
@@ -131,7 +135,28 @@
       </layout>
      </item>
      <item>
-      <widget class="QTableWidget" name="sheetStepTable"/>
+      <widget class="QTableWidget" name="sheetStepTable">
+       <column>
+        <property name="text">
+         <string>步骤</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>操作内容</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>操作时间</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>备注</string>
+        </property>
+       </column>
+      </widget>
      </item>
     </layout>
    </item>

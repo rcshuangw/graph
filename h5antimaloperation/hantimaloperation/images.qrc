@@ -22,5 +22,11 @@
         <file>images/zoom.png</file>
         <file>images/zoom_in.png</file>
         <file>images/zoom_out.png</file>
+        <file>images/Abolish.png</file>
+        <file>images/FileClose.png</file>
+        <file>images/FileOpen.png</file>
+        <file>images/FileSave.png</file>
+        <file>images/ToExecute.png</file>
+        <file>images/FilePrint.png</file>
     </qresource>
 </RCC>
