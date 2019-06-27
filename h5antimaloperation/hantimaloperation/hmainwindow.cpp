@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     HOpSheetRunWidget* runWidget = new HOpSheetRunWidget(mgr);
     m_pClient->addSubWindow(runWidget);
-
+    runWidget->showMaximized();
 }
 
 MainWindow::~MainWindow()

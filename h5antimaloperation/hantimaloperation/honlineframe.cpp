@@ -53,8 +53,6 @@ void HOnlineFrame::initOnlineFrame()
     dock->setWidget(m_pGraphTreeWidget);
     m_pSplitter->addWidget(dock);
     //创建信号
-
-    //右边
     m_pGraphFrame = new HGraphFrame(m_pAntiMalpoMgr);
     m_pSplitter->addWidget(m_pGraphFrame);
     //创建信号
@@ -73,6 +71,7 @@ bool HOnlineFrame::eventFilter(QObject *obj, QEvent *event)
         return onMousePressEvent(obj,event);
         break;
     }
+    return false;
 }
 
 bool HOnlineFrame::onMousePressEvent(QObject *obj, QEvent *event)

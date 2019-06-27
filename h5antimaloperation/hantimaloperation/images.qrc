@@ -28,5 +28,8 @@
         <file>images/FileSave.png</file>
         <file>images/ToExecute.png</file>
         <file>images/FilePrint.png</file>
+        <file>images/preview_cancel.png</file>
+        <file>images/preview_start.png</file>
+        <file>images/preview_stop.png</file>
     </qresource>
 </RCC>
