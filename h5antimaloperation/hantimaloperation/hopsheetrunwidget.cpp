@@ -76,3 +76,9 @@ void HOpSheetRunWidget::createOpSheetRunWidget()
     splitter->setStretchFactor(1,8);
     centerLayout->addWidget(splitter);
 }
+
+void HOpSheetRunWidget::createActions()
+{
+    //画面传递操作票信息
+    connect(m_pPreviewGraphFrame,SIGNAL(opeartorStepChanged(int,OPERATORSHEETSTEP*&)),m_pOpSheetPreviewWnd,SLOT(onOpeartorStepChanged(int,OPERATORSHEETSTEP*&)));
+}

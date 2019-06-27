@@ -61,14 +61,16 @@ void HOpSheetPreviewWnd::createActions()
 
 bool HOpSheetPreviewWnd::eventFilter(QObject *watched, QEvent *event)
 {
-    /*
+    //创建右键菜单
+
     if(watched == m_sheetStepTable)
     {
         if(event->type() == QEvent::ContextMenu)
         {
-
+            QMouseEvent* e = static_cast<QMouseEvent*>(event);
+            procContextMenu(e);
         }
-    }*/
+    }
     return false;
 }
 
@@ -77,5 +79,15 @@ void HOpSheetPreviewWnd::procContextMenu(QMouseEvent *event)
     QPointF pt = event->pos();
 
     QMenu* menu = new QMenu;
-    //QAction*
+    QAction* editStepAct = new QAction(QStringLiteral("预演增加一步"));
+    QAction* delStepAct = new QAction(QStringLiteral("预演删除一步"));
+    menu->addAction(editStepAct);
+    menu->addAction(delStepAct);
+    menu->popup(pt);
+}
+
+//画面传递过来操作票步骤
+void HOpSheetPreviewWnd::onOpeartorStepChanged(int nType,OPERATORSHEETSTEP*& step)
+{
+
 }

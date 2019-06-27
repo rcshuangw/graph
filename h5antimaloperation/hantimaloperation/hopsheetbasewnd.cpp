@@ -138,3 +138,37 @@ void HOpSheetBaseWnd::createOpSheetBaseWnd()
     mainLayout->setStretch(1, 8);
 }
 
+bool HOpSheetBaseWnd::eventFilter(QObject *watched, QEvent *event)
+{
+    //创建右键菜单
+
+    if(watched == m_sheetStepTable)
+    {
+        if(event->type() == QEvent::ContextMenu)
+        {
+            QMouseEvent* e = static_cast<QMouseEvent*>(event);
+            if(m_btOpenType == 0)
+                procPreviewContextMenu(e);
+        }
+    }
+    return false;
+}
+
+void HOpSheetBaseWnd::procPreviewContextMenu(QMouseEvent *event)
+{
+    QPointF pt = event->pos();
+
+    QMenu* menu = new QMenu;
+    QAction* editStepAct = new QAction(QStringLiteral("预演增加一步"));
+    QAction* delStepAct = new QAction(QStringLiteral("预演删除一步"));
+    menu->addAction(editStepAct);
+    menu->addAction(delStepAct);
+    menu->popup(pt);
+}
+
+//处理浏览框的右键
+void HOpSheetBaseWnd::procBrowserContextMenu(QMouseEvent *event)
+{
+
+}
+

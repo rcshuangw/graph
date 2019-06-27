@@ -22,6 +22,23 @@ public:
 public:
     void createOpSheetBaseWnd();
 
+    //操作票相关操作
+    void newOpSheet();
+    void openOpSheet(quint8 btOpenType);
+    void loadOpSheet(quint16 wOpSheetID);
+    void saveOpSheet();
+    void saveAsTemplate();
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event);
+    void onMousePressEvent(QMouseEvent* event);//左键
+    void onMouseDoubleClickEvent(QMouseEvent *event);//双击
+    void onContextMenuEvent(QMouseEvent* event);//右键
+    void procPreviewContextMenu(QMouseEvent* event);//右键
+    void procBrowserContextMenu(QMouseEvent* event);
+
+public slots:
+
 public:
     QHBoxLayout *m_toolBarLayout;
     QLabel* m_sheetLabel;
@@ -39,7 +56,8 @@ public:
     QAction* m_fileAbolishAct;
     QAction* m_fileSaveAct;
 protected:
-    quint8 m_btOpenType;
+    quint8 m_btOpenType;      //操作框类型
+    quint8 m_btOpSheetType;   //操作票类型
 private:
     Ui::OpSheetBaseWnd *ui;
 };

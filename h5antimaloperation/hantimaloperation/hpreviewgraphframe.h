@@ -62,7 +62,7 @@ public slots:
     //主要是点击完成后向左边操作票框发送操作票信息
 signals:
     //nType--预演步骤、编辑步骤
-    void sendOpeartorStep(int nType,OPERATORSHEETSTEP*& step);
+    //void opeartorStep(int nType,OPERATORSHEETSTEP*& step);
 };
 
 #endif // HPREVIEWGRAPHFRAME_H

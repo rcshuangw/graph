@@ -16,6 +16,7 @@ public:
     ~HOpSheetRunWidget();
 
     void createOpSheetRunWidget();
+    void createActions();
 signals:
 
 public slots:

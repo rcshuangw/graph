@@ -13,9 +13,14 @@ public:
 
  public:
     void createActions();
+
+public slots:
+    void onOpeartorStepChanged(int nType,OPERATORSHEETSTEP*& step);
+
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
     void procContextMenu(QMouseEvent* event);
+
 };
 
 #endif // HOPSHEETPREVIEWWND_H

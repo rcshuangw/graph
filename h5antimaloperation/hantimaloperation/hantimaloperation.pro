@@ -59,7 +59,8 @@ HEADERS  += \
     hpreviewgraphframe.h \
     hopsheetbasewnd.h \
     hopsheetpreviewwnd.h \
-    hopsheetrunwidget.h
+    hopsheetrunwidget.h \
+    public.h
 
 LIBS += -L../../../lib -lh5basehelp -lh5basegui -lh5baselib -ldatafile
 FORMS    += mainwindow.ui \

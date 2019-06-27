@@ -23,6 +23,11 @@ public:
     virtual bool onContextMenuEvent(QObject *obj, QEvent *event);
 protected:
     //bool eventFilter(QObject *obj, QEvent *event);
+
+signals:
+signals:
+    //nType--预演步骤、编辑步骤
+    void opeartorStepChanged(int nType,OPERATORSHEETSTEP*& step);
 public:
     HGraphView* m_pGraphView;
     HIconObj* m_pCurControlBtn; //当前操作的控制点
