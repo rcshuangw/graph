@@ -14,8 +14,7 @@ public:
  public:
     void createActions();
 
-public slots:
-    void onOpeartorStepChanged(int nType,OPERATORSHEETSTEP*& step);
+
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);

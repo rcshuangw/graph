@@ -39,7 +39,9 @@ SOURCES += main.cpp\
     hpreviewgraphframe.cpp \
     hopsheetbasewnd.cpp \
     hopsheetpreviewwnd.cpp \
-    hopsheetrunwidget.cpp
+    hopsheetrunwidget.cpp \
+    hopsheet.cpp \
+    hopterm.cpp
 
 HEADERS  += \
     hsystool.h \
@@ -60,7 +62,9 @@ HEADERS  += \
     hopsheetbasewnd.h \
     hopsheetpreviewwnd.h \
     hopsheetrunwidget.h \
-    public.h
+    public.h \
+    hopsheet.h \
+    hopterm.h
 
 LIBS += -L../../../lib -lh5basehelp -lh5basegui -lh5baselib -ldatafile
 FORMS    += mainwindow.ui \

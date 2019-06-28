@@ -5,6 +5,8 @@
 namespace Ui {
 class OpSheetBaseWnd;
 }
+#include "hfileapi.h"
+#include "public.h"
 class QHBoxLayout;
 class QLineEdit;
 class QPushButton;
@@ -21,14 +23,24 @@ public:
 
 public:
     void createOpSheetBaseWnd();
-
+public:
     //操作票相关操作
     void newOpSheet();
     void openOpSheet(quint8 btOpenType);
     void loadOpSheet(quint16 wOpSheetID);
-    void saveOpSheet();
-    void saveAsTemplate();
+    void saveOpSheet();  //保存操作票
+    void saveAsPrepare();//存为预开票
+    void saveAsTemplate(); //存为模板票
+    void closeOpSheet(); //关闭操作票
+    void cancelOpSheet(); //取消操作票
+    void finishOpSheet(); //结束操作票
+public:
+    void checkDBRule(OPERATORSHEETSTEP* step,int nDataBaseID = EXECUTEDB_ID);
+    void setDigitalValue(OPERATORSHEETSTEP* step,int nDataBaseID = EXECUTEDB_ID);
+    int  currentDBID();//当前库ID
 
+    bool isPreviewing();
+    bool isExecuting();
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
     void onMousePressEvent(QMouseEvent* event);//左键
@@ -38,6 +50,9 @@ protected:
     void procBrowserContextMenu(QMouseEvent* event);
 
 public slots:
+    void onOpeartorStepChanged(int nType,OPERATORSHEETSTEP*& step);
+
+    //action相关槽
 
 public:
     QHBoxLayout *m_toolBarLayout;

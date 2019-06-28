@@ -1,7 +1,7 @@
 #include "hopsheet.h"
 #include "honlineapi.h"
-#include "dbtoolapi.h"
-#include "hwfsystemmgr.h"
+#include "hdbtoolapi.h"
+#include "hantimalopmgr.h"
 #include <QtAlgorithms>
 
 ///////////////////////////////////////////////////////////////////////////////

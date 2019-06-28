@@ -2,27 +2,27 @@
 #define HOPSHEET_H
 
 #include <QObject>
-#include "publicdata.h"
-class HWfSystemMgr;
-//操作票信息类
-class HOpSheetInfo: public QObject
+#include "hfileapi.h"
+class HAntiMalopMgr;
+//操作票类
+class HOpSheet: public QObject
 {
     Q_OBJECT
 public:
     HOpSheetInfo();
     ~HOpSheetInfo();
 public:
-    void setOpSheetInfo(OPSHEETINFO* info);
-    void getOpSheetInfo(OPSHEETINFO* info);
+    void setOpSheetInfo(OPERATORSHEET* sheet);
+    void getOpSheetInfo(OPERATORSHEET* sheet);
     bool getAttr(ushort wAttr,void* pVal,size_t size = 0);
     bool setAttr(ushort wAttr,void* pVal,size_t size = 0);
-    void copyTo(HOpSheetInfo* info);
-    void copyFrom(HOpSheetInfo* info);
+    void copyTo(HOpSheet* info);
+    void copyFrom(HOpSheet* info);
 
     bool checkExist();//判断文件是否存在
 
 protected:
-    OPSHEETINFO m_opSheetInfo;
+    OPERATORSHEET m_opSheet;
 };
 
 /*
@@ -70,7 +70,7 @@ public:
     bool isCtrlLock();
 
 protected:
-    OPSHEETSTEP opSheetStep;
+    OPERATORSHEETSTEP m_opSheetStep;
     bool m_bBreak;
     bool m_bRunning;
 

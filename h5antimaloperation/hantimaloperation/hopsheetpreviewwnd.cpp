@@ -32,31 +32,7 @@ void HOpSheetPreviewWnd::createActions()
 
     //创建Table内容
 
-    m_sheetStepTable->setColumnCount(4);
-    QTableWidgetItem *item = new QTableWidgetItem();
-    m_sheetStepTable->setHorizontalHeaderItem(0, item);
-    item->setText(QStringLiteral("步骤"));
-    QTableWidgetItem *item1 = new QTableWidgetItem();
-    m_sheetStepTable->setHorizontalHeaderItem(1, item1);
-    item1->setText(QStringLiteral("操作内容"));
-    QTableWidgetItem *item2 = new QTableWidgetItem();
-    m_sheetStepTable->setHorizontalHeaderItem(2, item2);
-    item2->setText(QStringLiteral("操作时间"));
-    QTableWidgetItem *item3 = new QTableWidgetItem();
-    m_sheetStepTable->setHorizontalHeaderItem(3, item3);
-    item3->setText(QStringLiteral("备注"));
 
-
-    m_sheetStepTable->setColumnWidth(0,60);
-   /* m_sheetStepTable->setColumnWidth(1,600);*/
-    m_sheetStepTable->setColumnWidth(2,150);
-    m_sheetStepTable->setColumnWidth(3,100);
-    m_sheetStepTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
-    m_sheetStepTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-    m_sheetStepTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-    m_sheetStepTable->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
-   // m_sheetStepTable->horizontalHeader()->setStretchLastSection(true);//
-    m_sheetStepTable->setObjectName(QStringLiteral("sheetStepTable"));
 }
 
 bool HOpSheetPreviewWnd::eventFilter(QObject *watched, QEvent *event)

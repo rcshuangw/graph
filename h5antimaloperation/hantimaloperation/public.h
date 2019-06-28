@@ -1,5 +1,14 @@
 #ifndef PUBLIC_H
 #define PUBLIC_H
+//库的类型
+#define EXECUTEDB_ID				0	//执行库
+#define EDIT_PREVIEWDB_ID		    1	//编辑窗的预演库
+#define PREVIEW_PREVIEWDB_ID		2	//预演窗的预演库
+#define EXECUTE1_PREVIEWDB_ID	    3	//执行窗1的预演库
+#define EXECUTE2_PREVIEWDB_ID	    4	//执行窗2的预演库
+#define EXECUTE3_PREVIEWDB_ID	    5	//执行窗2的预演库
+#define EXECUTE4_PREVIEWDB_ID	    6	//执行窗2的预演库
+
 //操作票类型
 #define OPSHEET_TYPE_NULL             0
 #define OPSHEET_TYPE_TEMP		      1
